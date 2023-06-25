@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyGymWorld.Data;
 using MyGymWorld.Data.Common.Repositories;
 using MyGymWorld.Data.Models;
+using MyGymWorld.Data.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,16 @@ builder.Services.AddMvc();
 builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<MyGymWorldDbContext>();
+
+    dbContext.Database.Migrate();
+
+    new MyGymWorldDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
