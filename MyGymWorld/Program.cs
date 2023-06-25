@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyGymWorld.Data;
+using MyGymWorld.Data.Common.Repositories;
 using MyGymWorld.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,9 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc();
+
+// Repository pattern
+builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
 
