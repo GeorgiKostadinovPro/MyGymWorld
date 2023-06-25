@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld", "MyGymWorld\MyGymWorld.csproj", "{4E08D9C7-8EC8-48C1-9E36-BEDC5526871A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Data", "MyGymWorld.Data\MyGymWorld.Data.csproj", "{3AE9DE52-BF33-4F13-A447-4ECFACFE5182}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4E08D9C7-8EC8-48C1-9E36-BEDC5526871A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E08D9C7-8EC8-48C1-9E36-BEDC5526871A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E08D9C7-8EC8-48C1-9E36-BEDC5526871A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE9DE52-BF33-4F13-A447-4ECFACFE5182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE9DE52-BF33-4F13-A447-4ECFACFE5182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE9DE52-BF33-4F13-A447-4ECFACFE5182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE9DE52-BF33-4F13-A447-4ECFACFE5182}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
