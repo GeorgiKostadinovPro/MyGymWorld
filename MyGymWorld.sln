@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Data", "MyGymWor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E18F2EE2-1414-46B7-AF74-688DC801C1F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Web.Infrastructure", "MyGymWorld.Web.Infrastructure\MyGymWorld.Web.Infrastructure.csproj", "{781755A7-A7FC-4E21-BFB4-0D1904DD823D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Web.Infrastructure", "MyGymWorld.Web.Infrastructure\MyGymWorld.Web.Infrastructure.csproj", "{781755A7-A7FC-4E21-BFB4-0D1904DD823D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{500510B1-82C1-4BAF-8176-E037B36CDEA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Core.Mapping", "MyGymWorld.Core.Mapping\MyGymWorld.Core.Mapping.csproj", "{380525D9-9C76-41AE-BDE9-64D4914592AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,13 +35,19 @@ Global
 		{781755A7-A7FC-4E21-BFB4-0D1904DD823D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{781755A7-A7FC-4E21-BFB4-0D1904DD823D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{781755A7-A7FC-4E21-BFB4-0D1904DD823D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{380525D9-9C76-41AE-BDE9-64D4914592AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{380525D9-9C76-41AE-BDE9-64D4914592AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{380525D9-9C76-41AE-BDE9-64D4914592AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{380525D9-9C76-41AE-BDE9-64D4914592AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E08D9C7-8EC8-48C1-9E36-BEDC5526871A} = {E18F2EE2-1414-46B7-AF74-688DC801C1F7}
+		{3AE9DE52-BF33-4F13-A447-4ECFACFE5182} = {500510B1-82C1-4BAF-8176-E037B36CDEA4}
 		{781755A7-A7FC-4E21-BFB4-0D1904DD823D} = {E18F2EE2-1414-46B7-AF74-688DC801C1F7}
+		{380525D9-9C76-41AE-BDE9-64D4914592AC} = {78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F7D5DBE-DCEF-439D-8E8E-D072844B3AC3}
