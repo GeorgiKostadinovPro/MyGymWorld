@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyGymWorld.Data;
-using MyGymWorld.Data.Common.Repositories;
+using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
 
@@ -29,8 +29,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc();
 
-// Repository pattern
-builder.Services.AddScoped<IRepository, Repository>();
+
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
