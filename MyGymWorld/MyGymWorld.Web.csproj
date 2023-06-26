@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
+    <ProjectReference Include="..\MyGymWorld.Web.Infrastructure\MyGymWorld.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
