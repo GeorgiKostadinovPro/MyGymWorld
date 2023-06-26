@@ -29,7 +29,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc();
 
+// Automapper
+builder.Services.AddAutoMapper(typeof(Program));
 
+// Custom extension method to apply all different services among the application
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
