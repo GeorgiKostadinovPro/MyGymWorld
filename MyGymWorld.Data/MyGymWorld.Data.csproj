@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyGymWorld.Data.Common\MyGymWorld.Data.Common.csproj" />
+  </ItemGroup>
+
 </Project>

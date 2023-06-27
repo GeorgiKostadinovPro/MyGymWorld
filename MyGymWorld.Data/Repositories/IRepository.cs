@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyGymWorld.Data.Common.Repositories
+﻿
+namespace MyGymWorld.Data.Repositories
 {
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Abstraction of repository access methods
     /// </summary>

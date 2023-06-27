@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-
-namespace MyGymWorld.Data.Common.Repositories
+﻿namespace MyGymWorld.Data.Repositories
 {
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Implementation of repository access methods
     /// for Relational Database Engine
@@ -23,7 +23,7 @@ namespace MyGymWorld.Data.Common.Repositories
         /// </summary>
         protected DbSet<T> DbSet<T>() where T : class
         {
-            return this.Context.Set<T>();
+            return Context.Set<T>();
         }
 
         public Repository(MyGymWorldDbContext context)
@@ -60,7 +60,7 @@ namespace MyGymWorld.Data.Common.Repositories
 
         public IQueryable<T> All<T>(Expression<Func<T, bool>> search) where T : class
         {
-            return this.DbSet<T>().Where(search);
+            return DbSet<T>().Where(search);
         }
 
         /// <summary>
@@ -69,12 +69,12 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <returns>Expression tree</returns>
         public IQueryable<T> AllReadonly<T>() where T : class
         {
-            return this.DbSet<T>()
+            return DbSet<T>()
                 .AsNoTracking();
         }
         public IQueryable<T> AllReadonly<T>(Expression<Func<T, bool>> search) where T : class
         {
-            return this.DbSet<T>()
+            return DbSet<T>()
                 .Where(search)
                 .AsNoTracking();
         }
@@ -87,7 +87,7 @@ namespace MyGymWorld.Data.Common.Repositories
         {
             T entity = await GetByIdAsync<T>(id);
 
-            Delete<T>(entity);
+            Delete(entity);
         }
 
         /// <summary>
@@ -96,11 +96,11 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <param name="entity">Entity representing record to be deleted</param>
         public void Delete<T>(T entity) where T : class
         {
-            EntityEntry entry = this.Context.Entry(entity);
+            EntityEntry entry = Context.Entry(entity);
 
             if (entry.State == EntityState.Detached)
             {
-                this.DbSet<T>().Attach(entity);
+                DbSet<T>().Attach(entity);
             }
 
             entry.State = EntityState.Deleted;
@@ -112,7 +112,7 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <param name="entity">Entity to be detached</param>
         public void Detach<T>(T entity) where T : class
         {
-            EntityEntry entry = this.Context.Entry(entity);
+            EntityEntry entry = Context.Entry(entity);
 
             entry.State = EntityState.Detached;
         }
@@ -124,7 +124,7 @@ namespace MyGymWorld.Data.Common.Repositories
         /// </summary>
         public void Dispose()
         {
-            this.Context.Dispose();
+            Context.Dispose();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <returns>Error code</returns>
         public async Task<int> SaveChangesAsync()
         {
-            return await this.Context.SaveChangesAsync();
+            return await Context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <param name="entity">Entity for record to be updated</param>
         public void Update<T>(T entity) where T : class
         {
-            this.DbSet<T>().Update(entity);
+            DbSet<T>().Update(entity);
         }
 
         /// <summary>
@@ -166,17 +166,17 @@ namespace MyGymWorld.Data.Common.Repositories
         /// <param name="entities">Enumerable collection of entities to be updated</param>
         public void UpdateRange<T>(IEnumerable<T> entities) where T : class
         {
-            this.DbSet<T>().UpdateRange(entities);
+            DbSet<T>().UpdateRange(entities);
         }
 
         public void DeleteRange<T>(IEnumerable<T> entities) where T : class
         {
-            this.DbSet<T>().RemoveRange(entities);
+            DbSet<T>().RemoveRange(entities);
         }
 
         public void DeleteRange<T>(Expression<Func<T, bool>> deleteWhereClause) where T : class
         {
-            var entities = All<T>(deleteWhereClause);
+            var entities = All(deleteWhereClause);
             DeleteRange(entities);
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace MyGymWorld.Data.Common.Contracts
 {
-    public interface ITimestampable
+    public interface ITimestampableModel
     {
         DateTime CreatedOn { get; set; }
 

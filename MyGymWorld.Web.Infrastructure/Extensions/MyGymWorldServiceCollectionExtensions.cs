@@ -1,7 +1,7 @@
 ﻿namespace MyGymWorld.Web.Infrastructure.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
-    using MyGymWorld.Data.Common.Repositories;
+    using MyGymWorld.Data.Repositories;
 
     public static class MyGymWorldServiceCollectionExtensions
     {   
