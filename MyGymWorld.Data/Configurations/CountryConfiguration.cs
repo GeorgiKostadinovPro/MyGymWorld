@@ -11,7 +11,8 @@
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.Name)
+            builder
+                .Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(ValidationalConstants.CountryConstants.NameMaxLength);
         }
