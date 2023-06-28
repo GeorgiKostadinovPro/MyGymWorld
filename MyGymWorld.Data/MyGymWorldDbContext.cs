@@ -13,6 +13,43 @@ namespace MyGymWorld.Data
             
         }
 
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Town> Towns { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Article> Articles { get; set; }
+
+        public DbSet<ArticleCategory> ArticlesCategories { get; set; }
+
+        public DbSet<UserArticle> UsersArticles { get; set; }
+
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<UserEvent> UsersEvents { get; set; }
+
+        public DbSet<GymImage> GymImages { get; set; }
+        
+        public DbSet<Gym> Gyms { get; set; }
+
+        public DbSet<GymAddress> GymAddresses { get; set; }
+
+        public DbSet<UserGym> UsersGyms { get; set; }
+
+        public DbSet<Manager> Managers { get; set; }
+
+        public DbSet<ManagerGym> ManagersGyms { get; set; }
+
+        public DbSet<Like> Likes { get; set; }
+
+        public DbSet<Dislike> Dislikes { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -23,21 +60,7 @@ namespace MyGymWorld.Data
             Assembly assembly = Assembly.GetAssembly(typeof(MyGymWorldDbContext))
                 ?? Assembly.GetExecutingAssembly();
 
-            var configurationTypes = assembly
-                .GetTypes()
-                .Where(t => t.GetInterfaces()
-                             .Any(i => i.IsGenericType && i.GetType() == typeof(IEntityTypeConfiguration<>)))
-                .ToList();
-
-            foreach ( var configurationType in configurationTypes)
-            {
-                dynamic configurationInstance = Activator.CreateInstance(configurationType);
-
-                if (configurationInstance)
-                {
-                    builder.ApplyConfiguration(configurationInstance);
-                }
-            }
+            builder.ApplyConfigurationsFromAssembly(assembly);
 
             base.OnModelCreating(builder);
         }
