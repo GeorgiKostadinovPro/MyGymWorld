@@ -10,6 +10,7 @@
             this.Id = Guid.NewGuid();
 
             this.ArticlesCategories = new HashSet<ArticleCategory>();
+            this.UsersArticles = new HashSet<UserArticle>();
         }
 
         public Guid Id { get; set; }
@@ -23,5 +24,7 @@
         public virtual Gym Gym { get; set; } = null!;
 
         public virtual ICollection<ArticleCategory> ArticlesCategories { get; set; }
+
+        public virtual ICollection<UserArticle> UsersArticles { get; set; }
     }
 }

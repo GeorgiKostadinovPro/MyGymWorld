@@ -12,7 +12,9 @@
            
             this.GymImages = new HashSet<GymImage>();
             this.GymsAddresses = new HashSet<GymAddress>(); 
-            this.UsersGyms = new HashSet<UserGym>();            
+            this.UsersGyms = new HashSet<UserGym>();
+            this.ManagersGyms = new HashSet<ManagerGym>();
+
             this.Events = new HashSet<Event>();
             this.Articles = new HashSet<Article>();
             this.Likes = new HashSet<Like>();
@@ -41,6 +43,8 @@
         public virtual ICollection<GymAddress> GymsAddresses { get; set; }
        
         public virtual ICollection<UserGym> UsersGyms { get; set; } 
+
+        public virtual ICollection<ManagerGym> ManagersGyms { get; set; }
 
         public virtual ICollection<Event> Events { get; set; } 
 
