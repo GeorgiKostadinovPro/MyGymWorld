@@ -1,21 +1,19 @@
 ﻿namespace MyGymWorld.Data.Models
 {
     using MyGymWorld.Data.Common.Models;
+    using System;
 
-    public class UserGym : BaseDeletableEntityModel
+    public class ManagerGym : BaseDeletableEntityModel
     {
-        public UserGym() 
-        { 
+        public ManagerGym()
+        {
             this.Id = Guid.NewGuid();
         }
-
         public Guid Id { get; set; }
 
-        public bool IsSubscribedForArticles { get; set; }
+        public Guid ManagerId { get; set; }
 
-        public Guid UserId { get; set; }
-
-        public virtual ApplicationUser User { get; set; } = null!;
+        public virtual Manager Manager { get; set; } = null!;
 
         public Guid GymId { get; set; }
 

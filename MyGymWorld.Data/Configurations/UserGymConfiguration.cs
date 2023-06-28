@@ -23,6 +23,10 @@
                .HasForeignKey(ug => ug.GymId)
                .OnDelete(DeleteBehavior.Restrict)
                .IsRequired();
+
+            builder
+                .Property(ug => ug.IsSubscribedForArticles)
+                .HasDefaultValue(false);
         }
     }
 }

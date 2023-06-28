@@ -11,6 +11,8 @@
 
             this.UsersGyms = new HashSet<UserGym>();
             this.UsersEvents = new HashSet<UserEvent>();
+            this.UsersArticles = new HashSet<UserArticle>();
+
             this.Likes = new HashSet<Like>();
             this.Dislikes = new HashSet<Dislike>();
             this.Comments = new HashSet<Comment>();
@@ -32,9 +34,15 @@
         
         public virtual Address Address { get; set; } = null!;
 
+        public Guid? ManagerId { get; set; }
+
+        public virtual Manager Manager { get; set; } = null!;
+
         public virtual ICollection<UserGym> UsersGyms { get; set; }
 
         public virtual ICollection<UserEvent> UsersEvents { get; set; }
+
+        public virtual ICollection<UserArticle> UsersArticles { get; set; }
 
         public virtual ICollection<Like> Likes { get; set; }
 
