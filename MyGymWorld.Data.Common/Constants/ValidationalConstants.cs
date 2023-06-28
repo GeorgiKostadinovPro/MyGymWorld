@@ -1,5 +1,7 @@
 ﻿namespace MyGymWorld.Data.Common.Constants
 {
+    using System.Runtime.InteropServices;
+
     public static class ValidationalConstants
     {
         public static class CountryConstants
@@ -51,6 +53,27 @@
 
             public const int DescriptionMinLength = 15;
             public const int DescriptionMaxLength = 150;
+        }
+
+        public static class ArticleConstants
+        {
+            public const int TitleMinLength = 10;
+            public const int TitleMaxLength = 50;
+
+            public const int ContentMinLength = 50;
+            public const int ContentMaxLength = 5000;
+        }
+
+        public static class CategoryConstants
+        {
+            public const int NameMinLength = 5;
+            public const int NameMaxLength = 50;
+        }
+
+        public static class CommentConstants
+        {
+            public const int ContentMinLength = 10;
+            public const int ContentMaxLength = 500;
         }
     }
 }

@@ -19,19 +19,12 @@
                 .IsRequired();
 
             builder
-                .HasOne(e => e.EventType)
-                .WithMany(g => g.Events)
-                .HasForeignKey(e => e.EventTypeId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-
-            builder
                 .Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(ValidationalConstants.EventConstants.NameMaxLength);
 
             builder
-                .Property(e => e.Name)
+                .Property(e => e.Description)
                 .IsRequired()
                 .HasMaxLength(ValidationalConstants.EventConstants.DescriptionMaxLength);
         }
