@@ -84,5 +84,11 @@
             public const decimal PriceMinValue = 10.00m;
             public const decimal PriceMaxValue = 500.00m;
         }
+
+        public static class MessageConstants
+        {
+            public const int MessageMinLength = 1;
+            public const int MessageMaxLength = 1000;
+        }
     }
 }

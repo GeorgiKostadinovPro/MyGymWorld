@@ -38,6 +38,10 @@
         public string WebsiteUrl { get; set; } = null!; 
 
         public GymType GymType { get; set; }
+
+        public Guid ChatGroupId { get; set; }
+
+        public virtual ChatGroup ChatGroup { get; set; } = null!;
         
         public virtual ICollection<GymImage> GymImages { get; set; }
 

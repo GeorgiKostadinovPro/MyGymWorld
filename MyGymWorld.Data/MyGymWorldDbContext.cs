@@ -53,6 +53,12 @@ namespace MyGymWorld.Data
 
         public DbSet<UserMembership> UsersMemberships { get; set; }
 
+        public DbSet<ChatGroup> ChatGroups { get; set; }
+
+        public DbSet<UserChatGroup> UsersChatGroups { get; set; } 
+
+        public DbSet<Message> Messages { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
