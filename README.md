@@ -7,11 +7,11 @@ Don't forget to give this project a star for additional support ;)
 Maybe you can mention me or this repo in the acknowledgements too
 -->
 <div align="center">
-  <img src="assets/logo.png" alt="logo" width="200" height="auto" />
+  <img src="MyGymWorld/wwwroot/images/MyGymWorld-logo.png" alt="logo" width="500" height="auto" />
   <h1>Awesome Readme Template</h1>
   
   <p>
-    An awesome README template for your projects! 
+    My Gym World
   </p>
   
   
