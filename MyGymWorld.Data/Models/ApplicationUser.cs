@@ -13,10 +13,12 @@
             this.UsersEvents = new HashSet<UserEvent>();
             this.UsersArticles = new HashSet<UserArticle>();
             this.UsersMemberships = new HashSet<UserMembership>();
+            this.UsersChatGroups = new HashSet<UserChatGroup>();
 
             this.Likes = new HashSet<Like>();
             this.Dislikes = new HashSet<Dislike>();
             this.Comments = new HashSet<Comment>();
+            this.Messages = new HashSet<Message>(); 
         }
 
         public string? FirstName { get; set; }
@@ -47,10 +49,14 @@
 
         public virtual ICollection<UserMembership> UsersMemberships { get; set; }
 
+        public virtual ICollection<UserChatGroup> UsersChatGroups { get; set; }
+
         public virtual ICollection<Like> Likes { get; set; }
 
         public virtual ICollection<Dislike> Dislikes { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

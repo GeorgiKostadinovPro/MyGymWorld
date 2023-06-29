@@ -4,7 +4,6 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using MyGymWorld.Data.Common.Constants;
     using MyGymWorld.Data.Models;
-    using System;
 
     public class GymConfiguration : IEntityTypeConfiguration<Gym>
     {
