@@ -8,10 +8,10 @@ Maybe you can mention me or this repo in the acknowledgements too
 -->
 <div align="center">
   <img src="MyGymWorld/wwwroot/images/MyGymWorld-logo.png" alt="logo" width="500" height="auto" />
-  <h1>Awesome Readme Template</h1>
+  <h1>My Gym World</h1>
   
   <p>
-    My Gym World
+    Fuel your passion for fitness!
   </p>
   
   
