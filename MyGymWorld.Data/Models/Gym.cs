@@ -20,6 +20,7 @@
             this.Likes = new HashSet<Like>();
             this.Dislikes = new HashSet<Dislike>();
             this.Comments = new HashSet<Comment>();
+            this.Memberships = new HashSet<Membership>();
         }
 
         public Guid Id { get; set; }
@@ -55,5 +56,7 @@
         public virtual ICollection<Dislike> Dislikes { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Membership> Memberships { get; set; }
     }
 }
