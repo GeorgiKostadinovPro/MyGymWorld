@@ -293,7 +293,7 @@ Distributed under the no License. See LICENSE.txt for more information.
 
 Your Name - [LinkedIn](https://www.linkedin.com/in/georgi-kostadinov-125349241) - kostadinovgeorgi16@gmail.com
 
-Project Link: [https://github.com/Louis3797/awesome-readme-template](https://github.com/Louis3797/awesome-readme-template)
+Project Link: [MyGymWorld](https://github.com/GeorgiKostadinovPro/MyGymWorld)
 
 
 <!-- Acknowledgments -->
