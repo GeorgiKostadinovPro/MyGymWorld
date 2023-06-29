@@ -7,8 +7,6 @@ Don't forget to give this project a star for additional support ;)
 Maybe you can mention me or this repo in the acknowledgements too
 -->
 <div align="center">
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/69e92c0d-4a5e-4e7d-84ec-8214dc78f928)
-
   <img src="assets/logo.png" alt="logo" width="200" height="auto" />
   <h1>Awesome Readme Template</h1>
   
