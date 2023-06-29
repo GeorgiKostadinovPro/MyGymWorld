@@ -9,7 +9,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <div align="center">
 
   <img src="assets/logo.png" alt="logo" width="200" height="auto" />
-  <h1>Awesome Readme Template</h1>
+  <h1>My Gym World</h1>
   
   <p>
     An awesome README template for your projects! 
