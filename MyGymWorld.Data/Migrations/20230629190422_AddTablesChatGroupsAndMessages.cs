@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyGymWorld.Data.Migrations
 {
-    public partial class AddChatGroupsAndMessagesTables : Migration
+    public partial class AddTablesChatGroupsAndMessages : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace MyGymWorld.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GymId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -34,6 +35,12 @@ namespace MyGymWorld.Data.Migrations
                         name: "FK_ChatGroups_Gyms_GymId",
                         column: x => x.GymId,
                         principalTable: "Gyms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChatGroups_Managers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Managers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -103,6 +110,11 @@ namespace MyGymWorld.Data.Migrations
                 table: "ChatGroups",
                 column: "GymId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatGroups_ManagerId",
+                table: "ChatGroups",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatGroupId",
