@@ -12,8 +12,8 @@ using MyGymWorld.Data;
 namespace MyGymWorld.Data.Migrations
 {
     [DbContext(typeof(MyGymWorldDbContext))]
-    [Migration("20230629175801_AddChatGroupsAndMessagesTables")]
-    partial class AddChatGroupsAndMessagesTables
+    [Migration("20230629190422_AddTablesChatGroupsAndMessages")]
+    partial class AddTablesChatGroupsAndMessages
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -416,6 +416,9 @@ namespace MyGymWorld.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -423,6 +426,8 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId")
                         .IsUnique();
+
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("ChatGroups");
                 });
@@ -1173,7 +1178,15 @@ namespace MyGymWorld.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("MyGymWorld.Data.Models.Manager", "Manager")
+                        .WithMany("ChatGroups")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Gym");
+
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Comment", b =>
@@ -1533,6 +1546,8 @@ namespace MyGymWorld.Data.Migrations
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Manager", b =>
                 {
+                    b.Navigation("ChatGroups");
+
                     b.Navigation("ManagersGyms");
                 });
 
