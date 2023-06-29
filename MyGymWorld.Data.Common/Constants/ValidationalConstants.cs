@@ -75,5 +75,14 @@
             public const int ContentMinLength = 10;
             public const int ContentMaxLength = 500;
         }
+
+        public static class MembershipConstants
+        {
+            public const int PricePrecision = 18;
+            public const int PriceScale = 2;
+
+            public const decimal PriceMinValue = 10.00m;
+            public const decimal PriceMaxValue = 500.00m;
+        }
     }
 }

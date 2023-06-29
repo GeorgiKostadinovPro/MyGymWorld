@@ -12,8 +12,8 @@ using MyGymWorld.Data;
 namespace MyGymWorld.Data.Migrations
 {
     [DbContext(typeof(MyGymWorldDbContext))]
-    [Migration("20230628141620_FinishDatabase")]
-    partial class FinishDatabase
+    [Migration("20230629172842_AddTableMemberships")]
+    partial class AddTableMemberships
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -699,6 +699,9 @@ namespace MyGymWorld.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsCreator")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -750,6 +753,41 @@ namespace MyGymWorld.Data.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("ManagersGyms");
+                });
+
+            modelBuilder.Entity("MyGymWorld.Data.Models.Membership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GymId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MembershipType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GymId");
+
+                    b.ToTable("Memberships");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Town", b =>
@@ -883,6 +921,39 @@ namespace MyGymWorld.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UsersGyms");
+                });
+
+            modelBuilder.Entity("MyGymWorld.Data.Models.UserMembership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("MembershipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersMemberships");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1121,6 +1192,17 @@ namespace MyGymWorld.Data.Migrations
                     b.Navigation("Manager");
                 });
 
+            modelBuilder.Entity("MyGymWorld.Data.Models.Membership", b =>
+                {
+                    b.HasOne("MyGymWorld.Data.Models.Gym", "Gym")
+                        .WithMany("Memberships")
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Gym");
+                });
+
             modelBuilder.Entity("MyGymWorld.Data.Models.Town", b =>
                 {
                     b.HasOne("MyGymWorld.Data.Models.Country", "Country")
@@ -1189,6 +1271,25 @@ namespace MyGymWorld.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MyGymWorld.Data.Models.UserMembership", b =>
+                {
+                    b.HasOne("MyGymWorld.Data.Models.Membership", "Membership")
+                        .WithMany("UsersMemberships")
+                        .HasForeignKey("MembershipId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MyGymWorld.Data.Models.ApplicationUser", "User")
+                        .WithMany("UsersMemberships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Membership");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MyGymWorld.Data.Models.Address", b =>
                 {
                     b.Navigation("GymsAddresses");
@@ -1212,6 +1313,8 @@ namespace MyGymWorld.Data.Migrations
                     b.Navigation("UsersEvents");
 
                     b.Navigation("UsersGyms");
+
+                    b.Navigation("UsersMemberships");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Article", b =>
@@ -1254,12 +1357,19 @@ namespace MyGymWorld.Data.Migrations
 
                     b.Navigation("ManagersGyms");
 
+                    b.Navigation("Memberships");
+
                     b.Navigation("UsersGyms");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Manager", b =>
                 {
                     b.Navigation("ManagersGyms");
+                });
+
+            modelBuilder.Entity("MyGymWorld.Data.Models.Membership", b =>
+                {
+                    b.Navigation("UsersMemberships");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Town", b =>

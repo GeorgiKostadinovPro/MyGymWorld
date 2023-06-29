@@ -48,6 +48,10 @@ namespace MyGymWorld.Data
         public DbSet<Dislike> Dislikes { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
+        
+        public DbSet<Membership> Memberships { get; set; }
+
+        public DbSet<UserMembership> UsersMemberships { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

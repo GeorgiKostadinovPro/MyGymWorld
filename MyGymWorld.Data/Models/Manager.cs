@@ -16,6 +16,8 @@
 
         public ManagerType ManagerType { get; set; }
 
+        public bool IsCreator { get; set; }
+
         public Guid UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; } = null!;
