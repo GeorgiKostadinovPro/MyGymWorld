@@ -60,7 +60,7 @@
 
         public async Task LogoutUserAsync()
         {
-            throw new NotImplementedException();
+            await this.signInManager.SignOutAsync();
         }
     }
 }
