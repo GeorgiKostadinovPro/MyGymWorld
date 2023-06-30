@@ -30,7 +30,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
 
 // Automapper
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Custom extension method to apply all different services among the application
 builder.Services.AddApplicationServices();
