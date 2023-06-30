@@ -68,8 +68,10 @@
             {
                 throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
             }
-            
-            SignInResult result = await this.signInManager.PasswordSignInAsync(user, loginUserInputModel.Password, isPersistent: false, lockoutOnFailure: false);
+
+            bool isPersistent = loginUserInputModel.RememberMe;
+
+            SignInResult result = await this.signInManager.PasswordSignInAsync(user, loginUserInputModel.Password, isPersistent: isPersistent, lockoutOnFailure: false);
 
             if (!result.Succeeded)
             {
