@@ -7,5 +7,7 @@
         Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel);
 
         Task AuthenticateAsync(LoginUserInputModel loginUserInputModel);
+
+        Task LogoutUserAsync();
     }
 }

@@ -11,4 +11,9 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
+    <ProjectReference Include="..\MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
