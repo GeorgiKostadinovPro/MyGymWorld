@@ -21,6 +21,7 @@
     <ProjectReference Include="..\MyGymWorld.Core\MyGymWorld.Core.csproj" />
     <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
     <ProjectReference Include="..\MyGymWorld.Web.Infrastructure\MyGymWorld.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
