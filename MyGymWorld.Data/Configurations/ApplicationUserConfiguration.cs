@@ -16,7 +16,7 @@
                 .WithMany(a => a.Users)
                 .HasForeignKey(au => au.AddressId)
                 .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                .Property(au => au.UserName)

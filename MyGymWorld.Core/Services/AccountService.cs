@@ -38,12 +38,7 @@
                 throw new InvalidOperationException(ExceptionConstants.RegisterUser.EmailAlreadyExists);
             }
 
-            CreateUserInputModel userToCreate = new CreateUserInputModel
-            {
-                UserName = registerUserInputModel.UserName,
-                Email = registerUserInputModel.Email,
-                Password = registerUserInputModel.Password
-            };
+            CreateUserInputModel userToCreate = this.mapper.Map<CreateUserInputModel>(registerUserInputModel);
 
             var tuppleResult = await this.userService.CreateUserAsync(userToCreate);
 
