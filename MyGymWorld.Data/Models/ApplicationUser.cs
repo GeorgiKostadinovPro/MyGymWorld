@@ -33,7 +33,7 @@
 
         public DateTime? DeletedOn { get; set; }
         
-        public Guid AddressId { get; set; }
+        public Guid? AddressId { get; set; }
         
         public virtual Address Address { get; set; } = null!;
 
