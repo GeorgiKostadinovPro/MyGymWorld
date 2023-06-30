@@ -55,7 +55,26 @@
         
         public async Task AuthenticateAsync(LoginUserInputModel loginUserInputModel)
         {
-            throw new NotImplementedException();
+            ApplicationUser user = await this.userService.GetUserByEmailAsync(loginUserInputModel.Email);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.RegisterUser.UserDoesNotExist);
+            }
+
+            bool doesPasswordMatch = await this.userService.CheckUserPasswordAsync(user, loginUserInputModel.Password);
+
+            if (!doesPasswordMatch)
+            {
+                throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
+            }
+            
+            SignInResult result = await this.signInManager.PasswordSignInAsync(user, loginUserInputModel.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
+            }
         }
 
         public async Task LogoutUserAsync()

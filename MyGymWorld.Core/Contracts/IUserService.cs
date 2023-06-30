@@ -8,8 +8,12 @@
     {
         Task<(ApplicationUser, IdentityResult)> CreateUserAsync(CreateUserInputModel createUserInputModel);
 
+        Task<ApplicationUser> GetUserByUserNameAsync(string username);
+
         Task<ApplicationUser> GetUserByEmailAsync(string email);
 
         Task<bool> CheckIfUserExistsByEmailAsync(string email);
+
+        Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password);
     }
 }

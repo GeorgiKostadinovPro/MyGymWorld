@@ -62,8 +62,8 @@
             }
         }
 
+        [HttpGet]  
         [AllowAnonymous]
-        [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
             LoginUserInputModel loginUserInputModel = new LoginUserInputModel
@@ -72,6 +72,29 @@
             };
 
             return this.View(loginUserInputModel);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginUserInputModel loginUserInputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(loginUserInputModel);
+            }
+
+            try
+            {
+                await this.accountService.AuthenticateAsync(loginUserInputModel);
+
+                return this.RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                return this.View(loginUserInputModel);
+            }
         }
 
         public async Task<IActionResult> Logout()
