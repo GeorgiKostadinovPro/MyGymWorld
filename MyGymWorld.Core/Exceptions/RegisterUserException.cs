@@ -5,11 +5,11 @@
 
     public class RegisterUserException : Exception
     {
-        public IEnumerable<IdentityError> Errors;
-
         public RegisterUserException(IEnumerable<IdentityError> errors)
         {
             this.Errors = errors;
-        }
+        } 
+        
+        public IEnumerable<IdentityError> Errors;
     }
 }

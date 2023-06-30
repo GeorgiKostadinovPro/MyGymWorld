@@ -21,15 +21,13 @@
             this.mapper = _mapper;
         }
 
-        
-
         public async Task<(ApplicationUser, IdentityResult)> CreateUserAsync(CreateUserInputModel createUserInputModel)
         {
             ApplicationUser userToCreate = this.mapper.Map<ApplicationUser>(createUserInputModel);
 
             userToCreate.CreatedOn = DateTime.UtcNow;
 
-            IdentityResult result = await this.userManager.CreateAsync(userToCreate);
+            IdentityResult result = await this.userManager.CreateAsync(userToCreate, createUserInputModel.Password);
 
             return (userToCreate , result);
         }
@@ -47,6 +45,21 @@
                .FindByEmailAsync(email);
 
             return applicationUser; 
+        }
+
+        public async Task<ApplicationUser> GetUserByUserNameAsync(string username)
+        {
+            ApplicationUser applicationUser = await this.userManager
+               .FindByNameAsync(username);
+
+            return applicationUser;
+        }
+
+        public async Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password)
+        {
+            bool result = await this.userManager.CheckPasswordAsync(user, password);
+
+            return result;
         }
     }
 }
