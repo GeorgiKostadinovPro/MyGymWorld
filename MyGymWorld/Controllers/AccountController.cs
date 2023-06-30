@@ -76,6 +76,8 @@
 
         public async Task<IActionResult> Logout()
         {
+            await this.accountService.LogoutUserAsync();
+
             return this.RedirectToAction("Index", "Home");
         }
     }
