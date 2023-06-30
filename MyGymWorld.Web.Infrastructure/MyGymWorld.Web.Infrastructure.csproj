@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyGymWorld.Core.Utilities\MyGymWorld.Core.Utilities.csproj" />
     <ProjectReference Include="..\MyGymWorld.Core\MyGymWorld.Core.csproj" />
     <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
   </ItemGroup>

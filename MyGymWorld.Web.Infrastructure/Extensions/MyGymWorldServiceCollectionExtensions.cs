@@ -3,6 +3,8 @@
     using Microsoft.Extensions.DependencyInjection;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Services;
+    using MyGymWorld.Core.Utilities.Contracts;
+    using MyGymWorld.Core.Utilities.Services;
     using MyGymWorld.Data.Repositories;
 
     public static class MyGymWorldServiceCollectionExtensions
@@ -17,6 +19,8 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRepository, Repository>();
+
+            services.AddTransient<IEmailSenderService, EmailSenderService>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
