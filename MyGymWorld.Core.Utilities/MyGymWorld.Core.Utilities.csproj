@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyGymWorld.Core.Mapping\MyGymWorld.Core.Mapping.csproj" />
-    <ProjectReference Include="..\MyGymWorld.Core.Utilities\MyGymWorld.Core.Utilities.csproj" />
+    <PackageReference Include="SendGrid" Version="9.28.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
-    <ProjectReference Include="..\MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

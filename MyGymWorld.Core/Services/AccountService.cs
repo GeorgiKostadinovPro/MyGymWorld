@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
+    using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
     using System;
@@ -16,17 +17,20 @@
 
         private readonly IUserService userService;
         private readonly IMapper mapper;
+        private readonly IEmailSenderService emailSenderService;
 
         public AccountService(
             UserManager<ApplicationUser> _userManager, 
             SignInManager<ApplicationUser> signInManager,
             IUserService _userService,
-            IMapper _mapper)
+            IMapper _mapper,
+            IEmailSenderService _emailSenderService)
         {
             this.userManager = _userManager;
             this.signInManager = signInManager;
             this.userService = _userService;
             this.mapper = _mapper;
+            this.emailSenderService = _emailSenderService;
         }
 
         public async Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel)
@@ -77,6 +81,9 @@
             {
                 throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
             }
+
+            await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
+                $"<p>New login to your account at {DateTime.UtcNow}</p>");
         }
 
         public async Task LogoutUserAsync()
