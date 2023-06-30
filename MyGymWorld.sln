@@ -17,7 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{78A7FE3F-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Core.Mapping", "MyGymWorld.Core.Mapping\MyGymWorld.Core.Mapping.csproj", "{380525D9-9C76-41AE-BDE9-64D4914592AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Data.Common", "MyGymWorld.Data.Common\MyGymWorld.Data.Common.csproj", "{0715B85E-88A5-4455-B6DB-5581D0FAA386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Data.Common", "MyGymWorld.Data.Common\MyGymWorld.Data.Common.csproj", "{0715B85E-88A5-4455-B6DB-5581D0FAA386}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Core", "MyGymWorld.Core\MyGymWorld.Core.csproj", "{0ECC56A0-BA50-4EF8-8686-3382D519365C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Web.ViewModels", "MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj", "{B0DF566B-AF2D-4BC4-BFD2-1C536020F540}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{0715B85E-88A5-4455-B6DB-5581D0FAA386}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0715B85E-88A5-4455-B6DB-5581D0FAA386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0715B85E-88A5-4455-B6DB-5581D0FAA386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ECC56A0-BA50-4EF8-8686-3382D519365C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ECC56A0-BA50-4EF8-8686-3382D519365C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ECC56A0-BA50-4EF8-8686-3382D519365C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ECC56A0-BA50-4EF8-8686-3382D519365C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +67,8 @@ Global
 		{781755A7-A7FC-4E21-BFB4-0D1904DD823D} = {E18F2EE2-1414-46B7-AF74-688DC801C1F7}
 		{380525D9-9C76-41AE-BDE9-64D4914592AC} = {78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}
 		{0715B85E-88A5-4455-B6DB-5581D0FAA386} = {500510B1-82C1-4BAF-8176-E037B36CDEA4}
+		{0ECC56A0-BA50-4EF8-8686-3382D519365C} = {78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}
+		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540} = {E18F2EE2-1414-46B7-AF74-688DC801C1F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F7D5DBE-DCEF-439D-8E8E-D072844B3AC3}
