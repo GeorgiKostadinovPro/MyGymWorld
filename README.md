@@ -24,7 +24,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <img src="https://img.shields.io/github/last-commit/GeorgiKostadinovPro/MyGymWorld" alt="last update" />
   </a>
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/network/members">
-    <img src="[https://img.shields.io/github/forks/GeorgiKostadinovPro/MyGymWorld](https://img.shields.io/github/forks/GeorgiKostadinovPro/MyGymWorld)" alt="forks" />
+    <img src="https://img.shields.io/github/forks/GeorgiKostadinovPro/MyGymWorld" alt="forks" />
   </a>
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/stargazers">
     <img src="https://img.shields.io/github/stars/GeorgiKostadinovPro/MyGymWorld" alt="stars" />
