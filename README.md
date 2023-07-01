@@ -27,7 +27,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <img src="https://img.shields.io/github/issues/GeorgiKostadinovPro/MyGymWorld" alt="open issues" />
   </a>
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE.txt">
-    <img src="https://img.shields.io/github/license/GeorgiKostadinovPro/MyGymWorld" alt="license" />
+    <img src="https://badgen.net/badge/license/MIT/green" alt="license" />
   </a>
 </p>
    
