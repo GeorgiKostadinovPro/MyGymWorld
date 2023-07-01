@@ -13,7 +13,7 @@ builder.Services.AddDbContext<MyGymWorldDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<MyGymWorldDbContext>()
     .AddDefaultTokenProviders();

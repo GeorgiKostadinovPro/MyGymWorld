@@ -6,6 +6,8 @@
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Web.ViewModels.Users;
 
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
     public class AccountController : BaseController
     {
         private readonly IAccountService accountService;
@@ -39,6 +41,8 @@
             try
             {
                 await this.accountService.RegisterUserAsync(registerUserInputModel);
+
+                TempData[WarningMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -99,6 +103,31 @@
             await this.accountService.LogoutUserAsync();
 
             return this.RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string emailConfirmationToken)
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(emailConfirmationToken))
+            {
+                return this.BadRequest("Invalid confirmation parameters!");
+            }
+
+            try
+            {
+                await this.accountService.ConfirmUserEmailAsync(userId, emailConfirmationToken);
+                
+                return this.View();
+            }
+            catch (ArgumentException ex)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
         }
     }
 }

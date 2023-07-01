@@ -1,0 +1,25 @@
+﻿@using static MyGymWorld.Common.NotificationMessagesConstants;
+
+@if (TempData.ContainsKey(ErrorMessage))
+{
+    <script>toastr.error('@TempData[ErrorMessage]');</script>
+}
+
+@if (TempData.ContainsKey(WarningMessage))
+{
+    <script>toastr.warning('@TempData[WarningMessage]');</script>
+}
+
+@if (TempData.ContainsKey(InformationMessage))
+{
+    <script>toastr.info('@TempData[InformationMessage]');</script>
+}
+
+@if (TempData.ContainsKey(SuccessMessage))
+{
+    <script>toastr.success('@TempData[SuccessMessage]');</script>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

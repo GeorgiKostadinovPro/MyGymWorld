@@ -2,9 +2,11 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.WebUtilities;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
+    using System.Text;
     using System.Threading.Tasks;
 
     public class UserService : IUserService
@@ -32,11 +34,37 @@
             return (userToCreate , result);
         }
         
+        public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)
+        {
+            string emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            byte[] emailConfirmationTokenBytes = Encoding.UTF8.GetBytes(emailConfirmationToken);
+
+            string validEmailToken = WebEncoders.Base64UrlEncode(emailConfirmationTokenBytes);
+
+            return validEmailToken;
+        }
+        
+        public async Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password)
+        {
+            bool result = await this.userManager.CheckPasswordAsync(user, password);
+
+            return result;
+        }
+        
         public async Task<bool> CheckIfUserExistsByEmailAsync(string email)
         {
             ApplicationUser user = await this.GetUserByEmailAsync(email);
 
             return user != null ? true : false;
+        }
+        
+        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        {
+            ApplicationUser applicationUser = await this.userManager
+               .FindByIdAsync(userId);
+
+            return applicationUser;
         }
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
@@ -53,13 +81,6 @@
                .FindByNameAsync(username);
 
             return applicationUser;
-        }
-
-        public async Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password)
-        {
-            bool result = await this.userManager.CheckPasswordAsync(user, password);
-
-            return result;
         }
     }
 }
