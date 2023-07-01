@@ -137,30 +137,39 @@
             }
         }
 
-        public async Task<IList<AuthenticationScheme>> GetExternalLoginsAsync()
+        public async Task SendUserResetPasswordEmailAsync(string email)
         {
-            return (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ApplicationUser user = await this.userService.GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidEmailAddress);
+            }
+
+            string token = await this.userManager.GeneratePasswordResetTokenAsync(user);
+
+            string resetUrl = $"{this.configuration["ApplicationUrl"]}/Account/ResetPassword?email={Uri.EscapeDataString(email!)}&token={Uri.EscapeDataString(token)}";
+
+            await this.emailSenderService.SendEmailAsync(user.Email, 
+                "Reset password", "<h1>Please, confirm your email address!</h1>" +
+                $"<p>Please, click <a href='{resetUrl}'>here</a> to reset your password!</p>");
         }
 
-        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
+        public async Task ResetUserPasswordAsync(ResetPasswordInputModel resetPasswordInputModel)
         {
-            AuthenticationProperties properties = this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            ApplicationUser user = await this.userService.GetUserByEmailAsync(resetPasswordInputModel.Email);
 
-            return properties;
-        }
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidEmailAddress);
+            }
 
-        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync()
-        {
-            ExternalLoginInfo result = await this.signInManager.GetExternalLoginInfoAsync();
+            IdentityResult result = await this.userManager.ResetPasswordAsync(user, resetPasswordInputModel.Token, resetPasswordInputModel.Password);
 
-            return result;
-        }
-
-        public async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey)
-        {
-            SignInResult result = await this.signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent: false, bypassTwoFactor: true);
-
-            return result;
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidTokenOrPassword);
+            }
         }
     }
 }

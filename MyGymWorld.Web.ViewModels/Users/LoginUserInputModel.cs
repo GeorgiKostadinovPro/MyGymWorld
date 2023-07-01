@@ -13,8 +13,6 @@
         [DataType(DataType.Password)]
         public string Password { get; set; } = null!;
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; } = new List<AuthenticationScheme>();
-
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
 

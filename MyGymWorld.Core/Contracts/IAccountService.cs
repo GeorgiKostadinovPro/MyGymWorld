@@ -15,14 +15,10 @@
 
         Task ConfirmUserEmailAsync(string userId, string emailConfirmationToken);
 
+        Task SendUserResetPasswordEmailAsync(string email);
+
+        Task ResetUserPasswordAsync(ResetPasswordInputModel resetPasswordInputModel);
+
         Task LogoutUserAsync();
-        
-        Task<IList<AuthenticationScheme>> GetExternalLoginsAsync();
-
-        AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl);
-
-        Task<ExternalLoginInfo> GetExternalLoginInfoAsync();
-
-        Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey);
     }
 }

@@ -21,5 +21,11 @@
             public const string InvalidUserId = "User with this id does NOT exist!";
             public const string ConfirmEmailFailed = "Email was NOT confirmed!";
         }
+
+        public static class ResetPassword
+        {
+            public const string InvalidEmailAddress = "User with this email does NOT exist!";
+            public const string InvalidTokenOrPassword = "Your token or password is invalid!";
+        }
     }
 }

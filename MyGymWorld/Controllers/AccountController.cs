@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Server.IIS.Core;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Web.ViewModels.Users;
@@ -77,8 +78,7 @@
         {
             LoginUserInputModel loginUserInputModel = new LoginUserInputModel
             {
-                ReturnUrl = returnUrl,
-                ExternalLogins = await this.accountService.GetExternalLoginsAsync()
+                ReturnUrl = returnUrl
             };
 
             return this.View(loginUserInputModel);
@@ -145,49 +145,76 @@
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public IActionResult SendResetPasswordEmail()
         {
-            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", values: new { returnUrl });
-            var properties = this.accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
+            EnterEmailInputModel model = new EnterEmailInputModel();
+
+            return this.View(model);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> SendResetPasswordEmail(EnterEmailInputModel enterEmailInputModel)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
-            if (remoteError != null)
+            if (!this.ModelState.IsValid)
             {
-                this.TempData[ErrorMessage] = $"Error from external provider: {remoteError}";
-
-                return this.RedirectToAction("Login", new { ReturnUrl = returnUrl });
-            }
-            var info = await this.accountService.GetExternalLoginInfoAsync();
-
-            if (info == null)
-            {
-                this.TempData[ErrorMessage] = "Error loading external login information.";
-
-                return RedirectToPage("Login", new { ReturnUrl = returnUrl });
+                return this.View(enterEmailInputModel);
             }
 
-            var result = await this.accountService.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey);
+            try
+            {
+                await this.accountService.SendUserResetPasswordEmailAsync(enterEmailInputModel.Email);
 
-            if (result.Succeeded)
-            {
-                return this.LocalRedirect(returnUrl);
-            }
-            if (result.IsLockedOut)
-            {
-                return this.RedirectToPage("./Lockout");
-            }
-            else
-            {
-                TempData[InformationMessage] = "Please create an account before login!";
+                this.TempData[InformationMessage] = "Reset password link was sent to your email!";
 
-                return this.RedirectToAction(nameof(Register));
+                return this.View(enterEmailInputModel);
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.View(enterEmailInputModel);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            ResetPasswordInputModel model = new ResetPasswordInputModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordInputModel resetPasswordInputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(resetPasswordInputModel);
+            }
+
+            try
+            {
+                await this.accountService.ResetUserPasswordAsync(resetPasswordInputModel);
+
+                this.TempData[SuccessMessage] = "You succesfully reset your password!";
+
+                return this.RedirectToAction(nameof(Login));
+            }
+            catch (Exception ex)
+            {
+
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.View(resetPasswordInputModel);
             }
         }
     }
