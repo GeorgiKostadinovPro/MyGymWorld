@@ -4,6 +4,10 @@ using MyGymWorld.Data;
 using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +36,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
+});
+
+builder.Services.AddAuthentication()
+.AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Google:ClientID"];
+    options.ClientSecret = builder.Configuration["Google:ClientSecret"];
 });
 
 builder.Services.AddControllersWithViews();

@@ -1,9 +1,11 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.Google;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Web.ViewModels.Users;
@@ -13,15 +15,19 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService accountService;
+        private readonly IUserService userService;
 
-        public AccountController(IAccountService _accountService)
+        public AccountController(
+            IAccountService _accountService, 
+            IUserService _userService)
         {
             this.accountService = _accountService;
+            this.userService = _userService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public async Task<IActionResult> Register(string returnUrl = null)
         {
             RegisterUserInputModel registerUserInputModel = new RegisterUserInputModel
             {
@@ -67,11 +73,12 @@
 
         [HttpGet]  
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
             LoginUserInputModel loginUserInputModel = new LoginUserInputModel
             {
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                ExternalLogins = await this.accountService.GetExternalLoginsAsync()
             };
 
             return this.View(loginUserInputModel);
@@ -89,8 +96,6 @@
             try
             {
                 await this.accountService.AuthenticateAsync(loginUserInputModel);
-
-                this.HttpContext.Response.Cookies.Append("loginCookie", this.GetUserId(), new CookieOptions { Secure = true });
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -137,6 +142,52 @@
                 this.TempData[ErrorMessage] = ex.Message;
 
                 return this.RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", values: new { returnUrl });
+            var properties = this.accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (remoteError != null)
+            {
+                this.TempData[ErrorMessage] = $"Error from external provider: {remoteError}";
+
+                return this.RedirectToAction("Login", new { ReturnUrl = returnUrl });
+            }
+            var info = await this.accountService.GetExternalLoginInfoAsync();
+
+            if (info == null)
+            {
+                this.TempData[ErrorMessage] = "Error loading external login information.";
+
+                return RedirectToPage("Login", new { ReturnUrl = returnUrl });
+            }
+
+            var result = await this.accountService.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey);
+
+            if (result.Succeeded)
+            {
+                return this.LocalRedirect(returnUrl);
+            }
+            if (result.IsLockedOut)
+            {
+                return this.RedirectToPage("./Lockout");
+            }
+            else
+            {
+                TempData[InformationMessage] = "Please create an account before login!";
+
+                return this.RedirectToAction(nameof(Register));
             }
         }
     }
