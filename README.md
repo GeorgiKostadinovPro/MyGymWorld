@@ -23,6 +23,9 @@ Maybe you can mention me or this repo in the acknowledgements too
   <a href="">
     <img src="https://img.shields.io/github/last-commit/GeorgiKostadinovPro/MyGymWorld" alt="last update" />
   </a>
+  <a href="https://github.com/Louis3797/awesome-readme-template/network/members">
+    <img src="https://badgen.net/github/forks/GeorgiKostadinovPro/MyGymWorld" alt="forks" />
+  </a>
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/stargazers">
   <img src="https://badgen.net/github/stars/GeorgiKostadinovPro/MyGymWorld" alt="stars">
   </a>
