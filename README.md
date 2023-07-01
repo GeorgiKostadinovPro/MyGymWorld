@@ -17,23 +17,23 @@ Maybe you can mention me or this repo in the acknowledgements too
   
 <!-- Badges -->
 <p>
-  <a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/Louis3797/awesome-readme-template" alt="contributors" />
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/GeorgiKostadinovPro/MyGymWorld" alt="contributors" />
   </a>
   <a href="">
-    <img src="https://img.shields.io/github/last-commit/Louis3797/awesome-readme-template" alt="last update" />
+    <img src="https://img.shields.io/github/last-commit/GeorgiKostadinovPro/MyGymWorld" alt="last update" />
   </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/network/members">
-    <img src="https://img.shields.io/github/forks/Louis3797/awesome-readme-template" alt="forks" />
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/network/members">
+    <img src="https://img.shields.io/github/forks/GeorgiKostadinovPro/MyGymWorld" alt="forks" />
   </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/stargazers">
-    <img src="https://img.shields.io/github/stars/Louis3797/awesome-readme-template" alt="stars" />
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/stargazers">
+    <img src="https://img.shields.io/github/stars/GeorgiKostadinovPro/MyGymWorld" alt="stars" />
   </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/issues/">
-    <img src="https://img.shields.io/github/issues/Louis3797/awesome-readme-template" alt="open issues" />
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/issues/">
+    <img src="https://img.shields.io/github/issues/GeorgiKostadinovPro/MyGymWorld" alt="open issues" />
   </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/Louis3797/awesome-readme-template.svg" alt="license" />
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/GeorgiKostadinovPro/MyGymWorld" alt="license" />
   </a>
 </p>
    
