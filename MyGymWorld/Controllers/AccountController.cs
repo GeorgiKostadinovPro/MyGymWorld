@@ -28,7 +28,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(string returnUrl = null)
+        public IActionResult Register(string returnUrl = null)
         {
             RegisterUserInputModel registerUserInputModel = new RegisterUserInputModel
             {
@@ -74,7 +74,7 @@
 
         [HttpGet]  
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public IActionResult Login(string returnUrl = null)
         {
             LoginUserInputModel loginUserInputModel = new LoginUserInputModel
             {
