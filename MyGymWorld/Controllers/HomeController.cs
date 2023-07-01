@@ -32,15 +32,6 @@ namespace MyGymWorld.Controllers
                 return this.View();
             }
 
-            var loginCookie = this.HttpContext.Request.Cookies["LoginCookie"];
-
-            bool result = await this.userService.CheckIfUserHasConfirmedEmailAsync(userId);
-
-            if (result == true && loginCookie == null)
-            {
-                this.TempData[NotificationMessagesConstants.SuccessMessage] = "Successfully confirmed email!";
-            }
-
             return View();
         }
 

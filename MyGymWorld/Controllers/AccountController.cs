@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Web.ViewModels.Users;
@@ -43,7 +44,7 @@
             {
                 await this.accountService.RegisterUserAsync(registerUserInputModel);
 
-                this.TempData[WarningMessage] = "A confirmation email was sent to you! Please, confirm your account!";
+                this.TempData[InformationMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -89,7 +90,7 @@
             {
                 await this.accountService.AuthenticateAsync(loginUserInputModel);
 
-                this.HttpContext.Response.Cookies.Append("loginCookie", "true");
+                this.HttpContext.Response.Cookies.Append("loginCookie", this.GetUserId(), new CookieOptions { Secure = true });
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -120,15 +121,21 @@
             try
             {
                 await this.accountService.ConfirmUserEmailAsync(userId, emailConfirmationToken);
-                
-                return this.View();
+
+                this.TempData[SuccessMessage] = "Successfully confirmed email!";
+
+                return this.RedirectToAction("Index", "Home");
             }
             catch (ArgumentException ex)
             {
+                this.TempData[ErrorMessage] = ex.Message;
+
                 return this.RedirectToAction("Index", "Home");
             }
             catch (InvalidOperationException ex)
             {
+                this.TempData[ErrorMessage] = ex.Message;
+
                 return this.RedirectToAction("Index", "Home");
             }
         }
