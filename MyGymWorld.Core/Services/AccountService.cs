@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Core.Services
 {
     using AutoMapper;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
     using System;
     using System.Text;
@@ -22,7 +24,8 @@
         private readonly IUserService userService;
         private readonly IMapper mapper;
         private readonly IEmailSenderService emailSenderService;
-        public readonly IConfiguration configuration;
+        private readonly IConfiguration configuration;
+        private readonly IRepository repository;
 
         public AccountService(
             UserManager<ApplicationUser> _userManager, 
@@ -30,7 +33,8 @@
             IUserService _userService,
             IMapper _mapper,
             IEmailSenderService _emailSenderService,
-            IConfiguration _configuration)
+            IConfiguration _configuration,
+            IRepository _repository)
         {
             this.userManager = _userManager;
             this.signInManager = signInManager;
@@ -38,6 +42,7 @@
             this.mapper = _mapper;
             this.emailSenderService = _emailSenderService;
             this.configuration = _configuration;
+            this.repository = _repository;
         }
 
         public async Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel)
@@ -60,7 +65,7 @@
             {
                 throw new RegisterUserException(result.Errors);
             }
-            
+
             await this.signInManager.SignInAsync(user, isPersistent: false);
 
             string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
@@ -120,16 +125,42 @@
                 throw new ArgumentException(ExceptionConstants.ConfimEmail.InvalidUserId);
             }
 
-            var decodedToken = WebEncoders.Base64UrlDecode(emailConfirmationToken);
+            byte[] decodedToken = WebEncoders.Base64UrlDecode(emailConfirmationToken);
 
-            var originalToken = Encoding.UTF8.GetString(decodedToken);
+            string originalToken = Encoding.UTF8.GetString(decodedToken);
 
-            var result = await this.userManager.ConfirmEmailAsync(user, originalToken);
+            IdentityResult result = await this.userManager.ConfirmEmailAsync(user, originalToken);
 
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException(ExceptionConstants.ConfimEmail.ConfirmEmailFailed);
             }
+        }
+
+        public async Task<IList<AuthenticationScheme>> GetExternalLoginsAsync()
+        {
+            return (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+
+        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
+        {
+            AuthenticationProperties properties = this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return properties;
+        }
+
+        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync()
+        {
+            ExternalLoginInfo result = await this.signInManager.GetExternalLoginInfoAsync();
+
+            return result;
+        }
+
+        public async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey)
+        {
+            SignInResult result = await this.signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent: false, bypassTwoFactor: true);
+
+            return result;
         }
     }
 }
