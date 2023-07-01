@@ -3,6 +3,7 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
@@ -43,6 +44,18 @@
             string validEmailToken = WebEncoders.Base64UrlEncode(emailConfirmationTokenBytes);
 
             return validEmailToken;
+        } 
+        
+        public async Task<bool> CheckIfUserHasConfirmedEmailAsync(string userId)
+        {
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.ConfimEmail.InvalidUserId);
+            }
+
+            return user.EmailConfirmed;
         }
         
         public async Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password)

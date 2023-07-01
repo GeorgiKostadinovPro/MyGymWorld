@@ -15,9 +15,11 @@
         Task<ApplicationUser> GetUserByEmailAsync(string email);
 
         Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user);
+        
+        Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password);
 
         Task<bool> CheckIfUserExistsByEmailAsync(string email);
 
-        Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password);
+        Task<bool> CheckIfUserHasConfirmedEmailAsync(string userId);
     }
 }

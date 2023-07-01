@@ -13,7 +13,7 @@
 
         public static class LoginUser
         {
-            public const string InvalidLoginAttempt = "Invalid login attempt!";
+            public const string InvalidLoginAttempt = "Invalid login attempt or unconfirmed email!";
         }
 
         public static class ConfimEmail
