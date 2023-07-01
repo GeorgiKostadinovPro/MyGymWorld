@@ -1,4 +1,4 @@
-﻿namespace MyGymWorld.Core
+﻿namespace MyGymWorld.Common
 {
     /// <summary>
     /// A static class that contains all custom exception messages.
@@ -14,6 +14,12 @@
         public static class LoginUser
         {
             public const string InvalidLoginAttempt = "Invalid login attempt!";
+        }
+
+        public static class ConfimEmail
+        {
+            public const string InvalidUserId = "User with this id does NOT exist!";
+            public const string ConfirmEmailFailed = "Email was NOT confirmed!";
         }
     }
 }

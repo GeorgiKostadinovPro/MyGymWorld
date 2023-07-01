@@ -2,12 +2,16 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.Configuration;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
     using System;
+    using System.Text;
     using System.Threading.Tasks;
 
     public class AccountService : IAccountService
@@ -18,19 +22,22 @@
         private readonly IUserService userService;
         private readonly IMapper mapper;
         private readonly IEmailSenderService emailSenderService;
+        public readonly IConfiguration configuration;
 
         public AccountService(
             UserManager<ApplicationUser> _userManager, 
             SignInManager<ApplicationUser> signInManager,
             IUserService _userService,
             IMapper _mapper,
-            IEmailSenderService _emailSenderService)
+            IEmailSenderService _emailSenderService,
+            IConfiguration _configuration)
         {
             this.userManager = _userManager;
             this.signInManager = signInManager;
             this.userService = _userService;
             this.mapper = _mapper;
             this.emailSenderService = _emailSenderService;
+            this.configuration = _configuration;
         }
 
         public async Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel)
@@ -55,6 +62,10 @@
             }
             
             await this.signInManager.SignInAsync(user, isPersistent: false);
+
+            string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
+
+            await this.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
         }
         
         public async Task AuthenticateAsync(LoginUserInputModel loginUserInputModel)
@@ -89,6 +100,36 @@
         public async Task LogoutUserAsync()
         {
             await this.signInManager.SignOutAsync();
+        }
+
+        public async Task SendUserEmailConfirmationAsync(ApplicationUser user, string emailConfirmationToken)
+        {
+            string urlForVerification = $"{this.configuration["ApplicationUrl"]}/Account/ConfirmEmail?userId={user.Id}&emailConfirmationToken={emailConfirmationToken}";
+
+            await this.emailSenderService.SendEmailAsync(user.Email,
+                "Email confirmation", "<h1>Please, confirm your email address!</h1>" +
+                $"<p>Please, click <a href='{urlForVerification}'>here</a></p>");
+        }
+
+        public async Task ConfirmUserEmailAsync(string userId, string emailConfirmationToken)
+        {
+            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new ArgumentException(ExceptionConstants.ConfimEmail.InvalidUserId);
+            }
+
+            var decodedToken = WebEncoders.Base64UrlDecode(emailConfirmationToken);
+
+            var originalToken = Encoding.UTF8.GetString(decodedToken);
+
+            var result = await this.userManager.ConfirmEmailAsync(user, originalToken);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(ExceptionConstants.ConfimEmail.ConfirmEmailFailed);
+            }
         }
     }
 }

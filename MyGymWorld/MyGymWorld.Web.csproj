@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\ConfirmEmail.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.18" />
@@ -23,6 +27,18 @@
     <ProjectReference Include="..\MyGymWorld.Data\MyGymWorld.Data.csproj" />
     <ProjectReference Include="..\MyGymWorld.Web.Infrastructure\MyGymWorld.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Account\ConfirmEmail.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Account\ConfirmEmail.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Account\ConfirmEmail.cshtml" />
   </ItemGroup>
 
 </Project>
