@@ -32,7 +32,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/issues/">
     <img src="https://img.shields.io/github/issues/GeorgiKostadinovPro/MyGymWorld" alt="open issues" />
   </a>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE">
+  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/github/license/GeorgiKostadinovPro/MyGymWorld" alt="license" />
   </a>
 </p>
