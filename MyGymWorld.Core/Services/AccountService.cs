@@ -93,8 +93,8 @@
                 throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
             }
 
-            await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
-                $"<p>New login to your account at {DateTime.UtcNow}</p>");
+            /*await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
+                $"<p>New login to your account at {DateTime.UtcNow}</p>");*/
         }
 
         public async Task LogoutUserAsync()

@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
@@ -42,7 +43,7 @@
             {
                 await this.accountService.RegisterUserAsync(registerUserInputModel);
 
-                TempData[WarningMessage] = "A confirmation email was sent to you! Please, confirm your account!";
+                this.TempData[WarningMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -88,11 +89,13 @@
             {
                 await this.accountService.AuthenticateAsync(loginUserInputModel);
 
+                this.HttpContext.Response.Cookies.Append("loginCookie", "true");
+
                 return this.RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                this.ModelState.AddModelError(string.Empty, ex.Message);
 
                 return this.View(loginUserInputModel);
             }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyGymWorld.Common;
+using MyGymWorld.Core.Contracts;
 using MyGymWorld.Models;
 using MyGymWorld.Web.Controllers;
 using System.Diagnostics;
@@ -9,15 +11,36 @@ namespace MyGymWorld.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        public readonly IUserService userService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IUserService _userService)
         {
             _logger = logger;
+
+            this.userService = _userService;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            string userId = this.GetUserId();
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.View();
+            }
+
+            var loginCookie = this.HttpContext.Request.Cookies["LoginCookie"];
+
+            bool result = await this.userService.CheckIfUserHasConfirmedEmailAsync(userId);
+
+            if (result == true && loginCookie == null)
+            {
+                this.TempData[NotificationMessagesConstants.SuccessMessage] = "Successfully confirmed email!";
+            }
+
             return View();
         }
 
