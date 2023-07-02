@@ -7,6 +7,7 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
+    using System.Diagnostics.Tracing;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -105,16 +106,22 @@
                 throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
             }
 
+            string firstName = user.FirstName ?? "None";
+            string lastName = user.LastName ?? "None";
+            string profilePictureUrl = user.ProfilePictureUrl ?? "None";
+            string phoneNumber = user.PhoneNumber ?? "None";
+            string address = user.Address != null ? user.Address.Name ?? "None" : "None";
+
             UserProfileViewModel userProfileViewModel = new UserProfileViewModel()
             {
                 Id = userId,
                 UserName = user.UserName,
                 Email = user.Email,
-                //FirstName = user.FirstName,
-                //LastName = user.LastName,
-                //ProfilePictureUrl = user.ProfilePictureUrl,
-                //PhoneNumber = user.PhoneNumber,
-                //Address = user.Address.Name
+                FirstName = firstName,
+                LastName = lastName,
+                ProfilePictureUrl = profilePictureUrl,
+                PhoneNumber = phoneNumber,
+                Address = address
             };
 
             return userProfileViewModel;

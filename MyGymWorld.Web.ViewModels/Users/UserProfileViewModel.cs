@@ -18,5 +18,7 @@
         public string PhoneNumber { get; set; } = null!;
 
         public string? Address { get; set; }
+
+        public string? Role { get; set; }
     }
 }

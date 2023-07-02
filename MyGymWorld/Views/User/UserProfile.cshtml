@@ -4,164 +4,132 @@
     ViewData["Title"] = "User Profile";
 }
 
-<section style="background-color: #eee;">
-    <div class="container py-5">
+<div class="container" style="background-color: #CDCDCD">
+    <div class="main-body">
         <div class="row">
             <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3">@Model.UserName</h5>
-                        <p class="text-muted mb-1">Full Stack Developer</p>
-                        <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                        <div class="d-flex justify-content-center mb-2">
-                            <button type="button" class="btn btn-primary">Follow</button>
-                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="avatar-wrapper">
+                                <img class="profile-pic" src="" />
+                                <div class="upload-button">
+                                    <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                                </div>
+                                <input class="file-upload" type="file" accept="image/*" />
+                            </div>
+                           @* <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">*@
+                            <div class="mt-3">
+                                <h4>John Doe</h4>
+                                <p class="text-secondary mb-1">Full Stack Developer</p>
+                                <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                                <button class="btn btn-primary">Follow</button>
+                                <button class="btn btn-outline-primary">Message</button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card mb-4 mb-lg-0">
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush rounded-3">
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fas fa-globe fa-lg text-warning"></i>
-                                <p class="mb-0">https://mdbootstrap.com</p>
+                        <hr class="my-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
+                                <span class="text-secondary">https://bootdey.com</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github me-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
+                                <span class="text-secondary">bootdey</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter me-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
+                                <span class="text-secondary">bootdey</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                                <span class="text-secondary">bootdey</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                                <span class="text-secondary">bootdey</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8">
-                <div class="card mb-4">
+                <div class="card">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
+                                <h6 class="mb-0">Full Name</h6>
                             </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">Johnatan Smith</p>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" />
+                                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                @*<input type="text" class="form-control" value="John Doe">*@
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
+                                <h6 class="mb-0">Email</h6>
                             </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">example@example.com</p>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="john@example.com">
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-3">
-                                <p class="mb-0">Phone</p>
+                                <h6 class="mb-0">Phone</h6>
                             </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">(097) 234-5678</p>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="(239) 816-9029">
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-3">
-                                <p class="mb-0">Mobile</p>
+                                <h6 class="mb-0">Mobile</h6>
                             </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">(098) 765-4321</p>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="(320) 380-4539">
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-3">
-                                <p class="mb-0">Address</p>
+                                <h6 class="mb-0">Address</h6>
                             </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="Bay Area, San Francisco, CA">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="button" class="btn btn-primary px-4" value="Save Changes">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
+                    <div class="col-sm-12">
+                        <div class="card">
                             <div class="card-body">
-                                <p class="mb-4">
-                                    <span class="text-primary font-italic me-1">assigment</span> Project Status
-                                </p>
-                                <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                <h5 class="d-flex align-items-center mb-3">Project Status</h5>
+                                <p>Web Design</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                <p>Website Markup</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                <p>One Page</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                <p>Mobile Template</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                                <div class="progress rounded mb-2" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
-                            <div class="card-body">
-                                <p class="mb-4">
-                                    <span class="text-primary font-italic me-1">assigment</span> Project Status
-                                </p>
-                                <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                                <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                                <div class="progress rounded mb-2" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                <p>Backend API</p>
+                                <div class="progress" style="height: 5px">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -170,4 +138,164 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<style>
+    .main-body {
+        padding: 15px;
+    }
+
+    .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1rem;
+    }
+
+    .gutters-sm {
+        margin-right: -8px;
+        margin-left: -8px;
+    }
+
+        .gutters-sm > .col, .gutters-sm > [class*=col-] {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+    .mb-3, .my-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    .bg-gray-300 {
+        background-color: #e2e8f0;
+    }
+
+    .h-100 {
+        height: 100% !important;
+    }
+
+    .shadow-none {
+        box-shadow: none !important;
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid transparent;
+        border-radius: .25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+    }
+
+    .me-2 {
+        margin-right: .5rem !important;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        height: 200px;
+        width: 200px;
+        margin: 50px auto;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 1px 1px 15px -5px black;
+        transition: all 0.3s ease;
+    }
+
+        .avatar-wrapper:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+            .avatar-wrapper:hover .profile-pic {
+                opacity: 0.5;
+            }
+
+        .avatar-wrapper .profile-pic {
+            height: 100%;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+            .avatar-wrapper .profile-pic:after {
+                font-family: FontAwesome;
+                content: "";
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                font-size: 190px;
+                background: #ecf0f1;
+                color: #34495e;
+                text-align: center;
+            }
+
+        .avatar-wrapper .upload-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+            .avatar-wrapper .upload-button .fa-arrow-circle-up {
+                position: absolute;
+                font-size: 234px;
+                top: -17px;
+                left: 0;
+                text-align: center;
+                opacity: 0;
+                transition: all 0.3s ease;
+                color: #34495e;
+            }
+
+            .avatar-wrapper .upload-button:hover .fa-arrow-circle-up {
+                opacity: 0.9;
+            }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        var readURL = function (input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.profile-pic').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(".file-upload").on('change', function () {
+            readURL(this);
+        });
+
+        $(".upload-button").on('click', function () {
+            $(".file-upload").click();
+        });
+    });
+</script>

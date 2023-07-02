@@ -48,7 +48,7 @@
 
                 this.TempData[InformationMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
-                return this.RedirectToAction(nameof(Login));
+                return this.View(registerUserInputModel);
             }
             catch (InvalidOperationException ex)
             {
@@ -124,7 +124,7 @@
 
                 this.TempData[SuccessMessage] = "Successfully confirmed email!";
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction(nameof(Login));
             }
             catch (ArgumentException ex)
             {
