@@ -25,6 +25,8 @@
 
         public string? LastName { get; set; }
 
+        public string? ProfilePictureUrl { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }

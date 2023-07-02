@@ -2,6 +2,9 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Web.ViewModels.Users;
+
+    using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class UserController : BaseController
     {
@@ -13,9 +16,22 @@
         }
 
         [HttpGet]
-        public IActionResult UserProfile()
+        public async Task<IActionResult> UserProfile()
         {
-            return View();
+            string userId = this.GetUserId();
+
+            try
+            {
+                UserProfileViewModel userProfileViewModel = await this.userService.GetUserToDisplayByIdAsync(userId);
+                
+                return this.View(userProfileViewModel);
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.RedirectToAction("Index", "Home");
+            }
         }
     }
 }

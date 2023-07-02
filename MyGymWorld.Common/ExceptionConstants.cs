@@ -27,5 +27,10 @@
             public const string InvalidEmailAddress = "User with this email does NOT exist!";
             public const string InvalidTokenOrPassword = "Your token or password is invalid!";
         }
+
+        public static class UserErros
+        {
+            public const string InvalidUserId = "User with this id does NOT exist!";
+        }
     }
 }
