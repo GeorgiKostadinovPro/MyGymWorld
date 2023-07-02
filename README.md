@@ -13,7 +13,12 @@ Maybe you can mention me or this repo in the acknowledgements too
   <p>
     Fuel your passion for fitness!
   </p>
-  
+  <p>
+    NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid and Cloudinary.
+  </p>
+  <p>
+    For further info review [Environment Variables] in Table of Contents.
+  </p>
   
 <!-- Badges -->
 <p>
