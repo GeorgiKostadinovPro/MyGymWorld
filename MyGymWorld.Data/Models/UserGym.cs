@@ -11,7 +11,13 @@
 
         public Guid Id { get; set; }
 
+        public bool IsSubscribedForEvents { get; set; }
+
         public bool IsSubscribedForArticles { get; set; }
+
+        public bool IsNotifiedByEmail { get; set; }
+
+        public bool IsNotifiedBySMS { get; set; }
 
         public Guid UserId { get; set; }
 
