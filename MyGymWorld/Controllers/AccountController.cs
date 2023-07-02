@@ -48,7 +48,7 @@
 
                 this.TempData[InformationMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction(nameof(Login));
             }
             catch (InvalidOperationException ex)
             {
