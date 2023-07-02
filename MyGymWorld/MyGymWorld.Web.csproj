@@ -27,4 +27,12 @@
     <ProjectReference Include="..\MyGymWorld.Web.ViewModels\MyGymWorld.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\User\Edit.cshtml" />
+  </ItemGroup>
+
 </Project>

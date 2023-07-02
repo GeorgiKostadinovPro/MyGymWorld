@@ -1,11 +1,16 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Users
 {
-    public class UserProfileViewModel
+    using System.ComponentModel.DataAnnotations;
+
+    public class EditUserInputModel
     {
         public string Id { get; set; } = null!;
 
-        public string UserName { get; set; } = null!; 
-        
+        [Required]
+        public string UserName { get; set; } = null!;
+
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
 
         public string? FirstName { get; set; }
