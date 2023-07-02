@@ -33,5 +33,22 @@
                 return this.RedirectToAction("Index", "Home");
             }
         }
+
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, EditUserInputModel userProfileViewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            return this.RedirectToAction("Index", "Home");
+        }
     }
 }
