@@ -14,7 +14,7 @@
 
         Task<ApplicationUser> GetUserByEmailAsync(string email);
 
-        Task<UserViewModel> GetUserToDisplayById(string userId);
+        Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
         Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user);
         

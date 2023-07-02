@@ -96,9 +96,28 @@
             return applicationUser;
         }
 
-        public Task<UserViewModel> GetUserToDisplayById(string userId)
+        public async Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
+            }
+
+            UserProfileViewModel userProfileViewModel = new UserProfileViewModel()
+            {
+                Id = userId,
+                UserName = user.UserName,
+                Email = user.Email,
+                //FirstName = user.FirstName,
+                //LastName = user.LastName,
+                //ProfilePictureUrl = user.ProfilePictureUrl,
+                //PhoneNumber = user.PhoneNumber,
+                //Address = user.Address.Name
+            };
+
+            return userProfileViewModel;
         }
     }
 }
