@@ -107,6 +107,8 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://sendgrid.com/">SendGrid</a></li>
     <li><a href="https://cloudinary.com/">Cloudinary</a></li>
     <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>
+    <li><a href="https://www.w3schools.com/icons/fontawesome_icons_intro.asp">FontAwesome</a></li>
+    <li><a href="https://feathericons.com/">Feather</a></li>
   </ul>
 </details>
 
