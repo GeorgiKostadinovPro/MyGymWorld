@@ -12,7 +12,7 @@
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("NewPassword", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmNewPassword { get; set; } = null!;
 
         public string Email { get; set; } = null!;
