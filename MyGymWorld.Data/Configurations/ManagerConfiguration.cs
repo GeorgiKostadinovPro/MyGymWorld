@@ -16,6 +16,13 @@
                 .HasForeignKey<Manager>(m => m.UserId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false);
+
+            builder
+                .HasOne(m => m.Gym)
+                .WithMany(g => g.Managers)
+                .HasForeignKey(m => m.GymId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
         }
     }
 }
