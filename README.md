@@ -99,9 +99,9 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/areas?view=aspnetcore-6.0">ASP.NET Core Areas</a></li>
     <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
     <li><a href="https://jquery.com/">jQuery</a></li>
-    <li><a href="https://sendgrid.com/"SendGrid</a></li>
-    <li><a href="https://cloudinary.com/">Cloudinary</a></li>    
-     <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>    
+    <li><a href="https://sendgrid.com/">SendGrid</a></li>
+    <li><a href="https://cloudinary.com/">Cloudinary</a></li>
+    <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>
   </ul>
 </details>
 
