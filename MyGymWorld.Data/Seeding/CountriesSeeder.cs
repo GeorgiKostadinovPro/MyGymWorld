@@ -38,7 +38,7 @@
                 },
                 new Country()
                 {
-                    Name = "Japan",
+                    Name = "South Korea",
                     CreatedOn = DateTime.UtcNow,
                 },
                 new Country()
@@ -66,56 +66,56 @@
                     Name = "Italy",
                     CreatedOn = DateTime.UtcNow,
                 },
-                new Country()
-                {
-                    Name = "Portual",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Netherlands",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Canada",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Sweden",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Norway",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "South Korea",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Poland",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Romania",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "Serbia",
-                    CreatedOn = DateTime.UtcNow,
-                },
-                new Country()
-                {
-                    Name = "India",
-                    CreatedOn = DateTime.UtcNow,
-                }
+                //new Country()
+                //{
+                //    Name = "Portual",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Netherlands",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Canada",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Sweden",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Norway",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "South Korea",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Poland",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Romania",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "Serbia",
+                //    CreatedOn = DateTime.UtcNow,
+                //},
+                //new Country()
+                //{
+                //    Name = "India",
+                //    CreatedOn = DateTime.UtcNow,
+                //}
             };
 
             await dbContext.Countries.AddRangeAsync(countries);
