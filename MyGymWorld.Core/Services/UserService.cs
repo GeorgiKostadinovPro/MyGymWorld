@@ -95,5 +95,10 @@
 
             return applicationUser;
         }
+
+        public Task<UserViewModel> GetUserToDisplayById(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -164,7 +164,7 @@
                 throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidEmailAddress);
             }
 
-            IdentityResult result = await this.userManager.ResetPasswordAsync(user, resetPasswordInputModel.Token, resetPasswordInputModel.Password);
+            IdentityResult result = await this.userManager.ResetPasswordAsync(user, resetPasswordInputModel.Token, resetPasswordInputModel.NewPassword);
 
             if (!result.Succeeded)
             {
