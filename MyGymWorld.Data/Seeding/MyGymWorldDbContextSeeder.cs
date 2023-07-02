@@ -23,7 +23,8 @@ namespace MyGymWorld.Data.Seeding
             var seeders = new List<ISeeder>
                           {
                               new RolesSeeder(),
-                              new CountriesSeeder()
+                              new CountriesSeeder(),
+                              new TownsSeeder()
                           };
 
             foreach (var seeder in seeders)

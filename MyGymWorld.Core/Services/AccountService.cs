@@ -10,7 +10,6 @@
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
-    using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
     using System;
     using System.Text;
@@ -25,7 +24,6 @@
         private readonly IMapper mapper;
         private readonly IEmailSenderService emailSenderService;
         private readonly IConfiguration configuration;
-        private readonly IRepository repository;
 
         public AccountService(
             UserManager<ApplicationUser> _userManager, 
@@ -33,8 +31,7 @@
             IUserService _userService,
             IMapper _mapper,
             IEmailSenderService _emailSenderService,
-            IConfiguration _configuration,
-            IRepository _repository)
+            IConfiguration _configuration)
         {
             this.userManager = _userManager;
             this.signInManager = signInManager;
@@ -42,7 +39,6 @@
             this.mapper = _mapper;
             this.emailSenderService = _emailSenderService;
             this.configuration = _configuration;
-            this.repository = _repository;
         }
 
         public async Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel)

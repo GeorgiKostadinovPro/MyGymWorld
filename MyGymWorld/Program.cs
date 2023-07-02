@@ -50,7 +50,7 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var dbContext = serviceScope.ServiceProvider.GetRequiredService<MyGymWorldDbContext>();
 
-    //dbContext.Database.Migrate();
+    dbContext.Database.Migrate();
 
     new MyGymWorldDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
 }
