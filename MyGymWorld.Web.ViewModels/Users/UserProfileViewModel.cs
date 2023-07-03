@@ -17,5 +17,15 @@
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
+
+        public int EventsCount { get; set; }
+
+        public int ArticlesAcount { get; set; }
+
+        public int LikesCount { get; set; }
+
+        public int DislikesCount { get; set; }
+
+        public int CommentsCount { get; set; }
     }
 }

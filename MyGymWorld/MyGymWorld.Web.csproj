@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\User\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\user-profile.css" />
   </ItemGroup>
 
 </Project>
