@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Core.Services
 {
     using AutoMapper;
-    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Configuration;

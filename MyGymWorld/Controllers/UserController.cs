@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Users;
 
@@ -9,10 +10,17 @@
     public class UserController : BaseController
     {
         private readonly IUserService userService;
+        private readonly ICountryService countryService;
+        private readonly ITownService townService;
 
-        public UserController(IUserService _userService)
+        public UserController(
+            IUserService _userService,
+            ICountryService _countryService,
+            ITownService _townService)
         {
             this.userService = _userService;
+            this.countryService = _countryService;
+            this.townService = _townService;
         }
 
         [HttpGet]
@@ -23,7 +31,7 @@
             try
             {
                 UserProfileViewModel userProfileViewModel = await this.userService.GetUserToDisplayByIdAsync(userId);
-                
+
                 return this.View(userProfileViewModel);
             }
             catch (InvalidOperationException ex)
@@ -35,20 +43,61 @@
         }
 
         [HttpGet]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            return this.View();
+            EditUserInputModel editUserInputModel = await this.userService.GetUserForEditByIdAsync(id);
+
+            editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+            editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+            return this.View(editUserInputModel);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, EditUserInputModel userProfileViewModel)
+        public async Task<IActionResult> Edit(string id, EditUserInputModel editUserInputModel)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(UserProfile));
+                editUserInputModel.Id = id;
+                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editUserInputModel);
             }
 
-            return this.RedirectToAction("Index", "Home");
+            if (!string.IsNullOrWhiteSpace(editUserInputModel.Address))
+            {
+                if (editUserInputModel.CountryId == "None"
+                    || editUserInputModel.TownId == "None")
+                {
+                    this.ModelState.AddModelError("CountryId", "This field is required when you have address!");
+                    this.ModelState.AddModelError("TownId", "This field is required when you have address!");
+
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+
+                bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(editUserInputModel.TownId, editUserInputModel.CountryId);
+
+                if (isPresent == false)
+                {
+                    this.ModelState.AddModelError("TownId", "The town should be in the chosen country!");
+
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+            }
+
+            await this.userService.EditUserAsync(editUserInputModel.Id, editUserInputModel);
+
+            return this.RedirectToAction("UserProfile", "User");
         }
     }
 }

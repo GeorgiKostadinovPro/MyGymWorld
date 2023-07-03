@@ -25,6 +25,9 @@
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ITownService, TownService>();
+
             return services;
         }
     }

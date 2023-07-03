@@ -8,11 +8,16 @@
     {
         Task<(ApplicationUser, IdentityResult)> CreateUserAsync(CreateUserInputModel createUserInputModel);
 
+        Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel);
+
+
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
         Task<ApplicationUser> GetUserByUserNameAsync(string username);
 
         Task<ApplicationUser> GetUserByEmailAsync(string email);
+
+        Task<EditUserInputModel> GetUserForEditByIdAsync(string userId);
 
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
