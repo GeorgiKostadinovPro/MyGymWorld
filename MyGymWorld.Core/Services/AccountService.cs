@@ -142,7 +142,7 @@
                 throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidEmailAddress);
             }
 
-            string token = await this.userManager.GeneratePasswordResetTokenAsync(user);
+            string token = await this.userService.GenerateUserPasswordResetTokenAsync(user);
 
             string resetUrl = $"{this.configuration["ApplicationUrl"]}/Account/ResetPassword?email={Uri.EscapeDataString(email!)}&token={Uri.EscapeDataString(token)}";
 
@@ -160,7 +160,11 @@
                 throw new InvalidOperationException(ExceptionConstants.ResetPassword.InvalidEmailAddress);
             }
 
-            IdentityResult result = await this.userManager.ResetPasswordAsync(user, resetPasswordInputModel.Token, resetPasswordInputModel.NewPassword);
+            byte[] decodedToken = WebEncoders.Base64UrlDecode(resetPasswordInputModel.Token);
+
+            string originalToken = Encoding.UTF8.GetString(decodedToken);
+
+            IdentityResult result = await this.userManager.ResetPasswordAsync(user, originalToken, resetPasswordInputModel.NewPassword);
 
             if (!result.Succeeded)
             {

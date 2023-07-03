@@ -17,7 +17,10 @@
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
         Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user);
-        
+
+        Task<string> GenerateUserPasswordResetTokenAsync(ApplicationUser user);
+
+
         Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password);
 
         Task<bool> CheckIfUserExistsByEmailAsync(string email);
