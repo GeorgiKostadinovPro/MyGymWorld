@@ -34,7 +34,12 @@
 
             return (userToCreate , result);
         }
-        
+
+        public Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)
         {
             string emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -140,6 +145,36 @@
             };
 
             return userProfileViewModel;
+        }
+
+        public async Task<EditUserInputModel> GetUserForEditByIdAsync(string userId)
+        {
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
+            
+            if (user == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
+            }
+
+            string firstName = user.FirstName ?? string.Empty;
+            string lastName = user.LastName ?? string.Empty;
+            string profilePictureUrl = user.ProfilePictureUrl ?? string.Empty;
+            string phoneNumber = user.PhoneNumber ?? string.Empty;
+            string address = user.Address != null ? user.Address.Name ?? string.Empty : string.Empty;
+
+            EditUserInputModel editUserInputModel = new EditUserInputModel()
+            {
+                Id = userId,
+                UserName = user.UserName,
+                Email = user.Email,
+                FirstName = firstName,
+                LastName = lastName,
+                ProfilePictureUrl = profilePictureUrl,
+                PhoneNumber = phoneNumber,
+                Address = address
+            };
+
+            return editUserInputModel;
         }
     }
 }
