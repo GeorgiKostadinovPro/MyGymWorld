@@ -121,7 +121,12 @@
                 LastName = lastName,
                 ProfilePictureUrl = profilePictureUrl,
                 PhoneNumber = phoneNumber,
-                Address = address
+                Address = address,
+                EventsCount = user.UsersEvents.Count,
+                ArticlesAcount = user.UsersArticles.Count,
+                LikesCount = user.Likes.Count,
+                DislikesCount = user.Dislikes.Count,
+                CommentsCount = user.Comments.Count
             };
 
             return userProfileViewModel;
