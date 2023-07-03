@@ -7,7 +7,6 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
-    using System.Diagnostics.Tracing;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -45,8 +44,19 @@
             string validEmailToken = WebEncoders.Base64UrlEncode(emailConfirmationTokenBytes);
 
             return validEmailToken;
-        } 
-        
+        }
+
+        public async Task<string> GenerateUserPasswordResetTokenAsync(ApplicationUser user)
+        {
+            string resetPasswordToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
+
+            byte[] resetPasswordTokenBytes = Encoding.UTF8.GetBytes(resetPasswordToken);
+
+            string validResetPasswordToken = WebEncoders.Base64UrlEncode(resetPasswordTokenBytes);
+
+            return validResetPasswordToken;
+        }
+
         public async Task<bool> CheckIfUserHasConfirmedEmailAsync(string userId)
         {
             ApplicationUser user = await this.GetUserByIdAsync(userId);
