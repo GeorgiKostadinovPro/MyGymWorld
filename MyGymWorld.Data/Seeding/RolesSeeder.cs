@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using MyGymWorld.Data.Common.Constants;
+using MyGymWorld.Common;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding.Contracts;
 

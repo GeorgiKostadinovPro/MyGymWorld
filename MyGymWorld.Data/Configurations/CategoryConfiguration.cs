@@ -2,9 +2,8 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using MyGymWorld.Data.Common.Constants;
+    using MyGymWorld.Common;
     using MyGymWorld.Data.Models;
-    using System;
 
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
