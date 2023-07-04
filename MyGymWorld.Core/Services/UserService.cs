@@ -231,7 +231,7 @@
                 Email = user.Email,
                 FirstName = firstName,
                 LastName = lastName,
-                ProfilePictureUrl = profilePictureUrl,
+                ProfilePictureUri = profilePictureUrl,
                 PhoneNumber = phoneNumber,
                 Address = address,
                 EventsCount = user.UsersEvents.Count,
@@ -266,7 +266,6 @@
                 Email = user.Email,
                 FirstName = firstName,
                 LastName = lastName,
-                ProfilePictureUri = profilePictureUrl,
                 PhoneNumber = phoneNumber,
                 Address = address
             };
