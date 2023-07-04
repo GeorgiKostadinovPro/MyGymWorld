@@ -39,14 +39,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc();
 
-// Cloudinary account
-Account cloudinaryAccount = new Account(
-    builder.Configuration["Cloudinary:CloudName"],
-    builder.Configuration["Cloudinary:APIKey"],
-    builder.Configuration["Cloudinary:APISecret"]);
-
 // Custom extension method to apply all different services among the application
-builder.Services.AddApplicationServices(cloudinaryAccount);
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
