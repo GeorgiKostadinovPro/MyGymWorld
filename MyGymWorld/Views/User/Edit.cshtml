@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form id="editForm" asp-controller="User" asp-action="Edit" method="post">
+        <form id="editForm" asp-controller="User" asp-action="Edit" method="post" enctype="multipart/form-data">
             <h2>Edit Your Profile</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -40,7 +40,7 @@
                <div class="small text-muted mt-2">
                     Upload your Profile Picture
                 </div>
-              <input asp-for="FormFile" class="form-control form-control-lg" id="formFileLg" type="file" />
+              <input asp-for="@Model.ProfilePicture" class="form-control form-control-lg" id="formFileLg"/>
             </div>
             <div class="form-floating">
                 <input asp-for="@Model.Address" id="address" class="form-control" autocomplete="address" aria-required="true" />
