@@ -1,10 +1,12 @@
 ﻿namespace MyGymWorld.Core.Services
 {
     using AutoMapper;
+    using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
@@ -16,7 +18,9 @@
         private readonly UserManager<ApplicationUser> userManager;
 
         private readonly IMapper mapper;
-        private readonly IRepository repository; 
+        private readonly IRepository repository;
+
+        private readonly ICloudinaryService cloudinaryService;
 
         private readonly IAddressService addressService;
         private readonly ITownService townService;
@@ -26,6 +30,7 @@
             UserManager<ApplicationUser> _userManager, 
             IMapper _mapper,
             IRepository _repository,
+            ICloudinaryService _cloudinaryService,
             IAddressService _addressService,
             ITownService _townService,
             ICountryService _countryService)
@@ -34,6 +39,8 @@
 
             this.mapper = _mapper;
             this.repository = _repository;
+
+            this.cloudinaryService = _cloudinaryService;
 
             this.addressService = _addressService;
             this.townService = _townService;
@@ -59,25 +66,22 @@
             {
                 throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
             }
-
-            string phoneNumber = editUserInputModel.PhoneNumber;
-
-            //if (editUserInputModel.PhoneNumber != null)
-            //{
-            //    string[] phoneNumberParts = editUserInputModel.PhoneNumber.Split("-");
-            //    string countryCode = phoneNumberParts[0];
-            //    string realNumber = phoneNumberParts[1];
-
-            //    phoneNumber = string.Concat(countryCode, realNumber);
-            //}
-
+            
             userToEdit.UserName = editUserInputModel.UserName;
             userToEdit.Email = editUserInputModel.Email; 
             userToEdit.FirstName = editUserInputModel.FirstName;
             userToEdit.LastName = editUserInputModel.LastName;
-            userToEdit.PhoneNumber = phoneNumber;
-            userToEdit.ProfilePictureUrl = editUserInputModel.ProfilePictureUrl;
+            userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
             userToEdit.ModifiedOn = DateTime.UtcNow;
+
+            if (editUserInputModel.ProfilePicture != null)
+            {
+                ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(editUserInputModel.ProfilePicture);
+
+                string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
+                
+                userToEdit.ProfilePictureUri = profilePictureUri;
+            }
 
             if (editUserInputModel.Address == null)
             {
@@ -110,7 +114,7 @@
 
                     userToEdit.Address = newAddress;
                 }
-            }
+            }   
 
             IdentityResult result = await this.userManager.UpdateAsync(userToEdit);
             
@@ -207,7 +211,7 @@
 
             string firstName = user.FirstName ?? "None";
             string lastName = user.LastName ?? "None";
-            string profilePictureUrl = user.ProfilePictureUrl ?? "None";
+            string profilePictureUrl = user.ProfilePictureUri ?? "None";
             string phoneNumber = user.PhoneNumber ?? "None";
             string address = "None";
 
@@ -251,7 +255,7 @@
 
             string firstName = user.FirstName ?? string.Empty;
             string lastName = user.LastName ?? string.Empty;
-            string profilePictureUrl = user.ProfilePictureUrl ?? string.Empty;
+            string profilePictureUrl = user.ProfilePictureUri ?? string.Empty;
             string phoneNumber = user.PhoneNumber ?? string.Empty;
             string address = user.Address != null ? user.Address.Name ?? string.Empty : string.Empty;
 
@@ -262,7 +266,7 @@
                 Email = user.Email,
                 FirstName = firstName,
                 LastName = lastName,
-                ProfilePictureUrl = profilePictureUrl,
+                ProfilePictureUri = profilePictureUrl,
                 PhoneNumber = phoneNumber,
                 Address = address
             };
