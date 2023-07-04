@@ -126,13 +126,7 @@
 
                 return this.RedirectToAction(nameof(Login));
             }
-            catch (ArgumentException ex)
-            {
-                this.TempData[ErrorMessage] = ex.Message;
-
-                return this.RedirectToAction("Index", "Home");
-            }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 this.TempData[ErrorMessage] = ex.Message;
 

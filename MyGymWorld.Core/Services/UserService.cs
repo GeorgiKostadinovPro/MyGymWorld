@@ -6,6 +6,7 @@
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Text;
     using System.Threading.Tasks;
@@ -15,13 +16,28 @@
         private readonly UserManager<ApplicationUser> userManager;
 
         private readonly IMapper mapper;
+        private readonly IRepository repository; 
+
+        private readonly IAddressService addressService;
+        private readonly ITownService townService;
+        private readonly ICountryService countryService;
 
         public UserService(
             UserManager<ApplicationUser> _userManager, 
-            IMapper _mapper)
+            IMapper _mapper,
+            IRepository _repository,
+            IAddressService _addressService,
+            ITownService _townService,
+            ICountryService _countryService)
         {
             this.userManager = _userManager;
+
             this.mapper = _mapper;
+            this.repository = _repository;
+
+            this.addressService = _addressService;
+            this.townService = _townService;
+            this.countryService = _countryService;
         }
 
         public async Task<(ApplicationUser, IdentityResult)> CreateUserAsync(CreateUserInputModel createUserInputModel)
@@ -35,9 +51,51 @@
             return (userToCreate , result);
         }
 
-        public Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel)
+        public async Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel)
         {
-            throw new NotImplementedException();
+            ApplicationUser userToEdit = await this.GetUserByIdAsync(userId);
+
+            if (userToEdit == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
+            } 
+            
+            userToEdit.UserName = editUserInputModel.UserName;
+            userToEdit.Email = editUserInputModel.Email; 
+            userToEdit.FirstName = editUserInputModel.FirstName;
+            userToEdit.LastName = editUserInputModel.LastName;
+            userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
+            userToEdit.ProfilePictureUrl = editUserInputModel.ProfilePictureUrl;
+            userToEdit.ModifiedOn = DateTime.UtcNow;
+
+            if (editUserInputModel.Address != null)
+            {
+                Address address = await this.addressService.GetAddressByNameAsync(editUserInputModel.Address!);
+
+                if (address != null)
+                {
+                    userToEdit.AddressId = address.Id;
+                    userToEdit.Address = address;
+                }
+                else
+                {
+                    Address newAddress = new Address
+                    {
+                        Name = editUserInputModel.Address!,
+                        TownId = Guid.Parse(editUserInputModel.TownId!),
+                        CreatedOn = DateTime.UtcNow
+                    };
+
+                    await this.repository.AddAsync(newAddress);
+                    await this.repository.SaveChangesAsync();
+
+                    userToEdit.Address = newAddress;
+                }
+            }
+
+            IdentityResult result = await this.userManager.UpdateAsync(userToEdit);
+            
+            return (userToEdit, result);
         }
 
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)
@@ -88,6 +146,13 @@
             return user != null ? true : false;
         }
         
+        public async Task<bool> CheckIfUserExistsByUsernameAsync(string username)
+        {
+            ApplicationUser user = await this.GetUserByUsernameAsync(username);
+
+            return user != null ? true : false;
+        }
+        
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
         {
             ApplicationUser applicationUser = await this.userManager
@@ -104,7 +169,7 @@
             return applicationUser; 
         }
 
-        public async Task<ApplicationUser> GetUserByUserNameAsync(string username)
+        public async Task<ApplicationUser> GetUserByUsernameAsync(string username)
         {
             ApplicationUser applicationUser = await this.userManager
                .FindByNameAsync(username);
@@ -125,7 +190,16 @@
             string lastName = user.LastName ?? "None";
             string profilePictureUrl = user.ProfilePictureUrl ?? "None";
             string phoneNumber = user.PhoneNumber ?? "None";
-            string address = user.Address != null ? user.Address.Name ?? "None" : "None";
+            string address = "None";
+
+            if (user.AddressId != null)
+            {
+                Address userAddress = await this.addressService.GetAddressByIdAsync(user.AddressId.Value);
+                Town userTown = await this.townService.GetTownByIdAsync(userAddress.TownId);
+                Country userCountry = await this.countryService.GetCountryByIdAsync(userTown.CountryId);
+
+                address = string.Concat(userAddress.Name, $", {userTown.Name}, {userCountry.Name}");
+            }
 
             UserProfileViewModel userProfileViewModel = new UserProfileViewModel()
             {

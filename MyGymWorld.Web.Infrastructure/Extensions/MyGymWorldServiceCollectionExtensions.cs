@@ -27,6 +27,7 @@
 
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
+            services.AddScoped<IAddressService, AddressService>();
 
             return services;
         }

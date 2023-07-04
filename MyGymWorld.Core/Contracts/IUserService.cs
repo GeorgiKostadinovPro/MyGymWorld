@@ -13,7 +13,7 @@
 
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
-        Task<ApplicationUser> GetUserByUserNameAsync(string username);
+        Task<ApplicationUser> GetUserByUsernameAsync(string username);
 
         Task<ApplicationUser> GetUserByEmailAsync(string email);
 
@@ -29,6 +29,9 @@
         Task<bool> CheckUserPasswordAsync(ApplicationUser user, string password);
 
         Task<bool> CheckIfUserExistsByEmailAsync(string email);
+
+        Task<bool> CheckIfUserExistsByUsernameAsync(string username);
+
 
         Task<bool> CheckIfUserHasConfirmedEmailAsync(string userId);
     }

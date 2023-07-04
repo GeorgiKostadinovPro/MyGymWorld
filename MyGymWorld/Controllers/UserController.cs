@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Users;
 
@@ -103,6 +104,57 @@
                 }
             }
 
+            if (string.IsNullOrWhiteSpace(editUserInputModel.Address))
+            {
+                if (editUserInputModel.CountryId != "None"
+                    && editUserInputModel.TownId != null)
+                {
+                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+                    
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+                else if (editUserInputModel.CountryId != "None")
+                {
+                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+                else if (editUserInputModel.TownId != null 
+                    && editUserInputModel.TownId != "None")
+                {
+                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+            }
+
+            bool isUsernamePresent = await this.userService.CheckIfUserExistsByUsernameAsync(editUserInputModel.UserName);
+            var user = await this.userService.GetUserByIdAsync(id);
+
+            if (isUsernamePresent && user.Id != Guid.Parse(id))
+            {
+                this.ModelState.AddModelError("UserName", "This username is already taken!");
+
+                editUserInputModel.Id = id;
+                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editUserInputModel);
+            }
+            
             await this.userService.EditUserAsync(editUserInputModel.Id, editUserInputModel);
 
             return this.RedirectToAction("UserProfile", "User");
