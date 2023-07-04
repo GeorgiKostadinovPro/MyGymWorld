@@ -1,7 +1,5 @@
-﻿namespace MyGymWorld.Data.Common.Constants
+﻿namespace MyGymWorld.Common
 {
-    using System.Runtime.InteropServices;
-
     public static class ValidationalConstants
     {
         public static class CountryConstants

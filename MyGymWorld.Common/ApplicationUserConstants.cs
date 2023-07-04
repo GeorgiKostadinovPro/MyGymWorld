@@ -1,6 +1,5 @@
-﻿namespace MyGymWorld.Data.Common.Constants
+﻿namespace MyGymWorld.Common
 {
-
     public static class ApplicationUserConstants
     {
         public const int UsernameMinLength = 5;

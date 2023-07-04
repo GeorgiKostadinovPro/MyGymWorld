@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyGymWorld.Common\MyGymWorld.Common.csproj" />
     <ProjectReference Include="..\MyGymWorld.Data.Common\MyGymWorld.Data.Common.csproj" />
   </ItemGroup>
 
