@@ -32,6 +32,11 @@
                .Property(au => au.LastName)
                .IsRequired(false)
                .HasMaxLength(ApplicationUserConstants.LastNameMaxLength);
+
+            builder
+               .Property(au => au.PhoneNumber)
+               .IsRequired(false)
+               .HasMaxLength(ApplicationUserConstants.PhoneNumberMaxLength);
         }
     }
 }
