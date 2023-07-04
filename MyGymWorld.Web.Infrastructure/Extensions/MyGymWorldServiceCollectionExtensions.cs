@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Web.Infrastructure.Extensions
 {
+    using CloudinaryDotNet;
     using Microsoft.Extensions.DependencyInjection;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Services;
@@ -16,15 +17,28 @@
         /// </summary>
         /// <param name="services">Using IServiceCollection interface for extension</param>
         /// <returns>IServiceCollection</returns>
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, Account cloudinaryAccount)
         {
+            // Automapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Repository pattern
             services.AddScoped<IRepository, Repository>();
 
+            // SendGrid services
             services.AddTransient<IEmailSenderService, EmailSenderService>();
 
+            // Cloudinary services
+            Cloudinary cloudinary = new Cloudinary(cloudinaryAccount);
+
+            services.AddSingleton(cloudinary);
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+            // Authentication services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
 
+            // standard services
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
             services.AddScoped<IAddressService, AddressService>();

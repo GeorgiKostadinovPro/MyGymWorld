@@ -34,7 +34,7 @@
 
         public string? ProfilePictureUrl { get; set; }
 
-        public IFormFile? FormFile { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
 
         public string? Address { get; set; }
 

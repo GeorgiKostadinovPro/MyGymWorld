@@ -4,6 +4,7 @@ using MyGymWorld.Data;
 using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +39,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc();
 
-// Automapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// Cloudinary account
+Account cloudinaryAccount = new Account(
+    builder.Configuration["Cloudinary:CloudName"],
+    builder.Configuration["Cloudinary:APIKey"],
+    builder.Configuration["Cloudinary:APISecret"]);
 
 // Custom extension method to apply all different services among the application
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(cloudinaryAccount);
 
 var app = builder.Build();
 
