@@ -69,18 +69,34 @@
 }
 
 <script>
-    let countriesSelectElement = document.getElementById('countries');
+    //let countriesSelectElement = document.getElementById('countries');
 
-    countriesSelectElement.value = "None";
+    //countriesSelectElement.value = "None";
 
-    countriesSelectElement.addEventListener('change', (e) => {
+    //countriesSelectElement.addEventListener('change', (e) => {
 
-        let townsSelectElement = document.getElementById('towns');
+    //    let townsSelectElement = document.getElementById('towns');
 
-        if(countries.value == 'None'){
-            townsSelectElement.disabled = true;
-        }else{
-            townsSelectElement.disabled = false;
-        }
+    //    if(countries.value == 'None'){
+    //        townsSelectElement.disabled = true;
+    //    }else{
+    //        townsSelectElement.disabled = false;
+    //    }
+    //});
+
+    // With jQuery
+    $(document).ready(function () {
+        $('#countries').val('None');
+
+        $('#countries').on('change', function () {
+            var selectedCountry = $(this).val();
+            var $townsSelectElement = $('#towns');
+
+            if (selectedCountry === 'None') {
+                $townsSelectElement.prop('disabled', true);
+            } else {
+                $townsSelectElement.prop('disabled', false);
+            }
+        });
     });
 </script>

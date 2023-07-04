@@ -62,14 +62,14 @@
 
             string phoneNumber = editUserInputModel.PhoneNumber;
 
-            if (editUserInputModel.PhoneNumber != null)
-            {
-                string[] phoneNumberParts = editUserInputModel.PhoneNumber.Split("-");
-                string countryCode = phoneNumberParts[0];
-                string realNumber = phoneNumberParts[1];
+            //if (editUserInputModel.PhoneNumber != null)
+            //{
+            //    string[] phoneNumberParts = editUserInputModel.PhoneNumber.Split("-");
+            //    string countryCode = phoneNumberParts[0];
+            //    string realNumber = phoneNumberParts[1];
 
-                phoneNumber = string.Concat(countryCode, realNumber);
-            }
+            //    phoneNumber = string.Concat(countryCode, realNumber);
+            //}
 
             userToEdit.UserName = editUserInputModel.UserName;
             userToEdit.Email = editUserInputModel.Email; 
