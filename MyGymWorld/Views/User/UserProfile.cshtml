@@ -35,7 +35,6 @@
                                 {
                                     <p class="text-secondary mb-1">Regular User</p>
                                 }
-                                <p class="text-muted font-size-sm">@Model.Address</p>
                                @* <button class="btn btn-primary">Follow</button>
                                 <button class="btn btn-outline-primary">Message</button>*@
                             </div>
@@ -71,10 +70,10 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Username:</h6>
+                                <h6 class="mb-0">Full Name:</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="@Model.UserName" disabled>
+                                <input type="text" class="form-control" value="@(Model.FirstName == "None" ? Model.FirstName : Model.FirstName + " " + Model.LastName)" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">

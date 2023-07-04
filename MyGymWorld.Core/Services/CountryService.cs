@@ -8,6 +8,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Countries;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -40,6 +41,14 @@
                 })
                 .OrderBy(sli => sli.Text)
                 .ToArrayAsync();
+        }
+
+        public async Task<Country> GetCountryByIdAsync(Guid countryId)
+        {
+            Country country = await this.repository.All<Country>()
+                .FirstOrDefaultAsync(c => c.Id == countryId);
+
+            return country;
         }
     }
 }

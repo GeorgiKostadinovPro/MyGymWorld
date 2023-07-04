@@ -37,30 +37,24 @@
                 <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="col-md-9 pe-5">
-               @* <div class="small text-muted mt-2">
+               <div class="small text-muted mt-2">
                     Upload your Profile Picture
-                </div>*@
-              @*  <input asp-for="FormFile" class="form-control form-control-lg" id="formFileLg" type="file" />*@
-                <input type="file"
-                       class="form-control text-primary text-center"
-                       id="picture"
-                       placeholder="Picture..."
-                       asp-for="@Model.FormFile">
-                <span asp-validation-for="@Model.FormFile" class="text-danger"></span>
+                </div>
+              <input asp-for="FormFile" class="form-control form-control-lg" id="formFileLg" type="file" />
             </div>
             <div class="form-floating">
-                <input asp-for="@Model.Address" class="form-control" autocomplete="address" aria-required="true" />
+                <input asp-for="@Model.Address" id="address" class="form-control" autocomplete="address" aria-required="true" />
                 <label asp-for="@Model.Address"></label>
                 <span asp-validation-for="@Model.Address" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <select id="countries" class="form-select" asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList">
+                <select asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList" id="countries" class="form-select">
                     <option value="None">-- Please Select A Country --</option>
                 </select>
                 <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <select class="form-select" asp-for="@Model.TownId" asp-items="@Model.TownsSelectList">
+                <select asp-for="@Model.TownId" asp-items="@Model.TownsSelectList" id="towns" class="form-select" disabled>
                     <option value="None">-- Please Select A Town --</option>
                 </select>
                 <span asp-validation-for="@Model.TownId" class="text-danger"></span>
@@ -74,4 +68,19 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-           
+<script>
+    let countriesSelectElement = document.getElementById('countries');
+
+    countriesSelectElement.value = "None";
+
+    countriesSelectElement.addEventListener('change', (e) => {
+
+        let townsSelectElement = document.getElementById('towns');
+
+        if(countries.value == 'None'){
+            townsSelectElement.disabled = true;
+        }else{
+            townsSelectElement.disabled = false;
+        }
+    });
+</script>

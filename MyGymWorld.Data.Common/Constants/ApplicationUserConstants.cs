@@ -11,5 +11,8 @@
 
         public const int LastNameMinLength = 3;
         public const int LastNameMaxLength = 20;
+
+        public const int PhoneMinLength = 3;
+        public const int PhoneMaxLength = 20;
     }
 }
