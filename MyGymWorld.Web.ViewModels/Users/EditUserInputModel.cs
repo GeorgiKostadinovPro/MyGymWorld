@@ -32,8 +32,6 @@
             MinimumLength = ApplicationUserConstants.PhoneNumberMinLength)]
         public string? PhoneNumber { get; set; }
 
-        public string? ProfilePictureUri { get; set; }
-
         public IFormFile? ProfilePicture { get; set; }
 
         public string? Address { get; set; }
