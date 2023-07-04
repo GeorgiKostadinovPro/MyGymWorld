@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Users;
 

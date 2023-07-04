@@ -58,17 +58,36 @@
             if (userToEdit == null)
             {
                 throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
-            } 
-            
+            }
+
+            string phoneNumber = editUserInputModel.PhoneNumber;
+
+            if (editUserInputModel.PhoneNumber != null)
+            {
+                string[] phoneNumberParts = editUserInputModel.PhoneNumber.Split("-");
+                string countryCode = phoneNumberParts[0];
+                string realNumber = phoneNumberParts[1];
+
+                phoneNumber = string.Concat(countryCode, realNumber);
+            }
+
             userToEdit.UserName = editUserInputModel.UserName;
             userToEdit.Email = editUserInputModel.Email; 
             userToEdit.FirstName = editUserInputModel.FirstName;
             userToEdit.LastName = editUserInputModel.LastName;
-            userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
+            userToEdit.PhoneNumber = phoneNumber;
             userToEdit.ProfilePictureUrl = editUserInputModel.ProfilePictureUrl;
             userToEdit.ModifiedOn = DateTime.UtcNow;
 
-            if (editUserInputModel.Address != null)
+            if (editUserInputModel.Address == null)
+            {
+                if (userToEdit.AddressId != null)
+                {
+                    userToEdit.AddressId = null;
+                    userToEdit.Address = null;
+                }
+            }
+            else
             {
                 Address address = await this.addressService.GetAddressByNameAsync(editUserInputModel.Address!);
 

@@ -3,7 +3,7 @@
     public static class ApplicationUserConstants
     {
         public const int UsernameMinLength = 5;
-        public const int UsernameMaxLength = 30;
+        public const int UsernameMaxLength = 50;
 
         public const int FirstNameMinLength = 3;
         public const int FirstNameMaxLength = 20;
