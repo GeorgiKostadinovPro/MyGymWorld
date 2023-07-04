@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Users;
 
@@ -68,11 +67,20 @@
 
             if (!string.IsNullOrWhiteSpace(editUserInputModel.Address))
             {
-                if (editUserInputModel.CountryId == "None"
-                    || editUserInputModel.TownId == "None")
+                if (editUserInputModel.CountryId == "None")
                 {
-                    this.ModelState.AddModelError("CountryId", "This field is required when you have address!");
-                    this.ModelState.AddModelError("TownId", "This field is required when you have address!");
+                    this.ModelState.AddModelError("CountryId", "Country is required when you have address!");
+                   
+                    editUserInputModel.Id = id;
+                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                    return this.View(editUserInputModel);
+                }
+
+                if ( editUserInputModel.TownId == "None")
+                {
+                    this.ModelState.AddModelError("TownId", "Town is required when you have address!");
 
                     editUserInputModel.Id = id;
                     editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
@@ -81,7 +89,7 @@
                     return this.View(editUserInputModel);
                 }
 
-                bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(editUserInputModel.TownId, editUserInputModel.CountryId);
+                bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(editUserInputModel.TownId!, editUserInputModel.CountryId!);
 
                 if (isPresent == false)
                 {
