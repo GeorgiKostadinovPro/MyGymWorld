@@ -32,5 +32,10 @@
         {
             public const string InvalidUserId = "User with this id does NOT exist!";
         }
+
+        public static class ProfilePictureErrors
+        {
+            public const string InvalidProfilePictureExtension = "The profile picture must be in formats jpg, jpeg, png!";
+        }
     }
 }
