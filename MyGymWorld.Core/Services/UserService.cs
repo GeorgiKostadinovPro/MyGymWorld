@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using CloudinaryDotNet.Actions;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
     using MyGymWorld.Common;
@@ -10,6 +11,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -74,21 +76,13 @@
             userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
             userToEdit.ModifiedOn = DateTime.UtcNow;
 
-            if (editUserInputModel.ProfilePicture != null)
-            {
-                ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(editUserInputModel.ProfilePicture);
-
-                string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
-                
-                userToEdit.ProfilePictureUri = profilePictureUri;
-            }
+            await this.UploadUserProfilePictureAsync(userToEdit, editUserInputModel.ProfilePicture);
 
             if (editUserInputModel.Address == null)
             {
                 if (userToEdit.AddressId != null)
                 {
                     userToEdit.AddressId = null;
-                    userToEdit.Address = null;
                 }
             }
             else
@@ -119,6 +113,30 @@
             IdentityResult result = await this.userManager.UpdateAsync(userToEdit);
             
             return (userToEdit, result);
+        }
+
+        public async Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture)
+        {
+            if (profilePicture == null)
+            {
+                return;
+            }
+
+            string extension = Path.GetExtension(profilePicture.FileName);
+            string[] validExtensions = { "jpg", ".jpeg", "png" };
+
+            if (!validExtensions.Contains(extension))
+            {
+                throw new InvalidOperationException(ExceptionConstants.ProfilePictureErrors.InvalidProfilePictureExtension);
+            }
+
+            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture);
+
+            string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
+
+            user.ProfilePictureUri = profilePictureUri;
+
+            await this.userManager.UpdateAsync(user);
         }
 
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)

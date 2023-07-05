@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Core.Contracts
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
@@ -10,6 +11,7 @@
 
         Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel);
 
+        Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture);
 
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 

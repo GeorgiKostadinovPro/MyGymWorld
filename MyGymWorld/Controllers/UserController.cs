@@ -65,6 +65,28 @@
                 return this.View(editUserInputModel);
             }
 
+            if (editUserInputModel.FirstName != null && editUserInputModel.LastName == null)
+            {
+                this.ModelState.AddModelError("LastName", "LastName is required when you have FirstName!");
+
+                editUserInputModel.Id = id;
+                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editUserInputModel);
+            }
+
+            if (editUserInputModel.FirstName == null && editUserInputModel.LastName != null)
+            {
+                this.ModelState.AddModelError("FirstName", "FirstName is required when you have LastName!");
+
+                editUserInputModel.Id = id;
+                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editUserInputModel);
+            }
+
             if (!string.IsNullOrWhiteSpace(editUserInputModel.Address))
             {
                 if (editUserInputModel.CountryId == "None")
@@ -153,8 +175,17 @@
 
                 return this.View(editUserInputModel);
             }
-            
-            await this.userService.EditUserAsync(editUserInputModel.Id, editUserInputModel);
+
+            try
+            {
+                await this.userService.EditUserAsync(editUserInputModel.Id, editUserInputModel);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("ProfilePicture", ex.Message);
+
+                return this.View(editUserInputModel);
+            }
 
             return this.RedirectToAction("UserProfile", "User");
         }
