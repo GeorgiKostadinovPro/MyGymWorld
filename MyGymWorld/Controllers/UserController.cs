@@ -204,9 +204,17 @@
             return this.RedirectToAction("UserProfile", "User");
         }
 
+        [HttpPost]
         public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
         {
-            if (!this.cloudinaryService.IsFileValid(profilePicture) == false)
+            if (profilePicture == null)
+            {
+                this.TempData[ErrorMessage] = "Please choose a picture before submitting!!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            if (!this.cloudinaryService.IsFileValid(profilePicture))
             {
                 this.TempData[ErrorMessage] = "The allowed types of pictures are jpg, jpeg and png!";
 
