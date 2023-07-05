@@ -11,7 +11,7 @@
             builder.HasKey(gi => gi.Id);
 
             builder
-                .Property(gi => gi.Uri)
+                .Property(gi => gi.Url)
                 .IsRequired();
         }
     }
