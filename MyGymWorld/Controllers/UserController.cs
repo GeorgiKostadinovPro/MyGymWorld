@@ -1,9 +1,9 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
+    using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Utilities.Contracts;
-    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -48,6 +48,59 @@
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
+        {
+            if (profilePicture == null)
+            {
+                this.TempData[ErrorMessage] = "Please choose a picture before submitting!!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            if (!this.cloudinaryService.IsFileValid(profilePicture))
+            {
+                this.TempData[ErrorMessage] = "The allowed types of pictures are jpg, jpeg and png!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            string userId = this.GetUserId();
+
+            (string profilePictureUri, string publicId) = await this.userService.GetUserProfilePictureUriAndPublicIdAsync(userId);
+
+            if (publicId != null)
+            {
+                await this.cloudinaryService.DeletePhotoAsync(publicId);
+                await this.userService.DeleteUserProfilePictureAsync(userId);
+            }
+             
+            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture);
+
+            await this.userService.SetUserProfilePictureAsync(userId, imageUploadResult);
+
+            return this.RedirectToAction(nameof(UserProfile));
+        }
+
+        public async Task<IActionResult> DeleteProfilePicture()
+        {
+            string userId = this.GetUserId();
+
+            (string profilePictureUri, string publicId) = await this.userService.GetUserProfilePictureUriAndPublicIdAsync(userId);
+
+            if (profilePictureUri == null || publicId == null)
+            {
+                this.TempData[ErrorMessage] = "You don't have profile picture to delete!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            await this.cloudinaryService.DeletePhotoAsync(publicId);
+            await this.userService.DeleteUserProfilePictureAsync(userId);
+
+            return this.RedirectToAction(nameof(UserProfile));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -90,13 +143,6 @@
                 editUserInputModel.Id = id;
                 editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
                 editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
-                return this.View(editUserInputModel);
-            }
-
-            if (editUserInputModel.ProfilePicture != null && !this.cloudinaryService.IsFileValid(editUserInputModel.ProfilePicture))
-            {
-                this.ModelState.AddModelError("ProfilePicture", "The allowed types of pictures are jpg, jpeg and png!");
 
                 return this.View(editUserInputModel);
             }
@@ -202,50 +248,6 @@
             }
 
             return this.RedirectToAction("UserProfile", "User");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
-        {
-            if (profilePicture == null)
-            {
-                this.TempData[ErrorMessage] = "Please choose a picture before submitting!!";
-
-                return this.RedirectToAction(nameof(UserProfile));
-            }
-
-            if (!this.cloudinaryService.IsFileValid(profilePicture))
-            {
-                this.TempData[ErrorMessage] = "The allowed types of pictures are jpg, jpeg and png!";
-
-                return this.RedirectToAction(nameof(UserProfile));
-            }
-            
-            string userId = this.GetUserId();
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            await this.userService.UploadUserProfilePictureAsync(user, profilePicture);
-
-            return this.RedirectToAction(nameof(UserProfile));
-        }
-
-        public async Task<IActionResult> DeleteProfilePicture()
-        {
-            string userId = this.GetUserId();
-
-            var user = await this.userService.GetUserByIdAsync(userId);
-
-            if (user.ProfilePictureUri == null)
-            {
-                this.TempData[ErrorMessage] = "You don't have profile picture to delete!";
-
-                return this.RedirectToAction(nameof(UserProfile));
-            }
-
-            await this.userService.DeleteUserProfilePictureAsync(user);
-
-            return this.RedirectToAction(nameof(UserProfile));
         }
     }
 }
