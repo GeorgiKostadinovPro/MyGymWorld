@@ -4,7 +4,6 @@ using MyGymWorld.Data;
 using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
-using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
