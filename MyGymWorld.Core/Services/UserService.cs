@@ -78,6 +78,11 @@
 
             if (editUserInputModel.ProfilePicture != null)
             {
+                if (userToEdit.ProfilePicturePublicId != null)
+                {
+                    await this.DeleteUserProfilePictureAsync(userToEdit);
+                }
+                
                 await this.UploadUserProfilePictureAsync(userToEdit, editUserInputModel.ProfilePicture);
             }
                
@@ -122,7 +127,7 @@
         public async Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture)
         {
             string extension = Path.GetExtension(profilePicture.FileName);
-            string[] validExtensions = { "jpg", ".jpeg", "png" };
+            string[] validExtensions = { ".jpg", ".jpeg", ".png" };
 
             if (!validExtensions.Contains(extension))
             {
@@ -134,13 +139,19 @@
             string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
 
             user.ProfilePictureUri = profilePictureUri;
-
-            await this.userManager.UpdateAsync(user);
+            user.ProfilePicturePublicId = imageUploadResult.PublicId;
         }
 
         public async Task DeleteUserProfilePictureAsync(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            string publicId = user.ProfilePicturePublicId!;
+
+            await this.cloudinaryService.DeletePhotoAsync(publicId);
+
+            user.ProfilePictureUri = null;
+            user.ProfilePicturePublicId = null;
+
+            await this.userManager.UpdateAsync(user);
         }
 
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)

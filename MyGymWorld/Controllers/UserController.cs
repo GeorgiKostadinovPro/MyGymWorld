@@ -189,5 +189,23 @@
 
             return this.RedirectToAction("UserProfile", "User");
         }
+
+        public async Task<IActionResult> DeleteProfilePicture()
+        {
+            string userId = this.GetUserId();
+
+            var user = await this.userService.GetUserByIdAsync(userId);
+
+            if (user.ProfilePictureUri == null)
+            {
+                this.TempData[ErrorMessage] = "You don't have profile picture to delete!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+
+            await this.userService.DeleteUserProfilePictureAsync(user);
+
+            return this.RedirectToAction(nameof(UserProfile));
+        }
     }
 }
