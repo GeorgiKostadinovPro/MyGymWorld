@@ -159,7 +159,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("TownId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.ApplicationRole", b =>
@@ -336,7 +336,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Articles", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.ArticleCategory", b =>
@@ -369,7 +369,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ArticlesCategories");
+                    b.ToTable("ArticlesCategories", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Category", b =>
@@ -397,7 +397,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.ChatGroup", b =>
@@ -431,7 +431,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("ChatGroups");
+                    b.ToTable("ChatGroups", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Comment", b =>
@@ -473,7 +473,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Country", b =>
@@ -501,7 +501,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Dislike", b =>
@@ -534,7 +534,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Dislikes");
+                    b.ToTable("Dislikes", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Event", b =>
@@ -569,7 +569,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Gym", b =>
@@ -625,7 +625,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gyms");
+                    b.ToTable("Gyms", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.GymAddress", b =>
@@ -658,7 +658,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymAddresses");
+                    b.ToTable("GymAddresses", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.GymImage", b =>
@@ -690,7 +690,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymImages");
+                    b.ToTable("GymImages", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Like", b =>
@@ -723,7 +723,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Manager", b =>
@@ -763,7 +763,7 @@ namespace MyGymWorld.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Managers");
+                    b.ToTable("Managers", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Membership", b =>
@@ -798,7 +798,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Memberships");
+                    b.ToTable("Memberships", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Message", b =>
@@ -839,7 +839,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Town", b =>
@@ -880,7 +880,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Towns");
+                    b.ToTable("Towns", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.UserArticle", b =>
@@ -901,7 +901,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersArticles");
+                    b.ToTable("UsersArticles", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.UserChatGroup", b =>
@@ -934,7 +934,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersChatGroups");
+                    b.ToTable("UsersChatGroups", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.UserEvent", b =>
@@ -967,7 +967,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersEvents");
+                    b.ToTable("UsersEvents", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.UserGym", b =>
@@ -1014,7 +1014,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersGyms");
+                    b.ToTable("UsersGyms", (string)null);
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.UserMembership", b =>
@@ -1047,7 +1047,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersMemberships");
+                    b.ToTable("UsersMemberships", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

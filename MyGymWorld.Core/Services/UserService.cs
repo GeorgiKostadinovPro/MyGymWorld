@@ -133,7 +133,7 @@
 
             string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
 
-            user.ProfilePictureUri = profilePictureUri;
+            user.ProfilePictureUrl = profilePictureUri;
 
             await this.userManager.UpdateAsync(user);
         }
@@ -233,7 +233,7 @@
 
             string firstName = user.FirstName ?? "None";
             string lastName = user.LastName ?? "None";
-            string profilePictureUrl = user.ProfilePictureUri ?? "None";
+            string profilePictureUrl = user.ProfilePictureUrl ?? "None";
             string phoneNumber = user.PhoneNumber ?? "None";
             string address = "None";
 
@@ -277,7 +277,7 @@
 
             string firstName = user.FirstName ?? string.Empty;
             string lastName = user.LastName ?? string.Empty;
-            string profilePictureUrl = user.ProfilePictureUri ?? string.Empty;
+            string profilePictureUrl = user.ProfilePictureUrl ?? string.Empty;
             string phoneNumber = user.PhoneNumber ?? string.Empty;
             string address = user.Address != null ? user.Address.Name ?? string.Empty : string.Empty;
 
