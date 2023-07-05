@@ -3,6 +3,7 @@
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Utilities.Contracts;
     using System.Threading.Tasks;
 
@@ -42,6 +43,25 @@
             DeletionResult deletionResult = await this.cloudinary.DestroyAsync(deletionParams);
 
             return deletionResult;
+        }
+
+        public bool IsFileValid(IFormFile formFile)
+        {
+            if (formFile == null)
+            {
+                return false;
+            }
+
+            string extension = Path.GetExtension(formFile.FileName);
+
+            string[] validExtensions = { ".jpg", ".jpeg", ".png" };
+
+            if (!validExtensions.Contains(extension))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

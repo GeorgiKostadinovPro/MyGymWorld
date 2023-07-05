@@ -80,12 +80,19 @@
             {
                 if (userToEdit.ProfilePicturePublicId != null)
                 {
-                    await this.DeleteUserProfilePictureAsync(userToEdit);
+                    string publicId = userToEdit.ProfilePicturePublicId!;
+
+                    await this.cloudinaryService.DeletePhotoAsync(publicId);
+
+                    userToEdit.ProfilePictureUri = null;
+                    userToEdit.ProfilePicturePublicId = null;
                 }
-                
-                await this.UploadUserProfilePictureAsync(userToEdit, editUserInputModel.ProfilePicture);
+
+                ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(editUserInputModel.ProfilePicture);
+
+                userToEdit.ProfilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
+                userToEdit.ProfilePicturePublicId = imageUploadResult.PublicId;
             }
-               
 
             if (editUserInputModel.Address == null)
             {
@@ -117,7 +124,7 @@
 
                     userToEdit.Address = newAddress;
                 }
-            }   
+            }
 
             IdentityResult result = await this.userManager.UpdateAsync(userToEdit);
             
@@ -126,20 +133,14 @@
 
         public async Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture)
         {
-            string extension = Path.GetExtension(profilePicture.FileName);
-            string[] validExtensions = { ".jpg", ".jpeg", ".png" };
-
-            if (!validExtensions.Contains(extension))
-            {
-                throw new InvalidOperationException(ExceptionConstants.ProfilePictureErrors.InvalidProfilePictureExtension);
-            }
-
             ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture);
 
             string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
 
             user.ProfilePictureUri = profilePictureUri;
             user.ProfilePicturePublicId = imageUploadResult.PublicId;
+
+            await this.userManager.UpdateAsync(user);
         }
 
         public async Task DeleteUserProfilePictureAsync(ApplicationUser user)

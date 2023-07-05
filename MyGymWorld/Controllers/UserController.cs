@@ -2,21 +2,28 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Core.Utilities.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class UserController : BaseController
     {
+        private readonly ICloudinaryService cloudinaryService;
+
         private readonly IUserService userService;
         private readonly ICountryService countryService;
         private readonly ITownService townService;
 
         public UserController(
+            ICloudinaryService _cloudinaryService,
             IUserService _userService,
             ICountryService _countryService,
             ITownService _townService)
         {
+            this.cloudinaryService = _cloudinaryService;
+
             this.userService = _userService;
             this.countryService = _countryService;
             this.townService = _townService;
@@ -83,6 +90,13 @@
                 editUserInputModel.Id = id;
                 editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
                 editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editUserInputModel);
+            }
+
+            if (editUserInputModel.ProfilePicture != null && !this.cloudinaryService.IsFileValid(editUserInputModel.ProfilePicture))
+            {
+                this.ModelState.AddModelError("ProfilePicture", "The allowed types of pictures are jpg, jpeg and png!");
 
                 return this.View(editUserInputModel);
             }
@@ -188,6 +202,24 @@
             }
 
             return this.RedirectToAction("UserProfile", "User");
+        }
+
+        public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
+        {
+            if (!this.cloudinaryService.IsFileValid(profilePicture) == false)
+            {
+                this.TempData[ErrorMessage] = "The allowed types of pictures are jpg, jpeg and png!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
+            
+            string userId = this.GetUserId();
+
+            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+            await this.userService.UploadUserProfilePictureAsync(user, profilePicture);
+
+            return this.RedirectToAction(nameof(UserProfile));
         }
 
         public async Task<IActionResult> DeleteProfilePicture()
