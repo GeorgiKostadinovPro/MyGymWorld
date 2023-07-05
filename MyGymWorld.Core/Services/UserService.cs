@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using CloudinaryDotNet.Actions;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
     using MyGymWorld.Common;
@@ -11,7 +10,6 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
-    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -22,8 +20,6 @@
         private readonly IMapper mapper;
         private readonly IRepository repository;
 
-        private readonly ICloudinaryService cloudinaryService;
-
         private readonly IAddressService addressService;
         private readonly ITownService townService;
         private readonly ICountryService countryService;
@@ -32,7 +28,6 @@
             UserManager<ApplicationUser> _userManager, 
             IMapper _mapper,
             IRepository _repository,
-            ICloudinaryService _cloudinaryService,
             IAddressService _addressService,
             ITownService _townService,
             ICountryService _countryService)
@@ -41,8 +36,6 @@
 
             this.mapper = _mapper;
             this.repository = _repository;
-
-            this.cloudinaryService = _cloudinaryService;
 
             this.addressService = _addressService;
             this.townService = _townService;
@@ -75,24 +68,6 @@
             userToEdit.LastName = editUserInputModel.LastName;
             userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
             userToEdit.ModifiedOn = DateTime.UtcNow;
-
-            if (editUserInputModel.ProfilePicture != null)
-            {
-                if (userToEdit.ProfilePicturePublicId != null)
-                {
-                    string publicId = userToEdit.ProfilePicturePublicId!;
-
-                    await this.cloudinaryService.DeletePhotoAsync(publicId);
-
-                    userToEdit.ProfilePictureUri = null;
-                    userToEdit.ProfilePicturePublicId = null;
-                }
-
-                ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(editUserInputModel.ProfilePicture);
-
-                userToEdit.ProfilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
-                userToEdit.ProfilePicturePublicId = imageUploadResult.PublicId;
-            }
 
             if (editUserInputModel.Address == null)
             {
@@ -131,9 +106,9 @@
             return (userToEdit, result);
         }
 
-        public async Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture)
+        public async Task SetUserProfilePictureAsync(string userId, ImageUploadResult imageUploadResult)
         {
-            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture);
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
 
             string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
 
@@ -143,16 +118,21 @@
             await this.userManager.UpdateAsync(user);
         }
 
-        public async Task DeleteUserProfilePictureAsync(ApplicationUser user)
+        public async Task DeleteUserProfilePictureAsync(string userId)
         {
-            string publicId = user.ProfilePicturePublicId!;
-
-            await this.cloudinaryService.DeletePhotoAsync(publicId);
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
 
             user.ProfilePictureUri = null;
             user.ProfilePicturePublicId = null;
 
             await this.userManager.UpdateAsync(user);
+        }
+
+        public async Task<(string, string)> GetUserProfilePictureUriAndPublicIdAsync(string userId)
+        {
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
+
+            return (user.ProfilePictureUri, user.ProfilePicturePublicId);
         }
 
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)

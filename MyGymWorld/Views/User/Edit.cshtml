@@ -36,11 +36,6 @@
                 <label asp-for="@Model.PhoneNumber">+(country code)-(phone number)</label>
                 <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-floating>
-               <label class="form-label" for="customFile">Upload your profile picture</label>
-               <input asp-for="@Model.ProfilePicture" class="form-control" id="customFile"/>
-               <span asp-validation-for="@Model.ProfilePicture" class="text-danger"></span>
-            </div>
             <div class="form-floating">
                 <input asp-for="@Model.Address" id="address" class="form-control" autocomplete="address" aria-required="true" />
                 <label asp-for="@Model.Address"></label>

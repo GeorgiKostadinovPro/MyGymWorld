@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Core.Contracts
 {
     using CloudinaryDotNet.Actions;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
@@ -12,9 +11,11 @@
 
         Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel);
 
-        Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture);
+        Task SetUserProfilePictureAsync(string userId, ImageUploadResult imageUploadResult);
 
-        Task DeleteUserProfilePictureAsync(ApplicationUser user);
+        Task DeleteUserProfilePictureAsync(string userId);
+
+        Task<(string, string)> GetUserProfilePictureUriAndPublicIdAsync(string userId);
 
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
