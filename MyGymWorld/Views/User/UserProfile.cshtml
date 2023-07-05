@@ -13,14 +13,18 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <div class="avatar-wrapper">
-                                <img class="profile-pic" src="@Model.ProfilePictureUri" />
-                                <div>upload image</div>
-                                <div class="upload-button">
-                                    <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                                <div class="avatar-wrapper">
+                                    <img class="profile-pic" src="@Model.ProfilePictureUri" />
+                                    <div>upload image</div>
+                                    <div class="upload-button">
+                                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                                    </div>
+                                    <input asp-for="@Model.ProfilePicture" id="upload-picture-input" class="file-upload" accept="image/*" />
                                 </div>
-                                <input class="file-upload" type="file" accept="image/*" />
-                            </div>
+                                <div style="width: 300px">
+                                    <a class="link_button" id="upload-picture">Upload</a>
+                                    <a asp-controller="User" asp-action="DeleteProfilePicture" class="link_button">Delete</a>
+                                </div>
                             <div class="mt-3">
                                 <h4>@Model.UserName</h4>
                                 @if (User.IsInRole("Administrator"))
@@ -101,9 +105,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-10">
+                            <div class="col-sm-3">
                                 <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="link_button">Edit Profile</a>
-                                <a asp-controller="User" asp-action="DeleteProfilePicture" class="link_button">Delete Profile Picture</a>
                             </div>
                         </div>
                     </div>
@@ -163,6 +166,24 @@
 
         $(".upload-button").on('click', function () {
             $(".file-upload").click();
+        });
+
+        $('#upload-picture').click(function (e) {
+            e.preventDefault();
+
+            var fileInput = $('#upload-picture-input')[0];
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append('ProfilePicture', file);
+
+            $.ajax({
+                url: '@Url.Action("UploadProfilePicture", "User")',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false
+            });
         });
     });
 </script>
