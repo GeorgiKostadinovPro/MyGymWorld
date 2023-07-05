@@ -76,7 +76,11 @@
             userToEdit.PhoneNumber = editUserInputModel.PhoneNumber;
             userToEdit.ModifiedOn = DateTime.UtcNow;
 
-            await this.UploadUserProfilePictureAsync(userToEdit, editUserInputModel.ProfilePicture);
+            if (editUserInputModel.ProfilePicture != null)
+            {
+                await this.UploadUserProfilePictureAsync(userToEdit, editUserInputModel.ProfilePicture);
+            }
+               
 
             if (editUserInputModel.Address == null)
             {
@@ -117,11 +121,6 @@
 
         public async Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture)
         {
-            if (profilePicture == null)
-            {
-                return;
-            }
-
             string extension = Path.GetExtension(profilePicture.FileName);
             string[] validExtensions = { "jpg", ".jpeg", "png" };
 
@@ -137,6 +136,11 @@
             user.ProfilePictureUri = profilePictureUri;
 
             await this.userManager.UpdateAsync(user);
+        }
+
+        public async Task DeleteUserProfilePictureAsync(ApplicationUser user)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user)

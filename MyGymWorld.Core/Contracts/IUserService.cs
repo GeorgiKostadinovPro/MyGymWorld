@@ -13,6 +13,8 @@
 
         Task UploadUserProfilePictureAsync(ApplicationUser user, IFormFile profilePicture);
 
+        Task DeleteUserProfilePictureAsync(ApplicationUser user);
+
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
         Task<ApplicationUser> GetUserByUsernameAsync(string username);
