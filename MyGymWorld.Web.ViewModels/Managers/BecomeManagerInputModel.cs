@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Managers
 {
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using MyGymWorld.Common;
     using System;
     using System.Collections.Generic;
@@ -10,6 +11,8 @@
 
     public class BecomeManagerInputModel
     {
+        public string Id { get; set; } = null!;
+
         [Required]
         [StringLength(ApplicationUserConstants.UsernameMaxLength, ErrorMessage = "The username must be at least 5 and at max 50 characters long.",
             MinimumLength = ApplicationUserConstants.UsernameMinLength)]
@@ -35,5 +38,9 @@
         [StringLength(ApplicationUserConstants.PhoneNumberMaxLength, ErrorMessage = "The phone number must be at least 5 and at max 15 characters long.",
             MinimumLength = ApplicationUserConstants.PhoneNumberMinLength)]
         public string PhoneNumber { get; set; } = null!;
+
+        public string ManagerType { get; set; } = null!;
+
+        public IEnumerable<string>? ManagerTypes { get; set; }    
     }
 }

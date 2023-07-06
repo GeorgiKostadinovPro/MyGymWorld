@@ -4,9 +4,9 @@
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
-    using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
@@ -61,7 +61,7 @@
             {
                 throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
             }
-            
+
             userToEdit.UserName = editUserInputModel.UserName;
             userToEdit.Email = editUserInputModel.Email; 
             userToEdit.FirstName = editUserInputModel.FirstName;
@@ -213,6 +213,15 @@
 
             return applicationUser;
         }
+        
+        public async Task<bool> CheckIfUserExistsByPhoneNumberAsync(string phoneNumber)
+        {
+            bool result = await this.repository.AllReadonly<ApplicationUser>()
+                .AnyAsync(u => u.PhoneNumber == phoneNumber);
+              
+
+            return result;
+        }
 
         public async Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId)
         {
@@ -286,5 +295,7 @@
 
             return editUserInputModel;
         }
+
+        
     }
 }

@@ -20,16 +20,17 @@
         private readonly SignInManager<ApplicationUser> signInManager;
 
         private readonly IUserService userService;
-        private readonly IMapper mapper;
         private readonly IEmailSenderService emailSenderService;
+
+        private readonly IMapper mapper;
         private readonly IConfiguration configuration;
 
         public AccountService(
             UserManager<ApplicationUser> _userManager, 
             SignInManager<ApplicationUser> signInManager,
             IUserService _userService,
-            IMapper _mapper,
             IEmailSenderService _emailSenderService,
+            IMapper _mapper,
             IConfiguration _configuration)
         {
             this.userManager = _userManager;
@@ -65,7 +66,7 @@
 
             string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
 
-            await this.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
+            //await this.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
         }
         
         public async Task AuthenticateAsync(LoginUserInputModel loginUserInputModel)
