@@ -44,6 +44,7 @@
             // Authentication services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IManagerService, ManagerService>();
 
             // standard services
             services.AddScoped<ICountryService, CountryService>();
