@@ -13,7 +13,6 @@
             this.GymImages = new HashSet<GymImage>();
             this.GymsAddresses = new HashSet<GymAddress>(); 
             this.UsersGyms = new HashSet<UserGym>();
-            this.Managers = new HashSet<Manager>();
 
             this.Events = new HashSet<Event>();
             this.Articles = new HashSet<Article>();
@@ -39,6 +38,10 @@
 
         public GymType GymType { get; set; }
 
+        public Guid ManagerId { get; set; }
+
+        public virtual Manager Manager { get; set; } = null!;
+
         public Guid ChatGroupId { get; set; }
 
         public virtual ChatGroup ChatGroup { get; set; } = null!;
@@ -48,8 +51,6 @@
         public virtual ICollection<GymAddress> GymsAddresses { get; set; }
        
         public virtual ICollection<UserGym> UsersGyms { get; set; } 
-
-        public virtual ICollection<Manager> Managers { get; set; }
 
         public virtual ICollection<Event> Events { get; set; } 
 

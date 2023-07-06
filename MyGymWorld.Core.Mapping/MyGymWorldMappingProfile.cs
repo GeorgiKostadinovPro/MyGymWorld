@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Users;

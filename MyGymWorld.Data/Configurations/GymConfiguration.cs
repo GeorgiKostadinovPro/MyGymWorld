@@ -12,6 +12,13 @@
             builder.HasKey(g => g.Id);
 
             builder
+                .HasOne(g => g.Manager)
+                .WithMany(m => m.Gyms)
+                .HasForeignKey(g => g.ManagerId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            builder
                 .Property(g => g.Name)
                 .IsRequired()
                 .HasMaxLength(ValidationalConstants.GymConstants.NameMaxLength);

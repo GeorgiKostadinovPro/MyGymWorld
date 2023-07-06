@@ -2,9 +2,7 @@
 {
     public enum ManagerType
     { 
-        FirstLine = 0,
-        Middle = 1,
-        TopLevel = 2,
-        TeamLeader = 3
+        OneGymManager = 0,
+        ManyGymsManager = 1
     }
 }

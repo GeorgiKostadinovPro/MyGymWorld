@@ -13,6 +13,7 @@ namespace MyGymWorld.Data.Seeding
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
             await SeedRoleAsync(roleManager, ApplicationRoleConstants.AdministratorRoleName);
+            await SeedRoleAsync(roleManager, ApplicationRoleConstants.ManagerRoleName);
         }
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)

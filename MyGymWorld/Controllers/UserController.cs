@@ -117,22 +117,17 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditUserInputModel editUserInputModel)
         {
+            editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+            editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
             if (!this.ModelState.IsValid)
             {
-                editUserInputModel.Id = id;
-                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
                 return this.View(editUserInputModel);
             }
 
             if (editUserInputModel.FirstName != null && editUserInputModel.LastName == null)
             {
                 this.ModelState.AddModelError("LastName", "LastName is required when you have FirstName!");
-
-                editUserInputModel.Id = id;
-                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
 
                 return this.View(editUserInputModel);
             }
@@ -141,9 +136,14 @@
             {
                 this.ModelState.AddModelError("FirstName", "FirstName is required when you have LastName!");
 
-                editUserInputModel.Id = id;
-                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+                return this.View(editUserInputModel);
+            }
+
+            bool userExistsByPhoneNumber = await this.userService.CheckIfUserExistsByPhoneNumberAsync(editUserInputModel.PhoneNumber);
+
+            if (userExistsByPhoneNumber)
+            {
+                this.ModelState.AddModelError("PhoneNumber", "User with this phone exists!");
 
                 return this.View(editUserInputModel);
             }
@@ -154,20 +154,12 @@
                 {
                     this.ModelState.AddModelError("CountryId", "Country is required when you have address!");
                    
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
                     return this.View(editUserInputModel);
                 }
 
-                if ( editUserInputModel.TownId == "None")
+                if (editUserInputModel.TownId == "None")
                 {
                     this.ModelState.AddModelError("TownId", "Town is required when you have address!");
-
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
 
                     return this.View(editUserInputModel);
                 }
@@ -177,10 +169,6 @@
                 if (isPresent == false)
                 {
                     this.ModelState.AddModelError("TownId", "The town should be in the chosen country!");
-
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
 
                     return this.View(editUserInputModel);
                 }
@@ -194,19 +182,11 @@
                     this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
                     this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
                     
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
                     return this.View(editUserInputModel);
                 }
                 else if (editUserInputModel.CountryId != "None")
                 {
                     this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
-
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
 
                     return this.View(editUserInputModel);
                 }
@@ -214,10 +194,6 @@
                     && editUserInputModel.TownId != "None")
                 {
                     this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
-
-                    editUserInputModel.Id = id;
-                    editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                    editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
 
                     return this.View(editUserInputModel);
                 }
@@ -230,10 +206,6 @@
             {
                 this.ModelState.AddModelError("UserName", "This username is already taken!");
 
-                editUserInputModel.Id = id;
-                editUserInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-                editUserInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
                 return this.View(editUserInputModel);
             }
 
@@ -243,17 +215,12 @@
             }
             catch (Exception ex)
             {
-                this.ModelState.AddModelError("ProfilePicture", ex.Message);
+                this.TempData[ErrorMessage] = ex.Message;
 
                 return this.View(editUserInputModel);
             }
 
             return this.RedirectToAction("UserProfile", "User");
-        }
-
-        public IActionResult BecomeManager(BecomeManagerInputModel becomeManagerInputModel)
-        {
-            return this.View(becomeManagerInputModel);
         }
     }
 }

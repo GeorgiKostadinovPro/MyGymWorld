@@ -37,5 +37,10 @@
         {
             public const string InvalidProfilePictureExtension = "The profile picture must be in formats jpg, jpeg, png!";
         }
+
+        public static class ManagerErrors
+        {
+            public const string InvalidManagerType = "The provided manager type is invalid!";
+        }
     }
 }

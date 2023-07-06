@@ -10,6 +10,7 @@
         {
             this.Id = Guid.NewGuid();
 
+            this.Gyms = new HashSet<Gym>();
             this.ChatGroups = new HashSet<ChatGroup>();
         }
         public Guid Id { get; set; }
@@ -22,9 +23,7 @@
 
         public virtual ApplicationUser User { get; set; } = null!;
 
-        public Guid GymId { get; set; }
-
-        public virtual Gym Gym { get; set; } = null!;
+        public virtual ICollection<Gym> Gyms { get; set; }
 
         public virtual ICollection<ChatGroup> ChatGroups { get; set; }
     }

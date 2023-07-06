@@ -38,6 +38,7 @@
 
         Task<bool> CheckIfUserExistsByUsernameAsync(string username);
 
+        Task<bool> CheckIfUserExistsByPhoneNumberAsync(string phoneNumber);
 
         Task<bool> CheckIfUserHasConfirmedEmailAsync(string userId);
     }

@@ -4,12 +4,11 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
         <section>
             <form id="account" asp-controller="Account" asp-action="Login" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h2>Log in.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
