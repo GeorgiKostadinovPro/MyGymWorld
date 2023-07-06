@@ -1,4 +1,5 @@
 ﻿@model UserProfileViewModel
+@using static MyGymWorld.Common.NotificationMessagesConstants;
 
 @{
     ViewData["Title"] = "User Profile";
@@ -175,7 +176,7 @@
             var file = fileInput.files[0];
 
             if(!file){
-                confirm('You must choose a picture before uploading');
+                toastr.error('You must choose a picture before uploading!');
             }else{
                 var formData = new FormData();
                 formData.append('ProfilePicture', file);
@@ -185,7 +186,10 @@
                     type: 'POST',
                     data: formData,
                     contentType: false,
-                    processData: false
+                    processData: false,
+                    success: function (){
+                        toastr.success('Successfully uploaded profile picture!');
+                    }
                 });
             }
         });
