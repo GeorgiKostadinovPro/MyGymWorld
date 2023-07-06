@@ -278,7 +278,6 @@
 
             string firstName = user.FirstName ?? string.Empty;
             string lastName = user.LastName ?? string.Empty;
-            string profilePictureUrl = user.ProfilePictureUri ?? string.Empty;
             string phoneNumber = user.PhoneNumber ?? string.Empty;
             string address = user.Address != null ? user.Address.Name ?? string.Empty : string.Empty;
 
