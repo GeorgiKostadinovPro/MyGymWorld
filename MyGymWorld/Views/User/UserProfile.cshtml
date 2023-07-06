@@ -30,11 +30,11 @@
                                 <h4>@Model.UserName</h4>
                                 @if (User.IsInRole("Administrator"))
                                 {
-                                    <p class="text-secondary mb-1">Manager</p>
+                                    <p class="text-secondary mb-1">Administrator</p>
                                 }
-                                else if (User.IsInRole("Trainer"))
+                                else if (User.IsInRole("Manager"))
                                 {
-                                    <p class="text-secondary mb-1">Trainer</p>
+                                    <p class="text-secondary mb-1">Gym Manager</p>
                                 }
                                 else
                                 {

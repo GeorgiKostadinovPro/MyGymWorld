@@ -3,6 +3,7 @@
     using AutoMapper;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Countries;
+    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Users;
 
     public class MyGymWorldMappingProfile : Profile
@@ -16,6 +17,9 @@
                 .ForMember(d => d.Password, opt => opt.MapFrom(src => src.Password));
                 
             this.CreateMap<CreateUserInputModel, ApplicationUser>();
+
+            // Managers
+            this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();
