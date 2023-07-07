@@ -55,7 +55,7 @@
                 return this.View(becomeManagerInputModel);
             }
 
-            bool isThereManagerWithPhoneNumber = await this.managerService.CheckIfManagerExistsNyPhoneNumberAsync(becomeManagerInputModel.PhoneNumber);
+            bool isThereManagerWithPhoneNumber = await this.managerService.CheckIfManagerExistsByPhoneNumberAsync(becomeManagerInputModel.PhoneNumber);
 
             if (isThereManagerWithPhoneNumber)
             {
@@ -69,7 +69,7 @@
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
                 //await this.roleService.AddRoleToUserAsync(id, ApplicationRoleConstants.ManagerRoleName);
 
-                this.TempData[SuccessMessage] = "You are now a manager!";
+                this.TempData[SuccessMessage] = "Manager will aprove you soon!";
 
                 return this.RedirectToAction("Index", "Home");
             }

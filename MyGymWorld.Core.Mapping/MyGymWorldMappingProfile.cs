@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Web.ViewModels.Administration.Managers;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Notifications;
@@ -21,6 +22,14 @@
 
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
+            this.CreateMap<Manager, ManagerRequestViewModel>()
+                .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.User.LastName))
+                .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(d => d.ManagerProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri))
+                .ForMember(d => d.ManagerType, opt => opt.MapFrom(src => src.ManagerType.ToString()));
 
             // Notifications
             this.CreateMap<Notification, NotificationViewModel>()

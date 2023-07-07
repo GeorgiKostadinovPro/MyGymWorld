@@ -40,6 +40,7 @@
 
         public static class ManagerErrors
         {
+            public const string InvalidManagerId = "Manager with id {0} does NOT exist!";
             public const string InvalidManagerType = "The provided manager type is invalid!";
         }
     }
