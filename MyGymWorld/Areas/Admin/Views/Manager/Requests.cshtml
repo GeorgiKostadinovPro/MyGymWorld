@@ -1,0 +1,39 @@
+﻿@using MyGymWorld.Web.ViewModels.Administration.Managers;
+@using System.Globalization;
+
+@model AllRequestsViewModel
+
+@{
+    this.ViewData["Title"] = "Requests";
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_SideNavPartial" />
+    </div>
+    <div class="col main pt-1 mt-3 border">
+        <h3 class="text-center mt-3">
+            These requests await your approval
+        </h3>
+        <hr />
+        <ul class="list-group">
+            @foreach (var request in Model.Requests.OrderByDescending(x => x.CreatedOn))
+            {
+                var id = $"a{request.ManagerId}a";
+                <li class="list-group-item">
+                    <a asp-area="Admin" asp-controller="Manager" asp-action="RequestDetails" asp-route-managerId="@request.ManagerId" class="nav-link" data-toggle="modal" data-target="#@id">
+                        Request from @request.CreatedOn.Date.Day @request.CreatedOn.ToString("MMM", CultureInfo.CurrentCulture)
+                        by @request.FirstName @request.LastName
+                    </a>
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

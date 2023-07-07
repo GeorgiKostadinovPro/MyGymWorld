@@ -125,6 +125,20 @@
                 .ToArrayAsync();
         }
 
+        public async Task<int> GetAllNotApprovedManagerRequestsCountAsync()
+        {
+            return await this.repository.AllReadonly<Manager>(m => m.IsDeleted == false && m.IsApproved == false)
+                .CountAsync();
+        }
+
+        public async Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId)
+        {
+            return await this.repository.AllReadonly<Manager>(
+                m => m.IsDeleted == false && m.IsApproved == false && m.Id == Guid.Parse(managerId))
+                .ProjectTo<ManagerRequestViewModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId)
         {
             ApplicationUser user = await this.userService.GetUserByIdAsync(userId);

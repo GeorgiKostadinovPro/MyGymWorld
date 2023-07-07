@@ -6,12 +6,8 @@
     using MyGymWorld.Web.Controllers;
 
     [Authorize(Roles = ApplicationRoleConstants.AdministratorRoleName)]
-    [Area("Administration")]
+    [Area("Admin")]
     public class AdminController : BaseController
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

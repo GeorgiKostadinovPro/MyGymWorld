@@ -1,0 +1,16 @@
+﻿@using MyGymWorld.Common;
+
+@{
+    ViewData["Title"] = "_SideNavPartial";
+}
+
+@if (this.User.IsInRole(ApplicationRoleConstants.AdministratorRoleName))
+{
+    <h3 class="disabled">Admin</h3>
+    <hr />
+    <ul class="nav nav-pills flex-column" id="sideNav">
+        <li class="nav-item"><a class="nav-link" href="/Admin/Dashboard/Index">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/Admin/Users/All">Users</a></li>
+        <li class="nav-item"><a class="nav-link" href="/Admin/Gyms/All">Gyms</a></li>
+    </ul>
+}
