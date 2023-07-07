@@ -8,18 +8,21 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-        <li class="nav-item active float-right">
-        <a asp-area="" asp-controller="Notification" asp-action="Index" title="Notifications">
-            <i class="fas fa-bell"></i>
-            <span class="badge badge-warning notification-badge">
-                @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
-            </span>
-        </a>
+
+    <li class="nav-item active">
+        <form asp-area="" asp-controller="Notification" asp-action="Index" method="get">
+                <button type="submit" class="btn btn-primary" style="background-color: #204FCA; border-color: black;">
+                    Notifications
+                    <span class="badge badge-light">
+                        @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
+                    </span>
+                </button>
+        </form>
     </li>
-        <li class="nav-item active float-right">
+    <li class="nav-item active">
         <a  class="nav-link text-light" asp-controller="User" asp-action="UserProfile">My Profile</a>
     </li>
-        <li class="nav-item active float-right">
+        <li class="nav-item active" style="text-align: right">
         <form  class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-light">Logout</button>
         </form>

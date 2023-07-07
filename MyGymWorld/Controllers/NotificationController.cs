@@ -13,6 +13,7 @@
             this.notificationService = _notificationService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             string userId = this.GetUserId();
