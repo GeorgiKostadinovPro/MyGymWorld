@@ -69,7 +69,7 @@
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
                 //await this.roleService.AddRoleToUserAsync(id, ApplicationRoleConstants.ManagerRoleName);
 
-                this.TempData[SuccessMessage] = "Manager will aprove you soon!";
+                this.TempData[InformationMessage] = "Manager will aprove you soon!";
 
                 return this.RedirectToAction("Index", "Home");
             }

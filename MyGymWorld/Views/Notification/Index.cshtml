@@ -74,7 +74,7 @@ else
                     <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="deleteForm">
                         <input type="text" name="url" value="@notification.Url" hidden />
                         <input type="text" name="notificationId" value="@notification.Id" hidden />
-                        <button class="btn btn-warning float-right">
+                        <button class="btn btn-warning float-right" disabled="@notification.IsRead">
                             Read
                         </button>
                     </form>
