@@ -103,7 +103,7 @@
 
             await this.repository.SaveChangesAsync();
 
-            await this.roleService.AddRoleToUserAsync(manager.UserId.ToString(), "Administrator");
+            await this.roleService.AddRoleToUserAsync(manager.UserId.ToString(), "Manager");
 
             await this.notificationService.CreateNotificationAsync(
                 "Your request was approved! You are now a manager!",
