@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGymWorld.Data;
 
@@ -11,9 +12,10 @@ using MyGymWorld.Data;
 namespace MyGymWorld.Data.Migrations
 {
     [DbContext(typeof(MyGymWorldDbContext))]
-    partial class MyGymWorldDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707144200_SetColumnUserIdToNullableInTableNotifications")]
+    partial class SetColumnUserIdToNullableInTableNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -884,7 +886,7 @@ namespace MyGymWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("MyGymWorld.Data.Models.Town", b =>

@@ -17,7 +17,7 @@
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(n => n.Content)
