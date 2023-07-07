@@ -45,5 +45,22 @@
            
             return this.RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Read(string notificationId)
+        {
+            try
+            {
+                await this.notificationService.ReadNotificationByIdAsync(notificationId);
+
+                this.TempData[SuccessMessage] = "You read notification!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
     }
 }
