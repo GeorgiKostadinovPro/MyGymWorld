@@ -38,7 +38,7 @@
                     Content = content,
                     Url = url,
                     CreatedOn = DateTime.UtcNow
-               };
+                };
 
                 await this.repository.AddAsync(notification);
             }
@@ -59,12 +59,12 @@
                     await this.repository.AddAsync(notification);
                 }
             }
-
+            
             await this.repository.SaveChangesAsync();
-
+            
             return await this.repository.AllReadonly<Notification>().LastOrDefaultAsync();
-        } 
-        
+        }
+
         public async Task<Notification> DeleteNotificationAsync(string notificationId)
         {
             Notification notification = await this.repository
@@ -109,18 +109,18 @@
                                         .ToArrayAsync();
         }
 
-        public async Task<int> GetAllNotificationsCountByUserIdAsync(string userId)
-        {
-            return await this.repository.AllReadonly<Notification>( n => n.IsDeleted == false)
-                                       .Where(n => n.UserId == Guid.Parse(userId))
-                                       .CountAsync();
-        }
-
         public async Task<int> GetUnReadNotificationsCountByUserIdAsync(string userId)
         {
             return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
                                        .Where(n => n.UserId == Guid.Parse(userId) && n.IsRead == false)
                                        .CountAsync();
         }
-    }
+
+        public async Task<int> GetAllNotificationsCountByUserIdAsync(string userId)
+        {
+            return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
+                                       .Where(n => n.UserId == Guid.Parse(userId))
+                                       .CountAsync();
+        }
+    } 
 }

@@ -57,6 +57,7 @@ namespace MyGymWorld.Data
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
