@@ -67,7 +67,6 @@
             try
             {
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
-                //await this.roleService.AddRoleToUserAsync(id, ApplicationRoleConstants.ManagerRoleName);
 
                 this.TempData[InformationMessage] = "Manager will aprove you soon!";
 
