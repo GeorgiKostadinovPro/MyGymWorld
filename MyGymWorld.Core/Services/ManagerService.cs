@@ -20,14 +20,19 @@
         private readonly IRepository repository;
 
         private readonly IUserService userService;
-
+        private readonly INotificationService notificationService;
         
-        public ManagerService(IMapper _mapper, IRepository repository, IUserService _userService)
+        public ManagerService(
+            IMapper _mapper, 
+            IRepository repository, 
+            IUserService _userService,
+            INotificationService _notificationService)
         {
             this.mapper = _mapper;
             this.repository = repository;
 
             this.userService = _userService;
+            this.notificationService = _notificationService;
         }
 
         public async Task CreateManagerAsync(string userId, BecomeManagerInputModel becomeManagerInputModel)
@@ -59,7 +64,8 @@
             Manager manager = new Manager
             {
                 UserId = Guid.Parse(becomeManagerInputModel.Id),
-                ManagerType = managerType
+                ManagerType = managerType,
+                IsApproved = false
             };
 
             await this.repository.AddAsync(manager);
