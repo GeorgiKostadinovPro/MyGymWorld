@@ -17,6 +17,8 @@
 
         public ManagerType ManagerType { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public bool IsCreator { get; set; }
 
         public Guid UserId { get; set; }

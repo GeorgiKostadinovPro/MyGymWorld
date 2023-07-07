@@ -88,5 +88,11 @@
             public const int MessageMinLength = 1;
             public const int MessageMaxLength = 1000;
         }
+
+        public static class NotificatioConstants
+        {
+            public const int ContentMinLength = 10;
+            public const int ContentMaxLength = 500;
+        }
     }
 }
