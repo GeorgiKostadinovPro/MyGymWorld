@@ -67,7 +67,7 @@
             try
             {
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
-                await this.roleService.AddRoleToUserAsync(id, ApplicationRoleConstants.ManagerRoleName);
+                //await this.roleService.AddRoleToUserAsync(id, ApplicationRoleConstants.ManagerRoleName);
 
                 this.TempData[SuccessMessage] = "You are now a manager!";
 
