@@ -10,6 +10,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Users;
+    using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -295,6 +296,9 @@
             return editUserInputModel;
         }
 
-        
+        public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
+        {
+            return await this.userManager.Users.ToArrayAsync();
+        }
     }
 }

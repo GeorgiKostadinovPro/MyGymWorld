@@ -2,9 +2,9 @@
 {
     using AutoMapper;
     using MyGymWorld.Data.Models;
-    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Managers;
+    using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
 
     public class MyGymWorldMappingProfile : Profile
@@ -21,6 +21,10 @@
 
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
+
+            // Notifications
+            this.CreateMap<Notification, NotificationViewModel>()
+                .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

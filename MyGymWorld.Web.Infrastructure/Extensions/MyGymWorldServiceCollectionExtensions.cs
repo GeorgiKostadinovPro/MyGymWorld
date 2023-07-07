@@ -48,6 +48,7 @@
             services.AddScoped<IManagerService, ManagerService>();
 
             // standard services
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
             services.AddScoped<IAddressService, AddressService>();
