@@ -25,6 +25,12 @@
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             RegisterUserInputModel registerUserInputModel = new RegisterUserInputModel
             {
                 ReturnUrl = returnUrl
@@ -71,6 +77,12 @@
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
+            if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             LoginUserInputModel loginUserInputModel = new LoginUserInputModel
             {
                 ReturnUrl = returnUrl
@@ -113,6 +125,12 @@
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string emailConfirmationToken)
         {
+            if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(emailConfirmationToken))
             {
                 return this.BadRequest("Invalid confirmation parameters!");
@@ -138,6 +156,12 @@
         [AllowAnonymous]
         public IActionResult SendResetPasswordEmail()
         {
+            if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             EnterEmailInputModel model = new EnterEmailInputModel();
 
             return this.View(model);
@@ -172,6 +196,12 @@
         [AllowAnonymous]
         public IActionResult ResetPassword(string email, string token)
         {
+            if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             ResetPasswordInputModel model = new ResetPasswordInputModel
             {
                 Email = email,

@@ -62,9 +62,7 @@
                 throw new RegisterUserException(result.Errors);
             }
 
-            await this.signInManager.SignInAsync(user, isPersistent: false);
-
-            string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
+            //string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
 
             //await this.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
         }
