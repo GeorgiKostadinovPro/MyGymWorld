@@ -9,6 +9,7 @@
         {
             this.Id = Guid.NewGuid();
 
+            this.Notifications = new HashSet<Notification>();
             this.UsersGyms = new HashSet<UserGym>();
             this.UsersEvents = new HashSet<UserEvent>();
             this.UsersArticles = new HashSet<UserArticle>();
@@ -44,6 +45,8 @@
         public Guid? ManagerId { get; set; }
 
         public virtual Manager Manager { get; set; } = null!;
+
+        public virtual ICollection<Notification> Notifications { get; set; }
 
         public virtual ICollection<UserGym> UsersGyms { get; set; }
 
