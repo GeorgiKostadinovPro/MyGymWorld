@@ -4,21 +4,34 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @inject INotificationService notificationService;
+@inject IManagerService managerService;
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-
-    <li class="nav-item active">
-        <form asp-area="" asp-controller="Notification" asp-action="Index" method="get">
+        if (User.IsInRole("Administrator"))
+        {
+            <li class="nav-item active">
+                <form asp-area="Admin" asp-controller="Manager" asp-action="Requests" method="get">
+                    <button type="submit" class="btn btn-primary" style="background-color: #204FCA; border-color: black;">
+                        Requests
+                        <span class="badge badge-light">
+                            @(await this.managerService.GetAllNotApprovedManagerRequestsCountAsync())
+                        </span>
+                    </button>
+                </form>
+            </li>
+        }
+        <li class="nav-item active">
+            <form asp-area="" asp-controller="Notification" asp-action="Index" method="get">
                 <button type="submit" class="btn btn-primary" style="background-color: #204FCA; border-color: black;">
                     Notifications
                     <span class="badge badge-light">
                         @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
                     </span>
                 </button>
-        </form>
-    </li>
+           </form>
+       </li>
     <li class="nav-item active">
         <a  class="nav-link text-light" asp-controller="User" asp-action="UserProfile">My Profile</a>
     </li>

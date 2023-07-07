@@ -36,4 +36,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\user-profile.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Views\Admin\" />
+  </ItemGroup>
+
 </Project>

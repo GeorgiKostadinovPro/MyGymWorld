@@ -13,6 +13,10 @@
 
         Task<IEnumerable<ManagerRequestViewModel>> GetAllNotApprovedManagerRequestsAsync();
 
+        Task<int> GetAllNotApprovedManagerRequestsCountAsync();
+
+        Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId);
+
         Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId);
 
         Task<bool> CheckIfUserIsAManagerAsync(string userId);
@@ -20,5 +24,5 @@
         Task<bool> CheckIfManagerExistsByPhoneNumberAsync(string phoneNumber);
 
         IEnumerable<string> GetAllManagerTypes();
-    }
+    }  
 }
