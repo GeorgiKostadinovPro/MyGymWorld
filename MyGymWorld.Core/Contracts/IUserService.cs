@@ -27,6 +27,8 @@
 
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
+        Task<ApplicationUser> GetAdministratorAsync();
+
         Task<IEnumerable<ApplicationUser>> GetAllAsync();
 
         Task<string> GenerateUserEmailConfirmationTokenAsync(ApplicationUser user);

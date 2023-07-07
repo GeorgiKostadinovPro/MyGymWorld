@@ -39,6 +39,8 @@
             MinimumLength = ApplicationUserConstants.PhoneNumberMinLength)]
         public string PhoneNumber { get; set; } = null!;
 
+        public bool IsApproved { get; set; }
+
         public string ManagerType { get; set; } = null!;
 
         public IEnumerable<string>? ManagerTypes { get; set; }    

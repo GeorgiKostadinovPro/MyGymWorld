@@ -6,7 +6,7 @@
 
     public interface INotificationService
     {
-        Task<Notification?> CreateNotificationAsync(string userId ,string content, string url);
+        Task<Notification?> CreateNotificationAsync(string content, string url, string userId);
 
         Task<Notification> DeleteNotificationAsync(string notificationId);
 

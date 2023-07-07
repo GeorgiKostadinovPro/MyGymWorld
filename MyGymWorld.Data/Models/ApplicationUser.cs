@@ -19,7 +19,7 @@
             this.Likes = new HashSet<Like>();
             this.Dislikes = new HashSet<Dislike>();
             this.Comments = new HashSet<Comment>();
-            this.Messages = new HashSet<Message>(); 
+            this.Messages = new HashSet<Message>();
         }
 
         public string? FirstName { get; set; }

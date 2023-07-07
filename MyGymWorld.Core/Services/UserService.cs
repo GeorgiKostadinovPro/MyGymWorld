@@ -214,7 +214,22 @@
 
             return applicationUser;
         }
-        
+
+        public async Task<ApplicationUser> GetAdministratorAsync()
+        {
+            foreach (var user in this.userManager.Users)
+            {
+                bool isAdmin = await this.userManager.IsInRoleAsync(user, "Administrator");
+
+                if (isAdmin)
+                {
+                    return user;
+                }
+            }
+
+            return null!;
+        }
+
         public async Task<bool> CheckIfUserExistsByPhoneNumberAsync(string phoneNumber)
         {
             bool result = await this.repository.AllReadonly<ApplicationUser>()

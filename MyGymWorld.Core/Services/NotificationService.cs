@@ -25,10 +25,9 @@
             this.mapper = _mapper;
 
             this.userService = _userService;
-
         }
 
-        public async Task<Notification?> CreateNotificationAsync(string content, string url, string userId = null)
+        public async Task<Notification?> CreateNotificationAsync(string content, string url = null!, string userId = null)
         {
             if (userId != null)
             {
@@ -41,6 +40,9 @@
                 };
 
                 await this.repository.AddAsync(notification);
+                await this.repository.SaveChangesAsync();
+
+                return notification;
             }
             else
             {
@@ -58,9 +60,9 @@
 
                     await this.repository.AddAsync(notification);
                 }
+
+                await this.repository.SaveChangesAsync();
             }
-            
-            await this.repository.SaveChangesAsync();
             
             return await this.repository.AllReadonly<Notification>().LastOrDefaultAsync();
         }
