@@ -12,12 +12,12 @@
 
         Task<Notification> ReadNotificationByIdAsync(string notificationId);
 
-        Task<IEnumerable<NotificationViewModel>> GetAllAsync(string userId);
+        Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead);
+
+        Task<IEnumerable<NotificationViewModel>> GetAllByUserIdAsync(string userId);
 
         Task<int> GetUnReadNotificationsCountByUserIdAsync(string userId);
 
         Task<int> GetAllNotificationsCountByUserIdAsync(string userId);
-
-        Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead);
     }
 }

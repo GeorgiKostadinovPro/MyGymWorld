@@ -1,15 +1,25 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using MyGymWorld.Core.Contracts;
 @using MyGymWorld.Data.Models;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject INotificationService notificationService;
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-light" asp-controller="User" asp-action="UserProfile">Hello @User.Identity?.Name!</a>
+        <li class="nav-item active float-right">
+        <a asp-area="" asp-controller="Notification" asp-action="Index" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge badge-warning notification-badge">
+                @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
+            </span>
+        </a>
     </li>
-    <li class="nav-item">
+        <li class="nav-item active float-right">
+        <a  class="nav-link text-light" asp-controller="User" asp-action="UserProfile">My Profile</a>
+    </li>
+        <li class="nav-item active float-right">
         <form  class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-light">Logout</button>
         </form>
