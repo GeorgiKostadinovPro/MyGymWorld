@@ -23,7 +23,7 @@
             AllNotificationsViewModel viewModel = new AllNotificationsViewModel
             {
                 UserId = userId,
-                Notifications = await this.notificationService.GetAllByUserIdAsync(userId)
+                Notifications = await this.notificationService.GetAllNotificationsByUserIdAsync(userId)
             };
 
             return this.View(viewModel);

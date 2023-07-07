@@ -102,7 +102,7 @@
                                         .ToArrayAsync();
         }
 
-        public async Task<IEnumerable<NotificationViewModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId)
         {
             return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
                                         .Where(n => n.UserId == Guid.Parse(userId))
