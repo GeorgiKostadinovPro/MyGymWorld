@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGymWorld.Data;
 
@@ -11,9 +12,10 @@ using MyGymWorld.Data;
 namespace MyGymWorld.Data.Migrations
 {
     [DbContext(typeof(MyGymWorldDbContext))]
-    partial class MyGymWorldDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708214753_AddColumnIsRejectedToTableManagers")]
+    partial class AddColumnIsRejectedToTableManagers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
