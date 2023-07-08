@@ -27,6 +27,20 @@
             await this.userManager.AddToRoleAsync(user, roleName);
         }
 
+        public async Task RemoveRoleFromUserAsync(string userId, string roleName)
+        {
+            ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+
+            await this.userManager.RemoveFromRoleAsync(user, roleName);
+        }
+
+        public async Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName)
+        {
+            ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+
+            return await this.userManager.IsInRoleAsync(user, roleName);
+        }
+
         public IEnumerable<string> GetAllRoles()
         {
             return this.roleManager.Roles

@@ -2,7 +2,10 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
+
+    using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class ManagerController : AdminController
     {
@@ -37,9 +40,60 @@
             return this.View(managerRequestViewModel);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ApproveManager(string managerId)
         {
-            return this.RedirectToAction(nameof(RequestDetails), new { managerId = managerId });
+            Manager manager = await this.managerService.GetManagerByIdAsync(managerId);
+
+            if (manager == null)
+            {
+                this.TempData[ErrorMessage] = "User with this Id does not exists!";
+
+                return this.RedirectToAction("RequestDetails", "Manager", new { managerId });
+            }
+
+            try
+            {
+                string adminId = this.GetUserId();
+
+                await this.managerService.ApproveManagerAsync(managerId, adminId);
+
+                this.TempData[SuccessMessage] = "You succesfully approved a manager request!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+
+            return this.RedirectToAction(nameof(Requests));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RejectManager(string managerId)
+        {
+            Manager manager = await this.managerService.GetManagerByIdAsync(managerId);
+
+            if (manager == null)
+            {
+                this.TempData[ErrorMessage] = "User with this Id does not exists!";
+
+                return this.RedirectToAction("RequestDetails", "Manager", new { managerId });
+            }
+
+            try
+            {
+                string adminId = this.GetUserId();
+
+                await this.managerService.RejectManagerAsync(managerId, adminId);
+
+                this.TempData[SuccessMessage] = "You succesfully rejected a Manager!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+
+            return this.RedirectToAction(nameof(Requests));
         }
     }
 }
