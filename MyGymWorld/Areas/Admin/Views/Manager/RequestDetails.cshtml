@@ -48,6 +48,9 @@
                             <div class="d-flex justify-content-start">
                                 <a asp-area="Admin" asp-controller="Manager" asp-action="ApproveManager" asp-route-managerId="@Model.ManagerId" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Approve</a>
                             </div>
+                            <div class="d-flex justify-content-start">
+                                <a asp-area="Admin" asp-controller="Manager" asp-action="RejectManager" asp-route-managerId="@Model.ManagerId" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Reject</a>
+                            </div>
                         </div>
                     </div>
                 </div>

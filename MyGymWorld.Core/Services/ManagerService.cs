@@ -59,10 +59,9 @@
                 user.LastName = becomeManagerInputModel.LastName;
             }
 
-            if (user.PhoneNumber == null)
-            {
-                 user.PhoneNumber = becomeManagerInputModel.PhoneNumber;
-            }
+           
+            user.PhoneNumber = becomeManagerInputModel.PhoneNumber;
+            
 
             Manager manager = new Manager
             {
@@ -84,7 +83,7 @@
 
             await this.notificationService.CreateNotificationAsync(
                 $"You have received a manager request from {user.FirstName} {user.LastName}",
-                $"/Administration/Manager/Requests",
+                $"/Admin/Manager/Requests",
                 admin.Id.ToString());
         }
 
@@ -108,12 +107,59 @@
             await this.notificationService.CreateNotificationAsync(
                 "Your request was approved! You are now a manager!",
                 "/User/UserProfile",
-                managerId);
+                manager.UserId.ToString());
 
             await this.notificationService.CreateNotificationAsync(
                $"You approved {manager.User.FirstName} {manager.User.LastName}!",
-               "Administration/Manager/Requests",
+               "Admin/Manager/Requests",
                adminId);
+
+            return manager;
+        }
+
+        public async Task<Manager> RejectManagerAsync(string managerId, string adminId)
+        {
+            Manager manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
+
+            if (manager == null)
+            {
+                throw new InvalidOperationException(string.Format(ExceptionConstants.ManagerErrors.InvalidManagerId, managerId));
+            }
+
+            bool isManager = await this.roleService.CheckIfUserIsInRoleAsync(manager.UserId.ToString(), ApplicationRoleConstants.ManagerRoleName);
+
+            if (isManager)
+            {  
+                manager.IsApproved = false;
+                manager.ModifiedOn = DateTime.UtcNow;
+
+                await this.repository.SaveChangesAsync();
+
+                await this.roleService.RemoveRoleFromUserAsync(manager.UserId.ToString(), "Manager");
+
+                await this.notificationService.CreateNotificationAsync(
+                   "You were removed from Manager position! You are NOT a manager anymore!",
+                   "/User/UserProfile",
+                   manager.UserId.ToString());
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You rejected {manager.User.FirstName} {manager.User.LastName}! He is NOT a manager anymore!",
+                   "Admin/Manager/Requests",
+                   adminId);
+            }
+            else
+            {
+                await this.notificationService.CreateNotificationAsync(
+                   "Your Manager request was rejected by the Admin!",
+                   "/User/UserProfile",
+                   manager.UserId.ToString());
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You rejected {manager.User.FirstName} {manager.User.LastName} manager request!",
+                   "Admin/Manager/Requests",
+                   adminId);
+            }
 
             return manager;
         }
@@ -174,6 +220,14 @@
                 .AnyAsync(u => u.PhoneNumber == phoneNumber);
 
             return existsByPhoneNumber;
+        }
+
+        public async Task<Manager> GetManagerByIdAsync(string managerId)
+        {
+            Manager manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
+
+            return manager;
         }
     }
 }

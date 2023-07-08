@@ -41,27 +41,27 @@ else
                 {
                     if (timeSinceNotificationCreated >= 1440)
                     {
-                        <small>@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalDays.ToString("f0") days ago</small>
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalDays.ToString("f0") days ago</small>
                     }
                     else
                     {
-                        <small>@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalHours.ToString("f0") hours ago</small>
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalHours.ToString("f0") hours ago</small>
                     }
                 }
                 else
                 {
                     if (timeSinceNotificationCreated < 1)
                     {
-                        <small>@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(notification.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
                     }
                     else
                     {
-                        <small>@timeSinceNotificationCreated.ToString("f0") mins ago</small>
+                        <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
                     }
                 }
-                <form asp-controller="Notification" asp-action="Delete" method="post">
+                <form asp-area="" asp-controller="Notification" asp-action="Delete" method="post">
                     <input type="hidden" name="notificationId" value="@notification.Id"/>
-                    <button type="submit" class="ml-2 mb-1 close" title="Delete">
+                    <button type="submit" class="ml-2 mb-1 close" title="Delete" style="margin-left: 20px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </form>
@@ -75,7 +75,7 @@ else
                         <input type="text" name="url" value="@notification.Url" hidden />
                         <input type="text" name="notificationId" value="@notification.Id" hidden />
                         <button class="btn btn-warning float-right" disabled="@notification.IsRead">
-                            Read
+                            Mark as Read
                         </button>
                     </form>
                 </div>

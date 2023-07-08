@@ -27,7 +27,7 @@
             this.userService = _userService;
         }
 
-        public async Task<Notification?> CreateNotificationAsync(string content, string url = null!, string userId = null)
+        public async Task<Notification?> CreateNotificationAsync(string content, string url = null!, string userId = null!)
         {
             if (userId != null)
             {
