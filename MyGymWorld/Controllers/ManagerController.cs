@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -24,11 +25,18 @@
         {
             string userId = this.GetUserId();
 
-            bool isManager = await this.managerService.CheckIfUserIsAManagerAsync(userId);
+            Manager manager = await this.managerService.GetManagerByIdAsync(userId);
 
-            if (isManager)
+            if (manager != null  && manager.IsApproved == true)
             {
                 this.TempData[ErrorMessage] = "You are already a manager!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            if (manager != null && manager.IsRejected)
+            {
+                this.TempData[ErrorMessage] = "You were REJECTED for Manager! You cannot apply again!";
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -59,7 +67,7 @@
 
             if (isThereManagerWithPhoneNumber)
             {
-                this.TempData[ErrorMessage] = "There is already a manager with this phone!";
+                this.TempData[ErrorMessage] = "There is already an user with this phone!";
 
                 return this.View(becomeManagerInputModel);
             }

@@ -54,7 +54,7 @@
 
                 this.TempData[InformationMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
-                return this.View(registerUserInputModel);
+                return this.RedirectToAction(nameof(Login));
             }
             catch (InvalidOperationException ex)
             {
