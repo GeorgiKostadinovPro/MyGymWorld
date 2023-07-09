@@ -9,8 +9,10 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
+    using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -235,7 +237,6 @@
             bool result = await this.repository.AllReadonly<ApplicationUser>()
                 .AnyAsync(u => u.PhoneNumber == phoneNumber);
               
-
             return result;
         }
 
@@ -314,6 +315,30 @@
         public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
             return await this.userManager.Users.ToArrayAsync();
+        }
+
+        public async Task<List<UserViewModel>> GetAllForAdministrationAsync()
+        {
+            List<UserViewModel> users = new List<UserViewModel>();
+
+            foreach (ApplicationUser user in this.userManager.Users.Where(u => u.IsDeleted == false))
+            {
+                IList<string> userRoles = await this.userManager.GetRolesAsync(user);
+                    
+                string roleName = userRoles.FirstOrDefault()!;
+
+                if (roleName != null && roleName == ApplicationRoleConstants.AdministratorRoleName)
+                {
+                    continue;
+                }
+
+                UserViewModel userViewModel = this.mapper.Map<UserViewModel>(user);
+                userViewModel.Role = roleName;
+
+                users.Add(userViewModel);
+            }
+
+            return users;
         }
     }
 }

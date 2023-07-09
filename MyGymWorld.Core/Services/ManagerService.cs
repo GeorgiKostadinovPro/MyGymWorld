@@ -73,6 +73,8 @@
             await this.repository.AddAsync(manager);
             await this.repository.SaveChangesAsync();
 
+            user.ManagerId = manager.Id;
+
             ApplicationUser admin = await this.userService.GetAdministratorAsync();
 
             await this.notificationService.CreateNotificationAsync(

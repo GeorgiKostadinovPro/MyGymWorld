@@ -3,6 +3,7 @@
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Users;
 
     public interface IUserService
@@ -26,6 +27,8 @@
         Task<EditUserInputModel> GetUserForEditByIdAsync(string userId);
 
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
+
+        Task<List<UserViewModel>> GetAllForAdministrationAsync();
 
         Task<ApplicationUser> GetAdministratorAsync();
 

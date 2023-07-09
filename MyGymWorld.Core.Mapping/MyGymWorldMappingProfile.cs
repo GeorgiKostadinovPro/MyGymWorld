@@ -3,6 +3,7 @@
     using AutoMapper;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
+    using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Notifications;
@@ -19,6 +20,12 @@
                 .ForMember(d => d.Password, opt => opt.MapFrom(src => src.Password));
                 
             this.CreateMap<CreateUserInputModel, ApplicationUser>();
+
+            this.CreateMap<ApplicationUser, UserViewModel>()
+                .ForMember(d => d.IsApproved, opt => opt.MapFrom(src => src.Manager.IsApproved))
+                .ForMember(d => d.IsRejected, opt => opt.MapFrom(src => src.Manager.IsRejected))
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
+                .ForMember(d => d.Role, opt => opt.Ignore());
 
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
