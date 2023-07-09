@@ -30,7 +30,9 @@
 
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
-        Task<List<UserViewModel>> GetAllForAdministrationAsync();
+        Task<List<UserViewModel>> GetActiveForAdministrationAsync();
+
+        Task<List<UserViewModel>> GetDeletedForAdministrationAsync();
 
         Task<ApplicationUser> GetAdministratorAsync();
 

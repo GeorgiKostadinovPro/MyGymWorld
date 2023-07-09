@@ -29,6 +29,7 @@
 
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
+
             this.CreateMap<Manager, ManagerRequestViewModel>()
                 .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
