@@ -33,7 +33,6 @@
             return this.View(allUsersViewModel);
         }
 
-        [HttpPost]
         public async Task<IActionResult> Delete(string userId)
         {
             ApplicationUser userToDelete = await this.userService.GetUserByIdAsync(userId);
