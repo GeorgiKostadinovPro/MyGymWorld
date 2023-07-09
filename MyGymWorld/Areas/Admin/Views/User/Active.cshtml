@@ -74,11 +74,19 @@
                          <td>
                                 @if(user.IsApproved)
                                 {
-                                    <a href="#" class="settings" title="Reject" data-toggle="tooltip"><i class="material-icons">&#xF129;</i></a>
+                                    <a asp-area="Admin" asp-controller="Manager" asp-action="RejectManager" asp-route-managerId="@user.ManagerId" class="disturb" title="Reject" data-toggle="tooltip">
+                                        <span class="material-symbols-outlined">
+                                            do_not_disturb_on
+                                        </span>
+                                        </a>
                                 }
                                 else if (user.IsRejected)
                                 {
-                                    <a href="#" class="settings" title="Approve" data-toggle="tooltip"><i class="material-icons">&#xe013;</i></a>
+                                    <a asp-area="Admin" asp-controller="Manager" asp-action="ApproveManager" asp-route-managerId="@user.ManagerId" class="approve" title="Approve" data-toggle="tooltip">
+                                        <span class="material-symbols-outlined">
+                                            arrow_circle_up
+                                        </span>
+                                    </a>
                                 }
                                
                              <a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" title="Delete" data-toggle="tooltip">

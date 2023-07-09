@@ -65,7 +65,7 @@
                 this.TempData[ErrorMessage] = ex.Message;
             }
 
-            return this.RedirectToAction(nameof(Requests));
+            return this.RedirectToAction("Active","User");
         }
 
         [HttpGet]
@@ -93,7 +93,7 @@
                 this.TempData[ErrorMessage] = ex.Message;
             }
 
-            return this.RedirectToAction(nameof(Requests));
+            return this.RedirectToAction("Active", "User");
         }
     }
 }
