@@ -106,7 +106,7 @@
             await this.roleService.AddRoleToUserAsync(manager.UserId.ToString(), "Manager");
 
             await this.notificationService.CreateNotificationAsync(
-                "Your request was approved! You are now a manager!",
+                "Your request was approved by the Admin! You are now a manager!",
                 "/User/UserProfile",
                 manager.UserId.ToString());
 
