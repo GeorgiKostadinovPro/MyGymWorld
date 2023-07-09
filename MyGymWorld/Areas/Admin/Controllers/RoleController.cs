@@ -1,11 +1,13 @@
 ﻿namespace MyGymWorld.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.Areas.Administration.Controllers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
+
+    using static Common.NotificationMessagesConstants;
 
     public class RoleController : AdminController
     {
@@ -41,7 +43,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             CreateRoleInputModel createRoleInputModel = new CreateRoleInputModel();
 
@@ -58,7 +60,7 @@
 
             try
             {
-                bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsAsync(createRoleInputModel.Name);
+                bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByNameAsync(createRoleInputModel.Name);
 
                 if (doesRoleExists)
                 {
@@ -80,6 +82,34 @@
             }
 
             return this.RedirectToAction(nameof(Active));
+        }
+
+        public async Task<IActionResult> Delete(string roleId)
+        {
+            try
+            {
+                bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByIdAsync(roleId);
+
+                if (!doesRoleExists)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.RoleAlreadyExists);
+                }
+
+                ApplicationRole role = await this.roleService.DeleteRoleAsync(roleId);
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You successfully deleted role: {role.Name}",
+                    "/Admin/Role/Deleted",
+                    this.GetUserId());
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.RedirectToAction(nameof(Active));
+            }
+
+            return this.RedirectToAction(nameof(Deleted));
         }
     }
 }
