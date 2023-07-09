@@ -97,6 +97,11 @@
                 throw new InvalidOperationException(string.Format(ExceptionConstants.ManagerErrors.InvalidManagerId, managerId));
             }
 
+            if (manager.IsRejected)
+            {
+                manager.IsRejected = false;
+            }
+
             manager.IsApproved = true;
             manager.ModifiedOn = DateTime.UtcNow;
 
