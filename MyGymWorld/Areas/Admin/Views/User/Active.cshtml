@@ -1,7 +1,7 @@
 ﻿@model AllUsersViewModel
 
 @{
-     this.ViewData["Title"] = "All Users";
+     this.ViewData["Title"] = "Active Users";
 }
 
 <link rel="stylesheet" href="~/css/admin-users.css" />
@@ -32,7 +32,7 @@
                      </tr>
                  </thead>
                  <tbody>
-                    @for (int i = 0; i < Model.Users.Count(); i++)
+                    @for (int i = 0; i < Model.Users.Count; i++)
                     {
                         UserViewModel user = Model.Users[i];
                         <tr>
