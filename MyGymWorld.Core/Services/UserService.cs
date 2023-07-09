@@ -335,7 +335,7 @@
             return await this.userManager.Users.ToArrayAsync();
         }
 
-        public async Task<List<UserViewModel>> GetAllForAdministrationAsync()
+        public async Task<List<UserViewModel>> GetActiveForAdministrationAsync()
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
@@ -343,10 +343,26 @@
                 .Include(u => u.Manager)
                 .ToArrayAsync();
 
+            return await GetAllForAdministrationAsync(allUsersViewModel, users);
+        }
+
+        public async Task<List<UserViewModel>> GetDeletedForAdministrationAsync()
+        {
+            List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
+
+            var users = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == true)
+                .Include(u => u.Manager)
+                .ToArrayAsync();
+
+            return await GetAllForAdministrationAsync(allUsersViewModel, users);
+        }
+
+        private async Task<List<UserViewModel>> GetAllForAdministrationAsync(List<UserViewModel> allUsersViewModel, ApplicationUser[] users)
+        {
             foreach (ApplicationUser user in users)
             {
                 IList<string> userRoles = await this.userManager.GetRolesAsync(user);
-                    
+
                 string roleName = userRoles.FirstOrDefault()!;
 
                 if (roleName != null && roleName == ApplicationRoleConstants.AdministratorRoleName)
