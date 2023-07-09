@@ -2,23 +2,33 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
+    using Microsoft.AspNetCore.Identity;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
+    using MyGymWorld.Core.Utilities.Contracts;
+    using System.Net.WebSockets;
 
     public class AccountController : BaseController
     {
         private readonly IAccountService accountService;
         private readonly IUserService userService;
 
+        private readonly IEmailSenderService emailSenderService;
+
         public AccountController(
             IAccountService _accountService, 
-            IUserService _userService)
+            IUserService _userService,
+            IEmailSenderService _emailSenderService)
         {
             this.accountService = _accountService;
             this.userService = _userService;
+
+            this.emailSenderService = _emailSenderService;
         }
 
         [HttpGet]
@@ -50,7 +60,23 @@
 
             try
             {
-                await this.accountService.RegisterUserAsync(registerUserInputModel);
+                bool doesUserExist = await this.userService.CheckIfUserExistsByEmailAsync(registerUserInputModel.Email);
+
+                if (doesUserExist)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.RegisterUser.EmailAlreadyExists);
+                }
+
+                (ApplicationUser user, IdentityResult result) = await this.accountService.RegisterUserAsync(registerUserInputModel);
+
+                if (!result.Succeeded)
+                {
+                    throw new RegisterUserException(result.Errors);
+                }
+
+                string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
+
+                await accountService.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
 
                 this.TempData[InformationMessage] = "A confirmation email was sent to you! Please, confirm your account!";
 
@@ -75,7 +101,7 @@
 
         [HttpGet]  
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string returnUrl = null!)
         {
             if (User != null && User.Identity != null
                 && User.Identity.IsAuthenticated)
@@ -102,12 +128,40 @@
 
             try
             {
-                await this.accountService.AuthenticateAsync(loginUserInputModel);
+                ApplicationUser user = await this.userService.GetUserByEmailAsync(loginUserInputModel.Email);
+
+                if (user == null)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.LoginUser.UserDoesNotExist);
+                }
+
+                if (user.IsDeleted == true)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.LoginUser.UserWasDeletedByAdmin);
+                }
+
+                bool doesPasswordMatch = await this.userService.CheckUserPasswordAsync(user, loginUserInputModel.Password);
+
+                if (!doesPasswordMatch)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
+                }
+
+                var result =  await this.accountService.AuthenticateAsync(loginUserInputModel);
+
+                if (!result.Succeeded)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
+                }
+
+                //await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
+                //$"<p>New login to your account at {DateTime.UtcNow}</p>");
 
                 return this.RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
+                this.TempData[ErrorMessage] = ex.Message;
                 this.ModelState.AddModelError(string.Empty, ex.Message);
 
                 return this.View(loginUserInputModel);

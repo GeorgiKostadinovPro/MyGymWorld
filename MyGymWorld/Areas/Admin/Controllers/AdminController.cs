@@ -6,7 +6,7 @@
     using MyGymWorld.Web.Controllers;
 
     [Authorize(Roles = ApplicationRoleConstants.AdministratorRoleName)]
-    [Area("Admin")]
+    [Area(GlobalConstants.AdminAreaName)]
     public class AdminController : BaseController
     {
     }

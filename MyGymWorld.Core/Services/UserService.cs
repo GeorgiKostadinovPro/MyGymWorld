@@ -109,6 +109,24 @@
             return (userToEdit, result);
         }
 
+        public async Task DeleteUserAsync(string userId)
+        {
+            ApplicationUser userToDelete = await this.repository.All<ApplicationUser>(u => u.IsDeleted == false)
+                .Include(u => u.Manager)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            userToDelete.IsDeleted = true;
+            userToDelete.DeletedOn = DateTime.UtcNow;
+
+            if (userToDelete.ManagerId != null)
+            {
+                userToDelete.Manager.IsDeleted = true;
+                userToDelete.Manager.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task SetUserProfilePictureAsync(string userId, ImageUploadResult imageUploadResult)
         {
             ApplicationUser user = await this.GetUserByIdAsync(userId);
@@ -321,7 +339,7 @@
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            var users = await this.repository.All<ApplicationUser>(u => u.IsDeleted == false)
+            var users = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
                 .Include(u => u.Manager)
                 .ToArrayAsync();
 

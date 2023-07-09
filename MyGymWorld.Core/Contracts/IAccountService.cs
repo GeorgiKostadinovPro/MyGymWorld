@@ -1,15 +1,14 @@
 ﻿namespace MyGymWorld.Core.Contracts
 {
-    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;
 
     public interface IAccountService
     {
-        Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel);
+        Task<(ApplicationUser, IdentityResult)> RegisterUserAsync(RegisterUserInputModel registerUserInputModel);
 
-        Task AuthenticateAsync(LoginUserInputModel loginUserInputModel);
+        Task<SignInResult> AuthenticateAsync(LoginUserInputModel loginUserInputModel);
         
         Task SendUserEmailConfirmationAsync(ApplicationUser user, string emailConfirmationToken);
 
