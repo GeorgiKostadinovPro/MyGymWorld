@@ -27,6 +27,6 @@
 
         IEnumerable<string> GetAllManagerTypes();
 
-        Task<Manager> GetManagerByIdAsync(string userId);
+        Task<Manager> GetManagerByIdAsync(string managerId);
     }  
 }

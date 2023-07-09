@@ -319,9 +319,13 @@
 
         public async Task<List<UserViewModel>> GetAllForAdministrationAsync()
         {
-            List<UserViewModel> users = new List<UserViewModel>();
+            List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            foreach (ApplicationUser user in this.userManager.Users.Where(u => u.IsDeleted == false))
+            var users = await this.repository.All<ApplicationUser>(u => u.IsDeleted == false)
+                .Include(u => u.Manager)
+                .ToArrayAsync();
+
+            foreach (ApplicationUser user in users)
             {
                 IList<string> userRoles = await this.userManager.GetRolesAsync(user);
                     
@@ -333,12 +337,20 @@
                 }
 
                 UserViewModel userViewModel = this.mapper.Map<UserViewModel>(user);
-                userViewModel.Role = roleName;
 
-                users.Add(userViewModel);
+                if (roleName == null)
+                {
+                    userViewModel.Role = GlobalConstants.RegularUser;
+                }
+                else
+                {
+                    userViewModel.Role = roleName;
+                }
+
+                allUsersViewModel.Add(userViewModel);
             }
 
-            return users;
+            return allUsersViewModel;
         }
     }
 }

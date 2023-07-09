@@ -229,10 +229,10 @@
             return existsByPhoneNumber;
         }
 
-        public async Task<Manager?> GetManagerByIdAsync(string userId)
+        public async Task<Manager?> GetManagerByIdAsync(string managerId)
         {
             Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
-                .FirstOrDefaultAsync(m => m.UserId == Guid.Parse(userId));
+                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
 
             return manager;
         }

@@ -9,5 +9,7 @@
     public static class GlobalConstants
     {
         public const string AppName = "MyGymWorld";
+
+        public const string RegularUser = "Regular User";
     }
 }

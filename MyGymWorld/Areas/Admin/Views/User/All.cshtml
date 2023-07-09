@@ -36,10 +36,10 @@
                         <tr>
                             <td>@(i + 1)</td>
                             <td><a href="#">@user.Email</a></td>
-                         <td>@user.CreatedOn</td>
+                            <td>@user.CreatedOn</td>
                             <td>@user.Role</td>
 
-                            @if(@user.Role == ApplicationRoleConstants.ManagerRoleName)
+                            @if(user.Role != null && @user.Role == ApplicationRoleConstants.ManagerRoleName)
                             {
                                 @if (user.IsApproved)
                                 {
@@ -56,7 +56,6 @@
                             }
                             else
                             {
-
                                 @if (user.IsRejected)
                                 {
                                     <td>
