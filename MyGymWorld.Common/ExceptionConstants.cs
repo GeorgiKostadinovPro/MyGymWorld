@@ -1,5 +1,7 @@
 ﻿namespace MyGymWorld.Common
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// A static class that contains all custom exception messages.
     /// </summary>
@@ -44,6 +46,11 @@
         {
             public const string InvalidManagerId = "Manager with id {0} does NOT exist!";
             public const string InvalidManagerType = "The provided manager type is invalid!";
+        }
+
+        public static class ApplicationRoleErrors
+        {
+            public const string RoleAlreadyExists = "Role with this name already exists!";
         }
     }
 }

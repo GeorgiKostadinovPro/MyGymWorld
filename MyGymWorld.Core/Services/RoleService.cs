@@ -47,6 +47,15 @@
             await this.userManager.RemoveFromRoleAsync(user, roleName);
         }
 
+        public async Task CreateRoleAsync(CreateRoleInputModel createRoleInputModel)
+        {
+            ApplicationRole role = new ApplicationRole(createRoleInputModel.Name);
+
+            role.CreatedOn = DateTime.UtcNow;
+
+            await this.roleManager.CreateAsync(role);
+        }
+
         public async Task<List<RoleViewModel>> GetActiveForAdministrationAsync()
         {
             return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == false)
@@ -61,6 +70,13 @@
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<string>> GetAllRoleNamesAsync()
+        {
+            return await this.repository.AllReadonly<ApplicationRole>()
+                .Select(r => r.Name)
+                .ToListAsync();
+        }
+        
         public async Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName)    
         {
             ApplicationUser user = await this.userManager.FindByIdAsync(userId);
@@ -68,11 +84,14 @@
             return await this.userManager.IsInRoleAsync(user, roleName);
         }
 
-        public IEnumerable<string> GetAllRoles()
+        public async Task<bool> CheckIfRoleAlreadyExistsAsync(string roleName)
         {
-            return this.roleManager.Roles
-                                   .ToArray()
-                                   .Select(r => r.Name);
+            string wildCard = $"%{roleName.ToLower()}%";
+
+            bool result = await this.repository.AllReadonly<ApplicationRole>()
+                .AnyAsync(r => EF.Functions.Like(r.Name, wildCard));
+
+            return result;
         }
     }
 }

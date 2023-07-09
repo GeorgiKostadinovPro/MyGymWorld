@@ -22,7 +22,7 @@
             builder
                 .Property(n => n.Content)
                 .IsRequired()
-                .HasMaxLength(ValidationalConstants.NotificatioConstants.ContentMaxLength);
+                .HasMaxLength(ValidationalConstants.NotificationConstants.ContentMaxLength);
         }
     }
 }
