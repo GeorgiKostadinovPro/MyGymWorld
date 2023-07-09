@@ -10,12 +10,16 @@
 
         Task RemoveRoleFromUserAsync(string userId, string roleName);
 
+        Task CreateRoleAsync(CreateRoleInputModel createRoleInputModel);
+
         Task<List<RoleViewModel>> GetActiveForAdministrationAsync();
 
         Task<List<RoleViewModel>> GetDeletedForAdministrationAsync();
+        
+        Task<IEnumerable<string>> GetAllRoleNamesAsync();
 
         Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName);
 
-        IEnumerable<string> GetAllRoles();
+        Task<bool> CheckIfRoleAlreadyExistsAsync(string roleName);
     }
 }

@@ -89,10 +89,16 @@
             public const int MessageMaxLength = 1000;
         }
 
-        public static class NotificatioConstants
+        public static class NotificationConstants
         {
             public const int ContentMinLength = 10;
             public const int ContentMaxLength = 500;
+        }
+
+        public static class ApplicationRoleConstants
+        {
+            public const int NameMinLength = 5;
+            public const int NameMaxLength = 100;
         }
     }
 }

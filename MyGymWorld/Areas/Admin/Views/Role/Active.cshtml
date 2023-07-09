@@ -16,7 +16,11 @@
                     </div>
                     <div class="col-sm-7">
                         <a asp-area="Admin" asp-controller="Role" asp-action="Deleted" class="btn btn-secondary"><span>View Deleted Roles</span></a>
-                        <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>
+                        <a asp-area="Admin" asp-controller="Role" asp-action="Create" class="btn btn-secondary">
+                            <span class="material-symbols-outlined">
+                                add_circle
+                            </span><span>Create Role</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -68,6 +72,11 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
 <script>
     $(document).ready(function () {
