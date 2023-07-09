@@ -1,7 +1,7 @@
-﻿@model AllUsersViewModel
+﻿@model AllRolesViewModel
 
 @{
-    this.ViewData["Title"] = "Deleted Users";
+    this.ViewData["Title"] = "Deleted Roles";
 }
 
 <link rel="stylesheet" href="~/css/admin-users.css" />
@@ -12,10 +12,10 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>User <b>Management</b></h2>
+                        <h2>Roles <b>Management</b></h2>
                     </div>
                     <div class="col-sm-7">
-                        <a asp-area="Admin" asp-controller="User" asp-action="Active" class="btn btn-secondary"><span>View Active Users</span></a>
+                        <a asp-area="Admin" asp-controller="Role" asp-action="Active" class="btn btn-secondary"><span>View Active Roles</span></a>
                         <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>
                     </div>
                 </div>
@@ -24,22 +24,20 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Email</th>
+                        <th>Name</th>
                         <th>Date Created</th>
-                        <th>Role</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 0; i < Model.Users.Count; i++)
+                    @for (int i = 0; i < Model.Roles.Count; i++)
                     {
-                        UserViewModel user = Model.Users[i];
+                        RoleViewModel roles = Model.Roles[i];
                         <tr>
                             <td>@(i + 1)</td>
-                            <td><a href="#">@user.Email</a></td>
-                            <td>@user.CreatedOn</td>
-                            <td>@user.Role</td>
+                            <td><a href="#">@roles.Name</a></td>
+                            <td>@roles.CreatedOn</td>
 
                             <td>
                                 <span class="status text-danger">&bull;</span> Deleted

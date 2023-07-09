@@ -3,6 +3,7 @@
     using AutoMapper;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
+    using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Managers;
@@ -39,6 +40,10 @@
                 .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
                 .ForMember(d => d.ManagerProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri))
                 .ForMember(d => d.ManagerType, opt => opt.MapFrom(src => src.ManagerType.ToString()));
+
+            // Roles
+            this.CreateMap<ApplicationRole, RoleViewModel>()
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
 
             // Notifications
             this.CreateMap<Notification, NotificationViewModel>()
