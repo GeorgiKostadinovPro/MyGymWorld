@@ -22,6 +22,7 @@
             this.CreateMap<CreateUserInputModel, ApplicationUser>();
 
             this.CreateMap<ApplicationUser, UserViewModel>()
+                .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.Manager.Id))
                 .ForMember(d => d.IsApproved, opt => opt.MapFrom(src => src.Manager.IsApproved))
                 .ForMember(d => d.IsRejected, opt => opt.MapFrom(src => src.Manager.IsRejected))
                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))

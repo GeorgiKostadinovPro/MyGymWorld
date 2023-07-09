@@ -10,6 +10,8 @@
     {
         public string Id { get; set; } = null!;
 
+        public string? ManagerId { get; set; }
+
         public string Email { get; set; } = null!;
 
         public string? ProfilePictureUri { get; set; }

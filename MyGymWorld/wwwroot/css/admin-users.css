@@ -98,8 +98,12 @@ table.table td a {
         color: #2196F3;
     }
 
-    table.table td a.settings {
+    table.table td a.approve {
         color: #2196F3;
+    }
+
+    table.table td a.disturb {
+        color: #FFAC1C;
     }
 
     table.table td a.delete {

@@ -89,7 +89,6 @@
 
         public async Task<Manager> ApproveManagerAsync(string managerId, string adminId)
         {
-
             Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
                 .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
 
