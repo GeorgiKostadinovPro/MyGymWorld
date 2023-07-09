@@ -33,10 +33,10 @@
            </form>
        </li>
     <li class="nav-item active">
-        <a  class="nav-link text-light" asp-controller="User" asp-action="UserProfile">My Profile</a>
+        <a  class="nav-link text-light" asp-area="" asp-controller="User" asp-action="UserProfile">My Profile</a>
     </li>
         <li class="nav-item active" style="text-align: right">
-        <form  class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <form  class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-light">Logout</button>
         </form>
     </li>
