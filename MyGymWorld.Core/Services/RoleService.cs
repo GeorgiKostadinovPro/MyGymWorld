@@ -56,6 +56,30 @@
             await this.roleManager.CreateAsync(role);
         }
 
+        public async Task<ApplicationRole> DeleteRoleAsync(string roleId)
+        {
+            ApplicationRole role = await this.repository.GetByIdAsync<ApplicationRole>(Guid.Parse(roleId));
+
+            role.IsDeleted = true;
+            role.DeletedOn = DateTime.UtcNow;
+
+            foreach (var user in await this.userManager.Users.ToArrayAsync())
+            {
+                bool isInRole = await this.userManager.IsInRoleAsync(user, role.Name);
+
+                if (!isInRole)
+                {
+                    continue;
+                }
+
+                await this.userManager.RemoveFromRoleAsync(user, role.Name);
+            }
+
+            await this.repository.SaveChangesAsync();
+
+            return role;
+        }
+
         public async Task<List<RoleViewModel>> GetActiveForAdministrationAsync()
         {
             return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == false)
@@ -83,8 +107,15 @@
 
             return await this.userManager.IsInRoleAsync(user, roleName);
         }
+        
+        public async Task<bool> CheckIfRoleAlreadyExistsByIdAsync(string roleId)
+        {
+            ApplicationRole role = await this.roleManager.FindByIdAsync(roleId);
 
-        public async Task<bool> CheckIfRoleAlreadyExistsAsync(string roleName)
+            return role != null ? true : false;
+        }
+
+        public async Task<bool> CheckIfRoleAlreadyExistsByNameAsync(string roleName)
         {
             string wildCard = $"%{roleName.ToLower()}%";
 
