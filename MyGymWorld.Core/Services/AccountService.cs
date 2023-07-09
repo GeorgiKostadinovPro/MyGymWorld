@@ -41,15 +41,8 @@
             this.configuration = _configuration;
         }
 
-        public async Task RegisterUserAsync(RegisterUserInputModel registerUserInputModel)
+        public async Task<(ApplicationUser, IdentityResult)> RegisterUserAsync(RegisterUserInputModel registerUserInputModel)
         {
-            bool doesUserExist = await this.userService.CheckIfUserExistsByEmailAsync(registerUserInputModel.Email);
-
-            if (doesUserExist)
-            {
-                throw new InvalidOperationException(ExceptionConstants.RegisterUser.EmailAlreadyExists);
-            }
-
             CreateUserInputModel userToCreate = this.mapper.Map<CreateUserInputModel>(registerUserInputModel);
 
             var tuppleResult = await this.userService.CreateUserAsync(userToCreate);
@@ -57,43 +50,18 @@
             ApplicationUser user = tuppleResult.Item1;
             IdentityResult result = tuppleResult.Item2;
 
-            if (!result.Succeeded)
-            {
-                throw new RegisterUserException(result.Errors);
-            }
-
-            //string emailConfirmationToken = await this.userService.GenerateUserEmailConfirmationTokenAsync(user);
-
-            //await this.SendUserEmailConfirmationAsync(user, emailConfirmationToken);
+            return (user, result);
         }
         
-        public async Task AuthenticateAsync(LoginUserInputModel loginUserInputModel)
+        public async Task<SignInResult> AuthenticateAsync(LoginUserInputModel loginUserInputModel)
         {
             ApplicationUser user = await this.userService.GetUserByEmailAsync(loginUserInputModel.Email);
-
-            if (user == null)
-            {
-                throw new InvalidOperationException(ExceptionConstants.RegisterUser.UserDoesNotExist);
-            }
-
-            bool doesPasswordMatch = await this.userService.CheckUserPasswordAsync(user, loginUserInputModel.Password);
-
-            if (!doesPasswordMatch)
-            {
-                throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
-            }
 
             bool isPersistent = loginUserInputModel.RememberMe;
 
             SignInResult result = await this.signInManager.PasswordSignInAsync(user, loginUserInputModel.Password, isPersistent: isPersistent, lockoutOnFailure: false);
 
-            if (!result.Succeeded)
-            {
-                throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
-            }
-
-            /*await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
-                $"<p>New login to your account at {DateTime.UtcNow}</p>");*/
+            return result;
         }
 
         public async Task LogoutUserAsync()

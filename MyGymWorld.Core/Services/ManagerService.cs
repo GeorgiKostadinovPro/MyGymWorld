@@ -58,7 +58,6 @@
             {
                 user.LastName = becomeManagerInputModel.LastName;
             }
-
            
             user.PhoneNumber = becomeManagerInputModel.PhoneNumber;
             

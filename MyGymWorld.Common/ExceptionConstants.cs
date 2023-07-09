@@ -14,6 +14,8 @@
         public static class LoginUser
         {
             public const string InvalidLoginAttempt = "Invalid login attempt or unconfirmed email!";
+            public const string UserDoesNotExist = "User with this email does NOT exist!";
+            public const string UserWasDeletedByAdmin = "You were banned by the site Admin!";
         }
 
         public static class ConfimEmail

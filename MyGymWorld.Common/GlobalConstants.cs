@@ -10,6 +10,8 @@
     {
         public const string AppName = "MyGymWorld";
 
+        public const string AdminAreaName = "Admin";
+
         public const string RegularUser = "Regular User";
     }
 }

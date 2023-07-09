@@ -12,6 +12,8 @@
 
         Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel);
 
+        Task DeleteUserAsync(string userId);
+
         Task SetUserProfilePictureAsync(string userId, ImageUploadResult imageUploadResult);
 
         Task DeleteUserProfilePictureAsync(string userId);
