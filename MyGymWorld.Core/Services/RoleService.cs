@@ -56,6 +56,16 @@
             await this.roleManager.CreateAsync(role);
         }
 
+        public async Task EditRoleAsync(string roleId, EditRoleInputModel editRoleInputModel)
+        {
+            ApplicationRole role = await this.roleManager.FindByIdAsync(roleId);
+
+            role.Name = editRoleInputModel.Name;
+            role.ModifiedOn = DateTime.UtcNow;
+
+            await  this.roleManager.UpdateAsync(role);
+        }
+
         public async Task<ApplicationRole> DeleteRoleAsync(string roleId)
         {
             ApplicationRole role = await this.repository.GetByIdAsync<ApplicationRole>(Guid.Parse(roleId));
@@ -99,6 +109,13 @@
             return await this.repository.AllReadonly<ApplicationRole>()
                 .Select(r => r.Name)
                 .ToListAsync();
+        } 
+        
+        public async Task<EditRoleInputModel> GetRoleForEditAsync(string roleId)
+        {
+            ApplicationRole role  = await this.roleManager.FindByIdAsync(roleId);
+
+            return this.mapper.Map<EditRoleInputModel>(role);
         }
         
         public async Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName)    

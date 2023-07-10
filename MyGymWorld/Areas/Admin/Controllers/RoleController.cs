@@ -84,6 +84,62 @@
             return this.RedirectToAction(nameof(Active));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(string roleId)
+        {
+            try
+            {
+                bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByIdAsync(roleId);
+
+                if (!doesRoleExists)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.InvalidRoleId);
+                }
+
+                EditRoleInputModel editRoleInputModel = await this.roleService.GetRoleForEditAsync(roleId);
+
+                return this.View(editRoleInputModel);
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.RedirectToAction(nameof(Active));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, EditRoleInputModel editRoleInputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(editRoleInputModel);
+            }
+
+            try
+            {
+                bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByIdAsync(editRoleInputModel.Id);
+
+                if (!doesRoleExists)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.InvalidRoleId);
+                }
+
+                await this.roleService.EditRoleAsync(editRoleInputModel.Id, editRoleInputModel);
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You successfully edited role: {editRoleInputModel.Name}",
+                   "/Admin/Role/Active",
+                   this.GetUserId());
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+            
+            return this.RedirectToAction(nameof(Active));
+        }
+
         public async Task<IActionResult> Delete(string roleId)
         {
             try
@@ -92,7 +148,7 @@
 
                 if (!doesRoleExists)
                 {
-                    throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.RoleAlreadyExists);
+                    throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.InvalidRoleId);
                 }
 
                 ApplicationRole role = await this.roleService.DeleteRoleAsync(roleId);

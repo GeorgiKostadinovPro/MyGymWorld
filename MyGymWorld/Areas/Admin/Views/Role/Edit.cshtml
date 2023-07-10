@@ -1,23 +1,24 @@
-﻿@model CreateRoleInputModel
+﻿@model EditRoleInputModel
 
 @{
-    ViewData["Title"] = "Create Role";
+    ViewData["Title"] = "Edit Role";
 }
 
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form asp-area="Admin" asp-controller="Role" asp-action="Create" method="post">
-                <h2>Enter a name for your new role</h2>
+            <form asp-area="Admin" asp-controller="Role" asp-action="Edit" method="post">
+                <h2>Edit your role</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="@Model.Id" />
                 <div class="form-floating">
                     <input asp-for="@Model.Name" class="form-control" autocomplete="name" aria-required="true" required />
                     <label asp-for="@Model.Name" class="form-label"></label>
                     <span asp-validation-for="@Model.Name" class="text-danger"></span>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Save Changes</button>
                 </div>
             </form>
         </section>
