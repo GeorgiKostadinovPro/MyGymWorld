@@ -5,6 +5,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.Areas.Administration.Controllers;
     using MyGymWorld.Web.ViewModels.Administration.Users;
+    using System.Text;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class UserController : AdminController
@@ -67,6 +68,12 @@
             }
 
             return this.RedirectToAction(nameof(Active));
+        }
+
+        [HttpPost]
+        public FileResult ExportToExcel(string htmlTable)
+        {
+            return File(Encoding.ASCII.GetBytes(htmlTable), "application/vnd.ms-excel", "MyGymWorld-Users.xls");
         }
     }
 }
