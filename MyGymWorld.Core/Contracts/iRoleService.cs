@@ -13,6 +13,8 @@
 
         Task CreateRoleAsync(CreateRoleInputModel createRoleInputModel);
 
+        Task EditRoleAsync(string roleId, EditRoleInputModel editRoleInputModel);
+
         Task<ApplicationRole> DeleteRoleAsync(string roleId);
 
         Task<List<RoleViewModel>> GetActiveForAdministrationAsync();
@@ -20,6 +22,8 @@
         Task<List<RoleViewModel>> GetDeletedForAdministrationAsync();
         
         Task<IEnumerable<string>> GetAllRoleNamesAsync();
+
+        Task<EditRoleInputModel> GetRoleForEditAsync(string roleId);
 
         Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName);
 

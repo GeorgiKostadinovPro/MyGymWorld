@@ -52,7 +52,6 @@
         {
             public const string RoleAlreadyExists = "Role with this name already exists!";
             public const string InvalidRoleId = "Role with this Id does NOT exists!";
-
         }
     }
 }

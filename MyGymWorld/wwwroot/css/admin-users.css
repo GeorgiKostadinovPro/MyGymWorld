@@ -106,6 +106,10 @@ table.table td a {
         color: #FFAC1C;
     }
 
+    table.table td a.edit {
+        color: #FFAC1C;
+    }
+
     table.table td a.delete {
         color: #F44336;
     }

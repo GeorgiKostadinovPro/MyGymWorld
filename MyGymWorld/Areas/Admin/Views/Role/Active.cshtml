@@ -49,6 +49,11 @@
                             </td>
 
                             <td>
+                                <a asp-area="Admin" asp-controller="Role" asp-action="Edit" asp-route-roleId="@role.Id" class="edit" title="Edit" data-toggle="tooltip">
+                                    <span class="material-symbols-outlined">
+                                        edit
+                                    </span>
+                                </a>
                                 <a asp-area="Admin" asp-controller="Role" asp-action="Delete" asp-route-roleId="@role.Id" class="delete" title="Delete" data-toggle="tooltip">
                                     <i class="material-icons">&#xE5C9;</i>
                                 </a>
