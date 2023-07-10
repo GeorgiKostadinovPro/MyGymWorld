@@ -4,9 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Utilities.Contracts;
-    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Users;
-
+    
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class UserController : BaseController
