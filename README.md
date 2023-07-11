@@ -102,7 +102,6 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-6.0&tabs=visual-studio">ASP.NET Core MVC (.NET 6.0)</a></li>
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-6.0&tabs=visual-studio">ASP.NET Core Web API</a></li>
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/areas?view=aspnetcore-6.0">ASP.NET Core Areas</a></li>
-    <li><a href="https://learn.microsoft.com/en-us/ef/core/">Entity Framework Core 6.0</a></li>
     <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
     <li><a href="https://jquery.com/">jQuery</a></li>
     <li><a href="https://sendgrid.com/">SendGrid</a></li>
@@ -116,6 +115,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <details>
 <summary>Database</summary>
   <ul>
+     <li><a href="https://learn.microsoft.com/en-us/ef/core/">Entity Framework Core 6.0</a></li>
     <li><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads">MSSQL Server</a></li>
     <li><a href="https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16">T-SQL (Transact-SQL)</a></li>
     <li><a href="https://sqldbm.com/Home/">SqlDBM (SQL Database Modeler)</a></li>
