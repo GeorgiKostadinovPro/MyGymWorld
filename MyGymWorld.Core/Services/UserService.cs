@@ -335,18 +335,26 @@
             return await this.userManager.Users.ToArrayAsync();
         }
 
-        public async Task<List<UserViewModel>> GetActiveForAdministrationAsync()
+        public async Task<List<UserViewModel>> GetActiveForAdministrationAsync(int skip = 0, int? take = null)
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            var users = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
+            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
                 .Include(u => u.Manager)
-                .ToArrayAsync();
+                .OrderByDescending(u => u.CreatedOn)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                usersAsQuery = usersAsQuery.Take(take.Value);
+            }
+
+            ApplicationUser[] users = await usersAsQuery.ToArrayAsync();
 
             return await GetAllForAdministrationAsync(allUsersViewModel, users);
         }
 
-        public async Task<List<UserViewModel>> GetDeletedForAdministrationAsync()
+        public async Task<List<UserViewModel>> GetDeletedForAdministrationAsync(int page)
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
@@ -355,6 +363,19 @@
                 .ToArrayAsync();
 
             return await GetAllForAdministrationAsync(allUsersViewModel, users);
+        } 
+        
+        public async Task<int> GetActiveUsersCount()
+        {
+            List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
+
+            ApplicationUser[] users = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
+                .Include(u => u.Manager)
+                .ToArrayAsync();
+
+            int count = (await this.GetAllForAdministrationAsync(allUsersViewModel, users)).Count;
+
+            return count;
         }
 
         private async Task<List<UserViewModel>> GetAllForAdministrationAsync(List<UserViewModel> allUsersViewModel, ApplicationUser[] users)

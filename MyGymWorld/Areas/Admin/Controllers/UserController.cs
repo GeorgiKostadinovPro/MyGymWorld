@@ -10,6 +10,8 @@
 
     public class UserController : AdminController
     {
+        private const int UsersPerPage = 2;
+
         private readonly IUserService userService;
         private readonly INotificationService notificationService;
 
@@ -19,15 +21,20 @@
         {
             this.userService = _userService;
             this.notificationService = _notificationService;
-
         }
 
         [HttpGet]
-        public async Task<IActionResult> Active()
+        public async Task<IActionResult> Active(int page = 1)
         {
+            int count = await this.userService.GetActiveUsersCount();
+
+            int totalPages = (int)Math.Ceiling((double)count / UsersPerPage);
+
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
-                Users = await this.userService.GetActiveForAdministrationAsync(),
+                Users = await this.userService
+                .GetActiveForAdministrationAsync((page - 1) * UsersPerPage, UsersPerPage),
+                PagesCount = totalPages
             };
 
             return this.View(allUsersViewModel);
@@ -38,7 +45,7 @@
         {
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
-                Users = await this.userService.GetDeletedForAdministrationAsync(),
+                Users = await this.userService.GetDeletedForAdministrationAsync(5),
             };
 
             return this.View(allUsersViewModel);
