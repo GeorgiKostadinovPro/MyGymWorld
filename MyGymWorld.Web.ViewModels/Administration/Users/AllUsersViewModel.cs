@@ -11,6 +11,8 @@
 
         public int PagesCount { get; set; }
 
+        public int CurrentPage { get; set; }
+
         public List<UserViewModel> Users { get; set; }
     }
 }
