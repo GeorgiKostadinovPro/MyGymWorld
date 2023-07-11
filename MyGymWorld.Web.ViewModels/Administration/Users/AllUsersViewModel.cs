@@ -9,6 +9,8 @@
             this.Users = new List<UserViewModel>();
         }
 
+        public int PagesCount { get; set; }
+
         public List<UserViewModel> Users { get; set; }
     }
 }

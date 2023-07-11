@@ -4,6 +4,7 @@ using MyGymWorld.Data;
 using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,10 +72,9 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapAreaControllerRoute(
-        name: "areas",
-        areaName: "Admin",
-        pattern: "Admin/{controller=Home}/{action=Index}/{id?}" );
+    endpoints.MapControllerRoute(
+        name: "areaRoute",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}" );
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");

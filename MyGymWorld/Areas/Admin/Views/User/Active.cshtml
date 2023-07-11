@@ -18,7 +18,7 @@
                          <a asp-area="Admin" asp-controller="User" asp-action="Deleted" class="btn btn-secondary"><span>View Deleted Users</span></a>
                          <form asp-area="Admin" asp-controller="User" asp-action="ExportToExcel" method="post" id="excelForm">
                             <input type="hidden" name="htmlTable" />
-                            <input type="submit" id="exportToExcelBtn" value="Export to Excel" class="btn btn-primary" />
+                            @*<input type="submit" id="exportToExcelBtn" value="Export to Excel" class="btn btn-primary" />*@
                         </form>
                             @*<a onclick="document.getElementById('excelForm').submit();" id="exportToExcelBtn" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>*@
                      </div>
