@@ -53,7 +53,6 @@ using (var serviceScope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    app.UseDeveloperExceptionPage();
 }
 else
 {
