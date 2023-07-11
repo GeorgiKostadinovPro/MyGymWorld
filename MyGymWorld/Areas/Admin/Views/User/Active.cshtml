@@ -18,9 +18,7 @@
                          <a asp-area="Admin" asp-controller="User" asp-action="Deleted" class="btn btn-secondary"><span>View Deleted Users</span></a>
                          <form asp-area="Admin" asp-controller="User" asp-action="ExportToExcel" method="post" id="excelForm">
                             <input type="hidden" name="htmlTable" />
-                            @*<input type="submit" id="exportToExcelBtn" value="Export to Excel" class="btn btn-primary" />*@
                         </form>
-                            @*<a onclick="document.getElementById('excelForm').submit();" id="exportToExcelBtn" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>*@
                      </div>
                  </div>
              </div>
@@ -108,25 +106,51 @@
              <div class="clearfix">
                  <div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.PagesCount</b> pages</div>
                 <ul class="pagination">
-                    <li class="page-item disabled">
+                    @if(Model.CurrentPage == 1)
+                    {
+                         <li class="page-item disabled">
+                            <a href="">
+                                 Previous
+                             </a>
+                        </li>
+                    }
+                    else
+                    {
+                         <li class="page-item disabled">
                         <a 
                         asp-area="Admin"
                         asp-controller="User"
                         asp-action="Active"
-                        asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+                           asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
                         </li>
+                    }
+                   
                     
                     @for(int i = 1; i <= Model.PagesCount; i++)
                     {
-                         <li class="page-item">
-                             <a asp-area="Admin" 
+                        var active = i == Model.CurrentPage ? "active" : string.Empty;
+
+                        <li class="page-item @active">
+                             <a 
+                             asp-area="Admin" 
                              asp-controller="User" 
                              asp-action="Active" 
                              asp-route-page="@i" class="page-link">@i</a>
                              </li>
                     
                     }
-                     <li class="page-item">
+
+                    @if (Model.CurrentPage == Model.PagesCount)
+                    {
+                        <li class="page-item disabled">
+                            <a href="">
+                                Next
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
                          <a asp-area="Admin"
                            asp-controller="User"
                            asp-action="Active"
@@ -134,6 +158,7 @@
                              Next
                          </a>
                          </li>
+                    }
                  </ul>
              </div>
          </div>
