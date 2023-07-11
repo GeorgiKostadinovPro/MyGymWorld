@@ -106,15 +106,34 @@
              </table>
              </div>
              <div class="clearfix">
-                 <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                 <ul class="pagination">
-                     <li class="page-item disabled"><a href="#">Previous</a></li>
-                     <li class="page-item"><a href="#" class="page-link">1</a></li>
-                     <li class="page-item"><a href="#" class="page-link">2</a></li>
-                     <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                     <li class="page-item"><a href="#" class="page-link">4</a></li>
-                     <li class="page-item"><a href="#" class="page-link">5</a></li>
-                     <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                 <div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.PagesCount</b> pages</div>
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a 
+                        asp-area="Admin"
+                        asp-controller="User"
+                        asp-action="Active"
+                        asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+                        </li>
+                    
+                    @for(int i = 1; i <= Model.PagesCount; i++)
+                    {
+                         <li class="page-item">
+                             <a asp-area="Admin" 
+                             asp-controller="User" 
+                             asp-action="Active" 
+                             asp-route-page="@i" class="page-link">@i</a>
+                             </li>
+                    
+                    }
+                     <li class="page-item">
+                         <a asp-area="Admin"
+                           asp-controller="User"
+                           asp-action="Active"
+                           asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)" class="page-link">
+                             Next
+                         </a>
+                         </li>
                  </ul>
              </div>
          </div>

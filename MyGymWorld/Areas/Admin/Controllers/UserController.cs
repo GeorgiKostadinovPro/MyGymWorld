@@ -34,6 +34,7 @@
             {
                 Users = await this.userService
                 .GetActiveForAdministrationAsync((page - 1) * UsersPerPage, UsersPerPage),
+                CurrentPage = page,
                 PagesCount = totalPages
             };
 
