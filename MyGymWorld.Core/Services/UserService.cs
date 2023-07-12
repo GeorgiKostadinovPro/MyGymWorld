@@ -335,11 +335,11 @@
             return await this.userManager.Users.ToArrayAsync();
         }
 
-        public async Task<List<UserViewModel>> GetActiveForAdministrationAsync(int skip = 0, int? take = null)
+        public async Task<List<UserViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
+            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == isDeleted)
                 .Include(u => u.Manager)
                 .OrderByDescending(u => u.CreatedOn)
                 .Skip(skip);
@@ -353,25 +353,6 @@
 
             return await GetAllForAdministrationAsync(allUsersViewModel, users);
         }
-
-        public async Task<List<UserViewModel>> GetDeletedForAdministrationAsync(int skip = 0, int? take = null)
-        {
-            List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
-
-            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == true)
-                .Include(u => u.Manager)
-                .OrderByDescending(u => u.CreatedOn)
-                .Skip(skip);
-
-            if (take.HasValue)
-            {
-                usersAsQuery = usersAsQuery.Take(take.Value);
-            }
-
-            ApplicationUser[] users = await usersAsQuery.ToArrayAsync();
-
-            return await GetAllForAdministrationAsync(allUsersViewModel, users);
-        } 
         
         public async Task<int> GetActiveOrDeletedUsersCount(bool isDeleted)
         {

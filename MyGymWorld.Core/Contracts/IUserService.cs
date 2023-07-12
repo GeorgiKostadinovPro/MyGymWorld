@@ -30,9 +30,7 @@
 
         Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId);
 
-        Task<List<UserViewModel>> GetActiveForAdministrationAsync(int skip = 0, int? take = null);
-
-        Task<List<UserViewModel>> GetDeletedForAdministrationAsync(int skip = 0, int? take = null);
+        Task<List<UserViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
         Task<int> GetActiveOrDeletedUsersCount(bool isDeleted);
 
