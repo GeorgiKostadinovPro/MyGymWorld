@@ -10,6 +10,10 @@
             this.Roles = new List<RoleViewModel>();
         }
 
+        public int CurrentPage { get; set; }
+
+        public int PagesCount { get; set; }
+
         public List<RoleViewModel> Roles { get; set; }
     }
 }

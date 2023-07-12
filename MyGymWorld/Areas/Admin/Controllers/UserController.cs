@@ -26,9 +26,9 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            int count = await this.userService.GetActiveOrDeletedUsersCount(false);
+            int usersCount = await this.userService.GetActiveOrDeletedUsersCount(false);
 
-            int totalPages = (int)Math.Ceiling((double)count / UsersPerPage);
+            int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
 
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
@@ -44,9 +44,9 @@
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            int count = await this.userService.GetActiveOrDeletedUsersCount(true);
+            int usersCount = await this.userService.GetActiveOrDeletedUsersCount(true);
 
-            int totalPages = (int)Math.Ceiling((double)count / UsersPerPage);
+            int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
 
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {

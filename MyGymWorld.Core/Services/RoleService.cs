@@ -63,7 +63,7 @@
             role.Name = editRoleInputModel.Name;
             role.ModifiedOn = DateTime.UtcNow;
 
-            await  this.roleManager.UpdateAsync(role);
+            await this.roleManager.UpdateAsync(role);
         }
 
         public async Task<ApplicationRole> DeleteRoleAsync(string roleId)
@@ -90,18 +90,26 @@
             return role;
         }
 
-        public async Task<List<RoleViewModel>> GetActiveForAdministrationAsync()
+        public async Task<List<RoleViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
         {
-            return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == false)
+            IQueryable<ApplicationRole> rolesAsQuery = this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == isDeleted)
+                .OrderByDescending(u => u.CreatedOn)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                rolesAsQuery = rolesAsQuery.Take(take.Value);
+            }
+
+            return await rolesAsQuery
                 .ProjectTo<RoleViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        public async Task<List<RoleViewModel>> GetDeletedForAdministrationAsync()
+        public async Task<int> GetActiveOrDeletedRolesCount(bool isDeleted)
         {
-            return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == true)
-                .ProjectTo<RoleViewModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+            return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == isDeleted)
+                .CountAsync();
         }
 
         public async Task<IEnumerable<string>> GetAllRoleNamesAsync()
