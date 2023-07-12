@@ -17,10 +17,11 @@
 
         Task<ApplicationRole> DeleteRoleAsync(string roleId);
 
-        Task<List<RoleViewModel>> GetActiveForAdministrationAsync();
+        Task<List<RoleViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
-        Task<List<RoleViewModel>> GetDeletedForAdministrationAsync();
-        
+        Task<int> GetActiveOrDeletedRolesCount(bool isDeleted);
+
+
         Task<IEnumerable<string>> GetAllRoleNamesAsync();
 
         Task<EditRoleInputModel> GetRoleForEditAsync(string roleId);

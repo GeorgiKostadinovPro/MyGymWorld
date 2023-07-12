@@ -11,6 +11,8 @@
 
     public class RoleController : AdminController
     {
+        private const int RolesPerPage = 2;
+
         private readonly IRoleService roleService;
         private readonly INotificationService notificationService;
 
@@ -21,22 +23,34 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Active()
+        public async Task<IActionResult> Active(int page = 1)
         {
+            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCount(false);
+
+            int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
+
             AllRolesViewModel allRolesViewModel = new AllRolesViewModel
             {
-                Roles = await this.roleService.GetActiveForAdministrationAsync()
+                Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * RolesPerPage, RolesPerPage),
+                CurrentPage = page,
+                PagesCount = totalPages
             };
 
             return View(allRolesViewModel);       
         }
 
         [HttpGet]
-        public async Task<IActionResult> Deleted()
+        public async Task<IActionResult> Deleted(int page = 1)
         {
+            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCount(true);
+
+            int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
+
             AllRolesViewModel allRolesViewModel = new AllRolesViewModel
             {
-                Roles = await this.roleService.GetDeletedForAdministrationAsync()
+                Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * RolesPerPage, RolesPerPage),
+                CurrentPage = page,
+                PagesCount = totalPages
             };
 
             return View(allRolesViewModel);
