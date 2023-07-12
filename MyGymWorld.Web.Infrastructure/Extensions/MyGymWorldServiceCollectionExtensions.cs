@@ -7,6 +7,7 @@
     using MyGymWorld.Core.Services;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Core.Utilities.Services;
+    using MyGymWorld.Data.Migrations;
     using MyGymWorld.Data.Repositories;
 
     public static class MyGymWorldServiceCollectionExtensions
@@ -49,6 +50,7 @@
 
             // standard services
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IGymService, GymService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
             services.AddScoped<IAddressService, AddressService>();

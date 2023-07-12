@@ -12,6 +12,8 @@
 
         public const string AdminAreaName = "Admin";
 
+        public const string ManagerAreaName = "Manager";
+
         public const string RegularUser = "Regular User";
     }
 }

@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "tinymce@6.6.0",
+      "destination": "wwwroot/js/tinymce/"
+    }
+  ]
+}
