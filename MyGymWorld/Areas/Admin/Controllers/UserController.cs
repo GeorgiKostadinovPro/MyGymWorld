@@ -29,6 +29,7 @@
             int usersCount = await this.userService.GetActiveOrDeletedUsersCount(false);
 
             int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
+            totalPages = totalPages == 0 ? 1 : totalPages;
 
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
@@ -47,6 +48,7 @@
             int usersCount = await this.userService.GetActiveOrDeletedUsersCount(true);
 
             int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
+            totalPages = totalPages == 0 ? 1 : totalPages;
 
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
