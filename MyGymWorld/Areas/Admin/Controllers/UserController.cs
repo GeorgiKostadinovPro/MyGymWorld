@@ -33,7 +33,7 @@
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
                 Users = await this.userService
-                .GetActiveForAdministrationAsync((page - 1) * UsersPerPage, UsersPerPage),
+                .GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * UsersPerPage, UsersPerPage),
                 CurrentPage = page,
                 PagesCount = totalPages
             };
@@ -50,7 +50,7 @@
 
             AllUsersViewModel allUsersViewModel = new AllUsersViewModel
             {
-                Users = await this.userService.GetDeletedForAdministrationAsync((page - 1) * UsersPerPage, UsersPerPage),
+                Users = await this.userService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * UsersPerPage, UsersPerPage),
                 CurrentPage = page,
                 PagesCount = totalPages
             };
