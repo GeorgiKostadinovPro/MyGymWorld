@@ -19,14 +19,18 @@
         [RegularExpression("\\+[0-9]{1,3}-[0-9]{1,10}", ErrorMessage = "Your phone number must follow the pattern above")]
         [StringLength(ValidationalConstants.GymConstants.PhoneNumberMaxLength, ErrorMessage = "The phone number must be at least 7 and at max 15 characters long.",
          MinimumLength = ValidationalConstants.GymConstants.PhoneNumberMinLength)]
+        [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; } = null!;
 
         [Required]
+        [Display(Name = "Logo")]
         public string LogoUrl { get; set; } = null!;
 
+        [Display(Name = "Gallery")]
         public IEnumerable<string>? GalleryImagesUri { get; set; }
 
         [Required]
+        [Display(Name = "Webiste Url")]
         public string WebsiteUrl { get; set; } = null!;
 
         [Required]
@@ -35,6 +39,7 @@
         [Required]
         public string GymType { get; set; } = null!;
 
+        [Display(Name = "Gym Types")]
         public IEnumerable<string>? GymTypes { get; set; }
 
         [Required]
@@ -43,11 +48,13 @@
         [Required]
         public string CountryId { get; set; } = null!;
 
+        [Display(Name = "Countries")]
         public IEnumerable<SelectListItem>? CountriesSelectList { get; set; }
 
         [Required]
         public string TownId { get; set; } = null!;
 
+        [Display(Name = "Towns")]
         public IEnumerable<SelectListItem>? TownsSelectList { get; set; }
     }
 }
