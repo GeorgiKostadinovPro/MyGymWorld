@@ -9,7 +9,7 @@
             this.Id = Guid.NewGuid();
 
             this.Users = new HashSet<ApplicationUser>();
-            this.GymsAddresses = new HashSet<GymAddress>();
+            this.Gyms = new HashSet<Gym>();
         }
 
         public Guid Id { get; set; }
@@ -22,6 +22,6 @@
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
 
-        public virtual ICollection<GymAddress> GymsAddresses { get; set; }
+        public virtual ICollection<Gym> Gyms { get; set; }
     }
 }

@@ -6,10 +6,10 @@
 
 <script src="~/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
-<form>
+<form asp-area="Manager" asp-controller="Gym" asp-action="Create" method="post" enctype="multipart/form-data">
   <div class="form-row">
     <div class="col-md-4 mb-3">
-      <label for="validationServer01">First name</label>
+      <label for="validationServer01">Gym Name</label>
       <input type="text" class="form-control is-valid" id="validationServer01" placeholder="First name" value="Mark" required>
       <div class="valid-feedback">
         Looks good!
