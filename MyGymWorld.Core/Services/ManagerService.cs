@@ -207,8 +207,8 @@
         {
             IEnumerable<string> managerTypes =
                 Enum.GetValues(typeof(ManagerType)).Cast<ManagerType>()
-                .ToImmutableArray()
-                .Select(mt => mt.ToString());
+                .Select(mt => mt.ToString())
+                .ToImmutableArray();
 
             return managerTypes;
         }
