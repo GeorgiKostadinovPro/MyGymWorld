@@ -18,6 +18,14 @@
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
+
+            builder
+                .HasOne(g => g.Address)
+                .WithMany(m => m.Gyms)
+                .HasForeignKey(g => g.AddressId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
             builder
                 .Property(g => g.Name)
                 .IsRequired()

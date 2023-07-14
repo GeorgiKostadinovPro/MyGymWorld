@@ -11,7 +11,6 @@
             this.Id = Guid.NewGuid();
            
             this.GymImages = new HashSet<GymImage>();
-            this.GymsAddresses = new HashSet<GymAddress>(); 
             this.UsersGyms = new HashSet<UserGym>();
 
             this.Events = new HashSet<Event>();
@@ -45,11 +44,13 @@
         public Guid? ChatGroupId { get; set; }
 
         public virtual ChatGroup ChatGroup { get; set; } = null!;
+
+        public Guid AddressId { get; set; }
+
+        public virtual Address Address { get; set; } = null!;
         
         public virtual ICollection<GymImage> GymImages { get; set; }
 
-        public virtual ICollection<GymAddress> GymsAddresses { get; set; }
-       
         public virtual ICollection<UserGym> UsersGyms { get; set; } 
 
         public virtual ICollection<Event> Events { get; set; } 

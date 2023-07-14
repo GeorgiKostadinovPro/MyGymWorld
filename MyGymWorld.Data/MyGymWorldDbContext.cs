@@ -35,8 +35,6 @@ namespace MyGymWorld.Data
         
         public DbSet<Gym> Gyms { get; set; }
 
-        public DbSet<GymAddress> GymAddresses { get; set; }
-
         public DbSet<UserGym> UsersGyms { get; set; }
 
         public DbSet<Manager> Managers { get; set; }
