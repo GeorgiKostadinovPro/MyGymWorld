@@ -40,11 +40,15 @@
            <textarea style="text-align: center;" id="editor">Enter your Gym description.</textarea>
         </div>
         <div class="form-group col-md-6">
-            <label for="inputState">Gym Type</label>
-            <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
+            <label asp-for="@Model.LogoUrl">Gym Types</label>
+            <select asp-for="@Model.GymType" id="gymTypes" class="form-select">
+                <option value="None">-- Please Select A Manager Type --</option>
+                @foreach (string managerType in Model.GymTypes!)
+                {
+                    <option value="@managerType">@managerType</option>
+                }
             </select>
+            <span asp-validation-for="@Model.GymType" class="text-danger"></span>
         </div>
     </div>
     <div class="form-row">
@@ -53,18 +57,18 @@
             <input type="text" class="form-control" id="inputCity">
         </div>
         <div class="form-group col-md-4">
-            <label for="inputState">Town</label>
-            <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
+            <label asp-for="@Model.LogoUrl">Countries</label>
+            <select asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList" id="countries" class="form-select">
+                <option value="None">-- Please Select A Country --</option>
             </select>
+            <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4">
-            <label for="inputState">Country</label>
-            <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
+            <label asp-for="@Model.LogoUrl">Towns</label>
+            <select asp-for="@Model.TownId" asp-items="@Model.TownsSelectList" id="towns" class="form-select" disabled>
+                <option value="None">-- Please Select A Town --</option>
             </select>
+            <span asp-validation-for="@Model.TownId" class="text-danger"></span>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Create Gym</button>

@@ -24,7 +24,7 @@
         [Required]
         public string LogoUrl { get; set; } = null!;
 
-        public string[]? GalleryImagesUri { get; set; }
+        public IEnumerable<string>? GalleryImagesUri { get; set; }
 
         [Required]
         public string WebsiteUrl { get; set; } = null!;
@@ -34,6 +34,8 @@
 
         [Required]
         public string GymType { get; set; } = null!;
+
+        public IEnumerable<string>? GymTypes { get; set; }
 
         [Required]
         public string Address { get; set; } = null!;
