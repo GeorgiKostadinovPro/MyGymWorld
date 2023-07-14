@@ -42,7 +42,7 @@
 
         public virtual Manager Manager { get; set; } = null!;
 
-        public Guid ChatGroupId { get; set; }
+        public Guid? ChatGroupId { get; set; }
 
         public virtual ChatGroup ChatGroup { get; set; } = null!;
         
