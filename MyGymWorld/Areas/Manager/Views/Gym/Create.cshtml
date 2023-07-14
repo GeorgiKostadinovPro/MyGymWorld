@@ -6,73 +6,84 @@
 
 <script src="~/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
-<form>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Name</label>
-            <input type="text" class="form-control" id="inputEmail4" placeholder="Name">
+<div id="createGym" style="padding: 20px; box-shadow: 0 0 10px #2C3142;">
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.Name"></label>
+                <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Name" required>
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.Email"></label>
+                <input asp-for="@Model.Email" type="email" class="form-control" placeholder="Email" required>
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.PhoneNumber"></label>
+                <input asp-for="@Model.PhoneNumber" type="text" class="form-control" placeholder="Phone" required>
+                <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.LogoUrl"></label>
+                <input asp-for="@Model.LogoUrl" type="file" class="form-control" placeholder="Choose Logo" required>
+                <span asp-validation-for="@Model.LogoUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.GalleryImagesUri"></label>
+                <input asp-for="@Model.GalleryImagesUri" type="file" multiple="multiple" class="form-control" placeholder="Choose Images for Gallery" required>
+                <span asp-validation-for="@Model.GalleryImagesUri" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.WebsiteUrl"></label>
+                <input asp-for="@Model.WebsiteUrl" type="email" class="form-control" placeholder="Paste your gym website url" required>
+                <span asp-validation-for="@Model.WebsiteUrl" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <label for="inputPassword4">Phone number</label>
-            <input type="text" class="form-control" id="inputPassword4" placeholder="Phone">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <textarea asp-for="@Model.Description" id="editor" required>Enter your Gym description.</textarea>
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-5" style="margin-left: 30px;">
+                <label asp-for="@Model.GymTypes">Gym Types</label>
+                <select asp-for="@Model.GymType" id="gymTypes" class="form-select">
+                    <option value="None">-- Please Select A Manager Type --</option>
+                    @foreach (string managerType in Model.GymTypes!)
+                    {
+                        <option value="@managerType">@managerType</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.GymType" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Logo</label>
-            <input type="text" class="form-control" id="inputEmail4" placeholder="Choose Logo">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.Address"></label>
+                <input asp-for="@Model.Address" type="text" class="form-control" id="inputCity">
+                <span asp-validation-for="@Model.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.CountriesSelectList">Countries</label>
+                <select asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList" id="countries" class="form-select">
+                    <option value="None">-- Please Select A Country --</option>
+                </select>
+                <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.TownsSelectList">Towns</label>
+                <select asp-for="@Model.TownId" asp-items="@Model.TownsSelectList" id="towns" class="form-select" disabled>
+                    <option value="None">-- Please Select A Town --</option>
+                </select>
+                <span asp-validation-for="@Model.TownId" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Gallery</label>
-            <input type="text" class="form-control" id="inputEmail4" placeholder="Choose Images for Gallery">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Website Url</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Paste your gym website url">
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-           <textarea style="text-align: center;" id="editor">Enter your Gym description.</textarea>
-        </div>
-        <div class="form-group col-md-6">
-            <label asp-for="@Model.LogoUrl">Gym Types</label>
-            <select asp-for="@Model.GymType" id="gymTypes" class="form-select">
-                <option value="None">-- Please Select A Manager Type --</option>
-                @foreach (string managerType in Model.GymTypes!)
-                {
-                    <option value="@managerType">@managerType</option>
-                }
-            </select>
-            <span asp-validation-for="@Model.GymType" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="inputCity">Address</label>
-            <input type="text" class="form-control" id="inputCity">
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="@Model.LogoUrl">Countries</label>
-            <select asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList" id="countries" class="form-select">
-                <option value="None">-- Please Select A Country --</option>
-            </select>
-            <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="@Model.LogoUrl">Towns</label>
-            <select asp-for="@Model.TownId" asp-items="@Model.TownsSelectList" id="towns" class="form-select" disabled>
-                <option value="None">-- Please Select A Town --</option>
-            </select>
-            <span asp-validation-for="@Model.TownId" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Create Gym</button>
-</form>
+        <button type="submit" class="btn btn-primary mx-auto d-block">Create Gym</button>
+    </form>
+</div>
+
 
 @*<div class="row d-flex justify-content-center align-items-center">
     <div class="col-md-6">
