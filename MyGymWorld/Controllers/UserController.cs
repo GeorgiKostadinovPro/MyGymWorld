@@ -75,7 +75,7 @@
                 await this.userService.DeleteUserProfilePictureAsync(userId);
             }
              
-            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture);
+            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture, "MyGymWorld/assets/user-profile-pictures");
 
             await this.userService.SetUserProfilePictureAsync(userId, imageUploadResult);
 
