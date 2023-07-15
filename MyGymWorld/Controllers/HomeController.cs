@@ -19,19 +19,26 @@ namespace MyGymWorld.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            return View();
+            if (this.User != null
+                && this.User.Identity != null
+                && this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("All", "Gym");
+            }
+                
+            return this.View();
         }
 
         [AllowAnonymous]
         public IActionResult Privacy()
         {
-            return View();
+            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
