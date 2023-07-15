@@ -5,6 +5,8 @@
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
 
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
     public class GymController : ManagerController
     {
         private readonly ICloudinaryService cloudinaryService;
@@ -133,7 +135,16 @@
                 }
             }
 
-            await this.gymService.CreateGymAsync(createGymInputModel);
+            try
+            {
+                await this.gymService.CreateGymAsync(createGymInputModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong when trying to add the gym!";
+
+                return this.View(createGymInputModel);
+            }
 
             return this.RedirectToAction("Index", "Home");
         }
