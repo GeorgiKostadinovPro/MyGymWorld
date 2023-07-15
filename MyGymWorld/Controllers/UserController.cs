@@ -69,15 +69,24 @@
 
             (string profilePictureUri, string publicId) = await this.userService.GetUserProfilePictureUriAndPublicIdAsync(userId);
 
-            if (publicId != null)
+            try
             {
-                await this.cloudinaryService.DeletePhotoAsync(publicId);
-                await this.userService.DeleteUserProfilePictureAsync(userId);
-            }
-             
-            ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture, "MyGymWorld/assets/user-profile-pictures");
+                if (publicId != null)
+                {
+                    await this.cloudinaryService.DeletePhotoAsync(publicId);
+                    await this.userService.DeleteUserProfilePictureAsync(userId);
+                }
 
-            await this.userService.SetUserProfilePictureAsync(userId, imageUploadResult);
+                ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture, "MyGymWorld/assets/user-profile-pictures");
+
+                await this.userService.SetUserProfilePictureAsync(userId, imageUploadResult);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong when uploading picture!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
 
             return this.RedirectToAction(nameof(UserProfile));
         }
@@ -95,8 +104,17 @@
                 return this.RedirectToAction(nameof(UserProfile));
             }
 
-            await this.cloudinaryService.DeletePhotoAsync(publicId);
-            await this.userService.DeleteUserProfilePictureAsync(userId);
+            try
+            {
+                await this.cloudinaryService.DeletePhotoAsync(publicId);
+                await this.userService.DeleteUserProfilePictureAsync(userId);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong when deleting picture!";
+
+                return this.RedirectToAction(nameof(UserProfile));
+            }
 
             return this.RedirectToAction(nameof(UserProfile));
         }

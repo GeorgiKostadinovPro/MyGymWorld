@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGymWorld.Data;
 
@@ -11,9 +12,10 @@ using MyGymWorld.Data;
 namespace MyGymWorld.Data.Migrations
 {
     [DbContext(typeof(MyGymWorldDbContext))]
-    partial class MyGymWorldDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230715153605_AddColumnLogoPublicIdInTableGyms")]
+    partial class AddColumnLogoPublicIdInTableGyms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -665,10 +667,6 @@ namespace MyGymWorld.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Uri")
                         .IsRequired()

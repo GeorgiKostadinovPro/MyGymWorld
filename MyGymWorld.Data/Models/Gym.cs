@@ -31,7 +31,9 @@
 
         public string Description { get; set; } = null!;
 
-        public string LogoUrl { get; set; } = null!;
+        public string LogoUri { get; set; } = null!;
+
+        public string LogoPublicId { get; set; } = null!;
 
         public string WebsiteUrl { get; set; } = null!; 
 
