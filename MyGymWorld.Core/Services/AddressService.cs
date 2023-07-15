@@ -14,11 +14,28 @@
         {
             this.repository = _repository;
         }
+        
+        public async Task<Address> CreateAddressAsync(string name, string townId)
+        {
+            Address address = new Address
+            {
+                Name = name,
+                TownId = Guid.Parse(townId),
+                CreatedOn = DateTime.UtcNow
+            };
+
+            await this.repository.AddAsync(address);
+            await this.repository.SaveChangesAsync();
+
+            return address;
+        }
 
         public async Task<Address> GetAddressByNameAsync(string address)
         {
+            string wildCard = $"%{address.ToLower()}%";
+
             Address addressToGet = await this.repository.All<Address>()
-                .FirstOrDefaultAsync(a => a.Name.ToLower().Contains(address.ToLower()));
+                .FirstOrDefaultAsync(a => EF.Functions.Like(a.Name, wildCard));
 
             return addressToGet;
         } 

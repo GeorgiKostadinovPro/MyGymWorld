@@ -90,17 +90,9 @@
                 }
                 else
                 {
-                    Address newAddress = new Address
-                    {
-                        Name = editUserInputModel.Address!,
-                        TownId = Guid.Parse(editUserInputModel.TownId!),
-                        CreatedOn = DateTime.UtcNow
-                    };
+                    Address createdAddress = await this.addressService.CreateAddressAsync(editUserInputModel.Address!, editUserInputModel.TownId!);
 
-                    await this.repository.AddAsync(newAddress);
-                    await this.repository.SaveChangesAsync();
-
-                    userToEdit.Address = newAddress;
+                    userToEdit.Address = createdAddress;
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Core.Services
 {
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
@@ -14,14 +15,60 @@
     {
         private readonly IRepository repository;
 
-        public GymService(IRepository _repository)
+        private readonly IAddressService addressService;
+
+        public GymService(
+            IRepository _repository, 
+            IAddressService _addressService)
         {
             this.repository = _repository;
+            this.addressService = _addressService;
         }
 
-        public Task CreateGymAsync(CreateGymInputModel createGymInputModel)
+        public async Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel)
         {
-            throw new NotImplementedException();
+            Gym gym = new Gym
+            {
+                ManagerId = Guid.Parse(managerId),
+                Name = createGymInputModel.Name,
+                Email = createGymInputModel.Email,
+                PhoneNumber = createGymInputModel.PhoneNumber,
+                Description = createGymInputModel.Description,
+                LogoUri = createGymInputModel.LogoParams!.SecureUri!.AbsoluteUri,
+                LogoPublicId = createGymInputModel.LogoParams.PublicId,
+                WebsiteUrl = createGymInputModel.WebsiteUrl,
+                GymType = Enum.Parse<GymType>(createGymInputModel.GymType)
+            };
+
+            foreach (var galleryImageResultParams in createGymInputModel.GalleryImagesParams)
+            {
+                string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
+                string publicId = galleryImageResultParams.PublicId;
+
+                gym.GymImages.Add(new GymImage
+                {
+                    Uri = uri,
+                    PublicId = publicId,
+                    CreatedOn = DateTime.UtcNow
+                });
+            }
+
+            Address address = await this.addressService.GetAddressByNameAsync(createGymInputModel.Address);
+
+            if (address != null)
+            {
+                gym.AddressId = address.Id;
+                gym.Address = address;
+            }
+            else
+            {
+                Address createdAddress = await this.addressService.CreateAddressAsync(createGymInputModel.Address, createGymInputModel.TownId);
+
+                gym.Address = createdAddress;
+            }
+
+            await this.repository.AddAsync(gym);
+            await this.repository.SaveChangesAsync();
         }
 
         public IEnumerable<string> GetAllGymTypes()

@@ -40,13 +40,6 @@
 
         public async Task CreateManagerAsync(string userId, BecomeManagerInputModel becomeManagerInputModel)
         {
-            bool isManagerTypeValid = Enum.TryParse<ManagerType>(becomeManagerInputModel.ManagerType, true, out ManagerType managerType);
-
-            if (!isManagerTypeValid)
-            {
-                throw new InvalidOperationException(ExceptionConstants.ManagerErrors.InvalidManagerType);
-            }
-
             ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
             if (user.FirstName == null)
@@ -65,7 +58,7 @@
             Manager manager = new Manager
             {
                 UserId = Guid.Parse(becomeManagerInputModel.Id),
-                ManagerType = managerType,
+                ManagerType = Enum.Parse<ManagerType>(becomeManagerInputModel.ManagerType),
                 CreatedOn = DateTime.UtcNow
             };
             
