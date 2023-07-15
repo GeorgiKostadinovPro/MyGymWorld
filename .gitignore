@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /MyGymWorld/appsettings.json
 /MyGymWorld/appsettings.Development.json
+/MyGymWorld/appsettings.Production.json
