@@ -60,7 +60,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 - [About the Project](#star2-about-the-project)
   * [Tech Stack](#space_invader-tech-stack)
-  * * [Screenshots](#camera-screenshots)
+  * [Screenshots](#camera-screenshots)
   * [Features](#dart-features)
   * [Color Reference](#art-color-reference)
   * [Environment Variables](#key-environment-variables)
