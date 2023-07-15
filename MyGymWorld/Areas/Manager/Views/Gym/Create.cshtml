@@ -38,7 +38,7 @@
             </div>
             <div class="form-group col-md-4">
                 <label asp-for="@Model.WebsiteUrl"></label>
-                <input asp-for="@Model.WebsiteUrl" type="email" class="form-control" placeholder="Paste your gym website url" required>
+                <input asp-for="@Model.WebsiteUrl" class="form-control" placeholder="Paste your gym website url" required>
                 <span asp-validation-for="@Model.WebsiteUrl" class="text-danger"></span>
             </div>
         </div>
@@ -84,44 +84,6 @@
     </form>
 </div>
 
-
-@*<div class="row d-flex justify-content-center align-items-center">
-    <div class="col-md-6">
-        <form id="editForm" asp-area="Manager" asp-controller="Gym" asp-action="Create" method="post" enctype="multipart/form-data">
-            <h2>Add Your Gym To The Platform</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="@Model.Name" class="form-control" autocomplete="username" aria-required="true" minlength="5" maxlength="50" required />
-                <label asp-for="@Model.Name"></label>
-                <span asp-validation-for="@Model.Name" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" required />
-                <label asp-for="@Model.Email"></label>
-                <span asp-validation-for="@Model.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="@Model.Description" class="form-control" autocomplete="first name" aria-required="true" minlength="3" maxlength="20" />
-                <label asp-for="@Model.Description"></label>
-                <span asp-validation-for="@Model.Description" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="@Model.WebsiteUrl" class="form-control" autocomplete="last name" aria-required="true" minlength="3" maxlength="20" />
-                <label asp-for="@Model.WebsiteUrl"></label>
-                <span asp-validation-for="@Model.WebsiteUrl" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="@Model.LogoUrl" class="form-control" autocomplete="phone number" aria-required="true" minlength="5" maxlength="15" />
-                <label asp-for="@Model.LogoUrl"></label>
-                <span asp-validation-for="@Model.LogoUrl" class="text-danger"></span>
-            </div>
-            <textarea id="editor">This is some sample content.</textarea>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save Changes</button>
-        </form>
-    </div>
-</div>*@
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
@@ -131,6 +93,7 @@
         selector: '#editor',
         width: 540,
         height: 300,
+        resize: false,
         plugins: [
             'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
             'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
@@ -144,5 +107,20 @@
         },
         menubar: 'favs file edit view insert format tools table help',
         content_css: 'css/content.css'
+    });
+
+    $(document).ready(function () {
+        $('#countries').val('None');
+
+        $('#countries').on('change', function () {
+            var selectedCountry = $(this).val();
+            var $townsSelectElement = $('#towns');
+
+            if (selectedCountry === 'None') {
+                $townsSelectElement.prop('disabled', true);
+            } else {
+                $townsSelectElement.prop('disabled', false);
+            }
+        });
     });
 </script>

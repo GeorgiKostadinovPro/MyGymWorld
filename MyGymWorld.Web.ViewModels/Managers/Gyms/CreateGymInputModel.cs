@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Managers.Gyms
 {
+    using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using MyGymWorld.Common;
@@ -57,5 +58,9 @@
 
         [Display(Name = "Towns")]
         public IEnumerable<SelectListItem>? TownsSelectList { get; set; }
+
+        public ImageUploadParams LogoParams { get; set; } = null!;
+
+        public IEnumerable<ImageUploadParams>? GalleryImagesParams { get; set; }
     }
 }

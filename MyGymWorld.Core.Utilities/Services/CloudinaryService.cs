@@ -15,7 +15,7 @@
             this.cloudinary = _cloudinary;
         }
 
-        public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile formFile)
+        public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile formFile, string folder)
         {
             ImageUploadResult uploadResult = new ImageUploadResult();
 
@@ -26,7 +26,7 @@
                 ImageUploadParams imageUploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(formFile.FileName, stream),
-                    Folder = "MyGymWorld/assets/user-profile-pictures"
+                    Folder = folder
                 };
 
                 uploadResult = await this.cloudinary.UploadAsync(imageUploadParams);

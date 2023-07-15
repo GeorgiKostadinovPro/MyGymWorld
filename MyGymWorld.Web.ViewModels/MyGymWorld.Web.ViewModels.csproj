@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyGymWorld.Common\MyGymWorld.Common.csproj" />
+    <ProjectReference Include="..\MyGymWorld.Core.Utilities\MyGymWorld.Core.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
