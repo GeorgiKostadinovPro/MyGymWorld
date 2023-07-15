@@ -26,10 +26,10 @@
 
         [Required]
         [Display(Name = "Logo")]
-        public IFormFile LogoUrl { get; set; } = null!;
+        public IFormFile LogoFile { get; set; } = null!;
 
         [Display(Name = "Gallery")]
-        public IEnumerable<IFormFile>? GalleryImagesUri { get; set; }
+        public IEnumerable<IFormFile>? GalleryImagesFiles { get; set; }
 
         [Required]
         [Display(Name = "Webiste Url")]
@@ -59,8 +59,8 @@
         [Display(Name = "Towns")]
         public IEnumerable<SelectListItem>? TownsSelectList { get; set; }
 
-        public ImageUploadParams LogoParams { get; set; } = null!;
+        public ImageUploadResult LogoParams { get; set; } = null!;
 
-        public IEnumerable<ImageUploadParams>? GalleryImagesParams { get; set; }
+        public ICollection<ImageUploadResult> GalleryImagesParams { get; set; } = new HashSet<ImageUploadResult>();
     }
 }

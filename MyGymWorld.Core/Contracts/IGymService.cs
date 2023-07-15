@@ -5,7 +5,7 @@
 
     public interface IGymService
     {
-        Task CreateGymAsync(CreateGymInputModel createGymInputModel);
+        Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel);
 
         IEnumerable<string> GetAllGymTypes();
     }

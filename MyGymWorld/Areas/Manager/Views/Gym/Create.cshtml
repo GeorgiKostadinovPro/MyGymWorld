@@ -27,14 +27,14 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label asp-for="@Model.LogoUrl"></label>
-                <input asp-for="@Model.LogoUrl" type="file" class="form-control" placeholder="Choose Logo" required>
-                <span asp-validation-for="@Model.LogoUrl" class="text-danger"></span>
+                <label asp-for="@Model.LogoFile"></label>
+                <input asp-for="@Model.LogoFile" type="file" class="form-control" placeholder="Choose Logo" required>
+                <span asp-validation-for="@Model.LogoFile" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">
-                <label asp-for="@Model.GalleryImagesUri"></label>
-                <input asp-for="@Model.GalleryImagesUri" type="file" multiple="multiple" class="form-control" placeholder="Choose Images for Gallery" required>
-                <span asp-validation-for="@Model.GalleryImagesUri" class="text-danger"></span>
+                <label asp-for="@Model.GalleryImagesFiles"></label>
+                <input asp-for="@Model.GalleryImagesFiles" type="file" multiple="multiple" class="form-control" placeholder="Choose Images for Gallery" required>
+                <span asp-validation-for="@Model.GalleryImagesFiles" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">
                 <label asp-for="@Model.WebsiteUrl"></label>

@@ -53,5 +53,10 @@
             public const string RoleAlreadyExists = "Role with this name already exists!";
             public const string InvalidRoleId = "Role with this Id does NOT exists!";
         }
+
+        public static class GymErrors
+        {
+            public const string InvalidGymType = "The provided Gym Type is invalid!";
+        }
     }
 }

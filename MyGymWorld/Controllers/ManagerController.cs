@@ -5,6 +5,7 @@
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Managers;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -74,6 +75,13 @@
 
             try
             {
+                bool isManagerTypeValid = Enum.TryParse<ManagerType>(becomeManagerInputModel.ManagerType, true, out ManagerType managerType);
+
+                if (!isManagerTypeValid)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.ManagerErrors.InvalidManagerType);
+                }
+
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
 
                 this.TempData[InformationMessage] = "Manager will aprove you soon!";

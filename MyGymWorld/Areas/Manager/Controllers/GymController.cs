@@ -1,8 +1,12 @@
 ﻿namespace MyGymWorld.Web.Areas.Manager.Controllers
 {
+    using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Mvc;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Utilities.Contracts;
+    using MyGymWorld.Data.Models.Enums;
+    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -53,21 +57,21 @@
                 return this.View(createGymInputModel);
             }
 
-            if (!this.cloudinaryService.IsFileValid(createGymInputModel.LogoUrl))
+            if (!this.cloudinaryService.IsFileValid(createGymInputModel.LogoFile))
             {
                 this.ModelState.AddModelError("LogoUrl", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
 
                 return this.View(createGymInputModel);
             }
 
-            if (createGymInputModel.GalleryImagesUri == null)
+            if (createGymInputModel.GalleryImagesFiles == null)
             {
                 this.ModelState.AddModelError("GalleryImagesUri", "You must upload at least one gym picture!");
 
                 return this.View(createGymInputModel);
             }
 
-            foreach (var picture in createGymInputModel.GalleryImagesUri)
+            foreach (var picture in createGymInputModel.GalleryImagesFiles)
             {
                 if (!this.cloudinaryService.IsFileValid(picture))
                 {
@@ -130,14 +134,39 @@
                     && createGymInputModel.TownId != "None")
                 {
                     this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
-
                     return this.View(createGymInputModel);
                 }
             }
 
             try
             {
-                await this.gymService.CreateGymAsync(createGymInputModel);
+                bool isGymTypeValid = Enum.TryParse<GymType>(createGymInputModel.GymType, true, out GymType gymType);
+
+                if (!isGymTypeValid)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.GymErrors.InvalidGymType);
+                }
+
+                ImageUploadResult logoResultParams = await this.cloudinaryService.UploadPhotoAsync(createGymInputModel.LogoFile, "MyGymWorld/assets/gyms-logo-pictures");
+
+                createGymInputModel.LogoParams = logoResultParams;
+
+                foreach (var imageFile in createGymInputModel.GalleryImagesFiles)
+                {
+                    ImageUploadResult imageResultParams = await this.cloudinaryService.UploadPhotoAsync(imageFile, "MyGymWorld/assets/gyms-gallery-pictures");
+
+                    createGymInputModel.GalleryImagesParams.Add(imageResultParams);
+                }
+
+                string managerId = this.GetUserId();
+
+                await this.gymService.CreateGymAsync(managerId, createGymInputModel);
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.View(createGymInputModel);
             }
             catch (Exception)
             {
