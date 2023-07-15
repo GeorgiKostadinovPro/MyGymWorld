@@ -58,9 +58,5 @@
 
         [Display(Name = "Towns")]
         public IEnumerable<SelectListItem>? TownsSelectList { get; set; }
-
-        public ImageUploadResult LogoParams { get; set; } = null!;
-
-        public ICollection<ImageUploadResult> GalleryImagesParams { get; set; } = new HashSet<ImageUploadResult>();
     }
 }

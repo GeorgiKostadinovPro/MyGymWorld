@@ -7,7 +7,7 @@
 <script src="~/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
 <div id="createGym" style="padding: 20px; box-shadow: 0 0 10px #2C3142;">
-    <form>
+    <form asp-area="Manager" asp-controller="Gym" asp-action="Create" method="post" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label asp-for="@Model.Name"></label>

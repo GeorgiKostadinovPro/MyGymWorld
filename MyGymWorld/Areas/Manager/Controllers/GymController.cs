@@ -5,8 +5,8 @@
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Utilities.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
-    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -15,18 +15,21 @@
     {
         private readonly ICloudinaryService cloudinaryService;
 
+        private readonly IUserService userService;
         private readonly IGymService gymService;
         private readonly ICountryService countryService;
         private readonly ITownService townService;
 
         public GymController(
             ICloudinaryService _cloudinaryService,
+            IUserService _userService,
             IGymService _gymService,
             ICountryService _countryService,
             ITownService _townService)
         {
             this.cloudinaryService = _cloudinaryService;
 
+            this.userService = _userService;
             this.gymService = _gymService;
             this.countryService = _countryService;
             this.townService = _townService;
@@ -35,6 +38,19 @@
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            string userId = this.GetUserId();
+
+            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+            if (!this.User.IsInRole("Manager")
+                || user == null
+                || user.ManagerId == null)
+            {
+                this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
             CreateGymInputModel createGymInputModel = new CreateGymInputModel
             {
                 GymTypes = this.gymService.GetAllGymTypes(),
@@ -147,20 +163,24 @@
                     throw new InvalidOperationException(ExceptionConstants.GymErrors.InvalidGymType);
                 }
 
-                ImageUploadResult logoResultParams = await this.cloudinaryService.UploadPhotoAsync(createGymInputModel.LogoFile, "MyGymWorld/assets/gyms-logo-pictures");
+                GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel = new GymLogoAndGalleryImagesInputModel();
 
-                createGymInputModel.LogoParams = logoResultParams;
+                ImageUploadResult logoResultParams = await this.cloudinaryService.UploadPhotoAsync(createGymInputModel.LogoFile, "MyGymWorld/assets/gyms-logo-pictures");
+               
+                gymLogoAndGalleryImagesInputModel.LogoResultParams = logoResultParams;
 
                 foreach (var imageFile in createGymInputModel.GalleryImagesFiles)
                 {
                     ImageUploadResult imageResultParams = await this.cloudinaryService.UploadPhotoAsync(imageFile, "MyGymWorld/assets/gyms-gallery-pictures");
 
-                    createGymInputModel.GalleryImagesParams.Add(imageResultParams);
+                    gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Add(imageResultParams);
                 }
+               
+                string userId = this.GetUserId();
 
-                string managerId = this.GetUserId();
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
-                await this.gymService.CreateGymAsync(managerId, createGymInputModel);
+                await this.gymService.CreateGymAsync(user.ManagerId!.Value, createGymInputModel, gymLogoAndGalleryImagesInputModel);
             }
             catch (InvalidOperationException ex)
             {
