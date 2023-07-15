@@ -92,7 +92,7 @@
                 {
                     Address createdAddress = await this.addressService.CreateAddressAsync(editUserInputModel.Address!, editUserInputModel.TownId!);
 
-                    userToEdit.Address = createdAddress;
+                    userToEdit.AddressId = createdAddress.Id;
                 }
             }
 
