@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Managers.Gyms
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using MyGymWorld.Common;
     using System.ComponentModel.DataAnnotations;
@@ -24,10 +25,10 @@
 
         [Required]
         [Display(Name = "Logo")]
-        public string LogoUrl { get; set; } = null!;
+        public IFormFile LogoUrl { get; set; } = null!;
 
         [Display(Name = "Gallery")]
-        public IEnumerable<string>? GalleryImagesUri { get; set; }
+        public IEnumerable<IFormFile>? GalleryImagesUri { get; set; }
 
         [Required]
         [Display(Name = "Webiste Url")]

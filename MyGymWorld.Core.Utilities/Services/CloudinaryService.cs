@@ -3,7 +3,6 @@
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
-    using MyGymWorld.Common;
     using MyGymWorld.Core.Utilities.Contracts;
     using System.Threading.Tasks;
 

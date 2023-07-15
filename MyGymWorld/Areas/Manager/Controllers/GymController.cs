@@ -20,6 +20,7 @@
             this.townService = _townService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             CreateGymInputModel createGymInputModel = new CreateGymInputModel
@@ -30,6 +31,23 @@
             };
 
             return this.View(createGymInputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateGymInputModel createGymInputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(createGymInputModel);
+            }
+
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Active()
+        {
+            return this.View();
         }
     }
 }
