@@ -26,7 +26,7 @@
         {
             string userId = this.GetUserId();
 
-            Manager manager = await this.managerService.GetManagerByIdAsync(userId);
+            Manager manager = await this.managerService.GetManagerByUserIdAsync(userId);
 
             if (manager != null  && manager.IsApproved == true)
             {

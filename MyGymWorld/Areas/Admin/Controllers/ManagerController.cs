@@ -43,7 +43,7 @@
         [HttpGet]
         public async Task<IActionResult> ApproveManager(string managerId)
         {
-            Manager manager = await this.managerService.GetManagerByIdAsync(managerId);
+            Manager? manager = await this.managerService.GetManagerForApprovalAndRejectionAsync(managerId);
 
             if (manager == null)
             {
@@ -71,7 +71,7 @@
         [HttpGet]
         public async Task<IActionResult> RejectManager(string managerId)
         {
-            Manager manager = await this.managerService.GetManagerByIdAsync(managerId);
+            Manager? manager = await this.managerService.GetManagerForApprovalAndRejectionAsync(managerId);
 
             if (manager == null)
             {

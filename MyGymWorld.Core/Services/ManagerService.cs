@@ -225,7 +225,15 @@
             return existsByPhoneNumber;
         }
 
-        public async Task<Manager?> GetManagerByIdAsync(string userId)
+        public async Task<Manager?> GetManagerForApprovalAndRejectionAsync(string managerId)
+        {
+            Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
+
+            return manager;
+        }
+
+        public async Task<Manager?> GetManagerByUserIdAsync(string userId)
         {
             Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
                 .FirstOrDefaultAsync(m => m.UserId == Guid.Parse(userId));
