@@ -28,6 +28,9 @@
                 .ForMember(d => d.IsApproved, opt => opt.MapFrom(src => src.Manager.IsApproved))
                 .ForMember(d => d.IsRejected, opt => opt.MapFrom(src => src.Manager.IsRejected))
                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
+                .ForMember(d => d.DeletedOn, opt => opt.MapFrom(src => src.DeletedOn.HasValue
+                ? src.DeletedOn.Value.ToString("dd/MM/yyyy h:mm tt")
+                : null))
                 .ForMember(d => d.Role, opt => opt.Ignore());
 
             // Managers

@@ -1,11 +1,5 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Administration.Users
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     public class UserViewModel
     {
         public string Id { get; set; } = null!;
@@ -23,5 +17,7 @@
         public bool IsRejected { get; set; }
 
         public string CreatedOn { get; set; } = null!;
+
+        public string? DeletedOn { get; set; }
     }
 }
