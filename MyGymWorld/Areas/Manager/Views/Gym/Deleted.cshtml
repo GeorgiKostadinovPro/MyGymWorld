@@ -69,7 +69,7 @@
 						<li class="page-item disabled">
 							<a asp-area="Manager"
 						   asp-controller="Gym"
-						   asp-action="Active"
+						   asp-action="Deleted"
 						   asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
 						</li>
 					}
@@ -77,7 +77,7 @@
 					@for (int i = 1; i <= Model.PagesCount; i++)
 					{
 						<li class="page-item">
-							<a asp-area="Manager" asp-controller="Gym" asp-action="Active" asp-route-page="@i" class="page-link">@i</a>
+							<a asp-area="Manager" asp-controller="Gym" asp-action="Deleted" asp-route-page="@i" class="page-link">@i</a>
 						</li>
 					}
 
@@ -94,7 +94,7 @@
 						<li class="page-item disabled">
 							<a asp-area="Manager"
 						   asp-controller="Gym"
-						   asp-action="Active"
+						   asp-action="Deleted"
 						   asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)">Next</a>
 						</li>
 					}
@@ -103,6 +103,10 @@
 		</div>
 	</div>
 </div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
 
 <script>
 	$(document).ready(function () {

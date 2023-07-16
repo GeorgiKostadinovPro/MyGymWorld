@@ -4,59 +4,60 @@
      this.ViewData["Title"] = "Active Users";
 }
 
-<link rel="stylesheet" href="~/css/admin-users.css" />
+<link rel="stylesheet" href="~/css/manager-gyms.css" />
 
 <div class="container-xl">
-     <div class="table-responsive">
-         <div class="table-wrapper">
-             <div class="table-title">
-                 <div class="row">
-                     <div class="col-sm-5">
-                         <h2>User <b>Management</b></h2>
-                     </div>
-                     <div class="col-sm-7">
-                         <a asp-area="Admin" asp-controller="User" asp-action="Deleted" class="btn btn-secondary"><span>View Deleted Users</span></a>
-                         <form asp-area="Admin" asp-controller="User" asp-action="ExportToExcel" method="post" id="excelForm">
-                            <input type="hidden" name="htmlTable" />
-                        </form>
-                     </div>
-                 </div>
-             </div>
-            <div id="table-to-export">
-             <table class="table table-striped table-hover">
-                 <thead>
-                     <tr>
-                         <th>#</th>
-                         <th>Email</th>
-                         <th>Date Created</th>
-                         <th>Role</th>
-                         <th>Status</th>
-                         <th>Action</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                    @for (int i = 0; i < Model.Users.Count; i++)
-                    {
-                        UserViewModel user = Model.Users[i];
-                        <tr>
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Manage <b>Gyms</b></h2>
+					</div>
+                    <div class="col-sm-6">
+                        <a asp-area="Admin" asp-controller="User" asp-action="Deleted" class="btn btn-warning">
+							<i class="material-icons">&#xE15C;</i> 
+							<span>View Deleted Users</span>
+						</a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Date Created</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (int i = 0; i < Model.Users.Count; i++)
+					{
+						UserViewModel user = Model.Users[i];
+
+						<tr>
                             <td>@(i + 1)</td>
                             <td><a href="#">@user.Email</a></td>
                             <td>@user.CreatedOn</td>
                             <td>@user.Role</td>
 
-                            @if(user.Role != null && @user.Role == ApplicationRoleConstants.ManagerRoleName)
+                            @if (user.Role != null && @user.Role == ApplicationRoleConstants.ManagerRoleName)
                             {
                                 @if (user.IsApproved)
                                 {
-                                   <td>
-                                      <span class="status text-success">&bull;</span> Approved
+                                    <td>
+                                        <span class="status text-success">&bull;</span> Approved
                                     </td>
                                 }
                                 else if (user.IsRejected)
                                 {
-                                   <td>
-                                      <span class="status text-danger">&bull;</span> Rejected
-                                   </td>
+                                    <td>
+                                        <span class="status text-danger">&bull;</span> Rejected
+                                    </td>
                                 }
                             }
                             else
@@ -69,19 +70,20 @@
                                 }
                                 else
                                 {
-                                   <td>
-                                      <span class="status text-success">&bull;</span> Active
-                                   </td>
+                                    <td>
+                                        <span class="status text-success">&bull;</span> Active
+                                    </td>
                                 }
                             }
-                         <td>
-                                @if(user.IsApproved)
+
+                            <td>
+                                @if (user.IsApproved)
                                 {
                                     <a asp-area="Admin" asp-controller="Manager" asp-action="RejectManager" asp-route-managerId="@user.ManagerId" class="disturb" title="Reject" data-toggle="tooltip">
                                         <span class="material-symbols-outlined">
                                             do_not_disturb_on
                                         </span>
-                                        </a>
+                                    </a>
                                 }
                                 else if (user.IsRejected)
                                 {
@@ -91,91 +93,119 @@
                                         </span>
                                     </a>
                                 }
-                               
-                             <a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" title="Delete" data-toggle="tooltip">
-                                        <span class="material-symbols-outlined">
-                                            cancel
-                                        </span>
-                             </a>
-                         </td>
-                     </tr>
-                    }
-                 </tbody>
-             </table>
-             </div>
-             <div class="clearfix">
-                 <div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.PagesCount</b> pages</div>
-                <ul class="pagination">
-                    @if(Model.CurrentPage == 1)
-                    {
-                         <li class="page-item disabled">
-                            <a href="#" class="page-link" disabled>
-                                 Previous
-                             </a>
-                        </li>
-                    }
-                    else
-                    {
-                         <li class="page-item disabled">
-                        <a 
-                        asp-area="Admin"
-                        asp-controller="User"
-                        asp-action="Active"
-                           asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
-                        </li>
-                    }
-                   
-                    
-                    @for(int i = 1; i <= Model.PagesCount; i++)
-                    {
-                        var active = i == Model.CurrentPage ? "active" : string.Empty;
+                                else
+                                {
+                                    <span style="display: inline-block; height: 24px; width: 24px;">
+                                    </span>
+                                }
 
-                        <li class="page-item @active">
-                             <a 
-                             asp-area="Admin" 
-                             asp-controller="User" 
-                             asp-action="Active" 
-                             asp-route-page="@i" class="page-link">@i</a>
-                             </li>
-                    
-                    }
+                                <a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" data-toggle="tooltip">
+                                    <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                </a>
+                            </td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<div class="clearfix">
+				<div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.PagesCount</b> pages</div>
+				<ul class="pagination">
+					@if (Model.CurrentPage == 1)
+					{
+						<li class="page-item disabled">
+							<a href="#" class="page-link" disabled>
+								Previous
+							</a>
+						</li>
+					}
+					else
+					{
+						<li class="page-item disabled">
+							<a asp-area="Admin"
+						   asp-controller="User"
+						   asp-action="Active"
+						   asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+						</li>
+					}
 
-                    @if (Model.CurrentPage == Model.PagesCount)
-                    {
-                        <li class="page-item disabled">
-                            <a href="#" class="page-link" disabled>
-                                Next
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                         <a asp-area="Admin"
-                           asp-controller="User"
-                           asp-action="Active"
-                           asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)" class="page-link">
-                             Next
-                         </a>
-                         </li>
-                    }
-                 </ul>
-             </div>
-         </div>
-     </div>
+					@for(int i = 1; i <= Model.PagesCount; i++)
+					{
+						<li class="page-item">
+							<a asp-area="Admin" asp-controller="User" asp-action="Active" asp-route-page="@i" class="page-link">@i</a>
+					    </li>
+					}
+					
+					@if (Model.CurrentPage == Model.PagesCount)
+					{
+						<li class="page-item disabled">
+							<a href="#" class="page-link" disabled>
+								Next
+							</a>
+						</li>
+					}
+					else
+					{
+						<li class="page-item disabled">
+							<a asp-area="Admin"
+						   asp-controller="User"
+						   asp-action="Active"
+						   asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)">Next</a>
+						</li>
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
 </div>
 
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				<div class="modal-header">
+					<h4 class="modal-title">Delete Gym</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete these Records?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
 
 <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
+	$(document).ready(function () {
+		// Activate tooltip
+		$('[data-toggle="tooltip"]').tooltip();
 
-            $("#exportToExcelBtn").click(function () {
-            $("input[name='htmlTable']").val($("#table-to-export").html());
-            });
-        });
+		// Select/Deselect checkboxes
+		var checkbox = $('table tbody input[type="checkbox"]');
+		$("#selectAll").click(function () {
+			if (this.checked) {
+				checkbox.each(function () {
+					this.checked = true;
+				});
+			} else {
+				checkbox.each(function () {
+					this.checked = false;
+				});
+			}
+		});
+		checkbox.click(function () {
+			if (!this.checked) {
+				$("#selectAll").prop("checked", false);
+			}
+		});
+	});
 </script>
