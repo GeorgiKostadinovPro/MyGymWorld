@@ -13,6 +13,8 @@
 
     public class GymController : ManagerController
     {
+        private const int GymsPerPage = 2;
+
         private readonly ICloudinaryService cloudinaryService;
 
         private readonly IUserService userService;
@@ -34,6 +36,41 @@
             this.countryService = _countryService;
             this.townService = _townService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Active(int page = 1)
+        {
+            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
+
+            if (user == null)
+            {
+                this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            if (!User.IsInRole("Manager"))
+            {
+                this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            int count = await this.gymService.GetActiveOrDeletedGymsCountAsync(false);
+
+            int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+
+            AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+            {
+                Gyms = await this.gymService
+                .GetActiveOrDeletedForManagementAsync(false, (page - 1) * GymsPerPage, GymsPerPage),
+                CurrentPage = page,
+                PagesCount = totalPages
+            };
+
+            return this.View(allGymsForManagement);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -196,12 +233,6 @@
             }
 
             return this.RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Active()
-        {
-            return this.View();
         }
     }
 }
