@@ -32,7 +32,7 @@
 
         Task<List<UserViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
-        Task<int> GetActiveOrDeletedUsersCount(bool isDeleted);
+        Task<int> GetActiveOrDeletedUsersCountAsync(bool isDeleted);
 
         Task<ApplicationUser> GetAdministratorAsync();
 

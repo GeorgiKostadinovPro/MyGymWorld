@@ -346,7 +346,7 @@
             return await GetAllForAdministrationAsync(allUsersViewModel, users);
         }
         
-        public async Task<int> GetActiveOrDeletedUsersCount(bool isDeleted)
+        public async Task<int> GetActiveOrDeletedUsersCountAsync(bool isDeleted)
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 

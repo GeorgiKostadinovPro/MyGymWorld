@@ -26,7 +26,7 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            int usersCount = await this.userService.GetActiveOrDeletedUsersCount(false);
+            int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(false);
 
             int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
             totalPages = totalPages == 0 ? 1 : totalPages;
@@ -45,7 +45,7 @@
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            int usersCount = await this.userService.GetActiveOrDeletedUsersCount(true);
+            int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(true);
 
             int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
             totalPages = totalPages == 0 ? 1 : totalPages;
