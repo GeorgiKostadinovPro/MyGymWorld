@@ -1,7 +1,7 @@
 ﻿@model AllGymsForManagementViewModel
 
 @{
-    this.ViewData["Title"] = "Active Gyms";
+	this.ViewData["Title"] = "Deleted Gyms";
 }
 
 <link rel="stylesheet" href="~/css/manager-gyms.css" />
@@ -14,24 +14,18 @@
 					<div class="col-sm-6">
 						<h2>Manage <b>Gyms</b></h2>
 					</div>
-                    <div class="col-sm-6">
-                        <a asp-area="Manager" asp-controller="Gym" asp-action="Deleted" class="btn btn-warning">
-							<i class="material-icons">&#xE15C;</i> 
-							<span>View Deleted Gyms</span>
+					<div class="col-sm-6">
+						<a asp-area="Manager" asp-controller="Gym" asp-action="Active" class="btn btn-success">
+							<i class="material-icons">&#xE147;</i>
+							<span>View Active Gyms</span>
 						</a>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>
-						<a asp-area="Manager" asp-controller="Gym" asp-action="Create" class="btn btn-success">
-							<i class="material-icons">&#xE147;</i> 
-							<span>Add New Gym</span>
-						</a>
-						
 					</div>
 				</div>
 			</div>
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-                        <th>#</th>
+						<th>#</th>
 						<th>Name</th>
 						<th>Email</th>
 						<th>Phone</th>
@@ -53,8 +47,7 @@
 							<td>@gym.PhoneNumber</td>
 							<td>@gym.CreatedOn</td>
 							<td>
-								<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+								No Actions
 							</td>
 						</tr>
 					}
@@ -81,13 +74,13 @@
 						</li>
 					}
 
-					@for(int i = 1; i <= Model.PagesCount; i++)
+					@for (int i = 1; i <= Model.PagesCount; i++)
 					{
 						<li class="page-item">
 							<a asp-area="Manager" asp-controller="Gym" asp-action="Active" asp-route-page="@i" class="page-link">@i</a>
-					    </li>
+						</li>
 					}
-					
+
 					@if (Model.CurrentPage == Model.PagesCount)
 					{
 						<li class="page-item disabled">

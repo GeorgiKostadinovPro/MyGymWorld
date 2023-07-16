@@ -71,8 +71,41 @@
             return this.View(allGymsForManagement);
         }
 
+		[HttpGet]
+		public async Task<IActionResult> Deleted(int page = 1)
+		{
+			ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
 
-        [HttpGet]
+			if (user == null)
+			{
+				this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+				return this.RedirectToAction("Index", "Home");
+			}
+
+			if (!User.IsInRole("Manager"))
+			{
+				this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+				return this.RedirectToAction("Index", "Home");
+			}
+
+			int count = await this.gymService.GetActiveOrDeletedGymsCountAsync(true);
+
+			int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+
+			AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+			{
+				Gyms = await this.gymService
+				.GetActiveOrDeletedForManagementAsync(true, (page - 1) * GymsPerPage, GymsPerPage),
+				CurrentPage = page,
+				PagesCount = totalPages
+			};
+
+			return this.View(allGymsForManagement);
+		}
+
+		[HttpGet]
         public async Task<IActionResult> Create()
         {
             string userId = this.GetUserId();
