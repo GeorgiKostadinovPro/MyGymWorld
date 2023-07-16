@@ -44,7 +44,10 @@
 
             // Roles
             this.CreateMap<ApplicationRole, RoleViewModel>()
-                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
+				.ForMember(d => d.DeletedOn, opt => opt.MapFrom(src => src.DeletedOn.HasValue 
+                ? src.DeletedOn.Value.ToString("dd/MM/yyyy h:mm tt")
+                : null));
 
             this.CreateMap<ApplicationRole, EditRoleInputModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()));

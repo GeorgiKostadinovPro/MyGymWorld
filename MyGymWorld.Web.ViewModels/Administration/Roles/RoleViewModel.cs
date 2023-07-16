@@ -14,5 +14,7 @@
         public string Name { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+
+        public string? DeletedOn { get; set; }
     }
 }
