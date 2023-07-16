@@ -265,7 +265,7 @@
                 return this.View(createGymInputModel);
             }
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction(nameof(Active));
         }
     }
 }
