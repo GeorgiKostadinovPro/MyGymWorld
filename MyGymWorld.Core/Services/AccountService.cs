@@ -6,7 +6,6 @@
     using Microsoft.Extensions.Configuration;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
-    using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Users;

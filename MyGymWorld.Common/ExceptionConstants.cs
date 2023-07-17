@@ -56,6 +56,7 @@
 
         public static class GymErrors
         {
+            public const string InvalidGymId = "Gym with such ID does NOT exists!";
             public const string InvalidGymType = "The provided Gym Type is invalid!";
         }
     }

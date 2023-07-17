@@ -44,7 +44,7 @@
         {
             Address address = await this.repository.AllReadonly<Address>()
                 .Include(a => a.Town)
-                .ThenInclude(a => a.Country)
+                .ThenInclude(t => t.Country)
                 .FirstOrDefaultAsync(a => a.Id == addressId);
 
             return address;

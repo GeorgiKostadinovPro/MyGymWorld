@@ -79,10 +79,63 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel)
+        {
+            Gym gymToEdit = await this.repository.All<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
+                .Include(g => g.Address)
+                .ThenInclude(a => a.Town)
+                .FirstOrDefaultAsync();
+
+            gymToEdit.Name = editGymInputModel.Name;
+            gymToEdit.Email = editGymInputModel.Email;
+            gymToEdit.PhoneNumber = gymToEdit.PhoneNumber;
+            gymToEdit.WebsiteUrl = editGymInputModel.WebsiteUrl;
+            gymToEdit.Description = editGymInputModel.Description;
+            gymToEdit.GymType = Enum.Parse<GymType>(editGymInputModel.GymType);
+
+            Address address = await this.addressService.GetAddressByNameAsync(editGymInputModel.Address);
+
+            if (address != null)
+            {
+                gymToEdit.AddressId = address.Id;
+            }
+            else
+            {
+                Address createdAddress = await this.addressService.CreateAddressAsync(editGymInputModel.Address, editGymInputModel.TownId);
+
+                gymToEdit.AddressId = createdAddress.Id;
+            }
+
+            if (gymLogoAndGalleryImagesInputModel.LogoResultParams != null)
+            {
+                gymToEdit.LogoUri = gymLogoAndGalleryImagesInputModel.LogoResultParams!.SecureUri!.AbsoluteUri;
+                gymToEdit.LogoPublicId = gymLogoAndGalleryImagesInputModel.LogoResultParams.PublicId;
+            }
+
+            if (gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Count > 0)
+            {
+                foreach (var galleryImageResultParams in gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams)
+                {
+                    string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
+                    string publicId = galleryImageResultParams.PublicId;
+
+                    gymToEdit.GymImages.Add(new GymImage
+                    {
+                        GymId = gymToEdit.Id,
+                        Uri = uri,
+                        PublicId = publicId,
+                        CreatedOn = DateTime.UtcNow,
+                    });
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null)
         {
             IQueryable<Gym> gymsAsQuery = this.repository
-                .AllReadonly<Gym>(g => g.ManagerId == managerId && g.IsDeleted == isDeleted)
+                .AllReadonly<Gym>(g => g.IsDeleted == isDeleted && g.ManagerId == managerId)
                 .OrderByDescending(g => g.CreatedOn)
                 .Skip(skip);
 
@@ -116,7 +169,7 @@
         public async Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted)
         {
             return await this.repository
-                .AllReadonly<Gym>(g => g.ManagerId == managerId && g.IsDeleted == isDeleted)
+                .AllReadonly<Gym>(g => g.IsDeleted == isDeleted && g.ManagerId == managerId)
                 .CountAsync();
         }
 
@@ -126,6 +179,36 @@
                 .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
                 .CountAsync();
         }
+        
+        public async Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId)
+		{
+            Gym gymForEdit = await this.repository.AllReadonly<Gym>(g => g.Id == Guid.Parse(gymId) && g.IsDeleted == false)
+                .Include(g => g.Address)
+                .ThenInclude(a => a.Town)
+				.FirstOrDefaultAsync();
+
+            EditGymInputModel editGymInputModel = new EditGymInputModel
+            {
+                Id = gymForEdit!.Id.ToString(),
+                Name = gymForEdit.Name,
+                Email = gymForEdit.Email,
+                PhoneNumber = gymForEdit.PhoneNumber,
+                WebsiteUrl = gymForEdit.WebsiteUrl,
+                Description = gymForEdit.Description,
+                GymType = gymForEdit.GymType.ToString(),
+                Address = gymForEdit.Address.Name,
+                TownId = gymForEdit.Address.TownId.ToString(),
+                CountryId = gymForEdit.Address.Town.CountryId.ToString()
+            };
+
+            return editGymInputModel;
+		}
+        
+        public async Task<bool> CheckIfGymExistsByIdAsync(string gymId)
+		{
+            return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
+                .AnyAsync();
+		}
 
         public IEnumerable<string> GetAllGymTypes()
         {
@@ -136,5 +219,5 @@
 
             return gymTypes;    
         }
-    }
+	}
 }
