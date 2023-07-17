@@ -56,14 +56,14 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
-            int count = await this.gymService.GetActiveOrDeletedGymsCountAsync(false);
+            int count = await this.gymService.GetActiveOrDeletedGymsCountByManagerIdAsync(user.ManagerId!.Value, false);
 
             int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
             AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
             {
                 Gyms = await this.gymService
-                .GetActiveOrDeletedForManagementAsync(false, (page - 1) * GymsPerPage, GymsPerPage),
+                .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value, false, (page - 1) * GymsPerPage, GymsPerPage),
                 CurrentPage = page,
                 PagesCount = totalPages
             };
@@ -90,14 +90,14 @@
 				return this.RedirectToAction("Index", "Home");
 			}
 
-			int count = await this.gymService.GetActiveOrDeletedGymsCountAsync(true);
+			int count = await this.gymService.GetActiveOrDeletedGymsCountByManagerIdAsync(user.ManagerId!.Value, true);
 
 			int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
 			AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
 			{
 				Gyms = await this.gymService
-				.GetActiveOrDeletedForManagementAsync(true, (page - 1) * GymsPerPage, GymsPerPage),
+				.GetActiveOrDeletedForManagementAsync(user.ManagerId.Value, true, (page - 1) * GymsPerPage, GymsPerPage),
 				CurrentPage = page,
 				PagesCount = totalPages
 			};
