@@ -42,7 +42,9 @@
         
         public async Task<Address> GetAddressByIdAsync(Guid addressId)
         {
-            Address address = await this.repository.All<Address>()
+            Address address = await this.repository.AllReadonly<Address>()
+                .Include(a => a.Town)
+                .ThenInclude(a => a.Country)
                 .FirstOrDefaultAsync(a => a.Id == addressId);
 
             return address;

@@ -156,13 +156,18 @@
                 return this.View(editUserInputModel);
             }
 
-            bool userExistsByPhoneNumber = await this.userService.CheckIfUserExistsByPhoneNumberAsync(editUserInputModel.PhoneNumber);
+            
 
-            if (userExistsByPhoneNumber)
+            if (editUserInputModel.PhoneNumber != null)
             {
-                this.ModelState.AddModelError("PhoneNumber", "User with this phone exists!");
+                bool userExistsByPhoneNumber = await this.userService.CheckIfUserExistsByPhoneNumberAsync(editUserInputModel.PhoneNumber);
 
-                return this.View(editUserInputModel);
+                if (userExistsByPhoneNumber)
+                {
+                    this.ModelState.AddModelError("PhoneNumber", "User with this phone exists!");
+                    
+                    return this.View(editUserInputModel);
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(editUserInputModel.Address))
