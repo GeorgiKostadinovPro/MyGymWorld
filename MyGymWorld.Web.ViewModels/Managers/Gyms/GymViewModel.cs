@@ -11,5 +11,7 @@
         public string PhoneNumber { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+
+        public string UserName { get; set; } = null!;
     }
 }
