@@ -9,7 +9,11 @@
 
         Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
 
+        Task<List<GymViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
+
         Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted);
+
+        Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
 
         IEnumerable<string> GetAllGymTypes();
     }

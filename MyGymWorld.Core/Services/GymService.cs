@@ -95,11 +95,35 @@
                 .ProjectTo<GymViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+        
+        public async Task<List<GymViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
+        {
+            IQueryable<Gym> gymsAsQuery = this.repository
+                .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
+                .OrderByDescending(g => g.CreatedOn)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                gymsAsQuery = gymsAsQuery.Take(take.Value);
+            }
+
+            return await gymsAsQuery
+               .ProjectTo<GymViewModel>(this.mapper.ConfigurationProvider)
+               .ToListAsync();
+        }
 
         public async Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted)
         {
             return await this.repository
                 .AllReadonly<Gym>(g => g.ManagerId == managerId && g.IsDeleted == isDeleted)
+                .CountAsync();
+        }
+
+        public async Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted)
+        {
+            return await this.repository
+                .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
                 .CountAsync();
         }
 
