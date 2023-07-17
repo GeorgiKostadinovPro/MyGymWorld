@@ -306,7 +306,13 @@
             string firstName = user.FirstName ?? string.Empty;
             string lastName = user.LastName ?? string.Empty;
             string phoneNumber = user.PhoneNumber ?? string.Empty;
-            string address = user.Address != null ? user.Address.Name ?? string.Empty : string.Empty;
+
+            Address address = null;
+
+            if (user.AddressId != null)
+            {
+               address = await this.addressService.GetAddressByIdAsync(user.AddressId.Value);
+            }
 
             EditUserInputModel editUserInputModel = new EditUserInputModel()
             {
@@ -316,7 +322,9 @@
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = phoneNumber,
-                Address = address
+                Address = address != null ? address.Name : string.Empty,
+                TownId = address != null ? address.TownId.ToString() : null,
+                CountryId = address != null ? address.Town.CountryId.ToString() : null
             };
 
             return editUserInputModel;

@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <select asp-for="@Model.CountryId" asp-items="@Model.CountriesSelectList" id="countries" class="form-select">
-                    <option value="None">-- Please Select A Country --</option>
+                     <option value="None">-- Please Select A Country --</option>
                 </select>
                 <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
             </div>
@@ -63,24 +63,13 @@
 }
 
 <script>
-    //let countriesSelectElement = document.getElementById('countries');
-
-    //countriesSelectElement.value = "None";
-
-    //countriesSelectElement.addEventListener('change', (e) => {
-
-    //    let townsSelectElement = document.getElementById('towns');
-
-    //    if(countries.value == 'None'){
-    //        townsSelectElement.disabled = true;
-    //    }else{
-    //        townsSelectElement.disabled = false;
-    //    }
-    //});
-
-    // With jQuery
     $(document).ready(function () {
-        $('#countries').val('None');
+        var selectedCountry = $('#countries').val();
+
+        if (selectedCountry !== 'None')
+        {
+            $('#towns').prop('disabled', false);
+        }
 
         $('#countries').on('change', function () {
             var selectedCountry = $(this).val();
