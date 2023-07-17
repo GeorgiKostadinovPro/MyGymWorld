@@ -5,7 +5,7 @@
 
     public class GymLogoAndGalleryImagesInputModel
     {
-        public ImageUploadResult LogoResultParams { get; set; } = null!;
+        public ImageUploadResult? LogoResultParams { get; set; }
 
         public ICollection<ImageUploadResult> GalleryImagesResultParams { get; set; } = new HashSet<ImageUploadResult>();
     }

@@ -7,7 +7,12 @@
     {
         Task CreateGymAsync(Guid managerId, CreateGymInputModel createGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
 
-        Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
+        Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
+
+        Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId);
+
+
+		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
 
         Task<List<GymViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
@@ -15,6 +20,8 @@
 
         Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
 
-        IEnumerable<string> GetAllGymTypes();
+        Task<bool> CheckIfGymExistsByIdAsync(string gymId);
+
+		IEnumerable<string> GetAllGymTypes();
     }
 }

@@ -9,6 +9,7 @@
     using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
 
+    using static MyGymWorld.Common.ExceptionConstants;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class GymController : ManagerController
@@ -263,6 +264,190 @@
                 this.TempData[ErrorMessage] = "Something went wrong when trying to add the gym!";
 
                 return this.View(createGymInputModel);
+            }
+
+            return this.RedirectToAction(nameof(Active));
+        }
+
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(string gymId)
+		{
+			string userId = this.GetUserId();
+
+			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+			if (!this.User.IsInRole("Manager")
+				|| user == null
+				|| user.ManagerId == null)
+			{
+				this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+				return this.RedirectToAction("Index", "Home");
+			}
+
+            bool doesGymExists = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
+
+            if (!doesGymExists)
+            {
+                this.TempData[ErrorMessage] = GymErrors.InvalidGymId;
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            EditGymInputModel editGymInputModel = await this.gymService.GetGymForEditByIdAsync(gymId);
+
+            editGymInputModel.GymTypes = this.gymService.GetAllGymTypes();
+            editGymInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+			editGymInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+			
+			return this.View(editGymInputModel);
+		}
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromQuery]string gymId, EditGymInputModel editGymInputModel)
+        {
+            editGymInputModel.Id = gymId;
+            editGymInputModel.GymTypes = this.gymService.GetAllGymTypes();
+            editGymInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+            editGymInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(editGymInputModel);
+            }
+
+            bool hasLogo = false;
+            bool hasGalleryImages = false;
+
+            if (editGymInputModel.LogoFile != null)
+            {
+                hasLogo = true;
+            }
+
+            if (editGymInputModel.GalleryImagesFiles != null)
+            {
+                hasGalleryImages = true;
+            }
+
+            if (hasLogo == true && !this.cloudinaryService.IsFileValid(editGymInputModel.LogoFile))
+            {
+                this.ModelState.AddModelError("LogoUrl", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
+
+                return this.View(editGymInputModel);
+            }
+
+            if (hasGalleryImages == true)
+            {
+                foreach (var picture in editGymInputModel.GalleryImagesFiles)
+                {
+                    if (!this.cloudinaryService.IsFileValid(picture))
+                    {
+                        this.ModelState.AddModelError("GalleryImagesUri", "The allowed types of pictures are jpg, jpeg and png!");
+
+                        return this.View(editGymInputModel);
+                    }
+                }
+            }
+
+            if (editGymInputModel.GymType == "None")
+            {
+                this.ModelState.AddModelError(editGymInputModel.GymType, "You have to choose a Gym Type!");
+
+                return this.View(editGymInputModel);
+            }
+
+            if (!string.IsNullOrWhiteSpace(editGymInputModel.Address))
+            {
+                if (editGymInputModel.CountryId == "None")
+                {
+                    this.ModelState.AddModelError("CountryId", "Country is required when you have address!");
+
+                    return this.View(editGymInputModel);
+                }
+
+                if (editGymInputModel.TownId == "None")
+                {
+                    this.ModelState.AddModelError("TownId", "Town is required when you have address!");
+
+                    return this.View(editGymInputModel);
+                }
+
+                bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(editGymInputModel.TownId!, editGymInputModel.CountryId!);
+
+                if (isPresent == false)
+                {
+                    this.ModelState.AddModelError("TownId", "The town should be in the chosen country!");
+
+                    return this.View(editGymInputModel);
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(editGymInputModel.Address))
+            {
+                if (editGymInputModel.CountryId != "None"
+                    && editGymInputModel.TownId != null)
+                {
+                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+
+                    return this.View(editGymInputModel);
+                }
+                else if (editGymInputModel.CountryId != "None")
+                {
+                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+
+                    return this.View(editGymInputModel);
+                }
+                else if (editGymInputModel.TownId != null
+                    && editGymInputModel.TownId != "None")
+                {
+                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+                    return this.View(editGymInputModel);
+                }
+            }
+
+            try
+            {
+                bool isGymTypeValid = Enum.TryParse<GymType>(editGymInputModel.GymType, true, out GymType gymType);
+
+                if (!isGymTypeValid)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.GymErrors.InvalidGymType);
+                }
+
+                GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel = new GymLogoAndGalleryImagesInputModel();
+
+                if (hasLogo == true)
+                {
+                    ImageUploadResult logoResultParams = await this.cloudinaryService.UploadPhotoAsync(editGymInputModel.LogoFile, "MyGymWorld/assets/gyms-logo-pictures"); 
+                    
+                    gymLogoAndGalleryImagesInputModel.LogoResultParams = logoResultParams;
+                }
+                    
+                if (hasGalleryImages == true)
+                {
+                    foreach (var imageFile in editGymInputModel.GalleryImagesFiles)
+                    {
+                        ImageUploadResult imageResultParams = await this.cloudinaryService.UploadPhotoAsync(imageFile, "MyGymWorld/assets/gyms-gallery-pictures");
+
+                        gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Add(imageResultParams);
+                    }
+                }
+
+                await this.gymService.EditGymAsync(gymId, editGymInputModel, gymLogoAndGalleryImagesInputModel);
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+
+                return this.View(editGymInputModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong when trying to add the gym!";
+
+                return this.View(editGymInputModel);
             }
 
             return this.RedirectToAction(nameof(Active));
