@@ -12,7 +12,6 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     public class GymService : IGymService
@@ -80,9 +79,10 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(bool isDeleted, int skip = 0, int? take = null)
+        public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null)
         {
-            IQueryable<Gym> gymsAsQuery = this.repository.AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
+            IQueryable<Gym> gymsAsQuery = this.repository
+                .AllReadonly<Gym>(g => g.ManagerId == managerId && g.IsDeleted == isDeleted)
                 .OrderByDescending(g => g.CreatedOn)
                 .Skip(skip);
 
@@ -96,10 +96,10 @@
                 .ToListAsync();
         }
 
-        public async Task<int> GetActiveOrDeletedGymsCountAsync(bool isDeleted)
+        public async Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted)
         {
             return await this.repository
-                .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
+                .AllReadonly<Gym>(g => g.ManagerId == managerId && g.IsDeleted == isDeleted)
                 .CountAsync();
         }
 
