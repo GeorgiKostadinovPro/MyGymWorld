@@ -8,6 +8,7 @@
     using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
+    using MyGymWorld.Web.ViewModels.Gyms;
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
@@ -179,7 +180,16 @@
                 .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
                 .CountAsync();
         }
-        
+
+        public async Task<List<DisplayGymViewModel>> GetAllActiveGymsAsync()
+        {
+            return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .OrderByDescending(g => g.CreatedOn)
+                .Take(10)
+                .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId)
 		{
             Gym gymForEdit = await this.repository.AllReadonly<Gym>(g => g.Id == Guid.Parse(gymId) && g.IsDeleted == false)
