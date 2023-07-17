@@ -6,6 +6,7 @@
     using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Countries;
+    using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using MyGymWorld.Web.ViewModels.Notifications;
@@ -63,6 +64,10 @@
             this.CreateMap<Gym, GymViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.Manager.User.UserName))
+                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
+
+            this.CreateMap<Gym, DisplayGymViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
 
             // Countries

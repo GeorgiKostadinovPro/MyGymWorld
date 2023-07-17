@@ -269,7 +269,6 @@
             return this.RedirectToAction(nameof(Active));
         }
 
-
 		[HttpGet]
 		public async Task<IActionResult> Edit(string gymId)
 		{

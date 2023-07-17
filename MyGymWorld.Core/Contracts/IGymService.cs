@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Core.Contracts
 {
+    using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using System.Threading.Tasks;
 
@@ -19,6 +20,9 @@
         Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted);
 
         Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
+
+        Task<List<DisplayGymViewModel>> GetAllActiveGymsAsync();
+
 
         Task<bool> CheckIfGymExistsByIdAsync(string gymId);
 
