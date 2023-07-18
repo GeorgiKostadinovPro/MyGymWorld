@@ -5,6 +5,9 @@
 }
 
 <link rel="stylesheet" href="~/css/cssslider.css" />
+<link href="~/lib/owlcarousel/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/lib/owlcarousel/css/owl.theme.default.min.css" rel="stylesheet" />
+<script src="~/lib/owlcarousel/scripts/owl.carousel.min.js"></script>
 
 <h1 style="color: #2c3142;">Welcome to the Homepage!</h1>
 <p style="color: #2c3142; font-size: 30px;">Go to <a asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app.</p>
@@ -38,3 +41,24 @@
         </div>
     </div>
 </div>
+
+<!-- Set up your HTML -->
+<div class="owl-carousel" style="margin-top: 50px; margin-bottom: 100px;">
+    @foreach (DisplayGymViewModel gym in Model.Gyms)
+    {
+        <div style="background-image: url('@gym.LogoUri'); background-size: cover; color: white; height: 300px; width: 300px;">
+            <h1>@gym.Name</h1>
+            <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
+          </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 
+
+<script type="text/javascript">
+      $(document).ready(function () {
+          $(".owl-carousel").owlCarousel();
+      });
+</script>
