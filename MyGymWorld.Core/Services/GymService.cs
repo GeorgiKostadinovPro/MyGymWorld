@@ -181,13 +181,13 @@
                 .CountAsync();
         }
 
-        public async Task<List<DisplayGymViewModel>> GetAllActiveGymsAsync()
+        public async Task<IEnumerable<DisplayGymViewModel>> GetAllActiveGymsAsync()
         {
             return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
                 .OrderByDescending(g => g.CreatedOn)
                 .Take(10)
                 .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ToArrayAsync();
         }
 
         public async Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId)
