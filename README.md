@@ -156,34 +156,6 @@ To run this project, you will need to add the following environment variables to
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
 
-<!-- Prerequisites -->
-### :bangbang: Prerequisites
-
-This project uses Yarn as package manager
-
-```bash
- npm install --global yarn
-```
-
-<!-- Installation -->
-### :gear: Installation
-
-Install my-project with npm
-
-```bash
-  yarn install my-project
-  cd my-project
-```
-   
-<!-- Running Tests -->
-### :test_tube: Running Tests
-
-To run tests, run the following command
-
-```bash
-  yarn test test
-```
-
 <!-- Run Locally -->
 ### :running: Run Locally
 
@@ -210,17 +182,6 @@ Start the server
 ```bash
   yarn start
 ```
-
-
-<!-- Deployment -->
-### :triangular_flag_on_post: Deployment
-
-To deploy this project run
-
-```bash
-  yarn deploy
-```
-
 
 <!-- Usage -->
 ## :eyes: Usage
