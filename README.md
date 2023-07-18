@@ -105,6 +105,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://cloudinary.com/">Cloudinary</a></li>
     <li><a href="https://www.tiny.cloud/">TinyMCE (WYSIWYG HTML editor)</a></li>
     <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>
+    <li><a href="https://github.com/drygiel/csslider">CSS Slider (Pure CSS, simple slider)</a></li>
     <li><a href="https://www.w3schools.com/icons/fontawesome_icons_intro.asp">FontAwesome</a></li>
     <li><a href="https://feathericons.com/">Feather</a></li>
   </ul>
