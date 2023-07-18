@@ -6,32 +6,26 @@
 @inject INotificationService notificationService;
 @inject IManagerService managerService;
 
+<link rel="stylesheet" href="~/css/login-partial.css"/>
+
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
         if (User.IsInRole("Administrator"))
         {
             <li class="nav-item active">
-                <form asp-area="Admin" asp-controller="Manager" asp-action="Requests" method="get">
-                    <button type="submit" class="btn btn-primary" style="background-color: #204FCA; border-color: black;">
-                        Requests
-                        <span class="badge badge-light">
-                            @(await this.managerService.GetAllNotApprovedManagerRequestsCountAsync())
-                        </span>
-                    </button>
-                </form>
+                <a asp-area="Admin" asp-controller="Manager" asp-action="Requests" class="notification">
+                    <span>Requests</span>
+                    <span class="badge">@(await this.managerService.GetAllNotApprovedManagerRequestsCountAsync())</span>
+                </a>
             </li>
         }
         <li class="nav-item active">
-            <form asp-area="" asp-controller="Notification" asp-action="Index" method="get">
-                <button type="submit" class="btn btn-primary" style="background-color: #204FCA; border-color: black;">
-                    Notifications
-                    <span class="badge badge-light">
-                        @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
-                    </span>
-                </button>
-           </form>
-       </li>
+            <a asp-area="" asp-controller="Notification" asp-action="Index" class="notification">
+                <span>Inbox</span>
+                <span class="badge">@(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))</span>
+            </a>
+        </li>
     <li class="nav-item active">
         <a  class="nav-link text-light" asp-area="" asp-controller="User" asp-action="UserProfile">My Profile</a>
     </li>

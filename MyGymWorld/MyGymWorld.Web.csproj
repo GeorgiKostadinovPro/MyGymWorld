@@ -34,6 +34,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings.Production.json" />
     <_ContentIncludedByDefault Remove="Views\User\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\login-partial.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\user-profile.css" />
   </ItemGroup>
 
