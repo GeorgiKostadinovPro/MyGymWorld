@@ -6,13 +6,13 @@
     {
         public AllGymForDisplayViewModel()
         {
-            this.Gyms = new List<DisplayGymViewModel>();
+            this.Gyms = new HashSet<DisplayGymViewModel>();
         }
         
         public int PagesCount { get; set; }
 
         public int CurrentPage { get; set; }
 
-        public List<DisplayGymViewModel> Gyms { get; set; }
+        public IEnumerable<DisplayGymViewModel> Gyms { get; set; }
     }
 }

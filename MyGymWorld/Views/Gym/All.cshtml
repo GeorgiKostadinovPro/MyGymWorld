@@ -4,7 +4,39 @@
     ViewData["Title"] = "All Gyms";
 }
 
+<link rel="stylesheet" href="~/css/cssslider.css"/>
 
-<div class="text-center">
-    <h1 class="display-4">All Gyms</h1>
+<h1>Welcome to the Homepage!</h1>
+<p>Below you can review the newest gyms on the app!</p>
+
+
+<div id="slider1" class="csslider">
+    <input type="radio" name="slides" id="slides_1" />
+    <input type="radio" name="slides" id="slides_2" checked />
+    <input type="radio" name="slides" id="slides_3" />
+    <input type="radio" name="slides" id="slides_4" />
+    <ul>
+        @foreach(DisplayGymViewModel gym in Model.Gyms)
+        {
+            <li style="background-image: url('@gym.LogoUri'); background-size: cover; color: white;">
+                <h1>@gym.Name</h1>
+                <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
+            </li>
+        }
+    </ul>
+    <div class="arrows">
+        
+        <label for="slides_1"></label>
+        <label for="slides_2"></label>
+        <label for="slides_3"></label>
+        <label for="slides_4"></label>
+    </div>
+    <div class="navigation">
+        <div>
+            <label for="slides_1"></label>
+            <label for="slides_2"></label>
+            <label for="slides_3"></label>
+            <label for="slides_4"></label>
+        </div>
+    </div>
 </div>
