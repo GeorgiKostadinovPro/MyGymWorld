@@ -9,8 +9,8 @@
 <link href="~/lib/owlcarousel/css/owl.theme.default.min.css" rel="stylesheet" />
 <script src="~/lib/owlcarousel/scripts/owl.carousel.min.js"></script>
 
-<h1 style="color: #2c3142;">Welcome to the Homepage!</h1>
-<p style="color: #2c3142; font-size: 30px;">Go to <a asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app.</p>
+<h1 style="color: #2c3142;">Welcome to MyGymWorld!</h1>
+<p style="color: #2c3142; font-size: 30px;">Go to <a asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app and filter them by your choice.</p>
 
 <div id="slider1" class="csslider">
     <input type="radio" name="slides" id="slides_1" />
@@ -20,9 +20,31 @@
     <ul>
         @foreach (DisplayGymViewModel gym in Model.Gyms)
         {
-            <li style="background-image: url('@gym.LogoUri'); background-size: cover; color: white;">
-                <h1>@gym.Name</h1>
-                <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
+            <li>
+                <div class="bg-image" style="background-image: url('@gym.LogoUri');
+                       background-size: cover;
+                       color: white;
+                       filter: blur(3px);
+                       -webkit-filter: blur(3px);
+                       height: 100%;
+                        background-position: center;
+                        background-repeat: no-repeat;"></div>
+                <div class="bg-text" style="background-color: rgb(0,0,0);
+                            background-color: rgba(0,0,0, 0.4);
+                            color: white;
+                            font-weight: bold;
+                            border: 3px solid #f1f1f1;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            z-index: 2;
+                            width: 80%;
+                            padding: 20px;
+                            text-align: center;">
+                    <h1>@gym.Name</h1>
+                    <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
+                </div>
             </li>
         }
     </ul>
@@ -42,6 +64,10 @@
     </div>
 </div>
 
+<h1 style="color: #2c3142; margin-top: 40px;">Top rated Gyms!</h1>
+
+<hr />
+
 <!-- Set up your HTML -->
 <div class="owl-carousel" style="margin-top: 50px; margin-bottom: 100px;">
     @foreach (DisplayGymViewModel gym in Model.Gyms)
@@ -59,6 +85,29 @@
 
 <script type="text/javascript">
       $(document).ready(function () {
-          $(".owl-carousel").owlCarousel();
+        $(".owl-carousel").owlCarousel();
+
+        $('.loop').owlCarousel({
+            center: true,
+            items: 2,
+            loop: true,
+            margin: 10,
+            responsive: {
+                600: {
+                    items: 4
+                }
+            }
+        });
+        $('.nonloop').owlCarousel({
+            center: true,
+            items: 2,
+            loop: false,
+            margin: 10,
+            responsive: {
+                600: {
+                    items: 4
+                }
+            }
+        });
       });
 </script>
