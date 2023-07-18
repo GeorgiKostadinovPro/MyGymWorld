@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyGymWorld.Core.Contracts;
 using MyGymWorld.Models;
 using MyGymWorld.Web.Controllers;
+using MyGymWorld.Web.ViewModels.Gyms;
 using System.Diagnostics;
 
 namespace MyGymWorld.Controllers
@@ -10,22 +12,27 @@ namespace MyGymWorld.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        private readonly IGymService gymService;
+
         public HomeController(
-            ILogger<HomeController> logger)
+            ILogger<HomeController> logger,
+            IGymService _gymService)
         {
             _logger = logger;
+
+            this.gymService = _gymService;
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            if (this.User != null
-                && this.User.Identity != null
-                && this.User.Identity.IsAuthenticated)
+            AllGymForDisplayViewModel allGymToDisplayViewModel = new AllGymForDisplayViewModel
             {
-                return this.RedirectToAction("All", "Gym");
-            }
-                
+                Gyms = await this.gymService.GetAllActiveGymsAsync()
+            };
+
+            return this.View(allGymToDisplayViewModel);
+
             return this.View();
         }
 

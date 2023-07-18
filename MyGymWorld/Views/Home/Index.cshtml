@@ -1,8 +1,40 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model AllGymForDisplayViewModel
+
+@{
+    ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/cssslider.css" />
+
+<h1 style="color: #2c3142;">Welcome to the Homepage!</h1>
+<p style="color: #2c3142; font-size: 30px;">Go to <a asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app.</p>
+
+<div id="slider1" class="csslider">
+    <input type="radio" name="slides" id="slides_1" />
+    <input type="radio" name="slides" id="slides_2" checked />
+    <input type="radio" name="slides" id="slides_3" />
+    <input type="radio" name="slides" id="slides_4" />
+    <ul>
+        @foreach (DisplayGymViewModel gym in Model.Gyms)
+        {
+            <li style="background-image: url('@gym.LogoUri'); background-size: cover; color: white;">
+                <h1>@gym.Name</h1>
+                <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
+            </li>
+        }
+    </ul>
+    <div class="arrows">
+        @for (int i = 0; i < Model.Gyms.Count(); i++)
+        {
+            <label for="slides_@(i + 1)"></label>
+        }
+    </div>
+    <div class="navigation">
+        <div>
+            @for (int i = 0; i < Model.Gyms.Count(); i++)
+            {
+                <label for="slides_@(i + 1)"></label>
+            }
+        </div>
+    </div>
 </div>
