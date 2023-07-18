@@ -107,6 +107,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>
     <li><a href="https://github.com/drygiel/csslider">CSS Slider (Pure CSS, simple slider)</a></li>
     <li><a href="https://owlcarousel2.github.io/OwlCarousel2/">Owl Carousel 2</a></li>
+    <li><a href="https://www.cssscript.com/animated-particles-background-pure-javascript/">Animated Particles Background With Pure JavaScript (By Nash Vail)</a></li>
     <li><a href="https://www.w3schools.com/icons/fontawesome_icons_intro.asp">FontAwesome</a></li>
     <li><a href="https://feathericons.com/">Feather</a></li>
   </ul>
