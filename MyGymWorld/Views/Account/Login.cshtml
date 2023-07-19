@@ -4,7 +4,9 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="row">
+<link rel="stylesheet" href="~/css/register-form.css" />
+
+@*<div class="row">
     <div class="col-md-4">
         <section>
             <form id="account" asp-controller="Account" asp-action="Login" method="post">
@@ -40,6 +42,40 @@
             </form>
         </section>
     </div>
+</div>*@
+
+<div class="wrapper">
+    <div class="title">
+        Sign in
+    </div>
+    <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="field">
+            <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" required>
+            <label asp-for="@Model.Email"></label>
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+        </div>
+        <div class="field">
+            <input asp-for="@Model.Password" class="form-control" autocomplete="new-password" aria-required="true" required />
+            <label asp-for="@Model.Password"></label>
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        </div>
+        <div class="content">
+            <div class="checkbox">
+                <input asp-for="@Model.RememberMe" type="checkbox" id="remember-me">
+                <label asp-for="@Model.RememberMe" style="margin-bottom: 0;"></label>
+            </div>
+            <div class="pass-link">
+                    <a asp-controller="Account" asp-action="SendResetPasswordEmail">Forgot your password?</a>
+            </div>
+        </div>
+        <div class="field">
+            <input type="submit" value="Sign in">
+        </div>
+        <div class="signup-link">
+            Not a member? <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">SignUp now</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
