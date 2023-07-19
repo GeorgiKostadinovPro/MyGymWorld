@@ -4,6 +4,7 @@ using MyGymWorld.Data;
 using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddMvc();
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+});
 
 // Custom extension method to apply all different services among the application
 builder.Services.AddApplicationServices(builder.Configuration);
