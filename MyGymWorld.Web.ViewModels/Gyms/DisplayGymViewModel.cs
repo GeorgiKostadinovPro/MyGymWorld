@@ -9,5 +9,7 @@
         public string LogoUri { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+
+        public int TotalDays { get; set; }
     }
 }
