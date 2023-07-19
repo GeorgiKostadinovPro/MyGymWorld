@@ -4,7 +4,10 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="row">
+<link rel="stylesheet" href="~/css/register-form.css" />
+
+
+@*<div class="row">
     <div class="col-md-4">
         <form id="registerForm" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
@@ -33,6 +36,51 @@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
+</div>
+*@
+
+<div class="wrapper">
+    <div class="title">
+        Register
+    </div>
+    <form asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="field">
+            <input asp-for="@Model.UserName" class="form-control" autocomplete="username" aria-required="true" minlength="5" maxlength="50" required />
+            <label asp-for="@Model.UserName"></label>
+            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+        </div>
+        <div class="field">
+            <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" required>
+            <label asp-for="@Model.Email"></label>
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+        </div>
+        <div class="field">
+            <input asp-for="@Model.Password" class="form-control" autocomplete="new-password" aria-required="true" required />
+            <label asp-for="@Model.Password"></label>
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        </div>
+        <div class="field">
+            <input asp-for="@Model.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" required />
+            <label asp-for="@Model.ConfirmPassword"></label>
+            <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+        </div>
+      @*  <div class="content">
+            <div class="checkbox">
+                <input type="checkbox" id="remember-me">
+                <label for="remember-me">Remember me</label>
+            </div>
+            <div class="pass-link">
+                <a href="#">Forgot password?</a>
+            </div>
+        </div>*@
+        <div class="field">
+            <input type="submit" value="Login">
+        </div>
+        <div class="signup-link">
+           Have an account? <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Sign in</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
