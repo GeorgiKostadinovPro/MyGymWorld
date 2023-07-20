@@ -24,7 +24,7 @@
 <script src="~/js/particles.js"></script>
 
 <h1 style="color: #2c3142;">Welcome to MyGymWorld!</h1>
-<p style="color: #2c3142; font-size: 30px;">Go to <a asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app and filter them by your choice.</p>
+<p style="color: #2c3142; font-size: 30px;">Go to <a asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a> to visit all the gyms in the app and filter them by your choice.</p>
 
 @*Pure CSS Slider*@
 
@@ -91,34 +91,6 @@
 <div class="owl-carousel" style="margin-top: 50px; margin-bottom: 100px;">
     @foreach (DisplayGymViewModel gym in Model.MostLikedGyms)
     {
-        @*<div style="height: 300px; width: 350px;">
-            <div class="bg-image" style="background-image: url('@gym.LogoUri'); 
-                                         background-size: cover; 
-                                         color: white;
-                                         filter: blur(3px);
-                                         -webkit-filter: blur(3px);
-                                         height: 100%;
-                                         background-position: center;
-                                         background-repeat: no-repeat;">
-            </div>                      
-            <div class="bg-text" style="background-color: rgb(0,0,0);
-                                        background-color: rgba(0,0,0, 0.4);
-                                        color: white;
-                                        font-weight: bold;
-                                        border: 3px solid #f1f1f1;
-                                        position: absolute;
-                                        top: 50%;
-                                        left: 47%;
-                                        transform: translate(-50%, -50%);
-                                        z-index: 2;
-                                        width: 80%;
-                                        padding: 10px;
-                                        text-align: center;">
-                   <h4>@gym.Name</h4>
-                   <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
-            </div>
-         </div>*@
-
         <div class="card-hover">
             <div class="card-hover__content">
                 <h3 class="card-hover__title" style="font-size: 50px;">

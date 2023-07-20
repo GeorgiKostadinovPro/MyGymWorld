@@ -6,8 +6,6 @@
 
     public class GymController : BaseController
     {
-        private const int GymsPerPage = 3;
-
         private readonly IGymService gymService;
 
         public GymController(IGymService _gymService)
@@ -16,14 +14,19 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery] AllGymsQueryModel queryModel)
         {
-            AllGymForDisplayViewModel allGymToDisplayViewModel = new AllGymForDisplayViewModel
-            { 
-                MostLikedGyms = await this.gymService.GetTop10NewestActiveGymsAsync()
+            AllGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllGymsFilteredAndPagedViewModel
+            {
+                TotalGymsCount = await this.gymService.GetActiveGymsCountAsync(),
+                Gyms = await this.gymService.GetAllFilteredAndPagedActiveGymsAsync(queryModel)
             };
+               
+            queryModel.GymTypes = this.gymService.GetAllGymTypes();
+            queryModel.TotalGymsCount = await this.gymService.GetActiveGymsCountAsync();
+            queryModel.Gyms = allGymsFilteredAndPagedViewModel.Gyms;
 
-            return this.View(allGymToDisplayViewModel);
+            return this.View(queryModel);
         }
     }
 }

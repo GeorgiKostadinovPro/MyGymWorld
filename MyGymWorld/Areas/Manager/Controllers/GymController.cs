@@ -57,7 +57,7 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
-            int count = await this.gymService.GetActiveOrDeletedGymsCountByManagerIdAsync(user.ManagerId!.Value, false);
+            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, false);
 
             int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
@@ -91,7 +91,7 @@
 				return this.RedirectToAction("Index", "Home");
 			}
 
-			int count = await this.gymService.GetActiveOrDeletedGymsCountByManagerIdAsync(user.ManagerId!.Value, true);
+			int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, true);
 
 			int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
@@ -146,14 +146,14 @@
 
             if (!this.cloudinaryService.IsFileValid(createGymInputModel.LogoFile))
             {
-                this.ModelState.AddModelError("LogoUrl", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
+                this.ModelState.AddModelError("LogoFile", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
 
                 return this.View(createGymInputModel);
             }
 
             if (createGymInputModel.GalleryImagesFiles == null)
             {
-                this.ModelState.AddModelError("GalleryImagesUri", "You must upload at least one gym picture!");
+                this.ModelState.AddModelError("GalleryImagesFiles", "You must upload at least one gym picture!");
 
                 return this.View(createGymInputModel);
             }
@@ -162,7 +162,7 @@
             {
                 if (!this.cloudinaryService.IsFileValid(picture))
                 {
-                    this.ModelState.AddModelError("GalleryImagesUri", "The allowed types of pictures are jpg, jpeg and png!");
+                    this.ModelState.AddModelError("GalleryImagesFiles", "The allowed types of pictures are jpg, jpeg and png!");
 
                     return this.View(createGymInputModel);
                 }
@@ -331,7 +331,7 @@
 
             if (hasLogo == true && !this.cloudinaryService.IsFileValid(editGymInputModel.LogoFile))
             {
-                this.ModelState.AddModelError("LogoUrl", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
+                this.ModelState.AddModelError("LogoFile", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
 
                 return this.View(editGymInputModel);
             }
@@ -342,7 +342,7 @@
                 {
                     if (!this.cloudinaryService.IsFileValid(picture))
                     {
-                        this.ModelState.AddModelError("GalleryImagesUri", "The allowed types of pictures are jpg, jpeg and png!");
+                        this.ModelState.AddModelError("GalleryImagesFiles", "The allowed types of pictures are jpg, jpeg and png!");
 
                         return this.View(editGymInputModel);
                     }
