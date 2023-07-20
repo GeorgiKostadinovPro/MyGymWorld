@@ -181,10 +181,19 @@
                 .CountAsync();
         }
 
-        public async Task<IEnumerable<DisplayGymViewModel>> GetAllActiveGymsAsync()
+        public async Task<IEnumerable<DisplayGymViewModel>> GetTop10NewestActiveGymsAsync()
         {
             return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
                 .OrderByDescending(g => g.CreatedOn)
+                .Take(10)
+                .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
+                .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<DisplayGymViewModel>> GetTop10MostLikedActiveGymsAsync()
+        {
+            return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .OrderByDescending(g => g.Likes.Count)
                 .Take(10)
                 .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();

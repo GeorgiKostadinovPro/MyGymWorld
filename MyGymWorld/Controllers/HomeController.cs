@@ -28,12 +28,11 @@ namespace MyGymWorld.Controllers
         {
             AllGymForDisplayViewModel allGymToDisplayViewModel = new AllGymForDisplayViewModel
             {
-                Gyms = await this.gymService.GetAllActiveGymsAsync()
+                NewestGyms = await this.gymService.GetTop10NewestActiveGymsAsync(),
+                MostLikedGyms = await this.gymService.GetTop10MostLikedActiveGymsAsync() 
             };
 
             return this.View(allGymToDisplayViewModel);
-
-            return this.View();
         }
 
         [AllowAnonymous]
