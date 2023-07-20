@@ -1,8 +1,5 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Gyms
 {
-    using MyGymWorld.Data.Models.Enums;
-    using MyGymWorld.Data.Models;
-
     public class GymDetailsViewModel
     {
         public GymDetailsViewModel()
@@ -31,6 +28,8 @@
         public string ManagerFullName { get; set; } = null!;
 
         public string Address { get; set; } = null!;
+
+        public int TotalDays { get; set; }
 
         public IEnumerable<string> GymImages { get; set; }
     }

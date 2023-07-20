@@ -11,6 +11,7 @@
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
+    using System.Linq;
 
     public class MyGymWorldMappingProfile : Profile
     {
@@ -70,6 +71,15 @@
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
                  .ForMember(d=>d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
+
+            this.CreateMap<Gym, GymDetailsViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.ManagerId.ToString()))
+                 .ForMember(d => d.ManagerFullName, opt => opt.MapFrom(src => string.Concat(src.Manager.User.FirstName, " ", src.Manager.User.LastName)))
+                 .ForMember(d => d.GymType, opt => opt.MapFrom(src => src.GymType.ToString()))
+                 .ForMember(d => d.Address, opt => opt.MapFrom(src => string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name)))
+                 .ForMember(d => d.GymImages, opt => opt.MapFrom(src => src.GymImages.Select(gi => gi.Uri)))
+                 .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

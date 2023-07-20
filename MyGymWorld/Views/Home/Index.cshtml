@@ -58,7 +58,9 @@
                             width: 80%;
                             padding: 20px;
                             text-align: center;">
-                    <h1>@gym.Name</h1>
+                    <h1>
+                        <a asp-area="" asp-controller="Gym" asp-action="Details" asp-route-gymId="@gym.Id">@gym.Name</a>
+                    </h1>
                     <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
                 </div>
             </li>
