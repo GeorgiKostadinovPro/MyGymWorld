@@ -28,5 +28,13 @@
 
             return this.View(queryModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string gymId)
+        {
+            GymDetailsViewModel g = new GymDetailsViewModel();
+
+            return this.View(g);
+        }
     }
 }
