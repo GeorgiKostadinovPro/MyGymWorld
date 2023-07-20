@@ -4,6 +4,8 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Gyms;
 
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
     public class GymController : BaseController
     {
         private readonly IGymService gymService;
@@ -32,9 +34,18 @@
         [HttpGet]
         public async Task<IActionResult> Details(string gymId)
         {
-            GymDetailsViewModel g = new GymDetailsViewModel();
+            bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
 
-            return this.View(g);
+            if (!doesGymExist)
+            {
+                this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
+
+                return this.NotFound();
+            }
+
+            GymDetailsViewModel gymDetailsViewModel = await this.gymService.GetGymDetailsByIdAsync(gymId);
+
+            return this.View(gymDetailsViewModel);
         }
     }
 }

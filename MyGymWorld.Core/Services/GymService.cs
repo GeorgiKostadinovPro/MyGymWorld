@@ -269,9 +269,20 @@
             return gymsToDisplay;
         }
 
+
+        public async Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId)
+        {
+            Gym? gym = await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
+
+            GymDetailsViewModel gymDetailsViewModel = this.mapper.Map<GymDetailsViewModel>(gym);
+
+            return gymDetailsViewModel;
+        }
+
         public async Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId)
 		{
-            Gym gymForEdit = await this.repository.AllReadonly<Gym>(g => g.Id == Guid.Parse(gymId) && g.IsDeleted == false)
+            Gym? gymForEdit = await this.repository.AllReadonly<Gym>(g => g.Id == Guid.Parse(gymId) && g.IsDeleted == false)
                 .Include(g => g.Address)
                 .ThenInclude(a => a.Town)
 				.FirstOrDefaultAsync();
@@ -308,5 +319,5 @@
 
             return gymTypes;    
         }
-	}
+    }
 }

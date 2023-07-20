@@ -28,6 +28,8 @@
 
         Task<IEnumerable<DisplayGymViewModel>> GetAllFilteredAndPagedActiveGymsAsync(AllGymsQueryModel queryModel);
 
+        Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId);
+
         Task<bool> CheckIfGymExistsByIdAsync(string gymId);
 
 		IEnumerable<string> GetAllGymTypes();
