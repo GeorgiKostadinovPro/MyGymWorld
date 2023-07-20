@@ -23,7 +23,7 @@
             };
                
             queryModel.GymTypes = this.gymService.GetAllGymTypes();
-            queryModel.TotalGymsCount = await this.gymService.GetActiveGymsCountAsync();
+            queryModel.TotalGymsCount = allGymsFilteredAndPagedViewModel.TotalGymsCount;
             queryModel.Gyms = allGymsFilteredAndPagedViewModel.Gyms;
 
             return this.View(queryModel);
