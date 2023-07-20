@@ -6,6 +6,8 @@
 
     public class GymController : BaseController
     {
+        private const int GymsPerPage = 3;
+
         private readonly IGymService gymService;
 
         public GymController(IGymService _gymService)
@@ -18,7 +20,7 @@
         {
             AllGymForDisplayViewModel allGymToDisplayViewModel = new AllGymForDisplayViewModel
             { 
-                Gyms = await this.gymService.GetAllActiveGymsAsync()
+                MostLikedGyms = await this.gymService.GetTop10NewestActiveGymsAsync()
             };
 
             return this.View(allGymToDisplayViewModel);

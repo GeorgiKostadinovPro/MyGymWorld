@@ -16,7 +16,7 @@
     <input type="radio" name="slides" id="slides_3" />
     <input type="radio" name="slides" id="slides_4" />
     <ul>
-        @foreach(DisplayGymViewModel gym in Model.Gyms)
+        @foreach(DisplayGymViewModel gym in Model.MostLikedGyms)
         {
             <li style="background-image: url('@gym.LogoUri'); background-size: cover; color: white;">
                 <h1>@gym.Name</h1>

@@ -21,8 +21,9 @@
 
         Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
 
-        Task<IEnumerable<DisplayGymViewModel>> GetAllActiveGymsAsync();
+        Task<IEnumerable<DisplayGymViewModel>> GetTop10NewestActiveGymsAsync();
 
+        Task<IEnumerable<DisplayGymViewModel>> GetTop10MostLikedActiveGymsAsync();
 
         Task<bool> CheckIfGymExistsByIdAsync(string gymId);
 

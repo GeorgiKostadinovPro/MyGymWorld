@@ -34,7 +34,7 @@
     <input type="radio" name="slides" id="slides_3" />
     <input type="radio" name="slides" id="slides_4" />
     <ul>
-        @foreach (DisplayGymViewModel gym in Model.Gyms)
+        @foreach (DisplayGymViewModel gym in Model.NewestGyms)
         {
             <li>
                 <div class="bg-image" style="background-image: url('@gym.LogoUri');
@@ -65,14 +65,14 @@
         }
     </ul>
     <div class="arrows">
-        @for (int i = 0; i < Model.Gyms.Count(); i++)
+        @for (int i = 0; i < Model.NewestGyms.Count(); i++)
         {
             <label for="slides_@(i + 1)"></label>
         }
     </div>
     <div class="navigation">
         <div>
-            @for (int i = 0; i < Model.Gyms.Count(); i++)
+            @for (int i = 0; i < Model.NewestGyms.Count(); i++)
             {
                 <label for="slides_@(i + 1)"></label>
             }
@@ -82,14 +82,14 @@
 
 <hr />
 
-<h1 style="color: #2c3142; margin-top: 40px;">Top rated Gyms</h1>
+<h1 style="color: #2c3142; margin-top: 40px;">Best rated Gyms</h1>
 
 <hr />
 
 @*Owl Carousel 2*@
 
 <div class="owl-carousel" style="margin-top: 50px; margin-bottom: 100px;">
-    @foreach (DisplayGymViewModel gym in Model.Gyms)
+    @foreach (DisplayGymViewModel gym in Model.MostLikedGyms)
     {
         @*<div style="height: 300px; width: 350px;">
             <div class="bg-image" style="background-image: url('@gym.LogoUri'); 
