@@ -273,6 +273,12 @@
         public async Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId)
         {
             Gym? gym = await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .Include(g => g.Manager)
+                   .ThenInclude(m => m.User)
+                .Include(g => g.Address)
+                   .ThenInclude(a => a.Town)
+                      .ThenInclude(t => t.Country)
+                .Include(g => g.GymImages)
                 .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
 
             GymDetailsViewModel gymDetailsViewModel = this.mapper.Map<GymDetailsViewModel>(gym);
