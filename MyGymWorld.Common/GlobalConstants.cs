@@ -1,11 +1,5 @@
 ﻿namespace MyGymWorld.Common
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     public static class GlobalConstants
     {
         public const string AppName = "MyGymWorld";
@@ -15,5 +9,11 @@
         public const string ManagerAreaName = "Manager";
 
         public const string RegularUser = "Regular User";
+
+        public static class GymConstants
+        {
+            public const int GymsPerPage = 3;
+            public const int DefaultPage = 1;
+        }
     }
 }

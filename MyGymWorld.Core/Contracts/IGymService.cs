@@ -12,18 +12,21 @@
 
         Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId);
 
-
 		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
 
         Task<List<GymViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
-        Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted);
+        Task<int> GetActiveOrDeletedGymsCountForManagementAsync(Guid managerId, bool isDeleted);
 
         Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
+
+        Task<int> GetActiveGymsCountAsync();
 
         Task<IEnumerable<DisplayGymViewModel>> GetTop10NewestActiveGymsAsync();
 
         Task<IEnumerable<DisplayGymViewModel>> GetTop10MostLikedActiveGymsAsync();
+
+        Task<IEnumerable<DisplayGymViewModel>> GetAllFilteredAndPagedActiveGymsAsync(AllGymsQueryModel queryModel);
 
         Task<bool> CheckIfGymExistsByIdAsync(string gymId);
 

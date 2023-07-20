@@ -1,45 +1,122 @@
-﻿@model AllGymForDisplayViewModel
+﻿@model AllGymsQueryModel
 
 @{
     ViewData["Title"] = "All Gyms";
 }
 
-<link rel="stylesheet" href="~/css/cssslider.css"/>
+@*Fitness card*@
+<link href="~/css/fitness-card.css" rel="stylesheet" />
 
-<h1>Welcome to the Homepage!</h1>
-<p>Below you can review the newest gyms on the app!</p>
+<h1>Welcome to the Filtering page!</h1>
+<p>Below you can search fitnesses by your choice.</p>
 
+<hr />
 
-<div id="slider1" class="csslider">
-    <input type="radio" name="slides" id="slides_1" />
-    <input type="radio" name="slides" id="slides_2" checked />
-    <input type="radio" name="slides" id="slides_3" />
-    <input type="radio" name="slides" id="slides_4" />
-    <ul>
-        @foreach(DisplayGymViewModel gym in Model.MostLikedGyms)
-        {
-            <li style="background-image: url('@gym.LogoUri'); background-size: cover; color: white;">
-                <h1>@gym.Name</h1>
-                <p style="font-size: 20px;">Created On - @gym.CreatedOn</p>
-            </li>
-        }
-    </ul>
-    <div class="arrows">
-        
-        <label for="slides_1"></label>
-        <label for="slides_2"></label>
-        <label for="slides_3"></label>
-        <label for="slides_4"></label>
-    </div>
-    <div class="navigation">
-        <div>
-            <label for="slides_1"></label>
-            <label for="slides_2"></label>
-            <label for="slides_3"></label>
-            <label for="slides_4"></label>
+<form asp-area="" asp-controller="Gym" asp-action="All" method="get">
+    <div class="row">
+        <div class="form-group col-md-3 d-flex justify-content-between">
+            <div class="form-group">
+                <label asp-for="@Model.GymType"></label>
+                <select asp-for="@Model.GymType" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var gymType in Model.GymTypes)
+                    {
+                        <option value="@gymType">@gymType</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="@Model.SearchTerm"></label>
+            <input asp-for="@Model.SearchTerm" class="form-control" placeholder="...">
+        </div>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="@Model.GymsSorting"></label>
+                <select asp-for="@Model.GymsSorting" class="form-control">
+                    <option value="0">Newest</option>
+                    <option value="1">Oldest</option>
+                    <option value="2">Likes Ascending</option>
+                    <option value="3">Likes Descending</option>
+                    <option value="4">Comments Ascending</option>
+                    <option value="5">Comments Descending</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
         </div>
     </div>
+</form>
+
+@{
+    int previousPage = Model.CurrentPage - 1;
+
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    int maxPage = (int)Math.Ceiling((double)Model.TotalGymsCount / Model.GymsPerPage);
+}
+
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" :
+string.Empty)"
+           asp-controller="House"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-category="@Model.GymType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.GymsSorting)"><<</a>
+    </div>
+    @{
+        bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Gyms.Any();
+    }
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary
+ @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="House"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-category="@Model.GymType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.GymsSorting)">>></a>
+    </div>
 </div>
+
+@if (!Model.Gyms.Any())
+{
+    <h2 class="text-center">No Gyms were found by the given criteria!</h2>
+}
+
+<div class="row">
+    @foreach (DisplayGymViewModel gym in Model.Gyms)
+    {
+        <div class="card-hover">
+            <div class="card-hover__content">
+                <h3 class="card-hover__title" style="font-size: 50px;">
+                    @gym.Name
+                </h3>
+                <p class="card-hover__text" style="font-size: 25px; padding-bottom: 15px;">Created: @gym.TotalDays days ago.</p>
+                <a href="#" class="card-hover__link" style="font-size: 30px;">
+                    <span>View</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+            </div>
+            <div class="card-hover__extra">
+                <h4 style="color: whitesmoke;">Fuel your passion for fitness!</h4>
+            </div>
+            <img src="@gym.LogoUri" alt="">
+        </div>
+    }
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -14,6 +14,7 @@
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
+    using MyGymWorld.Web.ViewModels.Gyms.Enums;
 
     public class GymService : IGymService
     {
@@ -167,7 +168,7 @@
                .ToListAsync();
         }
 
-        public async Task<int> GetActiveOrDeletedGymsCountByManagerIdAsync(Guid managerId, bool isDeleted)
+        public async Task<int> GetActiveOrDeletedGymsCountForManagementAsync(Guid managerId, bool isDeleted)
         {
             return await this.repository
                 .AllReadonly<Gym>(g => g.IsDeleted == isDeleted && g.ManagerId == managerId)
@@ -178,6 +179,13 @@
         {
             return await this.repository
                 .AllReadonly<Gym>(g => g.IsDeleted == isDeleted)
+                .CountAsync();
+        }
+
+        public async Task<int> GetActiveGymsCountAsync()
+        {
+            return await this.repository
+                .AllReadonly<Gym>(g => g.IsDeleted == false)
                 .CountAsync();
         }
 
@@ -197,6 +205,68 @@
                 .Take(10)
                 .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<DisplayGymViewModel>> GetAllFilteredAndPagedActiveGymsAsync(AllGymsQueryModel queryModel)
+        {
+            IQueryable<Gym> gymsAsQuery = this.repository
+                .AllReadonly<Gym>(g => g.IsDeleted == false)
+                .Include(g => g.Address);
+
+            if (!string.IsNullOrWhiteSpace(queryModel.GymType))
+            {
+                gymsAsQuery = gymsAsQuery
+                    .Where(g => g.GymType == Enum.Parse<GymType>(queryModel.GymType));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryModel.SearchTerm))
+            {
+                string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
+
+                gymsAsQuery = gymsAsQuery
+                    .Where(g => EF.Functions.Like(g.Name, wildCard)
+                    || EF.Functions.Like(g.Description, wildCard)
+                    || EF.Functions.Like(g.Address.Name, wildCard));
+            }
+
+            switch (queryModel.GymsSorting)
+            {
+                case GymsSorting.Newest:
+                    gymsAsQuery = gymsAsQuery
+                        .OrderByDescending(g => g.CreatedOn);
+                    break;
+                case GymsSorting.Oldest:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.CreatedOn);
+                    break;
+                case GymsSorting.LikesAscending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.Likes.Count);
+                    break;
+                case GymsSorting.LikesDescending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderByDescending(g => g.Likes.Count);
+                    break;
+                case GymsSorting.CommentsAscending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.Comments.Count);
+                    break;
+                case GymsSorting.CommentsDescending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderByDescending(g => g.Comments.Count);
+                    break;
+                default:
+                    break;
+            }
+
+            IEnumerable<DisplayGymViewModel> gymsToDisplay
+                = await gymsAsQuery
+                             .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
+                             .Skip((queryModel.CurrentPage - 1) * queryModel.GymsPerPage)
+                             .Take(queryModel.GymsPerPage)
+                             .ToArrayAsync();
+
+            return gymsToDisplay;
         }
 
         public async Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId)
