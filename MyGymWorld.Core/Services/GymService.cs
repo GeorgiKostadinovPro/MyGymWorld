@@ -261,9 +261,9 @@
 
             IEnumerable<DisplayGymViewModel> gymsToDisplay
                 = await gymsAsQuery
-                             .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
                              .Skip((queryModel.CurrentPage - 1) * queryModel.GymsPerPage)
                              .Take(queryModel.GymsPerPage)
+                             .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
                              .ToArrayAsync();
 
             return gymsToDisplay;
