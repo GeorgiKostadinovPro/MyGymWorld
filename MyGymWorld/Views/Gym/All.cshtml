@@ -7,6 +7,12 @@
 @*Fitness card*@
 <link href="~/css/fitness-card.css" rel="stylesheet" />
 
+@*Particles*@
+<link href="~/css/index-page-particles.css" rel="stylesheet" />
+
+@*Particles*@
+<script src="~/js/particles.js"></script>
+
 <h1>Welcome to the Filtering page!</h1>
 <p>Below you can search fitnesses by your choice.</p>
 
@@ -96,7 +102,7 @@ string.Empty)"
 <div class="row">
     @foreach (DisplayGymViewModel gym in Model.Gyms)
     {
-        <div class="card-hover">
+        <div class="card-hover" style="margin-right: 15px;">
             <div class="card-hover__content">
                 <h3 class="card-hover__title" style="font-size: 50px;">
                     @gym.Name
