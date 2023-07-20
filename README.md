@@ -15,9 +15,15 @@ Maybe you can mention me or this repo in the acknowledgements too
   </p>
   <p>
     NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid and Cloudinary.
-  </p>
+  </p> 
   <p>
     For further info review [Environment Variables] in Table of Contents.
+  </p>
+   <p>
+    NOTE: You MUST add appsettings.json, appsettings.Development.json and apsettings.Production.json files.
+  </p>
+  <p>
+    The structures of these files are given in [Getting Started] in Table of Contents.
   </p>
   
 <!-- Badges -->
