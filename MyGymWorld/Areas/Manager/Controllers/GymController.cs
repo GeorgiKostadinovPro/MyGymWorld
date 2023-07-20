@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Web.Areas.Manager.Controllers
 {
     using CloudinaryDotNet.Actions;
+    using Ganss.Xss;
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
@@ -227,6 +228,8 @@
 
             try
             {
+                createGymInputModel.Description = new HtmlSanitizer().Sanitize(createGymInputModel.Description);
+
                 bool isGymTypeValid = Enum.TryParse<GymType>(createGymInputModel.GymType, true, out GymType gymType);
 
                 if (!isGymTypeValid)
@@ -408,6 +411,8 @@
 
             try
             {
+                editGymInputModel.Description = new HtmlSanitizer().Sanitize(editGymInputModel.Description);
+
                 bool isGymTypeValid = Enum.TryParse<GymType>(editGymInputModel.GymType, true, out GymType gymType);
 
                 if (!isGymTypeValid)
