@@ -13,15 +13,15 @@ Maybe you can mention me or this repo in the acknowledgements too
   <p>
     Fuel your passion for fitness!
   </p>
-  <p>
+  <h4>
     NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid and Cloudinary.
-  </p> 
+  </h4> 
   <p>
     For further info review [Environment Variables] in Table of Contents.
   </p>
-   <p>
+   <h4>
     NOTE: You MUST add appsettings.json, appsettings.Development.json and apsettings.Production.json files.
-  </p>
+  </h4>
   <p>
     The structures of these files are given in [Getting Started] in Table of Contents.
   </p>
