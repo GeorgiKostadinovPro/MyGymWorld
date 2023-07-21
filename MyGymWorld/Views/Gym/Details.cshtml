@@ -10,10 +10,16 @@
 <link href="~/lib/owlcarousel/css/owl.carousel.min.css" rel="stylesheet" />
 <link href="~/lib/owlcarousel/css/owl.theme.default.min.css" rel="stylesheet" />
 
+@*Particles*@
+<link href="~/css/index-page-particles.css" rel="stylesheet" />
+
 @*Owl Carousel 2*@
 <script src="~/lib/owlcarousel/scripts/owl.carousel.min.js"></script>
 
-<div class="row" style="outline: 5px dotted #2c3142;">
+@*Particles*@
+<script src="~/js/particles.js"></script>
+
+<div class="row" style="outline: 5px dotted #2c3142; position: relative; z-index: 1;">
     <div class="col-md-3 border-right">
         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" height="200px" width="200px" src="@Model.LogoUri">
             <h5 class="font-weight-bold" style="margin-top: 20px;">Website: <a href="@Model.WebsiteUrl" class="font-weight-bold">@Model.Name</a></h5>
@@ -79,7 +85,7 @@
 
 @*Owl Carousel 2*@
 
-<div class="owl-carousel" style="margin-top: 50px; margin-bottom: 50px;">
+<div class="owl-carousel" style="margin-top: 50px; margin-bottom: 50px; position: relative; z-index: 1;">
         @foreach (string uri in Model.GymImages)
         {
             <div class="card-hover">
