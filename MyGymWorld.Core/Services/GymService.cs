@@ -15,22 +15,26 @@
     using System.Linq;
     using System.Threading.Tasks;
     using MyGymWorld.Web.ViewModels.Gyms.Enums;
+    using MyGymWorld.Common;
 
     public class GymService : IGymService
     {
         private readonly IMapper mapper;
         private readonly IRepository repository;
 
+        private readonly IUserService userService;
         private readonly IAddressService addressService;
 
         public GymService(
             IMapper _mapper,
             IRepository _repository,
+            IUserService _userService,
             IAddressService _addressService)
         {
             this.mapper = _mapper;
             this.repository = _repository;
 
+            this.userService = _userService;
             this.addressService = _addressService;
         }
 
@@ -269,7 +273,6 @@
             return gymsToDisplay;
         }
 
-
         public async Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId)
         {
             Gym? gym = await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
@@ -308,13 +311,158 @@
             };
 
             return editGymInputModel;
-		}
+		} 
         
+        public async Task AddGymToUserAsync(string gymId, string userId)
+        {
+            Gym gym = await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .FirstAsync(g => g.Id == Guid.Parse(gymId));
+
+            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+            UserGym userGym = await this.repository.AllReadonly<UserGym>()
+                .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+
+            if (userGym != null)
+            {
+                if (userGym.IsDeleted == false)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.GymErrors.GymAlreadyJoined);
+                }
+                else
+                {
+                    userGym.IsDeleted = false;
+                    userGym.DeletedOn = null;
+                    userGym.ModifiedOn = DateTime.UtcNow;
+                }            
+            }
+            else
+            {
+                userGym = new UserGym 
+                { 
+                    GymId = gym.Id,
+                    UserId = user.Id,
+                    CreatedOn = DateTime.UtcNow
+                }; 
+                
+                await this.repository.AddAsync(userGym);
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task RemoveGymFromUserAsync(string gymId, string userId)
+        {
+            UserGym userGym = await this.repository.AllReadonly<UserGym>()
+                .FirstAsync(ug => ug.Id == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+
+            if (userGym == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.GymErrors.GymNotJoinedToBeLeft);
+            }
+            else
+            {
+                if (userGym.IsDeleted == true)
+                {
+                    throw new InvalidOperationException(ExceptionConstants.GymErrors.GymAlreadyLeft);
+                }
+                else
+                {
+                    userGym.IsDeleted = true;
+                    userGym.DeletedOn = DateTime.UtcNow;
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsAsync(string userId, AllGymsQueryModel queryModel)
+        {
+            IQueryable<Gym> gymsAsQuery = this.repository
+                .AllReadonly<UserGym>(ug => ug.IsDeleted == false && ug.UserId == Guid.Parse(userId))
+                .Include(ug => ug.Gym)
+                .ThenInclude(g => g.Address)
+                .Select(ug => ug.Gym);
+
+            if (!string.IsNullOrWhiteSpace(queryModel.GymType))
+            {
+                gymsAsQuery = gymsAsQuery
+                    .Where(g => g.GymType == Enum.Parse<GymType>(queryModel.GymType));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryModel.SearchTerm))
+            {
+                string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
+
+                gymsAsQuery = gymsAsQuery
+                    .Where(g => EF.Functions.Like(g.Name, wildCard)
+                    || EF.Functions.Like(g.Description, wildCard)
+                    || EF.Functions.Like(g.Address.Name, wildCard));
+            }
+
+            switch (queryModel.GymsSorting)
+            {
+                case GymsSorting.Newest:
+                    gymsAsQuery = gymsAsQuery
+                        .OrderByDescending(g => g.CreatedOn);
+                    break;
+                case GymsSorting.Oldest:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.CreatedOn);
+                    break;
+                case GymsSorting.LikesAscending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.Likes.Count);
+                    break;
+                case GymsSorting.LikesDescending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderByDescending(g => g.Likes.Count);
+                    break;
+                case GymsSorting.CommentsAscending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderBy(g => g.Comments.Count);
+                    break;
+                case GymsSorting.CommentsDescending:
+                    gymsAsQuery = gymsAsQuery
+                       .OrderByDescending(g => g.Comments.Count);
+                    break;
+                default:
+                    break;
+            }
+
+            IEnumerable<DisplayGymViewModel> gymsToDisplay
+                = await gymsAsQuery
+                             .Skip((queryModel.CurrentPage - 1) * queryModel.GymsPerPage)
+                             .Take(queryModel.GymsPerPage)
+                             .ProjectTo<DisplayGymViewModel>(this.mapper.ConfigurationProvider)
+                             .ToArrayAsync();
+
+            return gymsToDisplay;
+        }
+
+        public async Task<int> GetAllUserJoinedGymsCountAsync(string userId)
+        {
+            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false && ug.UserId == Guid.Parse(userId))
+                .CountAsync();
+        }
+
         public async Task<bool> CheckIfGymExistsByIdAsync(string gymId)
 		{
             return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
                 .AnyAsync();
 		}
+
+        public async Task<bool> CheckIfGymIsManagedByManagerAsync(string gymId, string mananerId)
+        {
+            return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .AnyAsync(g => g.Id == Guid.Parse(gymId) && g.ManagerId == Guid.Parse(mananerId));
+        }
+
+        public async Task<Gym> GetGymByIdAsync(string gymId)
+        {
+            return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
+                .FirstAsync(g => g.Id == Guid.Parse(gymId));
+        }
 
         public IEnumerable<string> GetAllGymTypes()
         {

@@ -22,8 +22,12 @@
 <div class="row" style="outline: 5px dotted #2c3142; position: relative; z-index: 1;">
     <div class="col-md-3 border-right">
         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" height="200px" width="200px" src="@Model.LogoUri">
-            <h5 class="font-weight-bold" style="margin-top: 20px;">Website: <a href="@Model.WebsiteUrl" class="font-weight-bold">@Model.Name</a></h5>
-            <h5 class="font-weight-bold" style="margin-top: 10px;">Email: <a href="https://mail.google.com/" class="font-weight-bold">@Model.Email</a></h5>
+            <h5 class="font-weight-bold" style="margin-top: 20px;">Website: 
+                <a href="@Model.WebsiteUrl" class="font-weight-bold">@Model.Name</a>
+                </h5>
+            <h5 class="font-weight-bold" style="margin-top: 10px;">Email: 
+                <a href="https://mail.google.com/" class="font-weight-bold">@Model.Email</a>
+                </h5>
             <span> </span>
         </div>
     </div>
@@ -57,9 +61,18 @@
                     }
                     <input type="text" class="form-control" value="@created" />
                  </div>
-                <div class="col-md-12"><label class="labels" style="font-size: 15px; font-weight: bold;">Phone</label><input type="text" class="form-control" value="@Model.PhoneNumber"></div>
-                <div class="col-md-12"><label class="labels" style="font-size: 15px; font-weight: bold;">Gym Type</label><input type="text" class="form-control" value="@Model.GymType"></div>
-                <div class="col-md-12"><label class="labels" style="font-size: 15px; font-weight: bold;">Address</label><input type="text" class="form-control" value="@Model.Address"></div>
+                <div class="col-md-12">
+                    <label class="labels" style="font-size: 15px; font-weight: bold;">Phone</label>
+                    <input type="text" class="form-control" value="@Model.PhoneNumber">
+                </div>
+                <div class="col-md-12">
+                    <label class="labels" style="font-size: 15px; font-weight: bold;">Gym Type</label>
+                    <input type="text" class="form-control" value="@Model.GymType">
+                </div>
+                <div class="col-md-12">
+                    <label class="labels" style="font-size: 15px; font-weight: bold;">Address</label>
+                    <input type="text" class="form-control" value="@Model.Address">
+                </div>
                 <div class="col-md-12">
                     <label class="labels" style="font-size: 15px; font-weight: bold;">More Info:</label>
                     <p>@(Html.Raw(Model.Description))</p>
@@ -71,9 +84,15 @@
     </div>
     <div class="col-md-4">
         <div class="p-3 py-5">
-            <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-            <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-            <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+            <div class="d-flex justify-content-center align-items-center experience">
+                <form asp-area="" asp-controller="Gym" asp-action="Join" asp-route-gymId="@Model.Id">
+                    <button type="submit"
+                       class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
+                        <i class="fa fa-plus"></i>&nbsp;Join
+                    </button>
+                </form>
+            </div>
+                    <br>
         </div>
     </div>    
 </div>
