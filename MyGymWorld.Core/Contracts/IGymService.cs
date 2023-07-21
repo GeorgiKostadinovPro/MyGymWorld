@@ -43,6 +43,8 @@
 
         Task<bool> CheckIfGymIsManagedByManagerAsync(string gymId, string mananerId);
 
+        Task<bool> CheckIfGymIsJoinedByUserAsync(string gymId, string userId);
+
         Task<Gym> GetGymByIdAsync(string gymId);
 
         IEnumerable<string> GetAllGymTypes();

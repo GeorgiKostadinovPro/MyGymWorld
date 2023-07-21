@@ -320,7 +320,7 @@
 
             ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
-            UserGym userGym = await this.repository.AllReadonly<UserGym>()
+            UserGym userGym = await this.repository.All<UserGym>()
                 .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
 
             if (userGym != null)
@@ -353,8 +353,8 @@
 
         public async Task RemoveGymFromUserAsync(string gymId, string userId)
         {
-            UserGym userGym = await this.repository.AllReadonly<UserGym>()
-                .FirstAsync(ug => ug.Id == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+            UserGym userGym = await this.repository.All<UserGym>()
+                .FirstAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
 
             if (userGym == null)
             {
@@ -456,6 +456,12 @@
         {
             return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
                 .AnyAsync(g => g.Id == Guid.Parse(gymId) && g.ManagerId == Guid.Parse(mananerId));
+        }
+
+        public async Task<bool> CheckIfGymIsJoinedByUserAsync(string gymId, string userId)
+        {
+            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false)
+                .AnyAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
         }
 
         public async Task<Gym> GetGymByIdAsync(string gymId)
