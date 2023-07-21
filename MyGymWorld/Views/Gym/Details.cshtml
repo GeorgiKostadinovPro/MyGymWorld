@@ -6,6 +6,13 @@
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
 
+@*Owl Carousel 2*@
+<link href="~/lib/owlcarousel/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/lib/owlcarousel/css/owl.theme.default.min.css" rel="stylesheet" />
+
+@*Owl Carousel 2*@
+<script src="~/lib/owlcarousel/scripts/owl.carousel.min.js"></script>
+
 <div class="row" style="outline: 5px dotted #2c3142;">
     <div class="col-md-3 border-right">
         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" height="200px" width="200px" src="@Model.LogoUri">
@@ -53,7 +60,6 @@
                 </div>
             </div>
             <div class="row mt-3">
-               
             </div>
         </div>
     </div>
@@ -63,8 +69,52 @@
             <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
             <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
         </div>
-    </div>
+    </div>    
 </div>
+
+
+<h3 style="text-align: center; margin-top: 30px;">Gallery</h3>
+
+<hr />
+
+@*Owl Carousel 2*@
+
+<div class="owl-carousel" style="margin-top: 50px; margin-bottom: 50px;">
+        @foreach (string uri in Model.GymImages)
+        {
+            <div class="card-hover">
+                <img src="@uri" alt="">
+            </div>
+        }
 </div>
-</div>
-</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".owl-carousel").owlCarousel();
+
+        $('.loop').owlCarousel({
+            center: true,
+            items: 2,
+            loop: true,
+            margin: 10,
+            responsive: {
+                600: {
+                    items: 4
+                }
+            }
+        });
+
+        $('.nonloop').owlCarousel({
+            center: true,
+            items: 2,
+            loop: false,
+            margin: 10,
+            responsive: {
+                600: {
+                    items: 4
+                }
+            }
+        });
+    });
+</script>
