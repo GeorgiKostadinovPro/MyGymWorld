@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Core.Contracts
 {
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using System.Threading.Tasks;
@@ -30,8 +31,20 @@
 
         Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId);
 
+        Task AddGymToUserAsync(string gymId, string userId);
+
+        Task RemoveGymFromUserAsync(string gymId, string userId);
+
+        Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsAsync(string userId, AllGymsQueryModel queryModel);
+
+        Task<int> GetAllUserJoinedGymsCountAsync(string userId);
+
         Task<bool> CheckIfGymExistsByIdAsync(string gymId);
 
-		IEnumerable<string> GetAllGymTypes();
+        Task<bool> CheckIfGymIsManagedByManagerAsync(string gymId, string mananerId);
+
+        Task<Gym> GetGymByIdAsync(string gymId);
+
+        IEnumerable<string> GetAllGymTypes();
     }
 }

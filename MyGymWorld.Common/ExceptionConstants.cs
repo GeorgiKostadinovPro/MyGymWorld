@@ -58,6 +58,10 @@
         {
             public const string InvalidGymId = "Gym with such ID does NOT exists!";
             public const string InvalidGymType = "The provided Gym Type is invalid!";
+
+            public const string GymAlreadyJoined = "You have already joined this gym!";
+            public const string GymNotJoinedToBeLeft = "You have to join the gym in order to leave it!";
+            public const string GymAlreadyLeft = "You have already left this gym!";
         }
     }
 }
