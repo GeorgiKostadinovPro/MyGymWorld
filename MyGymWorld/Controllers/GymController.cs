@@ -170,21 +170,17 @@
                   user.Id.ToString());
 
                 this.TempData[SuccessMessage] = "You successfully left the gym!";
-
-                return this.RedirectToAction(nameof(Joined));
             }
             catch (InvalidOperationException ex)
             {
                 this.TempData[ErrorMessage] = ex.Message;
-
-                return this.RedirectToAction(nameof(Details), new { gymId = gymId });
             }
             catch (Exception)
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
-
-                return this.RedirectToAction(nameof(Details), new { gymId = gymId });
             }
+            
+            return this.RedirectToAction(nameof(Details), new { gymId = gymId });
         }
 
         [HttpGet]

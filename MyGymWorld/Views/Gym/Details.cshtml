@@ -1,7 +1,16 @@
-﻿@model GymDetailsViewModel
+﻿@using MyGymWorld.Core.Contracts;
+@using MyGymWorld.Web.Infrastructure.Extensions;
+
+@model GymDetailsViewModel
+
+@inject IGymService GymService
 
 @{
     ViewData["Title"] = "Gym Details";
+
+    string userId = User.GetId();
+
+    bool hasUserJoinedGym = await this.GymService.CheckIfGymIsJoinedByUserAsync(Model.Id, userId);
 }
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
@@ -84,15 +93,29 @@
     </div>
     <div class="col-md-4">
         <div class="p-3 py-5">
-            <div class="d-flex justify-content-center align-items-center experience">
-                <form asp-area="" asp-controller="Gym" asp-action="Join" asp-route-gymId="@Model.Id">
+            @if(!hasUserJoinedGym)
+            {
+                <div class="d-flex justify-content-center align-items-center experience">
+                <form asp-area="" asp-controller="Gym" asp-action="Join" asp-route-gymId="@Model.Id" method="post">
                     <button type="submit"
                        class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
                         <i class="fa fa-plus"></i>&nbsp;Join
                     </button>
                 </form>
-            </div>
-                    <br>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex justify-content-center align-items-center experience">
+                    <form asp-area="" asp-controller="Gym" asp-action="Leave" asp-route-gymId="@Model.Id" method="post">
+                        <button type="submit"
+                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
+                            <i class="fa fa-minus"></i>&nbsp;Leave
+                        </button>
+                    </form>
+                </div>
+            }
+            <br>
         </div>
     </div>    
 </div>
