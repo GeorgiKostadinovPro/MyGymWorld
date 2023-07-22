@@ -55,12 +55,17 @@
                 </h5>
             <span> </span>
             <div style="margin-top: 20px;">
-                <span id="like" data-gym-id="@Model.Id" class="material-symbols-outlined" style="cursor: pointer; margin-right: 30px; @(hasUserLikedThisGym ? "color: #3F82C3;" : "color: none;")">
-                    thumb_up
-                </span>
-                <span id="dislike" class="material-symbols-outlined" style="cursor: pointer;">
-                    thumb_down
-                </span>
+                <a asp-area="" asp-controller="Like" asp-action="Create" asp-route-gymId="@Model.Id">
+                    <span id="like" class="material-symbols-outlined" style="cursor: pointer; margin-right: 30px; @(hasUserLikedThisGym ? "color: #3F82C3;" : "color: #212529;")">
+                        thumb_up
+                    </span>
+                </a>
+               <a>
+                    <span id="dislike" class="material-symbols-outlined" style="cursor: pointer;">
+                        thumb_down
+                    </span>
+               </a>
+                
             </div>
         </div>
         
@@ -201,24 +206,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#like").on('click', function (e) {
-            e.preventDefault();
-            var gymId = $(this).data('gym-id');
-
-            $.ajax({
-                url: "/api/Like/create/" + gymId,
-                type: "POST",
-                success: function (response) {
-                    console.log(response);
-
-                    $("#like").css("color", "#3F82C3");
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
         $(".owl-carousel").owlCarousel();
 
         $('.loop').owlCarousel({
