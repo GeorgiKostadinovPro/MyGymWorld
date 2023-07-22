@@ -53,7 +53,7 @@
     <div class="col-md-5 border-right">
         <div class="p-3 py-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="text-right">@Model.Name</h3>
+                <h3 class="text-right">@Model.Name</h3><h3>Members: @Model.UsersCount</h3>
             </div>
             <div class="row mt-3">
                 <div class="col-md-12"><h5>Manager: @Model.ManagerFullName</h5></div>
@@ -113,6 +113,10 @@
                             You are the manager!
                         </button>
                     </div>
+                    <button type="submit"
+                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; margin-bottom: 10px;">
+                            You CAN'T Join or Leave your Gym.
+                    </button>
                 }
                 else
                 {

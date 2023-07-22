@@ -79,6 +79,7 @@
                  .ForMember(d => d.GymType, opt => opt.MapFrom(src => src.GymType.ToString()))
                  .ForMember(d => d.Address, opt => opt.MapFrom(src => string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name)))
                  .ForMember(d => d.GymImages, opt => opt.MapFrom(src => src.GymImages.Select(gi => gi.Uri)))
+                 .ForMember(d => d.UsersCount, opt => opt.MapFrom(src => src.UsersGyms.Count(ug => ug.IsDeleted == false)))
                  .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             // Countries
