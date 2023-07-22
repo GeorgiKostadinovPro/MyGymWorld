@@ -29,15 +29,15 @@
                 return this.Unauthorized();
             }
 
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-            if (gym == null)
-            {
-                return this.NotFound();
-            }
-
             try
             {
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    return this.NotFound();
+                }
+
                 string userId = this.GetUserId();
 
                 Dislike dislike = await this.dislikeService.CreateDislikeAsync(gymId, userId);
@@ -60,13 +60,15 @@
                         $"/Gym/Details/?gymId={gymId}",
                         userId);
                 }
+                
+                return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
             }
             catch (Exception)
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
-            }
 
-            return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
+                return this.RedirectToAction("Index", "Home");
+            }
         }
     }
 }
