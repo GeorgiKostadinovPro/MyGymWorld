@@ -24,7 +24,7 @@
             this.userService = _userService;
         }
 
-        public async Task CreateLikeAsync(string gymId, string userId)
+        public async Task<Like> CreateLikeAsync(string gymId, string userId)
         {
             Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
                 .FirstOrDefaultAsync();
@@ -54,7 +54,7 @@
                 }
             }
 
-            await this.repository.SaveChangesAsync();
+            return like;
         }
         
         public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)

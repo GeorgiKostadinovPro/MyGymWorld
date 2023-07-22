@@ -1,15 +1,13 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.Infrastructure.Extensions;
 
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class LikeController : ControllerBase
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
+    public class LikeController : BaseController
     {
         private readonly ILikeService likeService;
         private readonly IGymService gymService;
@@ -25,13 +23,11 @@
             this.notificationService = _notificationService;
         }
 
-        [HttpPost("create/{gymId}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Create(string gymId)
         {
             if (!User.Identity!.IsAuthenticated)
             {
-                return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
+                return this.Unauthorized();
             }
 
             Gym gym = await this.gymService.GetGymByIdAsync(gymId);
@@ -45,19 +41,33 @@
             {
                 string userId = User.GetId();
 
-                await this.likeService.CreateLikeAsync(gymId, userId);
+                Like like = await this.likeService.CreateLikeAsync(gymId, userId);
 
-                await this.notificationService.CreateNotificationAsync(
-                    $"You liked gym: {gym.Name}",
-                    $"/Gym/Details/?gymId={gymId}",
-                    userId);
+                if (like.IsDeleted == false)
+                {
+                    this.TempData[SuccessMessage] = $"You liked {gym.Name}!";
 
-                return this.Ok();
+                    await this.notificationService.CreateNotificationAsync(
+                        $"You liked gym: {gym.Name}",
+                        $"/Gym/Details/?gymId={gymId}",
+                        userId);
+                }
+                else
+                {
+                    this.TempData[SuccessMessage] = $"You unliked {gym.Name}!";
+
+                    await this.notificationService.CreateNotificationAsync(
+                        $"You unliked gym: {gym.Name}",
+                        $"/Gym/Details/?gymId={gymId}",
+                        userId);
+                }
             }
             catch (Exception)
             {
-                return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
+                this.TempData[ErrorMessage] = "Something went wrong!";
             }
+            
+            return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
         }
     }
 }
