@@ -5,7 +5,8 @@
 @model GymDetailsViewModel
 
 @inject IGymService GymService
-@inject IManagerService ManagerService;
+@inject IManagerService ManagerService
+@inject ILikeService LikeService
 
 @{
     ViewData["Title"] = "Gym Details";
@@ -21,6 +22,8 @@
     {
         isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.Id, manager.Id.ToString());
     }
+
+    bool hasUserLikedThisGym = await this.LikeService.CheckIfUserLikedGymAsync(Model.Id, userId);
 }
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
@@ -38,6 +41,9 @@
 @*Particles*@
 <script src="~/js/particles.js"></script>
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,0" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,0" />
+
 <div class="row" style="outline: 5px dotted #2c3142; position: relative; z-index: 1;">
     <div class="col-md-3 border-right">
         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" height="200px" width="200px" src="@Model.LogoUri">
@@ -48,7 +54,16 @@
                 <a href="https://mail.google.com/" class="font-weight-bold">@Model.Email</a>
                 </h5>
             <span> </span>
+            <div style="margin-top: 20px;">
+                <span id="like" data-gym-id="@Model.Id" class="material-symbols-outlined" style="cursor: pointer; margin-right: 30px; @(hasUserLikedThisGym ? "color: #3F82C3;" : "color: none;")">
+                    thumb_up
+                </span>
+                <span id="dislike" class="material-symbols-outlined" style="cursor: pointer;">
+                    thumb_down
+                </span>
+            </div>
         </div>
+        
     </div>
     <div class="col-md-5 border-right">
         <div class="p-3 py-5">
@@ -180,8 +195,30 @@
 </div>
 
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#like").on('click', function (e) {
+            e.preventDefault();
+            var gymId = $(this).data('gym-id');
+
+            $.ajax({
+                url: "/api/Like/create/" + gymId,
+                type: "POST",
+                success: function (response) {
+                    console.log(response);
+
+                    $("#like").css("color", "#3F82C3");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
         $(".owl-carousel").owlCarousel();
 
         $('.loop').owlCarousel({
