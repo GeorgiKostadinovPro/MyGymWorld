@@ -7,6 +7,7 @@
 @inject IGymService GymService
 @inject IManagerService ManagerService
 @inject ILikeService LikeService
+@inject IDislikeService DislikeService;
 
 @{
     ViewData["Title"] = "Gym Details";
@@ -24,6 +25,7 @@
     }
 
     bool hasUserLikedThisGym = await this.LikeService.CheckIfUserLikedGymAsync(Model.Id, userId);
+    bool hasUserDislikedThisGym = await this.DislikeService.CheckIfUserDislikedGymAsync(Model.Id, userId);
 }
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
@@ -62,12 +64,12 @@
                   
                 </a> 
                 <span id="likeCount" style="margin-right: 20px;">@Model.LikesCount</span>
-               <a>
-                    <span id="dislike" class="material-symbols-outlined" style="cursor: pointer;">
+                <a asp-area="" asp-controller="Dislike" asp-action="Create" asp-route-gymId="@Model.Id" style="margin-right: 5px;">
+                    <span id="dislike" class="material-symbols-outlined" style="cursor: pointer;  @(hasUserDislikedThisGym ? "color: #3F82C3;" : "color: #212529;")">
                         thumb_down
                     </span>
-                    <span id="dislikeCount" style="margin-left: 5px;">@Model.DislikesCount</span>
-               </a>
+                </a> 
+                <span id="dislikeCount">@Model.DislikesCount</span>
             </div>
         </div>
         
