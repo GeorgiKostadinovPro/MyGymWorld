@@ -17,6 +17,29 @@
     {
         public MyGymWorldMappingProfile()
         {
+            // Gyms
+            this.CreateMap<Gym, GymViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.Manager.User.UserName))
+                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
+
+            this.CreateMap<Gym, DisplayGymViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
+                 .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
+
+            this.CreateMap<Gym, GymDetailsViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.ManagerId.ToString()))
+                 .ForMember(d => d.ManagerFullName, opt => opt.MapFrom(src => string.Concat(src.Manager.User.FirstName, " ", src.Manager.User.LastName)))
+                 .ForMember(d => d.GymType, opt => opt.MapFrom(src => src.GymType.ToString()))
+                 .ForMember(d => d.Address, opt => opt.MapFrom(src => string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name)))
+                 .ForMember(d => d.GymImages, opt => opt.MapFrom(src => src.GymImages.Select(gi => gi.Uri)))
+                 .ForMember(d => d.UsersCount, opt => opt.MapFrom(src => src.UsersGyms.Count(ug => ug.IsDeleted == false)))
+                 .ForMember(d => d.LikesCount, opt => opt.MapFrom(src => src.Likes.Count(ug => ug.IsDeleted == false)))
+                 .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(ug => ug.IsDeleted == false)))
+                 .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
+
             // Users
             this.CreateMap<RegisterUserInputModel, CreateUserInputModel>()
                 .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.UserName))
@@ -60,27 +83,6 @@
             // Notifications
             this.CreateMap<Notification, NotificationViewModel>()
                 .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()));
-
-            // Gyms
-            this.CreateMap<Gym, GymViewModel>()
-                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                 .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.Manager.User.UserName))
-                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
-
-            this.CreateMap<Gym, DisplayGymViewModel>()
-                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
-                 .ForMember(d=>d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
-
-            this.CreateMap<Gym, GymDetailsViewModel>()
-                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                 .ForMember(d => d.ManagerId, opt => opt.MapFrom(src => src.ManagerId.ToString()))
-                 .ForMember(d => d.ManagerFullName, opt => opt.MapFrom(src => string.Concat(src.Manager.User.FirstName, " ", src.Manager.User.LastName)))
-                 .ForMember(d => d.GymType, opt => opt.MapFrom(src => src.GymType.ToString()))
-                 .ForMember(d => d.Address, opt => opt.MapFrom(src => string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name)))
-                 .ForMember(d => d.GymImages, opt => opt.MapFrom(src => src.GymImages.Select(gi => gi.Uri)))
-                 .ForMember(d => d.UsersCount, opt => opt.MapFrom(src => src.UsersGyms.Count(ug => ug.IsDeleted == false)))
-                 .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

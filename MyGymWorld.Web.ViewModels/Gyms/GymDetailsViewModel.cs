@@ -33,6 +33,10 @@
 
         public int UsersCount { get; set; }
 
+        public int LikesCount { get; set; }
+
+        public int DislikesCount { get; set; }
+
         public IEnumerable<string> GymImages { get; set; }
     }
 }

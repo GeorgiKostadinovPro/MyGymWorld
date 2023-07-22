@@ -283,6 +283,8 @@
                       .ThenInclude(t => t.Country)
                 .Include(g => g.GymImages)
                 .Include(g => g.UsersGyms)
+                .Include(g => g.Likes)
+                .Include(g => g.Dislikes)
                 .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
 
             GymDetailsViewModel gymDetailsViewModel = this.mapper.Map<GymDetailsViewModel>(gym);
