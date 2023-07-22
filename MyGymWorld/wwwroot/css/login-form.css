@@ -102,7 +102,7 @@ form .content {
     }
 
     form .content .pass-link {
-        color: "";
+        color: none;
     }
 
 form .field input[type="submit"] {
