@@ -73,7 +73,7 @@
 
             Gym gym = await this.gymService.GetGymByIdAsync(gymId);
 
-            Manager manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
             
             if (manager != null)
             {
@@ -137,7 +137,7 @@
 
             Gym gym = await this.gymService.GetGymByIdAsync(gymId);
 
-            Manager manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
 
             if (manager != null)
             {
