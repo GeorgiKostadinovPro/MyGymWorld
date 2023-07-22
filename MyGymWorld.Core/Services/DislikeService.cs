@@ -4,16 +4,17 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
+    using System;
     using System.Threading.Tasks;
 
-    public class LikeService : ILikeService
+    public class DislikeService : IDislikeService
     {
         private readonly IRepository repository;
 
         private readonly IGymService gymService;
         private readonly IUserService userService;
 
-        public LikeService (
+        public DislikeService (
             IRepository _repository,
             IGymService _gymService,
             IUserService _userService)
@@ -24,51 +25,51 @@
             this.userService = _userService;
         }
 
-        public async Task<Like> CreateLikeAsync(string gymId, string userId)
+        public async Task<Dislike> CreateDislikeAsync(string gymId, string userId)
         {
-            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
-
             Dislike? dislike = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
                 .FirstOrDefaultAsync();
 
-            if (dislike != null && dislike.IsDeleted == false)
+            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
+               .FirstOrDefaultAsync();
+
+            if (like != null && like.IsDeleted == false)
             {
-                dislike.IsDeleted = true;
-                dislike.DeletedOn = DateTime.UtcNow;
+                like.IsDeleted = true;
+                like.DeletedOn = DateTime.UtcNow;
             }
 
-            if (like == null)
+            if (dislike == null)
             {
-                like = new Like 
+                dislike = new Dislike
                 {
                     GymId = Guid.Parse(gymId),
                     UserId = Guid.Parse(userId),
                     CreatedOn = DateTime.UtcNow
                 };
 
-                await this.repository.AddAsync(like);
+                await this.repository.AddAsync(dislike);
             }
             else
             {
-                if (like.IsDeleted == true)
+                if (dislike.IsDeleted == true)
                 {
-                    like.IsDeleted = false;
-                    like.DeletedOn = null;
+                    dislike.IsDeleted = false;
+                    dislike.DeletedOn = null;
                 }
                 else
                 {
-                    like.IsDeleted = true;
-                    like.DeletedOn = DateTime.UtcNow;
+                    dislike.IsDeleted = true;
+                    dislike.DeletedOn = DateTime.UtcNow;
                 }
             }
 
-            return like;
+            return dislike;
         }
-        
-        public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)
+
+        public async Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId)
         {
-            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
+            Dislike? like = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
                 .FirstOrDefaultAsync();
 
             if (like == null)
