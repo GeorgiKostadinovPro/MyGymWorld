@@ -11,18 +11,9 @@
     {
         private readonly IRepository repository;
 
-        private readonly IGymService gymService;
-        private readonly IUserService userService;
-
-        public DislikeService (
-            IRepository _repository,
-            IGymService _gymService,
-            IUserService _userService)
+        public DislikeService (IRepository _repository)
         {
             this.repository = _repository;
-
-            this.gymService = _gymService;
-            this.userService = _userService;
         }
 
         public async Task<Dislike> CreateDislikeAsync(string gymId, string userId)
@@ -83,6 +74,12 @@
             }
 
             return true;
+        }
+
+        public async Task<int> GetAllActiveDislikesCountAsync()
+        {
+            return await this.repository.AllReadonly<Dislike>(l => l.IsDeleted == false)
+              .CountAsync();
         }
     }
 }

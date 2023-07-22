@@ -58,6 +58,16 @@
                 : null))
                 .ForMember(d => d.Role, opt => opt.Ignore());
 
+            this.CreateMap<ApplicationUser, UserProfileViewModel>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.FirstName != null ? src.FirstName : "None"))
+                .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.LastName != null ? src.LastName : "None"))
+                .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber != null ? src.PhoneNumber : "None"))
+                .ForMember(d => d.ProfilePictureUri, opt => opt.MapFrom(src => src.ProfilePictureUri != null ? src.ProfilePictureUri : "None"))
+                .ForMember(d => d.LikesCount, opt => opt.MapFrom(src => src.Likes.Count(l => l.IsDeleted == false)))
+                .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(l => l.IsDeleted == false)))
+                .ForMember(d => d.Address, opt => opt.MapFrom(src => src.AddressId != null ? string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name) : "None"));
+
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
 

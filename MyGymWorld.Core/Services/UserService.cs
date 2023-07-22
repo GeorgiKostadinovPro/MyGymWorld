@@ -252,44 +252,20 @@
 
         public async Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId)
         {
-            ApplicationUser user = await this.GetUserByIdAsync(userId);
+            ApplicationUser? user = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
+                .Include(u => u.Likes)
+                .Include(u => u.Dislikes)
+                .Include(u => u.Address)
+                   .ThenInclude(a => a.Town)
+                   .ThenInclude(t => t.Country)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
 
             if (user == null)
             {
                 throw new InvalidOperationException(ExceptionConstants.UserErros.InvalidUserId);
             }
 
-            string firstName = user.FirstName ?? "None";
-            string lastName = user.LastName ?? "None";
-            string profilePictureUrl = user.ProfilePictureUri ?? "None";
-            string phoneNumber = user.PhoneNumber ?? "None";
-            string address = "None";
-
-            if (user.AddressId != null)
-            {
-                Address userAddress = await this.addressService.GetAddressByIdAsync(user.AddressId.Value);
-                Town userTown = await this.townService.GetTownByIdAsync(userAddress.TownId);
-                Country userCountry = await this.countryService.GetCountryByIdAsync(userTown.CountryId);
-
-                address = string.Concat(userAddress.Name, $", {userTown.Name}, {userCountry.Name}");
-            }
-
-            UserProfileViewModel userProfileViewModel = new UserProfileViewModel()
-            {
-                Id = userId,
-                UserName = user.UserName,
-                Email = user.Email,
-                FirstName = firstName,
-                LastName = lastName,
-                ProfilePictureUri = profilePictureUrl,
-                PhoneNumber = phoneNumber,
-                Address = address,
-                EventsCount = user.UsersEvents.Count,
-                ArticlesAcount = user.UsersArticles.Count,
-                LikesCount = user.Likes.Count,
-                DislikesCount = user.Dislikes.Count,
-                CommentsCount = user.Comments.Count
-            };
+            UserProfileViewModel userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);
 
             return userProfileViewModel;
         }
