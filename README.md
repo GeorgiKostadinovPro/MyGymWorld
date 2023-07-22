@@ -66,8 +66,8 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 - [About the Project](#star2-about-the-project)
   * [Tech Stack](#space_invader-tech-stack)
-  * [Screenshots](#camera-screenshots)
   * [Features](#dart-features)
+  * [Screenshots](#camera-screenshots)
   * [Color Reference](#art-color-reference)
   * [Environment Variables](#key-environment-variables)
 - [Getting Started](#toolbox-getting-started)
@@ -85,15 +85,6 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 <!-- About the Project -->
 ## :star2: About the Project
-
-
-<!-- Screenshots -->
-### :camera: Screenshots
-
-<div align="center"> 
-  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
-</div>
-
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
@@ -141,6 +132,13 @@ Maybe you can mention me or this repo in the acknowledgements too
 - Feature 1
 - Feature 2
 - Feature 3
+
+<!-- Screenshots -->
+### :camera: Screenshots
+
+<div align="center"> 
+  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
+</div>
 
 <!-- Color Reference -->
 ### :art: Color Reference
