@@ -31,6 +31,8 @@
 
         public int TotalDays { get; set; }
 
+        public int UsersCount { get; set; }
+
         public IEnumerable<string> GymImages { get; set; }
     }
 }
