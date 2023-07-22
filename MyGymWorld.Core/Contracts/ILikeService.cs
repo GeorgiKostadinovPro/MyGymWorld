@@ -7,5 +7,7 @@
         Task<Like> CreateLikeAsync(string gymId, string userId);
 
         Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId);
+        
+        Task<int> GetAllActiveLikesCountAsync();
     }
 }

@@ -8,5 +8,7 @@
         Task<Dislike> CreateDislikeAsync(string gymId, string userId);
 
         Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId);
+
+        Task<int> GetAllActiveDislikesCountAsync();
     }
 }

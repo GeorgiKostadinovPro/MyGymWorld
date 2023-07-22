@@ -10,18 +10,9 @@
     {
         private readonly IRepository repository;
 
-        private readonly IGymService gymService;
-        private readonly IUserService userService;
-
-        public LikeService (
-            IRepository _repository,
-            IGymService _gymService,
-            IUserService _userService)
+        public LikeService (IRepository _repository)
         {
             this.repository = _repository;
-
-            this.gymService = _gymService;
-            this.userService = _userService;
         }
 
         public async Task<Like> CreateLikeAsync(string gymId, string userId)
@@ -65,7 +56,7 @@
 
             return like;
         }
-        
+
         public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)
         {
             Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
@@ -82,6 +73,12 @@
             }
 
             return true;
+        } 
+        
+        public async Task<int> GetAllActiveLikesCountAsync()
+        {
+            return await this.repository.AllReadonly<Like>(l => l.IsDeleted == false)
+                .CountAsync();
         }
     }
 }
