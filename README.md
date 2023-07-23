@@ -129,10 +129,106 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 <!-- Features -->
 ### :dart: Features
+There are two Areas in the project (Manager and Admin) and Common Layer for Authenticated Users.
+<details>
+  <summary>Custom Authentication Flow</summary>
+  <ul>
+    <li>Register.</li>
+    <li>Login.</li>
+    <li>Remeber me.</li>
+    <li>Send Email for Reset Forgot Password.</li>
+    <li>Reset Password.</li>
+  </ul>
+</details>
 
-- Feature 1
-- Feature 2
-- Feature 3
+<details>
+  <summary>Guest</summary>
+  <ul>
+    <li>Only has access to Home Page.</li>
+  </ul>
+</details>
+<details>
+  <summary>Authenticated User</summary>
+  <ul>
+    <li>Can reset his password.</li>
+    <li>Can view his profile.</li>
+    <li>Can edit his profile.</li>
+    <li>Can upload profile picture.</li>
+    <li>Can delete profile picture.</li>
+    <li>Can review his notifications.</li>
+    <li>Can delete his notifications.</li>
+    <li>Can mark notification as read.</li>
+    <li>Can see all gyms.</li>
+    <li>Can sort all gyms.</li>
+    <li>Can filter all gyms.</li>
+    <li>Can search all gyms.</li>
+    <li>Can see details for each gym.</li>
+    <li>Can like a gym.</li>
+    <li>Can dislike a gym.</li>
+    <li>Can see all comments about a gym.</li>
+    <li>Can comment on gym.</li>
+    <li>Can reply to comment on gym.</li>
+    <li>Can use the given pagination.</li>
+    <li>Can join a gym.</li>
+    <li>Can leave a gym.</li>
+    <li>Can see all events for gym after joining it.</li>
+    <li>Can see details about each event events.</li>
+    <li>Can join events.</li>
+    <li>Can leave events.</li>
+    <li>Can see all articles about a gym.</li>
+    <li>Can see details about each article.</li>
+    <li>Can see all membership for each gym.</li>
+    <li>Can see details about each membership.</li>
+    <li>Can by a membership.</li>
+    <li>Can become manager via request to Admin.</li>
+  </ul>
+</details>
+
+<details>
+  <summary>Manager</summary>
+  <ul>
+    <li>Can use <strong>Authenticated User</strong> functionality.</li>
+    <li><strong>CANNOT</strong> join his own gyms.</li>
+    <li><strong>CANNOT</strong> leave his own gyms.</li>
+    <li>Can see all his <strong>active</strong> created gyms.</li>
+    <li>Can see all his <strong>deleted</strong> created gyms.</li>
+    <li>Can create a gym.</li>
+    <li>Can edit a gym.</li>
+    <li>Can delete a gym.</li>
+    <li>Can create events for a gym.</li>
+    <li>Can edit events for a gym.</li>
+    <li>Can delete events for a gym.</li>
+    <li>Can create articles for a gym.</li>
+    <li>Can edit articles for a gym.</li>
+    <li>Can delete articles for a gym.</li>
+    <li>Can create memberships for a gym.</li>
+    <li>Can edit memberships for a gym.</li>
+    <li>Can delete delete for a gym.</li>
+  </ul>
+</details>
+
+<details>
+  <summary>Administrator</summary>
+  <ul>
+    <li>Can use <strong>Authenticated User</strong> functionality.</li>
+    <li>Can see all <strong>active</strong> users in the app.</li>
+    <li>Can see all <strong>deleted</strong> users in the app.</li>
+    <li>Can delete a user.</li>
+    <li>Can see all manager requests.</li>
+    <li>Can see details about a manager request.</li>
+    <li>Can approve a manager request.</li>
+    <li>Can reject a manager request.</li>
+    <li>Can approve a rejected manager.</li>
+    <li>Can reject an approved manager. </li>
+    <li>Can see all <strong>active</strong> the roles in the app.</li>
+    <li>Can see all <strong>deleted</strong> the roles in the app.</li>
+    <li>Can create a role.</li>
+    <li>Can edit a role.</li>
+    <li>Can delete a role.</li>
+    <li>Can see all <strong>active</strong> gyms in the app with their manager.</li>
+    <li>Can see all <strong>deleted</strong> gyms in the app with their manager.</li>
+  </ul>
+</details>
 
 <!-- Screenshots -->
 ### :camera: Screenshots
