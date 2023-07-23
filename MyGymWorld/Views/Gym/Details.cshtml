@@ -71,7 +71,8 @@
                 <span id="dislikeCount">@Model.DislikesCount</span>
             </div>
             <div class="d-flex justify-content-center align-items-center experience" style="margin-top: 20px;">
-                <form asp-area="" asp-controller="Comment" asp-action="AllForGym" asp-route-gymId="@Model.Id" method="get">
+                <form asp-area="" asp-controller="Comment" asp-action="AllForGym" method="get">
+                    <input type="hidden" name="gymId" value="@Model.Id"/>
                     <button type="submit"
                             class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
                         <i class="fa fa-comment"></i>&nbsp;Comments

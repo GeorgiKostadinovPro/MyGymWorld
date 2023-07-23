@@ -9,8 +9,8 @@
             this.Comments = new List<CommentViewModel>();
         }
 
-        public string GymId { get; set; } = null!;
-
+        public string GymId { get; set; } = null!; 
+        
         public string Name { get; set; } = null!;
  
         public int CurrentPage { get; set; }

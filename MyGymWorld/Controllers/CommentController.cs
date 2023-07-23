@@ -18,6 +18,8 @@
         {
             AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel();
 
+            allCommentsForGymViewModel.GymId = gymId;
+
             return this.View(allCommentsForGymViewModel);
         }
 
