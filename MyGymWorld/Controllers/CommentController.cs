@@ -77,7 +77,19 @@
                     return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
                 }
 
-                await this.commentService.CreateCommentAsync(createCommentInputModel.GymId, userId, createCommentInputModel.Content);
+                if (createCommentInputModel.ParentId != null)
+                {
+                    bool isInTheSameGym = await this.commentService.IsInSameGymByIdAsync(createCommentInputModel.ParentId, createCommentInputModel.GymId);
+
+                    if (isInTheSameGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You tried creating a comment on different gym!";
+
+                        return this.RedirectToAction(nameof(AllForGym), new { gymid = createCommentInputModel.GymId });
+                    }
+                }
+
+                await this.commentService.CreateCommentAsync(createCommentInputModel.GymId, userId, createCommentInputModel.Content, createCommentInputModel.ParentId);
 
                 this.TempData[SuccessMessage] = "You wrote a comment!";
 

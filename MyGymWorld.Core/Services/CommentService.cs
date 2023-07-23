@@ -69,5 +69,15 @@
             return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
                 .CountAsync();
         }
+
+        public async Task<bool> IsInSameGymByIdAsync(string commentId, string gymId)
+        {
+            Guid commentGymId = await this.repository
+                .AllReadonly<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
+                .Select(c => c.GymId)
+                .FirstOrDefaultAsync();
+
+            return commentGymId == Guid.Parse(gymId);
+        }
     }
 }
