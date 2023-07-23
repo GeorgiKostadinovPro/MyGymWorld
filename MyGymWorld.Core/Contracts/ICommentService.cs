@@ -11,5 +11,7 @@
         Task<int> GetActiveCommentsCountByGymIdAsync(string gymId);
 
         Task<int> GetAllActiveCommentsAsync();
+
+        Task<bool> IsInSameGymByIdAsync(string commentId, string gymId);
     }
 }
