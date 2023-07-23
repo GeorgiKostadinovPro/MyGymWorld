@@ -4,13 +4,27 @@
     ViewData["Title"] = "Gym Comments";
 }
 
+<link href="~/css/comment-button.css" rel="stylesheet" />
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
 <h1 style="text-align: center;">Comments For Gym</h1>
 
 <div style="text-align: center;">
-    <button class="btn-comment btn-4 btn-sep icon-send">Comment</button>
+    <button class="btn-comment btn-4 btn-sep icon-send" onclick="showCommentForm()">Comment</button>
+</div>
+
+<div id="addCommentForm" style="width: 600px; margin: 0 auto; display: none;">
+    <form asp-area="" asp-controller="Comment" asp-action="Create" method="post">
+        <input type="hidden" name="GymId" value="@Model.GymId"/>
+        <div>
+            <label for="Content"></label>
+            <textarea id="content" name="Content" class="form-control"></textarea>
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: center;">
+           <a onclick="document.querySelector('#addCommentForm form').submit()" href="#" class="button">Send</a>
+        </div>
+    </form>
 </div>
 
 <hr />
@@ -103,84 +117,63 @@ else
     </nav>
 }
 
+<script>
+    function showCommentForm() {
+        let addCommentForm = $('#addCommentForm');
+       
+        if(addCommentForm.css("display") === 'none') {
+            addCommentForm.show();
+        } else {
+            addCommentForm.hide();
+        }
+    }
+</script>
+
 <style>
-    .btn-comment {
-    border: none;
-    font-family: 'Lato';
-    font-size: inherit;
-    color: inherit;
-    background: none;
-    cursor: pointer;
-    padding: 25px 80px;
-    display: inline-block;
-    margin: 15px 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    outline: none;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
+    .button {
+        display: inline-block;
+        padding: 0.75rem 1.25rem;
+        border-radius: 10rem;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 1rem;
+        letter-spacing: 0.15rem;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
     }
 
-        .btn-comment:after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
-    }
+        .button:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0cf;
+            border-radius: 10rem;
+            z-index: -2;
+        }
 
-    /* Pseudo elements for icons */
-        .btn-comment:before {
-    font-family: 'FontAwesome';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    position: relative;
-    -webkit-font-smoothing: antialiased;
-    }
+        .button:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: #008fb3;
+            transition: all 0.3s;
+            border-radius: 10rem;
+            z-index: -1;
+        }
 
-    /* Icon separator */
-    .btn-sep {
-    padding: 25px 60px 25px 120px;
-    }
+        .button:hover {
+            color: #fff;
+        }
 
-    .btn-sep:before {
-    background: rgba(0,0,0,0.15);
-    }
-
-    /* Button 3 */
-    .btn-4 {
-    background: #34495e;
-    color: #fff;
-    }
-
-    .btn-4:hover {
-    background: #2c3e50;
-    }
-
-    .btn-4:active {
-    background: #2c3e50;
-    top: 2px;
-    }
-
-    .btn-4:before {
-    position: absolute;
-    height: 100%;
-    left: 0;
-    top: 0;
-    line-height: 3;
-    font-size: 140%;
-    width: 60px;
-    }
-
-    .icon-send:before {
-    content: "\f1d8";
-    }
+            .button:hover:before {
+                width: 100%;
+            }
 </style>
