@@ -4,6 +4,8 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Web.ViewModels.Comments;
 
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
     public class CommentController : BaseController
     {
         private readonly ICommentService commentService;
@@ -26,7 +28,14 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateCommentInputModel createCommentInputModel)
         {
-            throw new NotImplementedException();
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData[ErrorMessage] = "The comment is NOT valid!";
+
+                return this.RedirectToAction(nameof(AllForGym));
+            }
+
+            return this.RedirectToAction(nameof(AllForGym));
         }
     }
 }
