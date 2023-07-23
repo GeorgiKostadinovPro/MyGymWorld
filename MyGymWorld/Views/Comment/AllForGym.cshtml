@@ -102,6 +102,8 @@ else
         </div>
     }
 
+    <hr />
+
     <nav aria-label="Page navigation example" style="margin-top: 15px;">
         <ul class="pagination justify-content-center">
             @if (Model.CurrentPage == 1)
@@ -114,12 +116,12 @@ else
             }
             else
             {
-                <li class="page-item disabled">
+                <li class="page-item">
                     <a asp-area=""
                      asp-controller="Comment"
                      asp-action="AllForGym"
                      asp-route-gymId="@Model.GymId"
-                     asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+                     asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)" class="page-link">Previous</a>
                 </li>
             }
 
@@ -145,12 +147,12 @@ else
             }
             else
             {
-                <li class="page-item disabled">
+                <li class="page-item">
                     <a asp-area=""
                        asp-controller="Comment"
                        asp-action="AllForGym"
                        asp-route-gymId="@Model.GymId"
-                       asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)">Next</a>
+                       asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)" class="page-link">Next</a>
                 </li>
             }
         </ul>
