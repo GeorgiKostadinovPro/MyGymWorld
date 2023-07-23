@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Core.Services
 {
+    using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
@@ -35,6 +36,12 @@
         public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> GetAllActiveCommentsAsync()
+        {
+            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
+                .CountAsync();
         }
     }
 }

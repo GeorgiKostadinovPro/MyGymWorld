@@ -36,8 +36,9 @@
                  .ForMember(d => d.Address, opt => opt.MapFrom(src => string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name)))
                  .ForMember(d => d.GymImages, opt => opt.MapFrom(src => src.GymImages.Select(gi => gi.Uri)))
                  .ForMember(d => d.UsersCount, opt => opt.MapFrom(src => src.UsersGyms.Count(ug => ug.IsDeleted == false)))
-                 .ForMember(d => d.LikesCount, opt => opt.MapFrom(src => src.Likes.Count(ug => ug.IsDeleted == false)))
-                 .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(ug => ug.IsDeleted == false)))
+                 .ForMember(d => d.LikesCount, opt => opt.MapFrom(src => src.Likes.Count(l => l.IsDeleted == false)))
+                 .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(dl => dl.IsDeleted == false)))
+                 .ForMember(d => d.CommentsCount, opt => opt.MapFrom(src => src.Comments.Count(c => c.IsDeleted == false)))
                  .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             // Users

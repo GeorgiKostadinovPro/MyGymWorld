@@ -285,6 +285,7 @@
                 .Include(g => g.UsersGyms)
                 .Include(g => g.Likes)
                 .Include(g => g.Dislikes)
+                .Include(g => g.Comments)
                 .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
 
             GymDetailsViewModel gymDetailsViewModel = this.mapper.Map<GymDetailsViewModel>(gym);
