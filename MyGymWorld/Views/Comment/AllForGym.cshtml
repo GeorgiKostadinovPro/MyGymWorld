@@ -10,7 +10,7 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
-<h1 style="text-align: center;">Comments For Gym</h1>
+<h1 style="text-align: center;">Comments For @Model.Name</h1>
 
 <div style="text-align: center;">
     <button class="btn-comment btn-4 btn-sep icon-send" onclick="showCommentForm()">Comment</button>
@@ -93,6 +93,9 @@ else
             </div>
             <div class="toast-body text-white row">
                 <div class="col-md-10">
+                    Author: @comment.Author
+                </div>
+                <div class="col-md-10">
                     @comment.Content
                 </div>
                @* <div class="col-md-2">
@@ -108,17 +111,57 @@ else
         </div>
     }
 
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" style="margin-top: 15px;">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
+            @if (Model.CurrentPage == 1)
+            {
+                <li class="page-item disabled">
+                    <a href="#" class="page-link" disabled>
+                        Previous
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a asp-area=""
+                     asp-controller="Comment"
+                     asp-action="AllForGym"
+                     asp-route-gymId="@Model.GymId"
+                     asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for(int i = 1; i <= Model.PagesCount; i++)
+            {
+                  <li class="page-item">
+                      <a  asp-area=""
+                          asp-controller="Comment"
+                          asp-action="AllForGym"
+                          asp-route-gymId="@Model.GymId"
+                          asp-route-page="@i"
+                          class="page-link">@i</a>
+                  </li>
+            }
+
+            @if (Model.CurrentPage == Model.PagesCount)
+            {
+                <li class="page-item disabled">
+                    <a href="#" class="page-link" disabled>
+                        Next
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a asp-area=""
+                       asp-controller="Comment"
+                       asp-action="AllForGym"
+                       asp-route-gymId="@Model.GymId"
+                       asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)">Next</a>
+                </li>
+            }
         </ul>
     </nav>
 }

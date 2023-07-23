@@ -1,5 +1,7 @@
 ﻿namespace MyGymWorld.Core.Services
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
@@ -7,14 +9,19 @@
     using MyGymWorld.Web.ViewModels.Comments;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class CommentService : ICommentService
     {
+        private readonly IMapper mapper;
         private readonly IRepository repository;
 
-        public CommentService(IRepository _repository)
+        public CommentService(
+            IMapper _mapper, 
+            IRepository _repository)
         {
+            this.mapper = _mapper;
             this.repository = _repository;
         }
 
@@ -33,9 +40,28 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
+        public async Task<List<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
-            throw new NotImplementedException();
+            IQueryable<Comment> commentsAsQuery 
+                = this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
+                                 .Include(c => c.User)
+                                 .Skip(skip);
+
+            if (take.HasValue)
+            {
+                commentsAsQuery = commentsAsQuery.Take(take.Value);
+            }
+
+            return await commentsAsQuery
+                .OrderByDescending(c => c.CreatedOn)
+                .ProjectTo<CommentViewModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetActiveCommentsCountByGymIdAsync(string gymId)
+        {
+            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false && c.GymId == Guid.Parse(gymId))
+           .CountAsync();
         }
 
         public async Task<int> GetAllActiveCommentsAsync()

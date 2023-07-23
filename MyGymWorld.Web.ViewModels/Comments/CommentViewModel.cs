@@ -8,7 +8,7 @@
 
         public string UserId { get; set; } = null!;
 
-        public string Username { get; set; } = null!;
+        public string Author { get; set; } = null!;
 
         public string GymId { get; set; } = null!;
 

@@ -5,6 +5,7 @@
     using MyGymWorld.Web.ViewModels.Administration.Managers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;
+    using MyGymWorld.Web.ViewModels.Comments;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers;
@@ -94,6 +95,13 @@
             // Notifications
             this.CreateMap<Notification, NotificationViewModel>()
                 .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()));
+
+            // Comments
+            this.CreateMap<Comment, CommentViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.GymId.ToString()))
+                 .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()))
+                 .ForMember(d => d.Author, opt => opt.MapFrom(src => src.User.UserName));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

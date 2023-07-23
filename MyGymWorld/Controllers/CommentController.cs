@@ -9,6 +9,8 @@
 
     public class CommentController : BaseController
     {
+        private const int CommentsPerPage = 5;
+
         private readonly ICommentService commentService;
         private readonly IGymService gymService;
         private readonly INotificationService notificationService;
@@ -26,9 +28,28 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym(string gymId, int page = 1)
         {
-            AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel();
+            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
 
-            allCommentsForGymViewModel.GymId = gymId;
+            if (gym == null)
+            {
+                this.TempData[ErrorMessage] = "Such gym does NOT exist!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            int count = await this.commentService.GetActiveCommentsCountByGymIdAsync(gymId);
+
+            int totalPages = (int)Math.Ceiling((double)count / CommentsPerPage);
+            totalPages = totalPages == 0 ? 1 : totalPages;
+
+            AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel
+            {
+                Comments = await this.commentService.GetActiveCommentsByGymIdAsync(gymId, (page - 1) * CommentsPerPage, CommentsPerPage),
+                CurrentPage = page,
+                PagesCount = totalPages,
+                GymId = gymId,
+                Name = gym.Name
+            };
 
             return this.View(allCommentsForGymViewModel);
         }
@@ -61,7 +82,7 @@
                 this.TempData[SuccessMessage] = "You wrote a comment!";
 
                 await this.notificationService.CreateNotificationAsync(
-                    $"You commented under: {gym.Name}",
+                    $"You commented under {gym.Name}",
                     $"/Comment/AllForGym?gymId={createCommentInputModel.GymId}&page=1",
                     userId);
             }
