@@ -37,6 +37,8 @@
 
         public int DislikesCount { get; set; }
 
+        public int CommentsCount { get; set; }
+
         public IEnumerable<string> GymImages { get; set; }
     }
 }

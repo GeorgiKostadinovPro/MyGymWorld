@@ -12,17 +12,18 @@
         private readonly IGymService gymService;
         private readonly IUserService userService;  
         private readonly IManagerService managerService;
+        private readonly ICommentService commentService;
         private readonly INotificationService notificationService;
 
         public GymController(
             IGymService _gymService, 
             IUserService _userService,  
-            IManagerService managerService,
+            IManagerService _managerService,
             INotificationService _notificationService)
         {
             this.gymService = _gymService;
             this.userService = _userService;
-            this.managerService = managerService;
+            this.managerService = _managerService;
             this.notificationService = _notificationService;
         }
 
