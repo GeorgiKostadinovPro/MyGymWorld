@@ -170,7 +170,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can join a gym.</li>
     <li>Can leave a gym.</li>
     <li>Can see all events for gym after joining it.</li>
-    <li>Can see details about each event events.</li>
+    <li>Can see details about each event.</li>
     <li>Can join events.</li>
     <li>Can leave events.</li>
     <li>Can see all articles about a gym.</li>
