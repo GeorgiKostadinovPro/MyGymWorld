@@ -61,7 +61,6 @@
                     <span id="like" class="material-symbols-outlined" style="cursor: pointer; @(hasUserLikedThisGym ? "color: #3F82C3;" : "color: #212529;")">
                         thumb_up 
                     </span>
-                  
                 </a> 
                 <span id="likeCount" style="margin-right: 20px;">@Model.LikesCount</span>
                 <a asp-area="" asp-controller="Dislike" asp-action="Create" asp-route-gymId="@Model.Id" style="margin-right: 5px;">
@@ -70,6 +69,14 @@
                     </span>
                 </a> 
                 <span id="dislikeCount">@Model.DislikesCount</span>
+            </div>
+            <div class="d-flex justify-content-center align-items-center experience" style="margin-top: 20px;">
+                <form asp-area="" asp-controller="Comment" asp-action="AllForGym" asp-route-gymId="@Model.Id" method="post">
+                    <button type="submit"
+                            class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
+                        <i class="fa fa-comment"></i>&nbsp;Comments
+                    </button>
+                </form>
             </div>
         </div>
         
