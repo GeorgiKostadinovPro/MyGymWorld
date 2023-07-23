@@ -71,7 +71,7 @@ else
                     <a href="@notification.Url" style="color: whitesmoke;"> @notification.Content</a>
                 </div>
                 <div class="col-md-2">
-                    <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="deleteForm">
+                    <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="readForm">
                         <input type="text" name="url" value="@notification.Url" hidden />
                         <input type="text" name="notificationId" value="@notification.Id" hidden />
                         <button class="btn btn-warning float-right" disabled="@notification.IsRead">

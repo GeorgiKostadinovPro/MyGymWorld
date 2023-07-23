@@ -13,18 +13,19 @@
 <h1 style="text-align: center;">Comments For @Model.Name</h1>
 
 <div style="text-align: center;">
-    <button class="btn-comment btn-4 btn-sep icon-send" onclick="showCommentForm()">Comment</button>
+    <button class="btn-comment btn-4 btn-sep icon-send" onclick="showCommentForm(null)">Comment</button>
 </div>
 
-<div id="addCommentForm" style="width: 600px; margin: 0 auto; display: none;">
-    <form asp-area="" asp-controller="Comment" asp-action="Create" method="post">
+<div id="addCommentDiv" style="width: 600px; margin: 0 auto; display: none;">
+    <form asp-area="" asp-controller="Comment" asp-action="Create" method="post" id="createCommentForm">
         <input type="hidden" name="GymId" value="@Model.GymId"/>
+        <input type="hidden" name="ParentId" value=""/>
         <div>
             <label for="Content"></label>
             <textarea id="content" name="Content" class="form-control"></textarea>
         </div>
         <div style="margin-top: 10px; display: flex; justify-content: center;">
-           <a onclick="document.querySelector('#addCommentForm form').submit()" href="#" class="button">Send</a>
+            <a onclick="document.getElementById('createCommentForm').submit()" href="#" class="button">Send</a>
         </div>
     </form>
 </div>
@@ -84,12 +85,6 @@ else
                         <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
                     }
                 }
-               @* <form asp-area="" asp-controller="Comment" asp-action="Delete" method="post">
-                    <input type="hidden" name="notificationId" value="@comment.Id" />
-                    <button type="submit" class="ml-2 mb-1 close" title="Delete" style="margin-left: 20px;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </form>*@
             </div>
             <div class="toast-body text-white row">
                 <div class="col-md-10">
@@ -98,15 +93,11 @@ else
                 <div class="col-md-10">
                     @comment.Content
                 </div>
-               @* <div class="col-md-2">
-                    <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="deleteForm">
-                        <input type="text" name="url" value="@notification.Url" hidden />
-                        <input type="text" name="notificationId" value="@notification.Id" hidden />
-                        <button class="btn btn-warning float-right" disabled="@notification.IsRead">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-warning float-right" onclick="showCommentForm('@(comment.Id)')">
                             Reply
-                        </button>
-                    </form>
-                </div>*@
+                    </button>
+                </div>
             </div>
         </div>
     }
@@ -167,13 +158,13 @@ else
 }
 
 <script>
-    function showCommentForm() {
-        let addCommentForm = $('#addCommentForm');
-       
-        if(addCommentForm.css("display") === 'none') {
-            addCommentForm.show();
-        } else {
-            addCommentForm.hide();
-        }
+    function showCommentForm(parentId) {
+        $("#createCommentForm input[name='ParentId']").val(parentId);
+
+        $('#addCommentDiv').show();
+
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#addCommentDiv").offset().top
+        }, 500);
     }
 </script>

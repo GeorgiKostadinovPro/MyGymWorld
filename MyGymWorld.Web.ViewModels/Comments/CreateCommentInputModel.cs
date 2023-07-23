@@ -11,5 +11,7 @@
         public string Content { get; set; } = null!;
 
         public string GymId { get; set; } = null!;
+
+        public string? ParentId { get; set; }
     }
 }
