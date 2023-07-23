@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Web.ViewModels.Comments;
 
     public class CommentController : BaseController
     {
@@ -15,7 +16,15 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym(string gymId, int page = 1)
         {
-            return this.View();
+            AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel();
+
+            return this.View(allCommentsForGymViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateCommentInputModel createCommentInputModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

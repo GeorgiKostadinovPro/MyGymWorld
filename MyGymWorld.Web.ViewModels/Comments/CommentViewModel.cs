@@ -12,6 +12,6 @@
 
         public string GymId { get; set; } = null!;
 
-        public string CreatedOn { get; set; } = null!;
+        public DateTime CreatedOn { get; set; }
     }
 }

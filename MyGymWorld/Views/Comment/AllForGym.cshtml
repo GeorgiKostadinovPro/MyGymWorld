@@ -1,11 +1,186 @@
 ﻿@model AllCommentsForGymViewModel
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewData["Title"] = "Gym Comments";
 }
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
 <h1 style="text-align: center;">Comments For Gym</h1>
 
+<div style="text-align: center;">
+    <button class="btn-comment btn-4 btn-sep icon-send">Comment</button>
+</div>
+
 <hr />
+
+@if (!Model.Comments.Any())
+{
+    <div class="alert alert-info col-md-12 text-center" role="alert">
+        There are No comments! Be the first to Comment.
+    </div>
+}
+else
+{
+    @foreach (var comment in Model.Comments.OrderByDescending(n => n.CreatedOn))
+    {
+        var timeSinceNotificationCreated = DateTime.UtcNow.Subtract(comment.CreatedOn).TotalMinutes;
+
+        <div class="bg-primary mt-3">
+            <div class="toast-header">
+                <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                     preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                    @if (timeSinceNotificationCreated < 1)
+                    {
+                        <rect fill="#007aff" width="100%" height="100%" />
+                        <strong class="mr-auto">Just Now</strong>
+                    }
+                    else
+                    {
+                        <rect fill="gray" width="100%" height="100%" />
+                        <strong class="mr-auto">Old</strong>
+                    }
+                </svg>
+                @if (timeSinceNotificationCreated >= 60)
+                {
+                    if (timeSinceNotificationCreated >= 1440)
+                    {
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalDays.ToString("f0") days ago</small>
+                    }
+                    else
+                    {
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalHours.ToString("f0") hours ago</small>
+                    }
+                }
+                else
+                {
+                    if (timeSinceNotificationCreated < 1)
+                    {
+                        <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
+                    }
+                    else
+                    {
+                        <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
+                    }
+                }
+               @* <form asp-area="" asp-controller="Comment" asp-action="Delete" method="post">
+                    <input type="hidden" name="notificationId" value="@comment.Id" />
+                    <button type="submit" class="ml-2 mb-1 close" title="Delete" style="margin-left: 20px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </form>*@
+            </div>
+            <div class="toast-body text-white row">
+                <div class="col-md-10">
+                    @comment.Content
+                </div>
+               @* <div class="col-md-2">
+                    <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="deleteForm">
+                        <input type="text" name="url" value="@notification.Url" hidden />
+                        <input type="text" name="notificationId" value="@notification.Id" hidden />
+                        <button class="btn btn-warning float-right" disabled="@notification.IsRead">
+                            Reply
+                        </button>
+                    </form>
+                </div>*@
+            </div>
+        </div>
+    }
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+<style>
+    .btn-comment {
+    border: none;
+    font-family: 'Lato';
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    padding: 25px 80px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    }
+
+        .btn-comment:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    }
+
+    /* Pseudo elements for icons */
+        .btn-comment:before {
+    font-family: 'FontAwesome';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    }
+
+    /* Icon separator */
+    .btn-sep {
+    padding: 25px 60px 25px 120px;
+    }
+
+    .btn-sep:before {
+    background: rgba(0,0,0,0.15);
+    }
+
+    /* Button 3 */
+    .btn-4 {
+    background: #34495e;
+    color: #fff;
+    }
+
+    .btn-4:hover {
+    background: #2c3e50;
+    }
+
+    .btn-4:active {
+    background: #2c3e50;
+    top: 2px;
+    }
+
+    .btn-4:before {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    line-height: 3;
+    font-size: 140%;
+    width: 60px;
+    }
+
+    .icon-send:before {
+    content: "\f1d8";
+    }
+</style>

@@ -70,8 +70,8 @@
 
         public static class CommentConstants
         {
-            public const int ContentMinLength = 10;
-            public const int ContentMaxLength = 500;
+            public const int ContentMinLength = 5;
+            public const int ContentMaxLength = 100;
         }
 
         public static class MembershipConstants
