@@ -196,6 +196,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can create events for a gym.</li>
     <li>Can edit events for a gym.</li>
     <li>Can delete events for a gym.</li>
+    <li><strong>CANNOT</strong> join his own events</li>
+    <li><strong>CANNOT</strong> leave his own events</li>
     <li>Can create articles for a gym.</li>
     <li>Can edit articles for a gym.</li>
     <li>Can delete articles for a gym.</li>
