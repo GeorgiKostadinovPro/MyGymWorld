@@ -68,7 +68,7 @@ else
             </div>
             <div class="toast-body text-white row">
                 <div class="col-md-10">
-                    @notification.Content
+                    <a href="@notification.Url" style="color: whitesmoke;"> @notification.Content</a>
                 </div>
                 <div class="col-md-2">
                     <form asp-area="" asp-controller="Notification" asp-action="Read" method="post" id="deleteForm">
