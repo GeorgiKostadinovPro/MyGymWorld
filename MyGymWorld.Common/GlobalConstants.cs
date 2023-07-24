@@ -15,5 +15,11 @@
             public const int GymsPerPage = 3;
             public const int DefaultPage = 1;
         }
+
+        public static class EventConstants
+        {
+             public const int EventsPerPage = 3;
+             public const int DefaultPage = 1;
+        }
     }
 }
