@@ -100,9 +100,11 @@
             // Comments
             this.CreateMap<Comment, CommentViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.ParentId, opt => opt.MapFrom(src => src.ParentId.HasValue ? src.ParentId.ToString() : null))
                  .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.GymId.ToString()))
                  .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()))
-                 .ForMember(d => d.Author, opt => opt.MapFrom(src => src.User.UserName));
+                 .ForMember(d => d.Author, opt => opt.MapFrom(src => src.User.UserName))
+                 .ForMember(d => d.AuthorProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri != null ? src.User.ProfilePictureUri : "https://img.freepik.com/free-icon/user_318-159711.jpg?w=2000"));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

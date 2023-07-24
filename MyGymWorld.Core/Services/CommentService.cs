@@ -64,7 +64,7 @@
            .CountAsync();
         }
 
-        public async Task<int> GetAllActiveCommentsAsync()
+        public async Task<int> GetAllActiveCommentsCountAsync()
         {
             return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
                 .CountAsync();
