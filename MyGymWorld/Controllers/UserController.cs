@@ -80,6 +80,8 @@
                 ImageUploadResult imageUploadResult = await this.cloudinaryService.UploadPhotoAsync(profilePicture, "MyGymWorld/assets/user-profile-pictures");
 
                 await this.userService.SetUserProfilePictureAsync(userId, imageUploadResult);
+
+                this.TempData[SuccessMessage] = "You have successfully uploaded a picture!";
             }
             catch (Exception)
             {
