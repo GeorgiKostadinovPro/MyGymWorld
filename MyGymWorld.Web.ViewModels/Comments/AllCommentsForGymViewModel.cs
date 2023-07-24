@@ -6,7 +6,7 @@
     {
         public AllCommentsForGymViewModel()
         {
-            this.Comments = new List<CommentViewModel>();
+            this.Comments = new HashSet<CommentViewModel>();
         }
 
         public string GymId { get; set; } = null!; 
@@ -17,6 +17,6 @@
 
         public int PagesCount { get; set; }
 
-        public List<CommentViewModel> Comments { get; set; }
+        public IEnumerable<CommentViewModel> Comments { get; set; }
     }
 }

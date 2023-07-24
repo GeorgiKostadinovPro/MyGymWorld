@@ -40,7 +40,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<List<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
+        public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
             IQueryable<Comment> commentsAsQuery 
                 = this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
