@@ -55,7 +55,7 @@
             return await commentsAsQuery
                 .OrderByDescending(c => c.CreatedOn)
                 .ProjectTo<CommentViewModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ToArrayAsync();
         }
 
         public async Task<int> GetActiveCommentsCountByGymIdAsync(string gymId)
