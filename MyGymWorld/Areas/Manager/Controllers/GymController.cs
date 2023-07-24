@@ -19,6 +19,7 @@
 
         private readonly ICloudinaryService cloudinaryService;
 
+        private readonly IManagerService managerService;
         private readonly IUserService userService;
         private readonly IGymService gymService;
         private readonly ICountryService countryService;
@@ -26,6 +27,7 @@
 
         public GymController(
             ICloudinaryService _cloudinaryService,
+            IManagerService _managerService,
             IUserService _userService,
             IGymService _gymService,
             ICountryService _countryService,
@@ -33,6 +35,7 @@
         {
             this.cloudinaryService = _cloudinaryService;
 
+            this.managerService = _managerService;
             this.userService = _userService;
             this.gymService = _gymService;
             this.countryService = _countryService;
@@ -121,6 +124,17 @@
                 this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
                 return this.RedirectToAction("Index", "Home");
+            }
+
+            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, false);
+
+            if ((int)manager!.ManagerType == 0 && count > 0)
+            {
+                this.TempData[ErrorMessage] = "You are NOT allowed to create more than one gym!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
             }
 
             CreateGymInputModel createGymInputModel = new CreateGymInputModel
