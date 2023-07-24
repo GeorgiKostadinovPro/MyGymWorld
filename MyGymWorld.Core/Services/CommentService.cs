@@ -61,7 +61,13 @@
         public async Task<int> GetActiveCommentsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false && c.GymId == Guid.Parse(gymId))
-           .CountAsync();
+                .CountAsync();
+        }
+
+        public async Task<Comment?> GetComentByIdAsync(string commentId)
+        {
+            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<int> GetAllActiveCommentsCountAsync()
