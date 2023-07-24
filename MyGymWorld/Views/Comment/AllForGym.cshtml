@@ -15,109 +15,69 @@
 
         @foreach (var comment in comments)
         {
-          var timeSinceNotificationCreated = DateTime.UtcNow.Subtract(comment.CreatedOn).TotalMinutes;
+            var timeSinceNotificationCreated = DateTime.UtcNow.Subtract(comment.CreatedOn).TotalMinutes;
 
-          <div class="d-flex flex-column mt-3" id="comment-container">
-            <div class="bg-white">
-              <div class="flex-row d-flex">
-                <img src="@(comment.AuthorProfilePictureUri)" width="40" class="rounded-circle">
-                <div class="d-flex flex-column justify-content-start ml-2">
-                  <strong class="d-block font-weight-bold name">@comment.Author</strong>
-                  <span class="date text-black-50">
-                         @if (timeSinceNotificationCreated >= 60)
-                         {
-                             if (timeSinceNotificationCreated >= 1440)
-                             {
-                                 <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalDays.ToString("f0") days ago</strong>
-                             }
-                             else
-                             {
-                                 <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalHours.ToString("f0") hours ago</strong>
-                             }
-                         }
-                         else
-                         {
-                             if (timeSinceNotificationCreated < 1)
-                             {
-                                 <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalSeconds.ToString("f0") seconds ago</strong>
-                             }
-                             else
-                             {
-                                 <strong style="margin-left: 5px;">@timeSinceNotificationCreated.ToString("f0") mins ago</strong>
-                             }
-                         }
-                  </span>
-                </div>
-              </div>
-              <div class="mt-3">
-                <p class="comment-text">@comment.Content</p>
-              </div>
-            </div>
-            <div class="bg-white">
-              <div class="d-flex flex-row fs-14">
-                <div class="p-2 cursor p-2">
-                <i class="fa fa-comment"></i>
-                      <span class="ml-1" onclick="showCommentForm('@(comment.Id)')">Reply</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-            //<div class="bg-primary mt-3">
-            //    <div class="toast-header">
-            //        <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-            //             preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-            //            @if (timeSinceNotificationCreated < 1)
-            //            {
-            //                <rect fill="#007aff" width="100%" height="100%" />
-            //                <strong class="mr-auto">Just Now</strong>
-            //            }
-            //            else
-            //            {
-            //                <rect fill="gray" width="100%" height="100%" />
-            //                <strong class="mr-auto">Old</strong>
-            //            }
-            //        </svg>
-            //        @if (timeSinceNotificationCreated >= 60)
-            //        {
-            //            if (timeSinceNotificationCreated >= 1440)
-            //            {
-            //                <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalDays.ToString("f0") days ago</small>
-            //            }
-            //            else
-            //            {
-            //                <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalHours.ToString("f0") hours ago</small>
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (timeSinceNotificationCreated < 1)
-            //            {
-            //                <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
-            //            }
-            //            else
-            //            {
-            //                <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
-            //            }
-            //        }
-            //    </div>
-            //    <div class="toast-body text-white row">
-            //        <div class="col-md-10">
-            //            Author: @comment.Author
-            //        </div>
-            //        <div class="col-md-10">
-            //            @comment.Content
-            //        </div>
-            //        <div class="col-md-2">
-            //            <button type="button" class="btn btn-warning float-right" onclick="showCommentForm('@(comment.Id)')">
-            //                Reply
-            //            </button>
-            //        </div>
-            //        @{
-            //            DisplayComments(comment.Id);
-            //        }
-            //    </div>
-            //</div>
+            <div class="container mt-3 text-dark">
+              <div class="row d-flex justify-content-center">
+                  <div class="col-md-12 col-lg-10 col-xl-8">
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex flex-start">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                              src="@comment.AuthorProfilePictureUri" alt="avatar" width="40"
+                              height="40" />
+                            <div class="w-100">
+                              <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="text-primary fw-bold mb-0">
+                                  @comment.Author
+                                  <span class="text-dark ms-2"><span class="text-primary"></span>
+                                    <span class="text-primary"></span> @comment.Content
+                                  </span>
+                                </h6>
+                                <p class="mb-0">
+                                     @if (timeSinceNotificationCreated >= 60)
+                                     {
+                                         if (timeSinceNotificationCreated >= 1440)
+                                         {
+                                             <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalDays.ToString("f0") days ago</strong>
+                                         }
+                                         else
+                                         {
+                                             <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalHours.ToString("f0") hours ago</strong>
+                                         }
+                                     }
+                                     else
+                                     {
+                                         if (timeSinceNotificationCreated < 1)
+                                         {
+                                             <strong style="margin-left: 5px;">@DateTime.UtcNow.Subtract(comment.CreatedOn).TotalSeconds.ToString("f0") seconds ago</strong>
+                                         }
+                                         else
+                                         {
+                                             <strong style="margin-left: 5px;">@timeSinceNotificationCreated.ToString("f0") mins ago</strong>
+                                         }
+                                     }
+                                </p>
+                              </div>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <p style="color: #aaa;">
+                                    <a href="#!" class="link-grey" onclick="showCommentForm('@(comment.Id)')">
+                                                    <span class="material-symbols-outlined" style="vertical-align: middle;">
+                                                        reply
+                                                    </span>Reply
+                                     </a>
+                                </p>
+                                <div class="d-flex flex-row">
+                                  <i class="far fa-check-circle text-primary"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                 </div>
+               </div>
+             </div>
         }
     }
 }
@@ -125,6 +85,8 @@
 <link href="~/css/comment-card.css" rel="stylesheet">
 <link href="~/css/write-comment-button.css" rel="stylesheet" />
 <link href="~/css/send-comment-button.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,1,0" />
+
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
