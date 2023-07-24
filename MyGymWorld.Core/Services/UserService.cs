@@ -255,6 +255,7 @@
             ApplicationUser? user = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
                 .Include(u => u.Likes)
                 .Include(u => u.Dislikes)
+                .Include(u => u.Comments)
                 .Include(u => u.Address)
                    .ThenInclude(a => a.Town)
                    .ThenInclude(t => t.Country)

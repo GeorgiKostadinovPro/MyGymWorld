@@ -7,12 +7,14 @@
 
 @inject ILikeService LikeService
 @inject IDislikeService DislikeService
+@inject ICommentService CommentService
 
 @{
     ViewData["Title"] = "User Profile";
 
     int totalLikesInApp = await this.LikeService.GetAllActiveLikesCountAsync();
     int totalDisikesInApp = await this.DislikeService.GetAllActiveDislikesCountAsync();
+    int totalCommentsInApp = await this.CommentService.GetAllActiveCommentsAsync();
 }
 
 <link rel="stylesheet" href="~/css/user-profile.css" />
@@ -143,7 +145,7 @@
                                 </div>
                                 <p>My Comments Ratio</p>
                                 <div class="progress" style="height: 5px">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: @(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalCommentsInApp"></div>
                                 </div>
                             </div>
                         </div>
