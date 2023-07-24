@@ -327,9 +327,20 @@
             UserGym userGym = await this.repository.All<UserGym>()
                 .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
 
-            if (userGym != null)
+            if (userGym == null)
             {
-                if (userGym.IsDeleted == false)
+                userGym = new UserGym
+                {
+                    GymId = gym.Id,
+                    UserId = user.Id,
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                await this.repository.AddAsync(userGym);
+            }
+            else
+            {
+               if (userGym.IsDeleted == false)
                 {
                     throw new InvalidOperationException(ExceptionConstants.GymErrors.GymAlreadyJoined);
                 }
@@ -338,18 +349,7 @@
                     userGym.IsDeleted = false;
                     userGym.DeletedOn = null;
                     userGym.ModifiedOn = DateTime.UtcNow;
-                }            
-            }
-            else
-            {
-                userGym = new UserGym 
-                { 
-                    GymId = gym.Id,
-                    UserId = user.Id,
-                    CreatedOn = DateTime.UtcNow
-                }; 
-                
-                await this.repository.AddAsync(userGym);
+                }   
             }
 
             await this.repository.SaveChangesAsync();
