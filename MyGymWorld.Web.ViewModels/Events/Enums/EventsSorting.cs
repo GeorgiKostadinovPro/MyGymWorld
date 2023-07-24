@@ -5,6 +5,6 @@
         Newest = 0,
         Oldest = 1,
         ParticipantsAscending = 2,
-        ParticipantDescendingDescending = 3
+        ParticipantsDescending = 3
     }
 }

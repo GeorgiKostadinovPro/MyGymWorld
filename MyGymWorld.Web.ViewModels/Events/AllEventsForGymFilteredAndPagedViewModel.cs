@@ -9,7 +9,7 @@
             this.Events = new HashSet<EventViewModel>();
         }
 
-        public int TotalGymsCount { get; set; }
+        public int TotalEventsCount { get; set; }
 
         public IEnumerable<EventViewModel> Events { get; set; }
     }

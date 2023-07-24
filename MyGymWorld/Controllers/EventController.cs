@@ -16,8 +16,15 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym([FromQuery] AllEventsForGymQueryModel queryModel)
         {
-            AllEventsForGymFilteredAndPagedViewModel allEventsForGymFilteredAndPagedViewModel = new AllEventsForGymFilteredAndPagedViewModel();
+            AllEventsForGymFilteredAndPagedViewModel allEventsForGymFilteredAndPagedViewModel = new AllEventsForGymFilteredAndPagedViewModel()
+            {
+                TotalEventsCount = await this.eventService.GetAllActiveEventsCountByGymIdAsync(queryModel.GymId),
+                Events = await this.eventService.GetAllActiveEventsFilteredAndPagedByGymIdAsync(queryModel)
+            };
 
+            queryModel.EventTypes = this.eventService.GetAllEventTypes();
+            queryModel.TotalEventsCount = allEventsForGymFilteredAndPagedViewModel.TotalEventsCount;
+            queryModel.Events = allEventsForGymFilteredAndPagedViewModel.Events;
 
             return View(queryModel);
         }

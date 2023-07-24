@@ -7,6 +7,7 @@
     using MyGymWorld.Web.ViewModels.Administration.Users;
     using MyGymWorld.Web.ViewModels.Comments;
     using MyGymWorld.Web.ViewModels.Countries;
+    using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
@@ -105,6 +106,15 @@
                  .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId.ToString()))
                  .ForMember(d => d.Author, opt => opt.MapFrom(src => src.User.UserName))
                  .ForMember(d => d.AuthorProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri != null ? src.User.ProfilePictureUri : "https://img.freepik.com/free-icon/user_318-159711.jpg?w=2000"));
+
+            // Events
+            this.CreateMap<Event, EventViewModel>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+                .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
+                .ForMember(d => d.OrganiserId, opt => opt.MapFrom(src => src.Gym.Manager.Id.ToString()))
+                .ForMember(d => d.Organiser, opt => opt.MapFrom(src => string.Concat(src.Gym.Manager.User.FirstName, " ", src.Gym.Manager.User.LastName)))
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

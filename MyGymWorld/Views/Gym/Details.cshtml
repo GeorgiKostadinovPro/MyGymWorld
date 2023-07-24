@@ -194,10 +194,11 @@
                 <hr />
 
                 <div class="d-flex justify-content-center align-items-center experience">
-                    <form asp-area="" asp-controller="Event" asp-action="AllForGym" asp-route-gymId="@Model.Id" method="get">
+                    <form asp-area="" asp-controller="Event" asp-action="AllForGym" method="get">
+                        <input type="hidden" name="GymId" value="@Model.Id" />
                         <button type="submit"
                                 class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
-                            <i class="fa fa-minus"></i>&nbsp;See Events
+                            <i class="fa fa-plus"></i>&nbsp;See Events
                         </button>
                     </form>
                 </div>
