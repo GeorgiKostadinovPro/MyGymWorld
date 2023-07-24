@@ -87,6 +87,15 @@
 
                         return this.RedirectToAction(nameof(AllForGym), new { gymid = createCommentInputModel.GymId });
                     }
+
+                    Comment? parent = await this.commentService.GetComentByIdAsync(createCommentInputModel.ParentId);
+
+                    if (parent.ParentId != null)
+                    {
+                        this.TempData[ErrorMessage] = "You tried creating a comment on reply comment!";
+
+                        return this.RedirectToAction(nameof(AllForGym), new { gymid = createCommentInputModel.GymId });
+                    }
                 }
 
                 await this.commentService.CreateCommentAsync(createCommentInputModel.GymId, userId, createCommentInputModel.Content, createCommentInputModel.ParentId);

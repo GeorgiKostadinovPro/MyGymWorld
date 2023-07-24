@@ -20,7 +20,7 @@
             <div class="container mt-3 text-dark">
               <div class="row d-flex justify-content-center">
                   <div class="col-md-12 col-lg-10 col-xl-8">
-                      <div class="card mb-3">
+                        <div class="card mb-3" style=" border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                         <div class="card-body">
                           <div class="d-flex flex-start">
                             <img class="rounded-circle shadow-1-strong me-3"
@@ -61,11 +61,20 @@
                               </div>
                               <div class="d-flex justify-content-between align-items-center">
                                 <p style="color: #aaa;">
-                                    <a href="#!" class="link-grey" onclick="showCommentForm('@(comment.Id)')">
-                                                    <span class="material-symbols-outlined" style="vertical-align: middle;">
-                                                        reply
-                                                    </span>Reply
-                                     </a>
+                                    @if(comment.ParentId != null)
+                                    {
+                                        <a class="link-grey" onclick="showCommentForm('@(comment.Id)')">
+                                           This is an answer.
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#!" class="link-grey" onclick="showCommentForm('@(comment.Id)')">
+                                        <span class="material-symbols-outlined" style="vertical-align: middle;">
+                                            reply
+                                             </span>Reply
+                                        </a>
+                                    }
                                 </p>
                                 <div class="d-flex flex-row">
                                   <i class="far fa-check-circle text-primary"></i>
@@ -74,6 +83,9 @@
                             </div>
                           </div>
                         </div>
+                            @{
+                                DisplayComments(comment.Id);
+                            }
                       </div>
                  </div>
                </div>
