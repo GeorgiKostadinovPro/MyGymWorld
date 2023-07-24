@@ -41,10 +41,10 @@
 else
 {
     <div class="alert alert-info col-md-12 text-center" role="alert">
-        There are @Model.Comments.Count comments.
+        There are @Model.Comments.Count() comments.
     </div>
 
-    @foreach (var comment in Model.Comments.OrderByDescending(n => n.CreatedOn))
+    @foreach (var comment in Model.Comments)
     {
         var timeSinceNotificationCreated = DateTime.UtcNow.Subtract(comment.CreatedOn).TotalMinutes;
 
