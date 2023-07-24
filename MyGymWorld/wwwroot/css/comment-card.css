@@ -1,30 +1,7 @@
-﻿#comment-container {
-    padding: 40px !important;
-    background: white;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+﻿.link-grey {
+    color: #aaa;
 }
 
-.date {
-    font-size: 12px;
-}
-
-.comment-text {
-    font-size: 14px;
-    line-height: 1.2rem;
-}
-
-.fs-14 {
-    font-size: 14px;
-}
-
-.name {
-    color: #FE654F;
-}
-
-.cursor {
-    cursor: pointer;
-}
-
-    .cursor:hover {
-        color: blue;
+    .link-grey:hover {
+        color: #00913b;
     }
