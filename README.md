@@ -252,11 +252,24 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <!-- Env Variables -->
 ### :key: Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+<p>To run this project, you will need to add the following variables to your appsettings.Development.json and appsettings.Production.json.</p>
+<p>The whole structure of these files is describe in <strong>Getting Started</strong> section below.</p>
 
-`API_KEY`
-
-`ANOTHER_API_KEY`
+You need to add these lines of json to your appsettings.json files:
+```json
+{
+"SendGrid": {
+    "APIKey": "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",
+    "Email": "fridgemateofficial@gmail.com",
+    "Name": "MyGymWorldTeam"
+  },
+  "Cloudinary": {
+    "CloudName": "de1i8aava",
+    "APIKey": "884721528828756",
+    "APISecret": "vrm7ANc8kr_2q76OtAZQs7ZNVNQ"
+  },
+}
+```
 
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
