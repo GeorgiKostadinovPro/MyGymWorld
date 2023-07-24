@@ -33,7 +33,7 @@
             AllGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllGymsFilteredAndPagedViewModel
             {
                 TotalGymsCount = await this.gymService.GetActiveGymsCountAsync(),
-                Gyms = await this.gymService.GetAllFilteredAndPagedActiveGymsAsync(queryModel)
+                Gyms = await this.gymService.GetAllActiveFilteredAndPagedGymsAsync(queryModel)
             };
                
             queryModel.GymTypes = this.gymService.GetAllGymTypes();
@@ -195,7 +195,7 @@
                 {
                     UserId = userId,
                     TotalGymsCount = await this.gymService.GetAllUserJoinedGymsCountAsync(userId),
-                    Gyms = await this.gymService.GetAllUserJoinedGymsAsync(userId, queryModel)
+                    Gyms = await this.gymService.GetAllUserJoinedGymsFilteredAndPagedAsync(userId, queryModel)
                 };
 
                 queryModel.GymTypes = this.gymService.GetAllGymTypes();

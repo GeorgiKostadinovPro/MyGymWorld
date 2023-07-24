@@ -27,7 +27,7 @@
 
         Task<IEnumerable<DisplayGymViewModel>> GetTop10MostLikedActiveGymsAsync();
 
-        Task<IEnumerable<DisplayGymViewModel>> GetAllFilteredAndPagedActiveGymsAsync(AllGymsQueryModel queryModel);
+        Task<IEnumerable<DisplayGymViewModel>> GetAllActiveFilteredAndPagedGymsAsync(AllGymsQueryModel queryModel);
 
         Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId);
 
@@ -35,7 +35,7 @@
 
         Task RemoveGymFromUserAsync(string gymId, string userId);
 
-        Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsAsync(string userId, AllGymsQueryModel queryModel);
+        Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllGymsQueryModel queryModel);
 
         Task<int> GetAllUserJoinedGymsCountAsync(string userId);
 

@@ -1,9 +1,10 @@
 ﻿namespace MyGymWorld.Data.Models
 {
+    using MyGymWorld.Data.Common.Models;
     using MyGymWorld.Data.Models.Enums;
     using System;
 
-    public class Event
+    public class Event : BaseDeletableEntityModel
     {
         public Event()
         {
