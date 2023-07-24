@@ -9,6 +9,10 @@
             this.Notifications = new HashSet<NotificationViewModel>();
         }
         public string UserId { get; set; } = null!;
+
+        public int CurrentPage { get; set; }
+
+        public int PagesCount { get; set; }
         
         public IEnumerable<NotificationViewModel> Notifications { get; set; }
     }
