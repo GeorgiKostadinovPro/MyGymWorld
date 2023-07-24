@@ -102,13 +102,21 @@
                                         .ToArrayAsync();
         }
 
-        public async Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId)
+        public async Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId, int skip = 0, int? take = null)
         {
-            return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
-                                        .Where(n => n.UserId == Guid.Parse(userId))
-                                        .OrderByDescending(x => x.CreatedOn)
-                                        .ProjectTo<NotificationViewModel>(this.mapper.ConfigurationProvider)
-                                        .ToArrayAsync();
+            IQueryable<Notification> notificationsAsQuery =
+                this.repository.AllReadonly<Notification>(n => n.IsDeleted == false && n.UserId == Guid.Parse(userId))
+                               .Skip(skip);
+
+            if (take.HasValue)
+            {
+                notificationsAsQuery = notificationsAsQuery.Take(take.Value);
+            }
+
+            return await notificationsAsQuery
+                        .OrderByDescending(x => x.CreatedOn)
+                        .ProjectTo<NotificationViewModel>(this.mapper.ConfigurationProvider)
+                        .ToArrayAsync();
         }
 
         public async Task<int> GetUnReadNotificationsCountByUserIdAsync(string userId)

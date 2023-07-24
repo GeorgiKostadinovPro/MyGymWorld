@@ -14,7 +14,7 @@
 
         Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead);
 
-        Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId);
+        Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId, int skip = 0, int? take = null);
 
         Task<int> GetUnReadNotificationsCountByUserIdAsync(string userId);
 

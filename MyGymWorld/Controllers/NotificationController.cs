@@ -8,6 +8,8 @@
 
     public class NotificationController : BaseController
     {
+        private readonly int NotificationsPerPage = 5;
+
         private readonly INotificationService notificationService;
 
         public NotificationController(INotificationService _notificationService)
@@ -16,14 +18,21 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             string userId = this.GetUserId();
+
+            int count = await this.notificationService.GetAllNotificationsCountByUserIdAsync(userId);
+
+            int totalPages = (int)Math.Ceiling((double)count / NotificationsPerPage);
+            totalPages = totalPages == 0 ? 1 : totalPages;
 
             AllNotificationsViewModel viewModel = new AllNotificationsViewModel
             {
                 UserId = userId,
-                Notifications = await this.notificationService.GetAllNotificationsByUserIdAsync(userId)
+                CurrentPage = page,
+                PagesCount = totalPages,
+                Notifications = await this.notificationService.GetAllNotificationsByUserIdAsync(userId, (page - 1) * NotificationsPerPage, NotificationsPerPage)
             };
 
             return this.View(viewModel);
