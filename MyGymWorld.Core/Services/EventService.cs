@@ -9,6 +9,7 @@
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Events.Enums;
+    using MyGymWorld.Web.ViewModels.Managers.Events;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -22,6 +23,18 @@
         {
             this.mapper = _mapper;
             this.repository = _repository;
+        }
+
+        public async Task<Event> CreateEventAsync(CreateEventInputModel createEventInputModel)
+        {
+            Event @event = this.mapper.Map<Event>(createEventInputModel);
+
+            @event.CreatedOn = DateTime.UtcNow;
+
+            await this.repository.AddAsync(@event);
+            await this.repository.SaveChangesAsync();
+
+            return @event;
         }
 
         public async Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel)

@@ -54,6 +54,11 @@ namespace MyGymWorld.Controllers
                 return this.View("Error401");
             }
 
+            if (statusCode == 403)
+            {
+                return this.View("Error403");
+            }
+
             return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

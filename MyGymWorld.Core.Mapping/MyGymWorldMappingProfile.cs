@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;
@@ -10,6 +11,7 @@
     using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers;
+    using MyGymWorld.Web.ViewModels.Managers.Events;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
@@ -116,6 +118,10 @@
                 .ForMember(d => d.Organiser, opt => opt.MapFrom(src => string.Concat(src.Gym.Manager.User.FirstName, " ", src.Gym.Manager.User.LastName)))
                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
 
+            this.CreateMap<CreateEventInputModel, Event>()
+                .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))
+                .ForMember(d => d.EventType, opt => opt.MapFrom(src => Enum.Parse<EventType>(src.EventType)));
+                
             // Countries
             this.CreateMap<Country, CountryViewModel>();
         }

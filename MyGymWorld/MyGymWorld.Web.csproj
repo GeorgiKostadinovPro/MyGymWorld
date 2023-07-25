@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Event\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="HtmlSanitizer" Version="8.0.645" />
@@ -34,6 +38,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings.Production.json" />
+    <_ContentIncludedByDefault Remove="Views\Event\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Gym\Joined.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\fitness-card.css" />
@@ -47,6 +52,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Gym\Joined.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Event\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Manager\Views\Event\Create.cshtml" />
   </ItemGroup>
 
 </Project>
