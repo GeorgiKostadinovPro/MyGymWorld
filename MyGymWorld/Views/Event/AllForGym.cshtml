@@ -28,10 +28,10 @@
 <link href="~/css/fitness-card.css" rel="stylesheet" />
 
 @*Particles*@
-<link href="~/css/particles.css" rel="stylesheet" />
+@*<link href="~/css/particles.css" rel="stylesheet" />*@
 
 @*Particles*@
-<script src="~/js/particles.js"></script>
+@*<script src="~/js/particles.js"></script>*@
 
 <h1 style="text-align: center;">Welcome to the Events page!</h1>
 <p style="text-align: center">Below you can search events by your choice.</p>
@@ -134,27 +134,20 @@ string.Empty)"
 <div class="row">
     @foreach (EventViewModel eventViewModel in Model.Events)
     {
-        <div class="card-hover" style="margin-right: 15px;">
-            <div class="card-hover__content">
-                <h3 class="card-hover__title" style="font-size: 50px;">
-                    @eventViewModel.Name
-                </h3>
-                <p class="card-hover__text" style="font-size: 25px; padding-bottom: 15px;">Created: @eventViewModel.CreatedOn</p>
-                <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id" class="card-hover__link" style="font-size: 30px;">
-                    <span>View</span>
-                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                </a>
+        <div class="card" style="width: 18rem; margin-right: 30px;  padding: 20px;
+    background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
+            <img style="border-radius: 50%; width: 100px; height: 100px;  object-fit: cover;" class="card-img-top" src="@eventViewModel.LogoUri" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>
+                <p style="text-align: center;" class="card-text">Created on: @eventViewModel.CreatedOn</p>
+                <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
+                    style="display: block; margin: 0 auto;" class="btn btn-primary">Details</a>
             </div>
-            <div class="card-hover__extra">
-                <h4 style="color: whitesmoke;">Fuel your passion for fitness!</h4>
-            </div>
-            <img src="@@event.LogoUri" alt="">
         </div>
     }
 </div>
 
+<hr />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

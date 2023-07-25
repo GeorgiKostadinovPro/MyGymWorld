@@ -51,6 +51,9 @@
                                <a class="nav-link text-light" asp-area="" asp-controller="Manager" asp-action="BecomeManager">Become Manager</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="Joined">My Joined Gyms</a>
                             </li>
                         }
@@ -64,11 +67,17 @@
                                 <a class="nav-link text-light" asp-area="Manager" asp-controller="Gym" asp-action="Active">Created Gyms</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="Joined">My Joined Gyms</a>
                             </li>
                         }
                         else if (User!.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="Joined">My Joined Gyms</a>
                             </li>

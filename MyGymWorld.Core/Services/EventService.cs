@@ -92,12 +92,32 @@
             return eventsToDisplay;
 
         }
-
+        
         public async Task<int> GetAllActiveEventsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.GymId == Guid.Parse(gymId))
                 .CountAsync();
         }
+
+        public async Task<EventDetailsViewModel> GetEventDetailsByIdAsync(string eventId)
+        {
+            Event eventToDisplay = await this.repository
+                   .AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+                   .Include(e => e.Gym)
+                      .ThenInclude(g => g.Manager)
+                      .ThenInclude(m => m.User)
+                      .FirstAsync();
+
+            EventDetailsViewModel eventDetailsViewModel = this.mapper.Map<EventDetailsViewModel>(eventToDisplay);
+
+            return eventDetailsViewModel;
+        }
+
+        public async Task<bool> CheckIfEventExistsByIdAsync(string eventId)
+        {
+            return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+                .AnyAsync();
+        } 
 
         public IEnumerable<string> GetAllEventTypes()
         {
