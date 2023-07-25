@@ -1,0 +1,34 @@
+﻿namespace MyGymWorld.Web.ViewModels.Managers.Events
+{
+    using MyGymWorld.Common;
+    using System.ComponentModel.DataAnnotations;
+
+    public class CreateEventInputModel
+    {
+        public CreateEventInputModel()
+        {
+            this.EventTypes = new HashSet<string>();
+        }
+
+        [Required]
+        [StringLength(ValidationalConstants.EventConstants.NameMaxLength, ErrorMessage = "The name mist be between 5 and 20 characters!",
+            MinimumLength = ValidationalConstants.EventConstants.NameMinLength)]
+        public string Name { get; set; } = null!;
+
+        [Required]
+        [StringLength(ValidationalConstants.EventConstants.DescriptionMaxLength, ErrorMessage = "The description must be between 15 and 150 characters!",
+            MinimumLength = ValidationalConstants.EventConstants.DescriptionMinLength)]
+        public string Description { get; set; } = null!;
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        [Required]
+        public string EventType { get; set; } = null!;
+        
+        public IEnumerable<string> EventTypes { get; set; }
+        
+        public string GymId { get; set; } = null!;
+    }
+}

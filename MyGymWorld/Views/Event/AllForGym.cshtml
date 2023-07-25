@@ -1,8 +1,28 @@
-﻿@model AllEventsForGymQueryModel
+﻿@using MyGymWorld.Core.Contracts;
+@using MyGymWorld.Data.Models;
+@using MyGymWorld.Web.Infrastructure.Extensions;
+
+@model AllEventsForGymQueryModel
+
+@inject IGymService GymService;
+@inject IManagerService ManagerService
 
 @{
     ViewData["Title"] = "All Events";
+
+    string userId = User.GetId();
+
+    Manager? manager = await this.ManagerService.GetManagerByUserIdAsync(userId);
+    bool isUserManagerOfThisGym = false;
+
+    if (manager != null)
+    {
+        isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
+    }
 }
+
+@*Create Button*@
+<link href="~/css/create-event-button.css" rel="stylesheet" />
 
 @*Fitness card*@
 <link href="~/css/fitness-card.css" rel="stylesheet" />
@@ -13,8 +33,20 @@
 @*Particles*@
 <script src="~/js/particles.js"></script>
 
-<h1>Welcome to the Events page!</h1>
-<p>Below you can search events by your choice.</p>
+<h1 style="text-align: center;">Welcome to the Events page!</h1>
+<p style="text-align: center">Below you can search events by your choice.</p>
+
+<hr />
+
+@if(User.IsInRole("Manager") && isUserManagerOfThisGym)
+{
+    <a 
+        asp-area="Manager"
+        asp-controller="Event"
+        asp-action="Create" 
+        asp-route-gymId="@Model.GymId"
+        class="button" type="submit" id="button" style="margin-top: 10px; margin-bottom: 10px; margin-top: 10px;">Create Event</a>
+}
 
 <hr />
 
@@ -108,7 +140,7 @@ string.Empty)"
                     @eventViewModel.Name
                 </h3>
                 <p class="card-hover__text" style="font-size: 25px; padding-bottom: 15px;">Created: @eventViewModel.CreatedOn</p>
-                <a asp-area="" asp-controller="event" asp-action="Details" asp-route-eventId="@eventViewModel.Id" class="card-hover__link" style="font-size: 30px;">
+                <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id" class="card-hover__link" style="font-size: 30px;">
                     <span>View</span>
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -126,4 +158,15 @@ string.Empty)"
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        let button = document.getElementById("button");
+
+        button.addEventListener('mousemove', (e) => {
+            x = e.offsetX;
+            y = e.offsetY;
+            button.style.setProperty('--mouse-x', x + "px");
+            button.style.setProperty('--mouse-y', y + "px");
+        });
+    </script>
 }

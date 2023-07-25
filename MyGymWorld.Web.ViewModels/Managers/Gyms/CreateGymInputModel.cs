@@ -8,6 +8,16 @@
 
     public class CreateGymInputModel
     {
+        public CreateGymInputModel()
+        {
+            this.GymTypes = new HashSet<string>();
+  
+            this.TownsSelectList = new HashSet<SelectListItem>();
+            this.CountriesSelectList = new HashSet<SelectListItem>();
+
+            this.GalleryImagesFiles = new HashSet<IFormFile>();
+        }
+
         [Required]
         [StringLength(ValidationalConstants.GymConstants.NameMaxLength, ErrorMessage = "The name must be at least 5 and at max 100 characters long.",
             MinimumLength = ValidationalConstants.GymConstants.NameMinLength)]
@@ -29,7 +39,7 @@
         public IFormFile LogoFile { get; set; } = null!;
 
         [Display(Name = "Gallery")]
-        public IEnumerable<IFormFile>? GalleryImagesFiles { get; set; }
+        public IEnumerable<IFormFile> GalleryImagesFiles { get; set; }
 
         [Required]
         [Display(Name = "Webiste Url")]
@@ -42,7 +52,7 @@
         public string GymType { get; set; } = null!;
 
         [Display(Name = "Gym Types")]
-        public IEnumerable<string>? GymTypes { get; set; }
+        public IEnumerable<string> GymTypes { get; set; }
 
         [Required]
         public string Address { get; set; } = null!;
@@ -51,12 +61,12 @@
         public string CountryId { get; set; } = null!;
 
         [Display(Name = "Countries")]
-        public IEnumerable<SelectListItem>? CountriesSelectList { get; set; }
+        public IEnumerable<SelectListItem> CountriesSelectList { get; set; }
 
         [Required]
         public string TownId { get; set; } = null!;
 
         [Display(Name = "Towns")]
-        public IEnumerable<SelectListItem>? TownsSelectList { get; set; }
+        public IEnumerable<SelectListItem> TownsSelectList { get; set; }
     }
 }
