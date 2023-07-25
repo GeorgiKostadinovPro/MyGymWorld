@@ -30,45 +30,54 @@
         [HttpGet]
         public async Task<IActionResult> Create(string gymId)
         {
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-            if (gym == null)
+            try
             {
-                this.TempData[ErrorMessage] = "You are NOT a Manager!";
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
 
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            string userId = this.GetUserId();
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            if (!this.User.IsInRole("Manager")
-                || user == null
-                || user.ManagerId == null)
-            {
-                this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            if (user.ManagerId != null)
-            {
-                bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
-
-                if (isGymManagedByCorrectManager == false)
+                if (gym == null)
                 {
-                    return this.Forbid();
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
                 }
+
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                CreateEventInputModel createEventInputModel = new CreateEventInputModel
+                {
+                    GymId = gymId,
+                    EventTypes = this.eventService.GetAllEventTypes()
+                };
+                
+                return this.View(createEventInputModel);
             }
-
-            CreateEventInputModel createEventInputModel = new CreateEventInputModel
+            catch (Exception)
             {
-                GymId = gymId,
-                EventTypes = this.eventService.GetAllEventTypes()
-            };
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-            return this.View(createEventInputModel);
+                return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = gymId });
+            }
         }
 
         [HttpPost]
@@ -146,6 +155,67 @@
             }
 
             return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = createEventInputModel.GymId});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string eventId, string gymId)
+        {
+            try
+            {
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                bool doesEventExists = await this.eventService.CheckIfEventExistsByIdAsync(eventId);
+
+                if (doesEventExists == false)
+                {
+                    this.TempData[ErrorMessage] = "Such event does NOT exist!";
+
+                    return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+                }
+
+
+                EditEventInputModel editEventInputModel = await this.eventService.GetEventForEditByIdAsync(eventId);
+
+                editEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
+
+                return this.View(editEventInputModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+            }
         }
     }
 }

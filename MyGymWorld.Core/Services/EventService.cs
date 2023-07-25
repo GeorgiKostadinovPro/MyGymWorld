@@ -113,6 +113,16 @@
             return eventDetailsViewModel;
         }
 
+        public async Task<EditEventInputModel> GetEventForEditByIdAsync(string eventId)
+        {
+            Event eventToEdit = await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+                .FirstAsync();
+
+            EditEventInputModel editEventInputModel = this.mapper.Map<EditEventInputModel>(eventToEdit);
+
+            return editEventInputModel;
+        }
+
         public async Task<bool> CheckIfEventExistsByIdAsync(string eventId)
         {
             return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))

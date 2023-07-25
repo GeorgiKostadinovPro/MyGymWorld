@@ -29,19 +29,34 @@
 			<img class="projcard-img" src="@Model.LogoUri" />
 			<div class="projcard-textbox">
 				<div class="projcard-title">Title: @Model.Name</div>
-				<div class="projcard-title">Type: @Model.EventType</div>
+				<div class="projcard-subtitle">Type: @Model.EventType</div>
 				<div class="projcard-subtitle">Organiser: @Model.Organiser</div>
 				<div class="projcard-subtitle">Starting time: @Model.StartDate</div>
 				<div class="projcard-subtitle">Estimated ending time: @Model.EndDate</div>
 				<div class="projcard-subtitle">Created on: @Model.CreatedOn</div>
-
 				<div class="projcard-bar"></div>
-				<div class="projcard-description">@Html.Raw(Model.Description)</div>
+				
 				@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
 				{
-					<div class="projcard-tagbox">
-					   <button type="submit" class="btn btn-primary">Edit</button>
-					   <button type="submit" class="btn btn-danger">Delete</button>
+					<div class="projcard-tagbox" style=" display: flex; align-items: center;">
+                       <form 
+							asp-area="Manager"
+							asp-controller="Event" 
+							asp-action="Edit"
+						    method="get" style="margin-right: 10px;">
+							<input type="hidden" name="eventId" value="@Model.Id" />
+							<input type="hidden" name="gymId" value="@Model.GymId"/>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+						</form>
+
+						<form asp-area="Manager"
+						  asp-controller="Event"
+						  asp-action="Delete"
+						  asp-route-eventId="@Model.Id"
+						  asp-route-gymId="@Model.GymId" method="post" style="margin-right: 10px;">
+							<button type="submit" class="btn btn-danger">Delete</button>
+						</form>
+					   
 				    </div>
 				}
 				else
@@ -55,10 +70,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-	document.querySelectorAll(".projcard-description").forEach(function (box) {
-		$clamp(box, { clamp: 6 });
-	});
-
-</script>
