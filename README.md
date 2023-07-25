@@ -154,6 +154,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can edit his profile.</li>
     <li>Can upload profile picture.</li>
     <li>Can delete profile picture.</li>
+    <li>Can use the given pagination on every page.</li>
     <li>Can review his notifications.</li>
     <li>Can delete his notifications.</li>
     <li>Can mark notification as read.</li>
@@ -167,7 +168,6 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see all comments about a gym.</li>
     <li>Can comment on gym.</li>
     <li>Can reply to comment on gym.</li>
-    <li>Can use the given pagination.</li>
     <li>Can join a gym.</li>
     <li>Can leave a gym.</li>
     <li>Can see all events for gym after joining it.</li>
