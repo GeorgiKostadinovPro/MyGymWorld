@@ -90,7 +90,7 @@
             Gym gymToEdit = await this.repository.All<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
                 .Include(g => g.Address)
                 .ThenInclude(a => a.Town)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             gymToEdit.Name = editGymInputModel.Name;
             gymToEdit.Email = editGymInputModel.Email;

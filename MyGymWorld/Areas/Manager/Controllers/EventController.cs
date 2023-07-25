@@ -5,7 +5,7 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Events;
-
+    using System.Globalization;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class EventController : ManagerController
@@ -69,7 +69,7 @@
                     GymId = gymId,
                     EventTypes = this.eventService.GetAllEventTypes()
                 };
-                
+
                 return this.View(createEventInputModel);
             }
             catch (Exception)
@@ -142,7 +142,7 @@
 
                 Event createdEvent = await this.eventService.CreateEventAsync(createEventInputModel);
 
-                this.TempData[SuccessMessage] = "You created event!";
+                this.TempData[SuccessMessage] = "You created an event!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You created an event for {gym.Name}",
@@ -154,7 +154,7 @@
                 this.TempData[ErrorMessage] = "Something went wrong!";
             }
 
-            return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = createEventInputModel.GymId});
+            return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = createEventInputModel.GymId });
         }
 
         [HttpGet]
@@ -216,6 +216,92 @@
 
                 return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string eventId, EditEventInputModel editEventInputModel)
+        {
+            editEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(editEventInputModel);
+            }
+
+            try
+            {
+                string userId = this.GetUserId();
+
+                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(editEventInputModel.GymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                var startDateResult = DateTime.TryParseExact(editEventInputModel.StartDate, "dd/MM/yyyy H:mm tt",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startResult);
+
+                var endDateResult = DateTime.TryParseExact(editEventInputModel.EndDate, "dd/MM/yyyy H:mm tt",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endResult);
+
+                if (startResult >= endResult)
+                {
+                    this.ModelState.AddModelError("StartDate", "The start date should be earlier than the end date!");
+
+                    return this.View(editEventInputModel);
+                }
+
+                editEventInputModel.ParsedStartDate = startResult;
+                editEventInputModel.ParsedEndDate = endResult;
+
+                if (editEventInputModel.EventType == "None")
+                {
+                    this.ModelState.AddModelError("EventType", "You must choose an event type!");
+
+                    return this.View(editEventInputModel);
+                }
+
+                editEventInputModel.Description = new HtmlSanitizer().Sanitize(editEventInputModel.Description);
+
+                Event editedEvent = await this.eventService.EditEventAsync(eventId, editEventInputModel);
+
+                this.TempData[SuccessMessage] = "You edited an event!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You edited an event for {gym.Name}",
+                    $"/Event/Details?eventId={editedEvent.Id.ToString()}",
+                    userId);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+            }
+
+            return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
         }
     }
 }
