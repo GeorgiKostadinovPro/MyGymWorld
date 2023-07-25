@@ -363,7 +363,7 @@ Distributed under the MIT license. See LICENSE.txt for more information.
 <!-- Contact -->
 ## :handshake: Contact
 
-Your Name - [LinkedIn](https://www.linkedin.com/in/georgi-kostadinov-125349241) - kostadinovgeorgi16@gmail.com
+Your Name - [LinkedIn](https://www.linkedin.com/in/georgi-kostadinov-125349241) - kostadinovgeorgi16@gmail.com - georgi.kostadinov14@abv.bg
 
 Project Link: [MyGymWorld](https://github.com/GeorgiKostadinovPro/MyGymWorld)
 
