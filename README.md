@@ -134,7 +134,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <ul>
     <li>Register.</li>
     <li>Login.</li>
-    <li>Remeber me.</li>
+    <li>Remember me.</li>
     <li>Send Email for Reset Forgot Password.</li>
     <li>Reset Password.</li>
   </ul>
