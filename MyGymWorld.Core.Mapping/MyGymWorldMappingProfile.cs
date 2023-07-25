@@ -131,7 +131,14 @@
             this.CreateMap<CreateEventInputModel, Event>()
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))
                 .ForMember(d => d.EventType, opt => opt.MapFrom(src => Enum.Parse<EventType>(src.EventType)));
-                
+
+            this.CreateMap<Event, EditEventInputModel>()
+              .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+              .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+              .ForMember(d => d.EventType, opt => opt.MapFrom(src => src.EventType.ToString()))
+              .ForMember(d => d.StartDate, opt => opt.MapFrom(src => src.StartDate.ToString("dd/MM/yyyy h:mm tt")))
+              .ForMember(d => d.EndDate, opt => opt.MapFrom(src => src.EndDate.ToString("dd/MM/yyyy h:mm tt")));
+
             // Countries
             this.CreateMap<Country, CountryViewModel>();
         }

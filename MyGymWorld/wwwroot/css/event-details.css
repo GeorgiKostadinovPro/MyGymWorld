@@ -256,7 +256,6 @@
     font-size: 14px;
     cursor: default;
     user-select: none;
-    pointer-events: none;
 }
 
 .projcard-tag {

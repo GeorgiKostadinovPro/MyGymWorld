@@ -14,6 +14,8 @@
 
         Task<EventDetailsViewModel> GetEventDetailsByIdAsync(string eventId);
 
+        Task<EditEventInputModel> GetEventForEditByIdAsync(string eventId);
+
         Task<bool> CheckIfEventExistsByIdAsync(string eventId);
 
         IEnumerable<string> GetAllEventTypes();
