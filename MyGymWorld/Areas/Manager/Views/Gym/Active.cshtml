@@ -60,7 +60,7 @@
 								    asp-controller="Gym"
 								    asp-action="Details"
 								    asp-route-gymId="@gym.Id">
-									<span class="material-symbols-outlined" style="color: #3F82C3;">
+									<span class="material-symbols-outlined" data-toggle="tooltip" title="Details" style="color: #3F82C3;">
 										visibility
 									</span>
 								</a>
@@ -69,7 +69,8 @@
 									asp-controller="Gym" 
 									asp-action="Edit" 
 									asp-route-gymId="@gym.Id"
-									class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+									class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i
+							     ></a>
 								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</td>
 						</tr>
