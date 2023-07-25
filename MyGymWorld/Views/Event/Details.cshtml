@@ -32,10 +32,10 @@
 				<div class="projcard-subtitle">Type: @Model.EventType</div>
 				<div class="projcard-subtitle">Organiser: @Model.Organiser</div>
 				<div class="projcard-subtitle">Starting time: @Model.StartDate</div>
-				<div class="projcard-subtitle">Estimated ending time: @Model.EndDate</div>
-				<div class="projcard-subtitle">Created on: @Model.CreatedOn</div>
+                <div class="projcard-subtitle">Estimated ending time: @Model.EndDate</div>
+                <div class="projcard-subtitle">Description: @Html.Raw(Model.Description)</div>
 				<div class="projcard-bar"></div>
-				
+
 				@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
 				{
 					<div class="projcard-tagbox" style=" display: flex; align-items: center;">

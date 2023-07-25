@@ -37,6 +37,23 @@
             return @event;
         }
 
+        public async Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel)
+        {
+            Event eventToEdit = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+                .FirstAsync();
+
+            eventToEdit.Name = editEventInputModel.Name;
+            eventToEdit.Description = editEventInputModel.Description;
+            eventToEdit.EventType = Enum.Parse<EventType>(editEventInputModel.EventType);
+            eventToEdit.StartDate = editEventInputModel.ParsedStartDate;
+            eventToEdit.EndDate = editEventInputModel.ParsedEndDate;
+            eventToEdit.ModifiedOn = DateTime.UtcNow;
+
+            await this.repository.SaveChangesAsync();
+
+            return eventToEdit;
+        }
+
         public async Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel)
         {
             IQueryable<Event> eventsAsQuery =

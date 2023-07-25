@@ -3,6 +3,7 @@
     using MyGymWorld.Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Runtime.Serialization;
 
     public class EditEventInputModel
     {
@@ -26,6 +27,10 @@
         public string StartDate { get; set; } = null!;
 
         public string EndDate { get; set; } = null!;
+
+        public DateTime ParsedStartDate { get; set; }
+
+        public DateTime ParsedEndDate { get; set; }
 
         [Required]
         public string EventType { get; set; } = null!;

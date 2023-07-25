@@ -8,6 +8,8 @@
     {
         Task<Event> CreateEventAsync(CreateEventInputModel createEventInputModel);
 
+        Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel);
+
         Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel);
 
         Task<int> GetAllActiveEventsCountByGymIdAsync(string gymId);
