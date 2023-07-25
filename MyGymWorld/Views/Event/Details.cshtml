@@ -1,7 +1,64 @@
-﻿@model EventDetailsViewModel
+﻿@using MyGymWorld.Core.Contracts;
+@using MyGymWorld.Data.Models;
+@using MyGymWorld.Web.Infrastructure.Extensions;
+
+@model EventDetailsViewModel
+
+@inject IGymService GymService;
+@inject IManagerService ManagerService
 
 @{
-    ViewData["Title"] = "event Details";
+    ViewData["Title"] = "Event Details";
+
+	string userId = User.GetId();
+
+	Manager? manager = await this.ManagerService.GetManagerByUserIdAsync(userId);
+	bool isUserManagerOfThisGym = false;
+
+	if (manager != null)
+	{
+		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
+	}
 }
 
-<h1>@Model.Name</h1>
+<link href="~/css/event-details.css" rel="stylesheet"/>
+
+<div class="projcard-container">
+	<div class="projcard projcard-blue">
+		<div class="projcard-innerbox">
+			<img class="projcard-img" src="@Model.LogoUri" />
+			<div class="projcard-textbox">
+				<div class="projcard-title">Title: @Model.Name</div>
+				<div class="projcard-title">Type: @Model.EventType</div>
+				<div class="projcard-subtitle">Organiser: @Model.Organiser</div>
+				<div class="projcard-subtitle">Starting time: @Model.StartDate</div>
+				<div class="projcard-subtitle">Estimated ending time: @Model.EndDate</div>
+				<div class="projcard-subtitle">Created on: @Model.CreatedOn</div>
+
+				<div class="projcard-bar"></div>
+				<div class="projcard-description">@Html.Raw(Model.Description)</div>
+				@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
+				{
+					<div class="projcard-tagbox">
+					   <button type="submit" class="btn btn-primary">Edit</button>
+					   <button type="submit" class="btn btn-danger">Delete</button>
+				    </div>
+				}
+				else
+				{
+					<div class="projcard-tagbox">
+						<button type="submit" class="btn btn-primary">Join</button>
+						<button type="submit" class="btn btn-danger">Leave</button>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	document.querySelectorAll(".projcard-description").forEach(function (box) {
+		$clamp(box, { clamp: 6 });
+	});
+
+</script>

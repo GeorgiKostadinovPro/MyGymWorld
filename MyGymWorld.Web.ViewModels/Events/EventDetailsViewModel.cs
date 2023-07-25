@@ -16,6 +16,14 @@
 
         public string LogoUri { get; set; } = null!;
 
+        public string EventType { get; set; } = null!;
+
+        public string Description { get; set; } = null!;
+
+        public string StartDate { get; set; } = null!;
+
+        public string EndDate { get; set; } = null!;
+
         public string CreatedOn { get; set; } = null!;
     }
 }
