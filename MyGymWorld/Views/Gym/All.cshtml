@@ -8,13 +8,14 @@
 <link href="~/css/fitness-card.css" rel="stylesheet" />
 
 @*Particles*@
-<link href="~/css/particles.css" rel="stylesheet" />
-
+@*<link href="~/css/particles.css" rel="stylesheet" />
+*@
 @*Particles*@
-<script src="~/js/particles.js"></script>
+@*<script src="~/js/particles.js"></script>
+*@
 
-<h1>Welcome to the Filtering page!</h1>
-<p>Below you can search fitnesses by your choice.</p>
+<h1 style="text-align: center;">Welcome to the Filtering page!</h1>
+<p style="text-align: center;">Below you can search fitnesses by your choice.</p>
 
 <hr />
 
@@ -99,7 +100,7 @@ string.Empty)"
     <h2 class="text-center">No Gyms were found by the given criteria!</h2>
 }
 
-<div class="row">
+<div class="row" style="margin-bottom: 20px;">
     @foreach (DisplayGymViewModel gym in Model.Gyms)
     {
         <div class="card-hover" style="margin-right: 15px;">
@@ -123,6 +124,7 @@ string.Empty)"
     }
 </div>
 
+<hr />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

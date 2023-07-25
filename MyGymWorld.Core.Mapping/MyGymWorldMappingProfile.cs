@@ -113,10 +113,17 @@
             this.CreateMap<Event, EventViewModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
-                .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
-                .ForMember(d => d.OrganiserId, opt => opt.MapFrom(src => src.Gym.Manager.Id.ToString()))
-                .ForMember(d => d.Organiser, opt => opt.MapFrom(src => string.Concat(src.Gym.Manager.User.FirstName, " ", src.Gym.Manager.User.LastName)))
-                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
+                .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy")));
+
+            this.CreateMap<Event, EventDetailsViewModel>()
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+               .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+               .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
+               .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
+               .ForMember(d => d.OrganiserId, opt => opt.MapFrom(src => src.Gym.Manager.Id.ToString()))
+               .ForMember(d => d.Organiser, opt => opt.MapFrom(src => string.Concat(src.Gym.Manager.User.FirstName, " ", src.Gym.Manager.User.LastName)))
+               .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy")));
 
             this.CreateMap<CreateEventInputModel, Event>()
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))

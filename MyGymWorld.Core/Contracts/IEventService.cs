@@ -12,6 +12,10 @@
 
         Task<int> GetAllActiveEventsCountByGymIdAsync(string gymId);
 
+        Task<EventDetailsViewModel> GetEventDetailsByIdAsync(string eventId);
+
+        Task<bool> CheckIfEventExistsByIdAsync(string eventId);
+
         IEnumerable<string> GetAllEventTypes();
     }
 }
