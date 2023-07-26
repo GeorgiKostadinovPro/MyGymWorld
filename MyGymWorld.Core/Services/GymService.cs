@@ -382,7 +382,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllGymsQueryModel queryModel)
+        public async Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllUserJoinedGymsQueryModel queryModel)
         {
             IQueryable<Gym> gymsAsQuery = this.repository
                 .AllReadonly<UserGym>(ug => ug.IsDeleted == false && ug.UserId == Guid.Parse(userId))

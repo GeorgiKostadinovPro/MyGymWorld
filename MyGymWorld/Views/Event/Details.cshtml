@@ -21,21 +21,35 @@
 		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
 	}
 
-	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasJoinedEventByIdAsync(Model.Id, userId);
+	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasAlreadyJoinedEventByIdAsync(Model.Id, userId);
 }
 
 <link href="~/css/event-details.css" rel="stylesheet"/>
 
 <div class="projcard-container">
 	<div class="projcard projcard-blue">
+
+		@if (Model.EndDate <= DateTime.UtcNow)
+		{
+			<span class="badge badge-danger" style="position: absolute; top: 10px; right: 10px;">Ended</span>
+		}
+		else if (Model.StartDate < DateTime.UtcNow && Model.EndDate > DateTime.UtcNow)
+		{
+			<span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">Running</span>
+		}
+		else
+		{
+			<span class="badge badge-primary" style="position: absolute; top: 10px; right: 10px;">Starting soon</span>
+		}
+
 		<div class="projcard-innerbox">
 			<img class="projcard-img" src="@Model.LogoUri" />
 			<div class="projcard-textbox">
 				<div class="projcard-title">Title: @Model.Name</div>
 				<div class="projcard-subtitle">Type: @Model.EventType</div>
 				<div class="projcard-subtitle">Organiser: @Model.Organiser</div>
-				<div class="projcard-subtitle">Starting time: @Model.StartDate</div>
-                <div class="projcard-subtitle">Estimated ending time: @Model.EndDate</div>
+				<div class="projcard-subtitle">Starting time: @Model.StartDate.ToString("dd/MM/yyyy h:mm tt")</div>
+				<div class="projcard-subtitle">Estimated ending time: @Model.EndDate.ToString("dd/MM/yyyy h:mm tt")</div>
                 <div class="projcard-subtitle">Description: @Html.Raw(Model.Description)</div>
 				<div class="projcard-bar"></div>
 
@@ -67,28 +81,31 @@
 				else
 				{
 					<div class="projcard-tagbox">
-					@if (hasUserJoinedEvent)
-					{
-						<form
-							asp-area=""
-						    asp-controller="Event"
-						    asp-action="Leave"
-	                        method="post">
-							    <input type="hidden" name="eventId" value="@Model.Id"/>
-                                <button type="submit" class="btn btn-danger">Leave</button>
-						</form>
-				    }
-				    else
-				    {
-						<form 
-							asp-area=""
-						    asp-controller="Event"
-						    asp-action="Participate"
-				            method="post">
-								<input type="hidden" name="eventId" value="@Model.Id" />
-								<button type="submit" class="btn btn-primary">Participate</button>
-						</form>
-				    }
+						@if (Model.StartDate < DateTime.UtcNow && Model.EndDate > DateTime.UtcNow || Model.StartDate >= DateTime.UtcNow)
+						{
+							@if (hasUserJoinedEvent)
+							{
+								<form 
+									asp-area=""
+						            asp-controller="Event"
+						            asp-action="Leave"
+				                	method="post">
+									<input type="hidden" name="eventId" value="@Model.Id" />
+									<button type="submit" class="btn btn-danger">Leave</button>
+								</form>
+							}
+							else
+							{
+								<form
+									asp-area=""
+						            asp-controller="Event"
+						            asp-action="Participate"
+					                 method="post">
+									<input type="hidden" name="eventId" value="@Model.Id" />
+									<button type="submit" class="btn btn-primary">Participate</button>
+								</form>
+							}
+						}
 					</div>
 				}
 			</div>

@@ -63,5 +63,10 @@
             public const string GymNotJoinedToBeLeft = "You have to join the gym in order to leave it!";
             public const string GymAlreadyLeft = "You have already left this gym!";
         }
+
+        public static class EventErrors 
+        {
+			public const string EventNotJoinedToBeLeft = "You have to join the event in order to leave it!";
+		}
     }
 }

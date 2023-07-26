@@ -11,5 +11,9 @@
         public string LogoUri { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+        
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
     }
 }

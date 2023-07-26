@@ -35,7 +35,7 @@
 
         Task RemoveGymFromUserAsync(string gymId, string userId);
 
-        Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllGymsQueryModel queryModel);
+        Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllUserJoinedGymsQueryModel queryModel);
 
         Task<int> GetAllUserJoinedGymsCountAsync(string userId);
 
