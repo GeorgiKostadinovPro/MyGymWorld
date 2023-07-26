@@ -32,6 +32,17 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym([FromQuery] AllEventsForGymQueryModel queryModel)
         {
+            string userId = this.GetUserId();
+
+            bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
+
+            if (hasUserJoinedGym == false)
+            {
+                this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+
+                return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
+            }
+
             AllEventsForGymFilteredAndPagedViewModel allEventsForGymFilteredAndPagedViewModel = new AllEventsForGymFilteredAndPagedViewModel()
             {
                 TotalEventsCount = await this.eventService.GetAllActiveEventsCountByGymIdAsync(queryModel.GymId),

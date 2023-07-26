@@ -319,20 +319,17 @@
         
         public async Task AddGymToUserAsync(string gymId, string userId)
         {
-            Gym gym = await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
-                .FirstAsync(g => g.Id == Guid.Parse(gymId));
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            UserGym userGym = await this.repository.All<UserGym>()
+            UserGym? userGym = await this.repository.All<UserGym>()
+                .Include(ug => ug.User)
+                   .ThenInclude(u => u.UsersEvents)
                 .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
 
             if (userGym == null)
             {
                 userGym = new UserGym
                 {
-                    GymId = gym.Id,
-                    UserId = user.Id,
+                    GymId = Guid.Parse(gymId),
+                    UserId = Guid.Parse(userId),
                     CreatedOn = DateTime.UtcNow
                 };
 
@@ -340,16 +337,17 @@
             }
             else
             {
-               if (userGym.IsDeleted == false)
-                {
-                    throw new InvalidOperationException(ExceptionConstants.GymErrors.GymAlreadyJoined);
-                }
-                else
+               if (userGym.IsDeleted == true)
                 {
                     userGym.IsDeleted = false;
                     userGym.DeletedOn = null;
-                    userGym.ModifiedOn = DateTime.UtcNow;
-                }   
+
+                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
+                    {
+                        userEvent.IsDeleted = false;
+                        userEvent.DeletedOn = null;
+                    }
+                }
             }
 
             await this.repository.SaveChangesAsync();
@@ -358,6 +356,8 @@
         public async Task RemoveGymFromUserAsync(string gymId, string userId)
         {
             UserGym userGym = await this.repository.All<UserGym>()
+                .Include(ug => ug.User)
+                    .ThenInclude(g => g.UsersEvents)
                 .FirstAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
 
             if (userGym == null)
@@ -366,14 +366,16 @@
             }
             else
             {
-                if (userGym.IsDeleted == true)
-                {
-                    throw new InvalidOperationException(ExceptionConstants.GymErrors.GymAlreadyLeft);
-                }
-                else
-                {
+                if (userGym.IsDeleted == false)
+                { 
                     userGym.IsDeleted = true;
                     userGym.DeletedOn = DateTime.UtcNow;
+
+                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
+                    {
+                        userEvent.IsDeleted = true;
+                        userEvent.DeletedOn = DateTime.UtcNow;
+                    }
                 }
             }
 
