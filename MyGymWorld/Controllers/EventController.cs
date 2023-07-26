@@ -101,7 +101,14 @@
 					}
 				}
 
-				bool hasUserAlreadyJoinedEvent = await this.eventService.CheckIfUserHasJoinedEventByIdAsync(eventId, userId);
+                if (eventToParticipate.EndDate <= DateTime.UtcNow)
+                {
+					this.TempData[ErrorMessage] = "This event has already ended!";
+
+					return this.RedirectToAction(nameof(Details), new { eventId = eventId });
+				}
+
+				bool hasUserAlreadyJoinedEvent = await this.eventService.CheckIfUserHasAlreadyJoinedEventByIdAsync(eventId, userId);
 
                 if (hasUserAlreadyJoinedEvent)
                 {
@@ -110,12 +117,10 @@
                     return this.RedirectToAction(nameof(Details), new { eventId = eventId });
                 }
 
-              
-
                 await this.eventService.ParticipateInEventAsync(eventId, userId);
 
                 await this.notificationService.CreateNotificationAsync(
-                    $"You a now a participant in {eventToParticipate.Name}",
+                    $"You are now participating in {eventToParticipate.Name}",
                     $"/Event/Details?eventId={eventId}",
                     userId);
 
@@ -129,7 +134,68 @@
             } 
         }
 
-        [HttpGet]
+		[HttpPost]
+		public async Task<IActionResult> Leave(string eventId)
+		{
+			try
+			{
+				Event? eventToLeave = await this.eventService.GetEventByIdAsync(eventId);
+
+				if (eventToLeave == null)
+				{
+					this.TempData[ErrorMessage] = "You tried leaving non-existing event!";
+
+					return this.NotFound();
+				}
+
+				string userId = this.GetUserId();
+
+				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+				if (user.ManagerId != null)
+				{
+					bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(eventToLeave.GymId.ToString(), user.ManagerId.ToString()!);
+
+					if (isGymManagedByCorrectManager == true)
+					{
+						return this.Forbid();
+					}
+				}
+
+				if (eventToLeave.EndDate <= DateTime.UtcNow)
+				{
+					this.TempData[ErrorMessage] = "This event has already ended!";
+
+					return this.RedirectToAction(nameof(Details), new { eventId = eventId });
+				}
+
+				bool hasUserAlreadyLeftEvent = await this.eventService.CheckIfUserHasAlreadyLeftEventByIdAsync(eventId, userId);
+
+				if (hasUserAlreadyLeftEvent)
+				{
+					this.TempData[ErrorMessage] = "You have already left this event!";
+
+					return this.RedirectToAction(nameof(Details), new { eventId = eventId });
+				}
+
+				await this.eventService.LeaveEventAsync(eventId, userId);
+
+				await this.notificationService.CreateNotificationAsync(
+					$"You left the event: {eventToLeave.Name}",
+					$"/Event/Details?eventId={eventId}",
+					userId);
+
+				return this.RedirectToAction(nameof(Joined), new { UserId = userId });
+			}
+			catch (Exception)
+			{
+				this.TempData[ErrorMessage] = "Something went wrong!";
+
+				return this.RedirectToAction(nameof(Details), new { eventId = eventId });
+			}
+		}
+
+		[HttpGet]
         public async Task<IActionResult> Joined([FromQuery] AllUserJoinedEventsQueryModel queryModel)
         {
             try

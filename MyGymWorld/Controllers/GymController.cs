@@ -185,7 +185,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Joined([FromQuery] AllGymsQueryModel queryModel)
+        public async Task<IActionResult> Joined([FromQuery] AllUserJoinedGymsQueryModel queryModel)
         {
             string userId = this.GetUserId();
 
@@ -198,6 +198,7 @@
                     Gyms = await this.gymService.GetAllUserJoinedGymsFilteredAndPagedAsync(userId, queryModel)
                 };
 
+                queryModel.UserId = userId;
                 queryModel.GymTypes = this.gymService.GetAllGymTypes();
                 queryModel.TotalGymsCount = allGymsFilteredAndPagedViewModel.TotalGymsCount;
                 queryModel.Gyms = allGymsFilteredAndPagedViewModel.Gyms;

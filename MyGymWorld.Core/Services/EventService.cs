@@ -3,7 +3,8 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
-    using MyGymWorld.Core.Contracts;
+	using MyGymWorld.Common;
+	using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Data.Repositories;
@@ -83,6 +84,28 @@
 
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task LeaveEventAsync(string eventId, string userId)
+        {
+			UserEvent? userEvent = await this.repository
+			   .All<UserEvent>(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId))
+			   .FirstOrDefaultAsync();
+
+            if (userEvent == null)
+            {
+				throw new InvalidOperationException(ExceptionConstants.EventErrors.EventNotJoinedToBeLeft);
+			}
+            else
+            {
+                if (userEvent.IsDeleted == false)
+                {
+                    userEvent.IsDeleted = true;
+                    userEvent.DeletedOn = DateTime.UtcNow;
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+		}
 
         public async Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel)
         {
@@ -244,9 +267,15 @@
                 .AnyAsync();
         }
 
-        public async Task<bool> CheckIfUserHasJoinedEventByIdAsync(string eventId, string userId)
+        public async Task<bool> CheckIfUserHasAlreadyJoinedEventByIdAsync(string eventId, string userId)
         {
             return await this.repository.All<UserEvent>(ue => ue.IsDeleted == false)
+                .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+        }
+
+        public async Task<bool> CheckIfUserHasAlreadyLeftEventByIdAsync(string eventId, string userId)
+        {
+            return await this.repository.All<UserEvent>(ue => ue.IsDeleted == true)
                 .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
         }
 

@@ -21,7 +21,8 @@
 
 <hr />
 
-<form asp-area="" asp-controller="Gym" asp-action="All" method="get">
+<form asp-area="" asp-controller="Event" asp-action="Joined" method="get">
+    <input type="hidden" name="UserId" value="@Model.UserId"/>
     <div class="row">
         <div class="form-group col-md-3 d-flex justify-content-between">
             <div class="form-group">
@@ -45,10 +46,8 @@
                 <select asp-for="@Model.EventsSorting" class="form-control">
                     <option value="0">Newest</option>
                     <option value="1">Oldest</option>
-                    <option value="2">Likes Ascending</option>
-                    <option value="3">Likes Descending</option>
-                    <option value="4">Comments Ascending</option>
-                    <option value="5">Comments Descending</option>
+                    <option value="2">Participants Ascending</option>
+                    <option value="3">Participants Descending</option>
                 </select>
             </div>
         </div>
@@ -75,8 +74,10 @@
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
         <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" :
 string.Empty)"
-           asp-controller="House"
-           asp-action="All"
+           asp-area=""
+           asp-controller="Event"
+           asp-action="Joined"
+           asp-route-userId="@Model.UserId"
            asp-route-currentPage="@previousPage"
            asp-route-category="@Model.EventType"
            asp-route-searchTerm="@Model.SearchTerm"
@@ -88,8 +89,10 @@ string.Empty)"
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
         <a class="btn btn-primary
  @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
-           asp-controller="House"
-           asp-action="All"
+           asp-area=""
+           asp-controller="Event"
+           asp-action="Joined"
+           asp-route-userId="@Model.UserId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
            asp-route-category="@Model.EventType"
            asp-route-searchTerm="@Model.SearchTerm"
@@ -107,6 +110,20 @@ string.Empty)"
     {
         <div class="card" style="width: 18rem; margin-right: 30px;  padding: 20px;
     background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
+
+            @if (eventViewModel.EndDate <= DateTime.UtcNow)
+            {
+                <span class="badge badge-danger" style="position: absolute; top: 10px; right: 10px;">Ended</span>
+            }
+            else if (eventViewModel.StartDate < DateTime.UtcNow && eventViewModel.EndDate > DateTime.UtcNow)
+            {
+                <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">Running</span>
+            }
+            else
+            {
+                <span class="badge badge-primary" style="position: absolute; top: 10px; right: 10px;">Starting soon</span>
+            }
+
             <img style="border-radius: 50%; width: 100px; height: 100px;  object-fit: cover;" class="card-img-top" src="@eventViewModel.LogoUri" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>

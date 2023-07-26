@@ -124,8 +124,6 @@
                .ForMember(d => d.OrganiserId, opt => opt.MapFrom(src => src.Gym.Manager.Id.ToString()))
                .ForMember(d => d.EventType, opt => opt.MapFrom(src => src.EventType.ToString()))
                .ForMember(d => d.Organiser, opt => opt.MapFrom(src => string.Concat(src.Gym.Manager.User.FirstName, " ", src.Gym.Manager.User.LastName)))
-			   .ForMember(d => d.StartDate, opt => opt.MapFrom(src => src.StartDate.ToString("dd/MM/yyyy h:mm tt")))
-			   .ForMember(d => d.EndDate, opt => opt.MapFrom(src => src.EndDate.ToString("dd/MM/yyyy h:mm tt")))
 			   .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
 
             this.CreateMap<CreateEventInputModel, Event>()

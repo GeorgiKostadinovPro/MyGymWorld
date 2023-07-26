@@ -12,6 +12,8 @@
 
         Task ParticipateInEventAsync(string eventId, string userId);
 
+        Task LeaveEventAsync(string eventId, string userId);
+
 		Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel);
 
         Task<int> GetAllActiveEventsCountByGymIdAsync(string gymId);
@@ -25,11 +27,12 @@
         Task<EditEventInputModel> GetEventForEditByIdAsync(string eventId);
 
         Task<Event?> GetEventByIdAsync(string eventId);
-
-		Task<bool> CheckIfUserHasJoinedEventByIdAsync(string eventId, string userId);
-
+        
         Task<bool> CheckIfEventExistsByIdAsync(string eventId);
 
+		Task<bool> CheckIfUserHasAlreadyJoinedEventByIdAsync(string eventId, string userId);
+
+        Task<bool> CheckIfUserHasAlreadyLeftEventByIdAsync(string eventId, string userId);
 
         IEnumerable<string> GetAllEventTypes();
     }
