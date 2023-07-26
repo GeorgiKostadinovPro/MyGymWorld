@@ -8,6 +8,7 @@
 @inject ILikeService LikeService
 @inject IDislikeService DislikeService
 @inject ICommentService CommentService
+@inject IEventService EventService;
 
 @{
     ViewData["Title"] = "User Profile";
@@ -15,6 +16,7 @@
     int totalLikesInApp = await this.LikeService.GetAllActiveLikesCountAsync();
     int totalDisikesInApp = await this.DislikeService.GetAllActiveDislikesCountAsync();
     int totalCommentsInApp = await this.CommentService.GetAllActiveCommentsCountAsync();
+    int totalEventsInApp = await this.EventService.GetAllActiveEventsCountAsync();
 }
 
 <link rel="stylesheet" href="~/css/user-profile.css" />
@@ -57,24 +59,24 @@
                         <hr class="my-4">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Likes</h6>
+                                <span class="text-secondary">@Model.LikesCount</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Dislikes</h6>
+                                <span class="text-secondary">@Model.DislikesCount</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Comments</h6>
+                                <span class="text-secondary">@Model.CommentsCount</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">My Events</h6>
                                 <span class="text-secondary">@Model.EventsCount</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">My Articles</h6>
                                 <span class="text-secondary">@Model.ArticlesAcount</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0">Liked Gyms</h6>
-                                <span class="text-secondary">@Model.LikesCount</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0">Dislikes Gyms</h6>
-                                <span class="text-secondary">@Model.DislikesCount</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0">Comments</h6>
-                                <span class="text-secondary">@Model.CommentsCount</span>
                             </li>
                         </ul>
                     </div>
@@ -127,14 +129,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="d-flex align-items-center mb-3">My activity ratios</h5>
-                                <p>My Events Ratio</p>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>My Articles Ratio</p>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
                                 <p>My Likes Ratio</p>
                                 <div class="progress mb-3" style="height: 5px">
                                     <div class="progress-bar bg-success" role="progressbar" style="width: @(totalLikesInApp > 0 ? (Model.LikesCount / totalLikesInApp * 100) : 0)%" aria-valuenow="@(totalLikesInApp > 0 ? (Model.LikesCount / totalLikesInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalLikesInApp"></div>
@@ -147,6 +141,17 @@
                                 <div class="progress" style="height: 5px">
                                     <div class="progress-bar bg-info" role="progressbar" style="width: @(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalCommentsInApp"></div>
                                 </div>
+                                <p>My Events Ratio</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                         style="width: @(totalEventsInApp > 0 ? (Model.EventsCount / totalEventsInApp * 100) : 0)%;"
+                                         aria-valuenow="@(totalEventsInApp > 0 ? (Model.EventsCount / totalEventsInApp * 100) : 0)"
+                                         aria-valuemin="0" aria-valuemax="@totalEventsInApp"></div>
+                                </div>
+                                <p>My Articles Ratio</p>
+                                <div class="progress mb-3" style="height: 5px">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,7 +163,7 @@
 
 <script>
     $(document).ready(function () {
-
+        console.log(@totalEventsInApp);
         var readURL = function (input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

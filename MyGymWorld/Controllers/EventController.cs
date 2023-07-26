@@ -1,7 +1,8 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using MyGymWorld.Core.Contracts;
+	using Microsoft.CodeAnalysis.CSharp.Syntax;
+	using MyGymWorld.Core.Contracts;
 	using MyGymWorld.Data.Models;
 	using MyGymWorld.Web.ViewModels.Events;
     using System;
@@ -34,14 +35,20 @@
         {
             string userId = this.GetUserId();
 
-            bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
+			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
-            if (hasUserJoinedGym == false)
-            {
-                this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+			if (user.ManagerId == null 
+                || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(queryModel.GymId, user.ManagerId.ToString()!))))
+			{
+				bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
 
-                return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
-            }
+				if (hasUserJoinedGym == false)
+				{
+					this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+
+					return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
+				}
+			}
 
             AllEventsForGymFilteredAndPagedViewModel allEventsForGymFilteredAndPagedViewModel = new AllEventsForGymFilteredAndPagedViewModel()
             {

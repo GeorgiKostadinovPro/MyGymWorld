@@ -5,7 +5,7 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Events;
-    using System.Globalization;
+	using System.Globalization;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class EventController : ManagerController
@@ -131,7 +131,14 @@
                     return this.View(createEventInputModel);
                 }
 
-                if (createEventInputModel.EventType == "None")
+				if (createEventInputModel.StartDate >= createEventInputModel.EndDate)
+				{
+					this.ModelState.AddModelError("StartDate", "The start date should be earlier than the end date!");
+
+					return this.View(createEventInputModel);
+				}
+
+				if (createEventInputModel.EventType == "None")
                 {
                     this.ModelState.AddModelError("EventType", "You must choose an event type!");
 
@@ -202,7 +209,6 @@
 
                     return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
                 }
-
 
                 EditEventInputModel editEventInputModel = await this.eventService.GetEventForEditByIdAsync(eventId);
 
@@ -302,6 +308,54 @@
             }
 
             return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string eventId)
+        {
+            Event? eventToDelete = await this.eventService.GetEventByIdAsync(eventId);
+
+            if (eventToDelete == null)
+            {
+                this.TempData[ErrorMessage] = "Such event does NOT exist!";
+
+                return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+            }
+
+            try
+            {
+                if (eventToDelete.StartDate < DateTime.UtcNow && eventToDelete.EndDate > DateTime.UtcNow)
+                {
+					this.TempData[ErrorMessage] = "You CANNOT delete running event!";
+
+					return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+				}
+
+				string userId = this.GetUserId();
+
+				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+				if (!this.User.IsInRole("Manager")
+					|| user == null
+					|| user.ManagerId == null)
+				{
+					this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+					return this.RedirectToAction("Index", "Home");
+				}
+
+                await this.eventService.DeleteEventAsync(eventId);
+
+                this.TempData[SuccessMessage] = "You deleted event!";
+
+                return this.RedirectToActionPermanent("AllForGym", "Event", new { area = "", GymId = eventToDelete.GymId });
+            }
+            catch (Exception)
+            {
+				this.TempData[SuccessMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Details", "Event", new { eventId = eventToDelete.Id });
+            }
         }
     }
 }

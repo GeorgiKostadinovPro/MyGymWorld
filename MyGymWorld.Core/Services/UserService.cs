@@ -105,7 +105,7 @@
         {
             ApplicationUser userToDelete = await this.repository.All<ApplicationUser>(u => u.IsDeleted == false)
                 .Include(u => u.Manager)
-                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+                .FirstAsync(u => u.Id == Guid.Parse(userId));
 
             userToDelete.IsDeleted = true;
             userToDelete.DeletedOn = DateTime.UtcNow;
@@ -256,6 +256,7 @@
                 .Include(u => u.Likes)
                 .Include(u => u.Dislikes)
                 .Include(u => u.Comments)
+                .Include(u => u.UsersEvents)
                 .Include(u => u.Address)
                    .ThenInclude(a => a.Town)
                    .ThenInclude(t => t.Country)

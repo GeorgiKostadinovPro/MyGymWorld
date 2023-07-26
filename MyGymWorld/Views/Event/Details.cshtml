@@ -66,16 +66,12 @@
                             <button type="submit" class="btn btn-primary">Edit</button>
 						</form>
 
-						<form 
-							asp-area="Manager"
-						    asp-controller="Event"
-						    asp-action="Delete"
-						    asp-route-eventId="@Model.Id"
-						     method="post" style="margin-right: 10px;">
-							 <input type="hidden" name="eventId" value="@Model.Id" />
-						    <button type="submit" class="btn btn-danger">Delete</button>
-						</form>
-					   
+						@if(Model.StartDate > DateTime.UtcNow || Model.EndDate < DateTime.UtcNow)
+						{
+						   <a href="#deleteEventModal" data-eventId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger">
+						     	Delete
+						   </a>
+						}
 					</div>
 				}
 				else
@@ -112,3 +108,46 @@
 		</div>
 	</div>
 </div>
+
+<!-- Delete Modal HTML -->
+<div id="deleteEventModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form asp-area="Manager" asp-controller="Event" asp-action="Delete" method="post">
+				<input type="hidden" id="eventIdInput" name="eventId" value="" />
+				<div class="modal-header">
+					<h4 class="modal-title">Delete Event</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete these record?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script>
+ $(document).ready(function () {
+		 // Activate tooltip
+		 $('[data-toggle="tooltip"]').tooltip();
+
+		const deleteAnchor = $('#deleteAnchor');
+
+		 deleteAnchor.on('click', function (event) {
+			 event.preventDefault();
+
+			 const eventId = deleteAnchor.attr('data-eventId');
+
+			$('#eventIdInput').val(eventId);
+
+			$('#deleteEventModal').modal('show');
+		});
+	 });
+</script>
