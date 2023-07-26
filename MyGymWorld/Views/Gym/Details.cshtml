@@ -5,6 +5,7 @@
 @model GymDetailsViewModel
 
 @inject IGymService GymService
+@inject IEventService EventService;
 @inject IManagerService ManagerService
 @inject ILikeService LikeService
 @inject IDislikeService DislikeService;
@@ -26,6 +27,8 @@
 
     bool hasUserLikedThisGym = await this.LikeService.CheckIfUserLikedGymAsync(Model.Id, userId);
     bool hasUserDislikedThisGym = await this.DislikeService.CheckIfUserDislikedGymAsync(Model.Id, userId);
+
+    int totalEventsCount = await this.EventService.GetAllActiveEventsCountByGymIdAsync(Model.Id);
 }
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
@@ -198,7 +201,7 @@
                         <input type="hidden" name="GymId" value="@Model.Id" />
                         <button type="submit"
                                 class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black;">
-                            <i class="fa fa-plus"></i>&nbsp;See Events
+                            <i class="fa fa-plus"></i>&nbsp;See Events <span>@totalEventsCount</span>
                         </button>
                     </form>
                 </div>
