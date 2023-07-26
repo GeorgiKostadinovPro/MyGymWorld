@@ -174,6 +174,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see details about each event.</li>
     <li>Can join events.</li>
     <li>Can leave events.</li>
+    <li><strong>CANNOT</strong> join already ended events.</li>
+    <li><strong>CANNOT</strong> leave already ended events.</li>
     <li>Can see all his joined events (search, filter and sort them).</li>
     <li>Can see all articles about a gym.</li>
     <li>Can see details about each article.</li>
