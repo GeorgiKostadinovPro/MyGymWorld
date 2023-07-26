@@ -10,6 +10,7 @@
     using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Events.Enums;
     using MyGymWorld.Web.ViewModels.Managers.Events;
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -52,6 +53,35 @@
             await this.repository.SaveChangesAsync();
 
             return eventToEdit;
+        }
+
+        public async Task ParticipateInEventAsync(string eventId, string userId)
+        {
+            UserEvent? userEvent = await this.repository
+                .All<UserEvent>(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId))
+                .FirstOrDefaultAsync();
+
+            if (userEvent == null)
+            {
+                userEvent = new UserEvent
+                {
+                    EventId = Guid.Parse(eventId),
+                    UserId = Guid.Parse(userId),
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                await this.repository.AddAsync(userEvent);
+            }
+            else
+            {
+                if (userEvent.IsDeleted == true)
+                {
+                    userEvent.IsDeleted = false;
+                    userEvent.DeletedOn = null;
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel)
@@ -116,6 +146,68 @@
                 .CountAsync();
         }
 
+        public async Task<IEnumerable<EventViewModel>> GetAllUserJoinedEventsFilteredAndPagedAsync(string userId, AllUserJoinedEventsQueryModel queryModel)
+        {
+            IQueryable<Event> eventsAsQuery =
+               this.repository.AllReadonly<UserEvent>(ue => ue.IsDeleted == false && ue.UserId == Guid.Parse(userId))
+                              .Include(ue => ue.Event)
+                                  .ThenInclude(ue => ue.Gym)
+                                  .ThenInclude(g => g.Manager)
+                                  .ThenInclude(m => m.User)
+                              .Select(ue => ue.Event);
+
+            if (!string.IsNullOrWhiteSpace(queryModel.EventType))
+            {
+                eventsAsQuery = eventsAsQuery
+                    .Where(e => e.EventType == Enum.Parse<EventType>(queryModel.EventType));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryModel.SearchTerm))
+            {
+                string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
+
+                eventsAsQuery = eventsAsQuery
+                    .Where(e => EF.Functions.Like(e.Name, wildCard))
+                    .Where(e => EF.Functions.Like(e.Description, wildCard))
+                    .Where(e => EF.Functions.Like(e.Gym.Name, wildCard));
+            }
+
+            switch (queryModel.EventsSorting)
+            {
+                case EventsSorting.Newest:
+                    eventsAsQuery = eventsAsQuery
+                        .OrderByDescending(e => e.CreatedOn);
+                    break;
+                case EventsSorting.Oldest:
+                    eventsAsQuery = eventsAsQuery
+                       .OrderBy(e => e.CreatedOn);
+                    break;
+                case EventsSorting.ParticipantsAscending:
+                    eventsAsQuery = eventsAsQuery
+                       .OrderBy(e => e.UsersEvents.Count);
+                    break;
+                case EventsSorting.ParticipantsDescending:
+                    eventsAsQuery = eventsAsQuery
+                      .OrderBy(e => e.UsersEvents.Count);
+                    break;
+            }
+
+            IEnumerable<EventViewModel> eventsToDisplay
+                = await eventsAsQuery
+                               .Skip((queryModel.CurrentPage - 1) * queryModel.EventsPerPage)
+                               .Take(queryModel.EventsPerPage)
+                               .ProjectTo<EventViewModel>(this.mapper.ConfigurationProvider)
+                               .ToArrayAsync();
+
+            return eventsToDisplay;
+        }
+
+        public async Task<int> GetAllUserJoinedEventsCountAsync(string userId)
+        {
+            return await this.repository.AllReadonly<UserEvent>(ue => ue.IsDeleted == false && ue.UserId == Guid.Parse(userId))
+                .CountAsync();
+        }
+
         public async Task<EventDetailsViewModel> GetEventDetailsByIdAsync(string eventId)
         {
             Event eventToDisplay = await this.repository
@@ -140,11 +232,23 @@
             return editEventInputModel;
         }
 
+        public async Task<Event?> GetEventByIdAsync(string eventId)
+        {
+            return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<bool> CheckIfEventExistsByIdAsync(string eventId)
         {
             return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
                 .AnyAsync();
-        } 
+        }
+
+        public async Task<bool> CheckIfUserHasJoinedEventByIdAsync(string eventId, string userId)
+        {
+            return await this.repository.All<UserEvent>(ue => ue.IsDeleted == false)
+                .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+        }
 
         public IEnumerable<string> GetAllEventTypes()
         {

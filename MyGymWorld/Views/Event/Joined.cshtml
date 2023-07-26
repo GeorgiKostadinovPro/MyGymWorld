@@ -1,0 +1,136 @@
+﻿@model AllUserJoinedEventsQueryModel
+
+@{
+    ViewData["Title"] = "All Events";
+}
+
+@*Create Button*@
+<link href="~/css/create-event-button.css" rel="stylesheet" />
+
+@*Fitness card*@
+<link href="~/css/fitness-card.css" rel="stylesheet" />
+
+@*Particles*@
+@*<link href="~/css/particles.css" rel="stylesheet" />*@
+
+@*Particles*@
+@*<script src="~/js/particles.js"></script>*@
+
+<h1 style="text-align: center;">Welcome to Your events page!</h1>
+<p style="text-align: center">Below you can search events by your choice.</p>
+
+<hr />
+
+<form asp-area="" asp-controller="Gym" asp-action="All" method="get">
+    <div class="row">
+        <div class="form-group col-md-3 d-flex justify-content-between">
+            <div class="form-group">
+                <label asp-for="@Model.EventType"></label>
+                <select asp-for="@Model.EventType" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var eventType in Model.EventTypes)
+                    {
+                        <option value="@eventType">@eventType</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="@Model.SearchTerm"></label>
+            <input asp-for="@Model.SearchTerm" class="form-control" placeholder="...">
+        </div>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="@Model.EventsSorting"></label>
+                <select asp-for="@Model.EventsSorting" class="form-control">
+                    <option value="0">Newest</option>
+                    <option value="1">Oldest</option>
+                    <option value="2">Likes Ascending</option>
+                    <option value="3">Likes Descending</option>
+                    <option value="4">Comments Ascending</option>
+                    <option value="5">Comments Descending</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@{
+    int previousPage = Model.CurrentPage - 1;
+
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    int maxPage = (int)Math.Ceiling((double)Model.TotalEventsCount / Model.EventsPerPage);
+}
+
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" :
+string.Empty)"
+           asp-controller="House"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-category="@Model.EventType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.EventsSorting)"><<</a>
+    </div>
+    @{
+        bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Events.Any();
+    }
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary
+ @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="House"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-category="@Model.EventType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.EventsSorting)">>></a>
+    </div>
+</div>
+
+@if (!Model.Events.Any())
+{
+    <h2 class="text-center">No Events were found by the given criteria!</h2>
+}
+
+<div class="row">
+    @foreach (EventViewModel eventViewModel in Model.Events)
+    {
+        <div class="card" style="width: 18rem; margin-right: 30px;  padding: 20px;
+    background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
+            <img style="border-radius: 50%; width: 100px; height: 100px;  object-fit: cover;" class="card-img-top" src="@eventViewModel.LogoUri" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>
+                <p style="text-align: center;" class="card-text">Created on: @eventViewModel.CreatedOn</p>
+                <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
+                   style="display: block; margin: 0 auto;" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    }
+</div>
+
+<hr />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        let button = document.getElementById("button");
+
+        button.addEventListener('mousemove', (e) => {
+            x = e.offsetX;
+            y = e.offsetY;
+            button.style.setProperty('--mouse-x', x + "px");
+            button.style.setProperty('--mouse-y', y + "px");
+        });
+    </script>
+}

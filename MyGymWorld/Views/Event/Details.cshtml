@@ -4,11 +4,12 @@
 
 @model EventDetailsViewModel
 
-@inject IGymService GymService;
+@inject IEventService EventService
+@inject IGymService GymService
 @inject IManagerService ManagerService
 
 @{
-    ViewData["Title"] = "Event Details";
+	ViewData["Title"] = "Event Details";
 
 	string userId = User.GetId();
 
@@ -19,6 +20,8 @@
 	{
 		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
 	}
+
+	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasJoinedEventByIdAsync(Model.Id, userId);
 }
 
 <link href="~/css/event-details.css" rel="stylesheet"/>
@@ -49,21 +52,43 @@
                             <button type="submit" class="btn btn-primary">Edit</button>
 						</form>
 
-						<form asp-area="Manager"
-						  asp-controller="Event"
-						  asp-action="Delete"
-						  asp-route-eventId="@Model.Id"
-						  asp-route-gymId="@Model.GymId" method="post" style="margin-right: 10px;">
-							<button type="submit" class="btn btn-danger">Delete</button>
+						<form 
+							asp-area="Manager"
+						    asp-controller="Event"
+						    asp-action="Delete"
+						    asp-route-eventId="@Model.Id"
+						     method="post" style="margin-right: 10px;">
+							 <input type="hidden" name="eventId" value="@Model.Id" />
+						    <button type="submit" class="btn btn-danger">Delete</button>
 						</form>
 					   
-				    </div>
+					</div>
 				}
 				else
 				{
 					<div class="projcard-tagbox">
-						<button type="submit" class="btn btn-primary">Join</button>
-						<button type="submit" class="btn btn-danger">Leave</button>
+					@if (hasUserJoinedEvent)
+					{
+						<form
+							asp-area=""
+						    asp-controller="Event"
+						    asp-action="Leave"
+	                        method="post">
+							    <input type="hidden" name="eventId" value="@Model.Id"/>
+                                <button type="submit" class="btn btn-danger">Leave</button>
+						</form>
+				    }
+				    else
+				    {
+						<form 
+							asp-area=""
+						    asp-controller="Event"
+						    asp-action="Participate"
+				            method="post">
+								<input type="hidden" name="eventId" value="@Model.Id" />
+								<button type="submit" class="btn btn-primary">Participate</button>
+						</form>
+				    }
 					</div>
 				}
 			</div>
