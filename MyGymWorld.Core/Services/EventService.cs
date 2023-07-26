@@ -56,7 +56,25 @@
             return eventToEdit;
         }
 
-        public async Task ParticipateInEventAsync(string eventId, string userId)
+		public async Task DeleteEventAsync(string eventId)
+		{
+            Event eventToDelete = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id== Guid.Parse(eventId))
+                .Include(e => e.UsersEvents)
+                .FirstAsync();
+
+            eventToDelete.IsDeleted = true;
+            eventToDelete.DeletedOn = DateTime.UtcNow;
+
+            foreach (UserEvent userEvent in eventToDelete.UsersEvents)
+            {
+                userEvent.IsDeleted = true;
+                userEvent.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+		}
+
+		public async Task ParticipateInEventAsync(string eventId, string userId)
         {
             UserEvent? userEvent = await this.repository
                 .All<UserEvent>(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId))
@@ -279,6 +297,13 @@
                 .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
         }
 
+        public async Task<int> GetAllActiveEventsCountAsync()
+        {
+            var result =  await this.repository.AllReadonly<Event>(e => e.IsDeleted == false)
+                .CountAsync();
+            return result;
+        }
+
         public IEnumerable<string> GetAllEventTypes()
         {
             IEnumerable<string> eventTypes = Enum.GetValues(typeof(EventType))
@@ -288,5 +313,5 @@
 
             return eventTypes;
         }
-    }
+	}
 }

@@ -101,10 +101,6 @@
 								<a href="#deleteUserModal" data-userId="@user.Id" data-toggle="modal" class="delete">
 									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="tooltip">&#xE872;</i>
 								</a>
-
-                                @*<a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" data-toggle="tooltip">
-                                    <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-                                </a>*@
                             </td>
 						</tr>
 					}
@@ -168,7 +164,7 @@
 			<form asp-area="Admin" asp-controller="User" asp-action="Delete" method="post">
 				<input type="hidden" id="userIdInput" name="userId" value="" />
 				<div class="modal-header">
-					<h4 class="modal-title">Delete Role</h4>
+					<h4 class="modal-title">Delete User</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
@@ -186,23 +182,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
 
-<script>
-	$(document).ready(function () {
-		// Activate tooltip
-		$('[data-toggle="tooltip"]').tooltip();
-
-		const deleteAnchor = $('.delete');
-
-		deleteAnchor.on('click', function (event) {
-			event.preventDefault();
-
-			const userId = deleteAnchor.attr('data-userId');
-
-			$('#userIdInput').val(userId);
-
-			$('#deleteUserModal').modal('show');
-		});
-	});
+	<script>
+	     $(document).ready(function () {
+	     	// Activate tooltip
+	     	$('[data-toggle="tooltip"]').tooltip();
+	     
+	     	const deleteAnchor = $('.delete');
+	     
+	     	deleteAnchor.on('click', function (event) {
+	     		event.preventDefault();
+	     
+	     		const userId = deleteAnchor.attr('data-userId');
+	     
+	     		$('#userIdInput').val(userId);
+	     
+	     		$('#deleteUserModal').modal('show');
+	     	});
+	     });
 </script>
+}

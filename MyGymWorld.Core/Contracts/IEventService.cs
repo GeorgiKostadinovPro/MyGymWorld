@@ -10,6 +10,8 @@
 
         Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel);
 
+        Task DeleteEventAsync(string eventId);
+
         Task ParticipateInEventAsync(string eventId, string userId);
 
         Task LeaveEventAsync(string eventId, string userId);
@@ -34,6 +36,9 @@
 
         Task<bool> CheckIfUserHasAlreadyLeftEventByIdAsync(string eventId, string userId);
 
-        IEnumerable<string> GetAllEventTypes();
+        Task<int> GetAllActiveEventsCountAsync();
+
+
+		IEnumerable<string> GetAllEventTypes();
     }
 }
