@@ -98,9 +98,13 @@
                                     </span>
                                 }
 
-                                <a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" data-toggle="tooltip">
+								<a href="#deleteUserModal" data-userId="@user.Id" data-toggle="modal" class="delete">
+									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="tooltip">&#xE872;</i>
+								</a>
+
+                                @*<a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id" class="delete" data-toggle="tooltip">
                                     <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-                                </a>
+                                </a>*@
                             </td>
 						</tr>
 					}
@@ -158,16 +162,17 @@
 </div>
 
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteUserModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form asp-area="Admin" asp-controller="User" asp-action="Delete" method="post">
+				<input type="hidden" id="userIdInput" name="userId" value="" />
 				<div class="modal-header">
-					<h4 class="modal-title">Delete Gym</h4>
+					<h4 class="modal-title">Delete Role</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you want to delete these Records?</p>
+					<p>Are you sure you want to delete these record?</p>
 					<p class="text-warning"><small>This action cannot be undone.</small></p>
 				</div>
 				<div class="modal-footer">
@@ -188,23 +193,16 @@
 		// Activate tooltip
 		$('[data-toggle="tooltip"]').tooltip();
 
-		// Select/Deselect checkboxes
-		var checkbox = $('table tbody input[type="checkbox"]');
-		$("#selectAll").click(function () {
-			if (this.checked) {
-				checkbox.each(function () {
-					this.checked = true;
-				});
-			} else {
-				checkbox.each(function () {
-					this.checked = false;
-				});
-			}
-		});
-		checkbox.click(function () {
-			if (!this.checked) {
-				$("#selectAll").prop("checked", false);
-			}
+		const deleteAnchor = $('.delete');
+
+		deleteAnchor.on('click', function (event) {
+			event.preventDefault();
+
+			const userId = deleteAnchor.attr('data-userId');
+
+			$('#userIdInput').val(userId);
+
+			$('#deleteUserModal').modal('show');
 		});
 	});
 </script>

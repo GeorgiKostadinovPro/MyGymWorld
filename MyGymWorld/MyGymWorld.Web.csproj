@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Admin\**" />
+    <Content Remove="Areas\Admin\Views\Admin\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Admin\**" />
+    <None Remove="Areas\Admin\Views\Admin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Event\Create.cshtml" />
   </ItemGroup>
 
@@ -44,10 +51,6 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\fitness-card.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\login-partial.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\user-profile.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Admin\" />
   </ItemGroup>
 
   <ItemGroup>

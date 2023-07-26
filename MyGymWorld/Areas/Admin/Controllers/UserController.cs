@@ -60,6 +60,7 @@
             return this.View(allUsersViewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(string userId)
         {
             ApplicationUser userToDelete = await this.userService.GetUserByIdAsync(userId);
@@ -84,12 +85,6 @@
             }
 
             return this.RedirectToAction(nameof(Active));
-        }
-
-        [HttpPost]
-        public FileResult ExportToExcel(string htmlTable)
-        {
-            return File(Encoding.ASCII.GetBytes(htmlTable), "application/vnd.ms-excel", "MyGymWorld-Users.xls");
         }
     }
 }
