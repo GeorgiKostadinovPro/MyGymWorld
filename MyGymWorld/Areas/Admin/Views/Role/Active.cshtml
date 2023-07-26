@@ -55,12 +55,9 @@
 								<a asp-area="Admin" asp-controller="Role" asp-action="Edit" asp-route-roleId="@role.Id" class="edit">
                                     <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                                 </a>
-								<a href="#deleteEmployeeModal" data-roleId="@role.Id" data-toggle="modal" class="delete">
+								<a href="#deleteRoleModal" data-roleId="@role.Id" data-toggle="modal" class="delete">
 									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="tooltip">&#xE872;</i>
 								</a>
-                              @*  <a asp-area="Admin" asp-controller="Role" asp-action="Delete" asp-route-roleId="@role.Id" class="delete">
-									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="modal">&#xE872;</i>
-                                </a>*@
 							</td>
 						</tr>
 					}
@@ -118,7 +115,7 @@
 </div>
 
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteRoleModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form asp-area="Admin" asp-controller="Role" asp-action="Delete" method="post">
@@ -149,16 +146,16 @@
          // Activate tooltip
          $('[data-toggle="tooltip"]').tooltip();
 
-		const deleteAnchor = $('.delete');
+		 const deleteAnchor = $('.delete');
 
-		deleteAnchor.on('click', function (event) {
-			event.preventDefault();
+		 deleteAnchor.on('click', function (event) {
+			 event.preventDefault();
 
-			const roleId = deleteAnchor.attr('data-roleId');
+			 const roleId = deleteAnchor.attr('data-roleId');
 
-			$('#roleIdInput').val(roleId);
+			 $('#roleIdInput').val(roleId);
 
-			$('#deleteEmployeeModal').modal('show');
+			$('#deleteRoleModal').modal('show');
 		});
      });
 </script>
