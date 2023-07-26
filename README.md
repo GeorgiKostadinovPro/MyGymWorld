@@ -174,7 +174,6 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see details about each event.</li>
     <li>Can join events.</li>
     <li>Can leave events.</li>
-    <li><strong>CANNOT</strong> join already running events.</li>
     <li><strong>CANNOT</strong> join already ended events.</li>
     <li><strong>CANNOT</strong> leave already ended events.</li>
     <li>Can see all his joined events (search, filter and sort them).</li>
@@ -201,7 +200,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can create events for a gym.</li>
     <li>Can edit events for a gym.</li>
     <li>Can delete events for a gym.</li>
-    <li><strong>CANNOT</strong> delete already running event.</li>
+    <li><strong>CANNOT</strong> delete already running events.</li>
     <li><strong>CANNOT</strong> join his own events</li>
     <li><strong>CANNOT</strong> leave his own events</li>
     <li>Can create articles for a gym.</li>
