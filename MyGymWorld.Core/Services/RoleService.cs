@@ -4,6 +4,7 @@
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
@@ -70,19 +71,22 @@
         {
             ApplicationRole role = await this.repository.GetByIdAsync<ApplicationRole>(Guid.Parse(roleId));
 
-            role.IsDeleted = true;
-            role.DeletedOn = DateTime.UtcNow;
-
-            foreach (var user in await this.userManager.Users.ToArrayAsync())
+            if (role.Name != ApplicationRoleConstants.AdministratorRoleName)
             {
-                bool isInRole = await this.userManager.IsInRoleAsync(user, role.Name);
+                 role.IsDeleted = true;
+                 role.DeletedOn = DateTime.UtcNow;
 
-                if (!isInRole)
+                foreach (var user in await this.userManager.Users.ToArrayAsync())
                 {
-                    continue;
-                }
+                    bool isInRole = await this.userManager.IsInRoleAsync(user, role.Name);
 
-                await this.userManager.RemoveFromRoleAsync(user, role.Name);
+                    if (!isInRole)
+                    {
+                        continue;
+                    }
+
+                    await this.userManager.RemoveFromRoleAsync(user, role.Name);
+                }
             }
 
             await this.repository.SaveChangesAsync();
