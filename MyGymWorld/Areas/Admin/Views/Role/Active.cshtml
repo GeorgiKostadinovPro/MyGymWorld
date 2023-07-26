@@ -19,7 +19,6 @@
 							<i class="material-icons">&#xE15C;</i>
 							<span>View Deleted Roles</span>
 						</a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>
 						<a asp-area="Admin" asp-controller="Role" asp-action="Create" class="btn btn-success">
 							<i class="material-icons">&#xE147;</i>
 							<span>Add New Role</span>
@@ -56,9 +55,12 @@
 								<a asp-area="Admin" asp-controller="Role" asp-action="Edit" asp-route-roleId="@role.Id" class="edit">
                                     <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                                 </a>
-                                <a asp-area="Admin" asp-controller="Role" asp-action="Delete" asp-route-roleId="@role.Id" class="delete">
-                                    <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-                                </a>
+								<a href="#deleteEmployeeModal" data-roleId="@role.Id" data-toggle="modal" class="delete">
+									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="tooltip">&#xE872;</i>
+								</a>
+                              @*  <a asp-area="Admin" asp-controller="Role" asp-action="Delete" asp-route-roleId="@role.Id" class="delete">
+									<i class="material-icons" title="Delete" id="#deleteEmployeeModal" data-toggle="modal">&#xE872;</i>
+                                </a>*@
 							</td>
 						</tr>
 					}
@@ -119,13 +121,14 @@
 <div id="deleteEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form asp-area="Admin" asp-controller="Role" asp-action="Delete" method="post">
+				<input type="hidden" id="roleIdInput" name="roleId" value="" />
 				<div class="modal-header">
-					<h4 class="modal-title">Delete Employee</h4>
+					<h4 class="modal-title">Delete Role</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you want to delete these Records?</p>
+					<p>Are you sure you want to delete these record?</p>
 					<p class="text-warning"><small>This action cannot be undone.</small></p>
 				</div>
 				<div class="modal-footer">
@@ -146,23 +149,16 @@
          // Activate tooltip
          $('[data-toggle="tooltip"]').tooltip();
 
-         // Select/Deselect checkboxes
-         var checkbox = $('table tbody input[type="checkbox"]');
-         $("#selectAll").click(function () {
-             if (this.checked) {
-                 checkbox.each(function () {
-                     this.checked = true;
-                 });
-             } else {
-                 checkbox.each(function () {
-                     this.checked = false;
-                 });
-             }
-         });
-         checkbox.click(function () {
-             if (!this.checked) {
-                 $("#selectAll").prop("checked", false);
-             }
-         });
+		const deleteAnchor = $('.delete');
+
+		deleteAnchor.on('click', function (event) {
+			event.preventDefault();
+
+			const roleId = deleteAnchor.attr('data-roleId');
+
+			$('#roleIdInput').val(roleId);
+
+			$('#deleteEmployeeModal').modal('show');
+		});
      });
 </script>

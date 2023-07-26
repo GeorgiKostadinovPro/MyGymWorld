@@ -157,6 +157,7 @@
             return this.RedirectToAction(nameof(Active));
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(string roleId)
         {
             try
