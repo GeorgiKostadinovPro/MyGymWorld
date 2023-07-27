@@ -5,6 +5,7 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
+    using MyGymWorld.Web.ViewModels.Managers.Articles;
     using MyGymWorld.Web.ViewModels.Managers.Events;
 	using System.Globalization;
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -43,7 +44,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -62,7 +63,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 CreateEventInputModel createEventInputModel = new CreateEventInputModel
@@ -77,7 +78,7 @@
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = gymId });
+                return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
 
@@ -103,7 +104,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -122,7 +123,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (createEventInputModel.StartDate >= createEventInputModel.EndDate)
@@ -157,14 +158,16 @@
                 await this.notificationService.CreateNotificationAsync(
                     $"You created an event for {gym.Name}",
                     $"/Event/Details?eventId={createdEvent.Id.ToString()}",
-                    userId);
+                userId);
+
+                return this.RedirectToAction("AllForGym", "event", new { area = "", gymId = createEventInputModel.GymId });
             }
             catch (Exception)
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
-            }
 
-            return this.RedirectToAction("AllForGym", "Event", new { area = "", GymId = createEventInputModel.GymId });
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
         }
 
         [HttpGet]
@@ -182,7 +185,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -201,7 +204,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 bool doesEventExists = await this.eventService.CheckIfEventExistsByIdAsync(eventId);
@@ -210,7 +213,7 @@
                 {
                     this.TempData[ErrorMessage] = "Such event does NOT exist!";
 
-                    return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 EditEventInputModel editEventInputModel = await this.eventService.GetEventForEditByIdAsync(eventId);
@@ -223,7 +226,7 @@
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+                return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
 
@@ -249,7 +252,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -268,7 +271,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 var startDateResult = DateTime.TryParseExact(editEventInputModel.StartDate, "dd/MM/yyyy H:mm tt",
@@ -306,13 +309,15 @@
                     $"You edited an event for {gym.Name}",
                     $"/Event/Details?eventId={editedEvent.Id.ToString()}",
                     userId);
+
+                return this.RedirectToAction("AllForGym", "event", new { area = "", gymId = editEventInputModel.GymId });
             }
             catch (Exception)
             {
-                this.TempData[ErrorMessage] = "Something went wrong!";
-            }
-
-            return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+                this.TempData[ErrorMessage] = "Something went wrong!"; 
+                
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }       
         }
 
         [HttpPost]
@@ -324,7 +329,7 @@
             {
                 this.TempData[ErrorMessage] = "Such event does NOT exist!";
 
-                return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
+                return this.RedirectToAction("All", "Gym", new { area = "" });
             }
 
             try
@@ -333,8 +338,8 @@
                 {
 					this.TempData[ErrorMessage] = "You CANNOT delete running event!";
 
-					return this.RedirectToAction("Details", "Event", new { area = "", eventId = eventId });
-				}
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
 
 				string userId = this.GetUserId();
 
@@ -346,8 +351,8 @@
 				{
 					this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-					return this.RedirectToAction("Index", "Home");
-				}
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
 
                 await this.eventService.DeleteEventAsync(eventId);
 
@@ -359,7 +364,7 @@
             {
 				this.TempData[SuccessMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("Details", "Event", new { eventId = eventToDelete.Id });
+                return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
     }

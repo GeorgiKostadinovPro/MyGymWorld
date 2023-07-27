@@ -38,15 +38,12 @@
             
             article.CreatedOn = DateTime.UtcNow;
 
-            Category? category = await this.categoryService.GetCategoryByIdAsync(createArticleInputModel.CategoryId);
-
-            if (category != null)
+            foreach (string categoryId in createArticleInputModel.CategoryIds)
             {
                 article.ArticlesCategories.Add(new ArticleCategory
                 {
                     ArticleId = article.Id,
-                    CategoryId = category.Id,
-                    CreatedOn = DateTime.UtcNow
+                    CategoryId = Guid.Parse(categoryId)
                 });
             }
 
@@ -54,6 +51,29 @@
             await this.repository.SaveChangesAsync();
 
             return article;
+        }
+
+        public async Task<Article> DeleteArticleAsync(string articleId)
+        {
+            Article? articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+                .Include(a => a.ArticlesCategories)
+                .FirstOrDefaultAsync();
+
+            if (articleToDelete != null)
+            {
+                articleToDelete.IsDeleted = true;
+                articleToDelete.DeletedOn = DateTime.UtcNow;
+
+                foreach (var articleCategory in articleToDelete.ArticlesCategories)
+                {
+                    articleCategory.IsDeleted = true;
+					articleCategory.DeletedOn = DateTime.UtcNow;
+				}
+
+				await this.repository.SaveChangesAsync();
+            }
+
+            return articleToDelete;
         }
 
         public async Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel)
@@ -126,5 +146,11 @@
             return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
                 .AnyAsync();
 		}
-	}
+
+        public async Task<Article?> GetArticleByIdAsync(string articleId)
+        {
+            return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+                .FirstOrDefaultAsync();
+        }
+    }
 }

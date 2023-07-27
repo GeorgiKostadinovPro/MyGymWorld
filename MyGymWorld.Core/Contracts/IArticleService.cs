@@ -8,11 +8,15 @@
     {
         Task<Article> CreateArticleAsync(CreateArticleInputModel createArticleInputModel);
 
+        Task<Article> DeleteArticleAsync(string articleId);
+
         Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel);
 
         Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId);
         
         Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId);
+
+        Task<Article?> GetArticleByIdAsync(string articleId);
 
         Task<bool> CheckIfArticleExistsByIdAsync(string articleId);
     }
