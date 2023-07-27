@@ -4,22 +4,22 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
-    using MyGymWorld.Web.ViewModels.Managers.Articles;
-    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class ArticleService : IArticleService
+    public class CategoryService : ICategoryService
     {
         private readonly IRepository repository;
 
-        public ArticleService(IRepository _repository)
+        public CategoryService(IRepository _repository)
         {
             this.repository = _repository;
         }
 
-        public async Task<Article> CreateArticleAsync(CreateArticleInputModel createArticleInputModel)
+        public async Task<IEnumerable<Category>> GetActiveCategoriesAsync()
         {
-            throw new NotImplementedException();
+            return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false)
+                .ToArrayAsync();
         }
     }
 }

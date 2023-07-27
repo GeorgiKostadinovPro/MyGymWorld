@@ -39,6 +39,8 @@
 
         public int CommentsCount { get; set; }
 
+        public int ArticlesCount { get; set; }
+
         public IEnumerable<string> GymImages { get; set; }
     }
 }

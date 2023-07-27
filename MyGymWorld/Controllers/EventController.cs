@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-	using Microsoft.CodeAnalysis.CSharp.Syntax;
 	using MyGymWorld.Core.Contracts;
 	using MyGymWorld.Data.Models;
 	using MyGymWorld.Web.ViewModels.Events;
