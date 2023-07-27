@@ -2,6 +2,7 @@
 {
     using Ganss.Xss;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Articles;
@@ -46,7 +47,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -65,13 +66,13 @@
                 {
                     this.TempData[ErrorMessage] = "Such gym does not exists!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 CreateArticleInputModel createEventInputModel = new CreateArticleInputModel
                 {
                     GymId = gymId,
-                    Categories = await this.categoryService.GetActiveCategoriesAsync()
+                    CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync()
                 };
 
                 return this.View(createEventInputModel);
@@ -87,7 +88,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateArticleInputModel createArticleInputModel)
         {
-            createArticleInputModel.Categories = await this.categoryService.GetActiveCategoriesAsync();
+            createArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
 
             if (!this.ModelState.IsValid)
             {
@@ -106,7 +107,7 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (user.ManagerId != null)
@@ -125,14 +126,12 @@
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
-                    return this.RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Category? category = await this.categoryService.GetCategoryByIdAsync(createArticleInputModel.CategoryId);
-
-                if (createArticleInputModel.CategoryId == "None" || category == null)
+                if (createArticleInputModel.CategoryIds.Count() == 0)
                 {
-                    this.ModelState.AddModelError("CategoryId", "You must choose a valid catgeory type!");
+                    this.ModelState.AddModelError("CategoryIds", "You must choose at least one catgeory type!");
 
                     return this.View(createArticleInputModel);
                 }
@@ -144,16 +143,65 @@
                 this.TempData[SuccessMessage] = "You created an article!";
 
                 await this.notificationService.CreateNotificationAsync(
-                    $"You created an articlwe for {gym.Name}",
+                    $"You created an article for {gym.Name}",
                     $"/Article/Details?articleId={createdArticle.Id.ToString()}",
                     userId);
-            }
+                
+                return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = createArticleInputModel.GymId });
+            } 
             catch (Exception)
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Delete(string articleId)
+        {
+            Article? articleToDelete = await this.articleService.GetArticleByIdAsync(articleId);
+
+            if (articleToDelete == null)
+            {
+                this.TempData[ErrorMessage] = "Such article does NOT exist!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
             }
 
-            return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = createArticleInputModel.GymId });
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                Article deletedArticle = await this.articleService.DeleteArticleAsync(articleId);
+
+                this.TempData[SuccessMessage] = "You deleted an article!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You deleted an article!",
+                    $"/Article/Details?articleId={deletedArticle.Id.ToString()}",
+                    userId);
+
+                return this.RedirectToActionPermanent("AllForGym", "Article", new { area = "", GymId = articleToDelete.GymId });
+            }
+            catch (Exception)
+            {
+                this.TempData[SuccessMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
         }
     }
 }

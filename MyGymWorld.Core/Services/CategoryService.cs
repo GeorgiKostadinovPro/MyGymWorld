@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Core.Services
 {
-    using Microsoft.EntityFrameworkCore;
+	using Microsoft.AspNetCore.Mvc.Rendering;
+	using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
@@ -27,5 +28,17 @@
             return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false && c.Id == Guid.Parse(categoryId))
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
+		{
+			return await this.repository.AllReadonly<Category>()
+				.Select(c => new SelectListItem
+				{
+					Text = c.Name,
+					Value = c.Id.ToString()
+				})
+				.OrderBy(sli => sli.Text)
+				.ToArrayAsync();
+		}
     }
 }

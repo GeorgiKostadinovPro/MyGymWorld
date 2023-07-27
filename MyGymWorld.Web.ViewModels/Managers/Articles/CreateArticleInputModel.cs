@@ -1,14 +1,15 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Managers.Articles
 {
-    using MyGymWorld.Common;
-    using MyGymWorld.Data.Models;
+	using Microsoft.AspNetCore.Mvc.Rendering;
+	using MyGymWorld.Common;
     using System.ComponentModel.DataAnnotations;
 
     public class CreateArticleInputModel
     {
         public CreateArticleInputModel()
         {
-            this.Categories = new HashSet<Category>();
+            this.CategoryIds = new HashSet<string>();
+            this.CategoriesListItems = new HashSet<SelectListItem>();
         }
 
         [Required]
@@ -21,10 +22,9 @@
             MinimumLength = ValidationalConstants.ArticleConstants.ContentMinLength)]
         public string Content { get; set; } = null!;
 
-        [Required]
-        public string CategoryId { get; set; } = null!;
+        public IEnumerable<string> CategoryIds { get; set; } = null!;
 
-        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<SelectListItem> CategoriesListItems { get; set; }
 
         public string GymId { get; set; } = null!;
     }

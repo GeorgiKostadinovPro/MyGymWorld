@@ -50,7 +50,7 @@
 				</form>
 
 
-				<a href="#deleteEventModal" data-eventId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
+				<a href="#deleteEventModal" data-articleId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
 			 		Delete
 			  </a>
 			
@@ -61,11 +61,11 @@
 </div>
 
 <!-- Delete Modal HTML -->
-<div id="deleteEventModal" class="modal fade">
+<div id="deleteArticleModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form asp-area="Manager" asp-controller="Event" asp-action="Delete" method="post">
-				<input type="hidden" id="eventIdInput" name="eventId" value="" />
+			<form asp-area="Manager" asp-controller="Article" asp-action="Delete" method="post">
+				<input type="hidden" id="articleIdInput" name="articleId" value="" />
 				<div class="modal-header">
 					<h4 class="modal-title">Delete Event</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -94,11 +94,11 @@
 		deleteAnchor.on('click', function (event) {
 			event.preventDefault();
 
-			const eventId = deleteAnchor.attr('data-eventId');
+			const eventId = deleteAnchor.attr('data-articleId');
 
-			$('#eventIdInput').val(eventId);
+			$('#articleIdInput').val(eventId);
 
-			$('#deleteEventModal').modal('show');
+			$('#deleteArticleModal').modal('show');
 		});
 	});
 </script>
