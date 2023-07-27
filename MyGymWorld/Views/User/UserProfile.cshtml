@@ -82,41 +82,46 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
-                <div class="card">
+            <div class="col-md-8">
+                <div class="card mb-3">
                     <div class="card-body">
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Full Name:</h6>
+                                <h6 class="mb-0">Full Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="@(Model.FirstName == "None" ? Model.FirstName : Model.FirstName + " " + Model.LastName)" disabled>
+                                @(Model.FirstName == "None" ? Model.FirstName : Model.FirstName + " " + Model.LastName)
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <hr>
+                        <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Email:</h6>
+                                <h6 class="mb-0">Email</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="@Model.Email" disabled>
+                                @Model.Email
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <hr>
+                        <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Phone:</h6>
+                                <h6 class="mb-0">Phone</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="@Model.PhoneNumber" disabled>
+                                
+                                @Model.PhoneNumber
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <hr>
+                        <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Address:</h6>
+                                <h6 class="mb-0">Address</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="@Model.Address" disabled>
+                                @Model.Address
                             </div>
                         </div>
+                        <hr>
                         <div class="row">
                             <div class="col-sm-3">
                                 <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="link_button">Edit Profile</a>
@@ -131,19 +136,19 @@
                                 <h5 class="d-flex align-items-center mb-3">My activity ratios</h5>
                                 <p>My Likes Ratio</p>
                                 <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: @(totalLikesInApp > 0 ? (Model.LikesCount / totalLikesInApp * 100) : 0)%" aria-valuenow="@(totalLikesInApp > 0 ? (Model.LikesCount / totalLikesInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalLikesInApp"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: @(totalLikesInApp > 0 ? ((double)Model.LikesCount / totalLikesInApp * 100) : 0)%" aria-valuenow="@(totalLikesInApp > 0 ? ((double)Model.LikesCount / totalLikesInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalLikesInApp"></div>
                                 </div>
                                 <p>My Dislikes Ratio</p>
                                 <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: @(totalDisikesInApp > 0 ? (Model.DislikesCount / totalDisikesInApp * 100) : 0)%" aria-valuenow="@(totalDisikesInApp > 0 ? (Model.DislikesCount / totalDisikesInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalDisikesInApp"></div>
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: @(totalDisikesInApp > 0 ? ((double)Model.DislikesCount / totalDisikesInApp * 100) : 0)%" aria-valuenow="@(totalDisikesInApp > 0 ? ((double)Model.DislikesCount / totalDisikesInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalDisikesInApp"></div>
                                 </div>
                                 <p>My Comments Ratio</p>
                                 <div class="progress" style="height: 5px">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: @(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalCommentsInApp > 0 ? (Model.CommentsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalCommentsInApp"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: @(totalCommentsInApp > 0 ? ((double)Model.CommentsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalCommentsInApp > 0 ? ((double)Model.CommentsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalCommentsInApp"></div>
                                 </div>
                                 <p>My Events Ratio</p>
                                 <div class="progress" style="height: 5px">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: @(totalEventsInApp > 0 ? (Model.EventsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalEventsInApp > 0 ? (Model.EventsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalEventsInApp"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: @(totalEventsInApp > 0 ? ((double)Model.EventsCount / totalCommentsInApp * 100) : 0)%" aria-valuenow="@(totalEventsInApp > 0 ? ((double)Model.EventsCount / totalCommentsInApp * 100) : 0)" aria-valuemin="0" aria-valuemax="@totalEventsInApp"></div>
                                 </div>
                                 <p>My Articles Ratio</p>
                                 <div class="progress mb-3" style="height: 5px">
