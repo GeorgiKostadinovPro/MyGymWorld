@@ -1,0 +1,104 @@
+﻿@using MyGymWorld.Core.Contracts;
+@using MyGymWorld.Data.Models;
+@using MyGymWorld.Web.Infrastructure.Extensions;
+
+@model ArticleDetailsViewModel
+
+@inject IEventService EventService
+@inject IGymService GymService
+@inject IManagerService ManagerService
+
+@{
+	ViewData["Title"] = "Event Details";
+
+	string userId = User.GetId();
+
+	Manager? manager = await this.ManagerService.GetManagerByUserIdAsync(userId);
+	bool isUserManagerOfThisGym = false;
+
+	if (manager != null)
+	{
+		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
+	}
+
+	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasAlreadyJoinedEventByIdAsync(Model.Id, userId);
+}
+
+<link href="~/css/article-details-card.css" rel="stylesheet" />
+
+<div class="blog_post">
+	<div class="img_pod">
+		<img src="@Model.LogoUri" alt="random image">
+	</div>
+	<div class="container_copy">
+		<h3>@Model.CreatedOn.ToString("d MMMM yyyy")</h3>
+		<h1>@Model.Title</h1>
+        <p>@Html.Raw(Model.Content)</p>
+		<hr />
+		@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
+		{
+			
+			
+			<div class="projcard-tagbox" style=" display: flex; align-items: center;">
+				<form asp-area="Manager"
+				  asp-controller="Article"
+				  asp-action="Edit"
+		  method="get" style="margin-right: 10px;">
+					<input type="hidden" name="articleId" value="@Model.Id" />
+					<input type="hidden" name="gymId" value="@Model.GymId" />
+					<button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;">Edit</button>
+				</form>
+
+
+				<a href="#deleteEventModal" data-eventId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
+			 		Delete
+			  </a>
+			
+			</div>
+		}
+	</div>
+
+</div>
+
+<!-- Delete Modal HTML -->
+<div id="deleteEventModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form asp-area="Manager" asp-controller="Event" asp-action="Delete" method="post">
+				<input type="hidden" id="eventIdInput" name="eventId" value="" />
+				<div class="modal-header">
+					<h4 class="modal-title">Delete Event</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete these record?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function () {
+		// Activate tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+
+		const deleteAnchor = $('#deleteAnchor');
+
+		deleteAnchor.on('click', function (event) {
+			event.preventDefault();
+
+			const eventId = deleteAnchor.attr('data-eventId');
+
+			$('#eventIdInput').val(eventId);
+
+			$('#deleteEventModal').modal('show');
+		});
+	});
+</script>

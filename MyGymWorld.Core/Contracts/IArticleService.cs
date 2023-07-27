@@ -11,5 +11,9 @@
         Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel);
 
         Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId);
+        
+        Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId);
+
+        Task<bool> CheckIfArticleExistsByIdAsync(string articleId);
     }
 }

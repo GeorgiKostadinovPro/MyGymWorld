@@ -34,13 +34,9 @@
 
         public async Task<Article> CreateArticleAsync(CreateArticleInputModel createArticleInputModel)
         {
-            Article article = new Article
-            {
-                Title = createArticleInputModel.Title,
-                Content = createArticleInputModel.Content,
-                GymId = Guid.Parse(createArticleInputModel.GymId),
-                CreatedOn = DateTime.UtcNow
-            };
+            Article article = this.mapper.Map<Article>(createArticleInputModel);
+            
+            article.CreatedOn = DateTime.UtcNow;
 
             Category? category = await this.categoryService.GetCategoryByIdAsync(createArticleInputModel.CategoryId);
 
@@ -49,7 +45,8 @@
                 article.ArticlesCategories.Add(new ArticleCategory
                 {
                     ArticleId = article.Id,
-                    CategoryId = category.Id
+                    CategoryId = category.Id,
+                    CreatedOn = DateTime.UtcNow
                 });
             }
 
@@ -112,5 +109,22 @@
             return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.GymId == Guid.Parse(gymId))
                 .CountAsync();
         }
-    }
+
+		public async Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId)
+		{
+            Article articleToDisplay = await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+                .Include(a => a.Gym)
+                .FirstAsync();
+
+            ArticleDetailsViewModel articleDetailsViewModel = this.mapper.Map<ArticleDetailsViewModel>(articleToDisplay);
+
+            return articleDetailsViewModel;
+		}
+
+		public async Task<bool> CheckIfArticleExistsByIdAsync(string articleId)
+		{
+            return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+                .AnyAsync();
+		}
+	}
 }

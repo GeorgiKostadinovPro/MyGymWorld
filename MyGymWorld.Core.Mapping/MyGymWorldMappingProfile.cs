@@ -83,11 +83,11 @@
             this.CreateMap<Gym, GymViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.Manager.User.UserName))
-                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")));
+                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("d MMMM yyyy")));
 
             this.CreateMap<Gym, DisplayGymViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy h:mm tt")))
+                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("d MMMM yyyy")))
                  .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             this.CreateMap<Gym, GymDetailsViewModel>()
@@ -118,7 +118,7 @@
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
                 .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
-                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("dd/MM/yyyy")));
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn.ToString("d MMMM yyyy")));
 
             this.CreateMap<Event, EventDetailsViewModel>()
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
@@ -142,14 +142,24 @@
               .ForMember(d => d.EndDate, opt => opt.MapFrom(src => src.EndDate.ToString("dd/MM/yyyy h:mm tt")));
 
             // Articles
+            this.CreateMap<CreateArticleInputModel, Article>()
+                .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)));
+
             this.CreateMap<Article, ArticleViewModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
                 .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
                 .ForMember(d => d.ShortContent, opt => opt.MapFrom(src => src.Content.Substring(0, 50)));
 
-            // Countries
-            this.CreateMap<Country, CountryViewModel>();
+			this.CreateMap<Article, ArticleDetailsViewModel>()
+			   .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+			   .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+			   .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
+			   .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
+			   .ForMember(d => d.Content, opt => opt.MapFrom(src => src.Content));
+
+			// Countries
+			this.CreateMap<Country, CountryViewModel>();
         }
     }
 }

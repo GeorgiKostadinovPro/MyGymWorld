@@ -1,8 +1,8 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using MyGymWorld.Core.Contracts;
-    using MyGymWorld.Data.Models;
+	using MyGymWorld.Core.Contracts;
+	using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Articles;
     using MyGymWorld.Web.ViewModels.Events;
 
@@ -64,5 +64,22 @@
 
             return this.View(queryModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string articleId)
+        {
+			bool doesArticleExist = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
+
+			if (doesArticleExist == false)
+			{
+				this.TempData[ErrorMessage] = "Such article does NOT exist!";
+
+				return this.NotFound();
+			}
+
+			ArticleDetailsViewModel articleDetailsViewModel = await this.articleService.GetArticleDetailsByIdAsync(articleId);
+
+			return this.View(articleDetailsViewModel);
+		}
     }
 }
