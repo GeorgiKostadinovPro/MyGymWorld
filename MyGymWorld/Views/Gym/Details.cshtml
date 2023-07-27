@@ -40,6 +40,9 @@
 @*Particles*@
 <link href="~/css/index-page-particles.css" rel="stylesheet" />
 
+@*Create Button*@
+<link href="~/css/create-event-button.css" rel="stylesheet" />
+
 @*Owl Carousel 2*@
 <script src="~/lib/owlcarousel/scripts/owl.carousel.min.js"></script>
 
@@ -211,10 +214,23 @@
                         <input type="hidden" name="GymId" value="@Model.Id" />
                         <button type="submit"
                                 class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 180px;">
-                            <i class="fa fa-plus"></i>&nbsp;See Articles <span>@totalEventsCount</span>
+                            <i class="fa fa-plus"></i>&nbsp;See Articles <span>@Model.ArticlesCount</span>
                         </button>
                     </form>
                 </div>
+
+                <hr />
+
+                @if(User.IsInRole("Manager") && isUserManagerOfThisGym)
+                {
+                   <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                    <a asp-area="Manager"
+                   asp-controller="Article"
+                   asp-action="Create"
+                   asp-route-gymId="@Model.Id"
+                       class="button" type="submit" id="button">Create Article</a>
+                  </div>
+                }
             }
             <br>
         </div>

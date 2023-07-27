@@ -34,10 +34,10 @@
             <div class="form-group col-md-5" style="margin-left: 30px;">
                 <label asp-for="@Model.EventTypes">Gym Types</label>
                 <select asp-for="@Model.EventType" id="gymTypes" class="form-select">
-                    <option value="None">-- Please Select A Manager Type --</option>
-                    @foreach (string managerType in Model.EventTypes)
+                    <option value="None">-- Please Select A Event Type --</option>
+                    @foreach (string eventType in Model.EventTypes)
                     {
-                        <option value="@managerType">@managerType</option>
+                        <option value="@eventType">@eventType</option>
                     }
                 </select>
                 <span asp-validation-for="@Model.EventType" class="text-danger"></span>

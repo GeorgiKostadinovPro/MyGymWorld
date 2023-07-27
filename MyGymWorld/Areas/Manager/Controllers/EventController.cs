@@ -32,15 +32,6 @@
         {
             try
             {
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -62,6 +53,15 @@
                     {
                         return this.Forbid();
                     }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
                 }
 
                 CreateEventInputModel createEventInputModel = new CreateEventInputModel
@@ -94,15 +94,6 @@
             {
                 string userId = this.GetUserId();
 
-                Gym gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
                 if (!this.User.IsInRole("Manager")
@@ -122,6 +113,15 @@
                     {
                         return this.Forbid();
                     }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
                 }
 
                 if (createEventInputModel.StartDate >= createEventInputModel.EndDate)
@@ -169,15 +169,6 @@
         {
             try
             {
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -199,6 +190,15 @@
                     {
                         return this.Forbid();
                     }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
                 }
 
                 bool doesEventExists = await this.eventService.CheckIfEventExistsByIdAsync(eventId);
@@ -238,15 +238,6 @@
             {
                 string userId = this.GetUserId();
 
-                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
                 if (!this.User.IsInRole("Manager")
@@ -266,6 +257,15 @@
                     {
                         return this.Forbid();
                     }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
                 }
 
                 var startDateResult = DateTime.TryParseExact(editEventInputModel.StartDate, "dd/MM/yyyy H:mm tt",
