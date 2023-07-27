@@ -1,10 +1,10 @@
-﻿@using MyGymWorld.Core.Contracts;
-@using MyGymWorld.Data.Models;
-@using MyGymWorld.Web.Infrastructure.Extensions;
+﻿@using MyGymWorld.Core.Contracts
+@using MyGymWorld.Data.Models
+@using MyGymWorld.Web.Infrastructure.Extensions
 
-@model AllEventsForGymQueryModel
+@model AllArticlesForGymQueryModel
 
-@inject IGymService GymService;
+@inject IGymService GymService
 @inject IManagerService ManagerService
 
 @{
@@ -32,7 +32,8 @@
     <hr />
 
     <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-       <a asp-area="Manager"
+       <a 
+           asp-area="Manager"
        asp-controller="Article"
        asp-action="Create"
        asp-route-gymId="@Model.GymId"
@@ -47,12 +48,12 @@
     <div class="row">
         <div class="form-group col-md-3 d-flex justify-content-between">
             <div class="form-group">
-                <label asp-for="@Model.EventType"></label>
-                <select asp-for="@Model.EventType" class="form-control">
+                <label asp-for="@Model.Categories"></label>
+                <select asp-for="@Model.CategoryId" class="form-control">
                     <option value="">All</option>
-                    @foreach (var eventType in Model.EventTypes)
+                    @foreach (var category in Model.Categories)
                     {
-                        <option value="@eventType">@eventType</option>
+                        <option value="@category.Id.ToString()">@category.Name</option>
                     }
                 </select>
             </div>
@@ -63,12 +64,10 @@
         </div>
         <div class="form-group col-md-3">
             <div class="form-group">
-                <label asp-for="@Model.EventsSorting"></label>
-                <select asp-for="@Model.EventsSorting" class="form-control">
+                <label asp-for="@Model.ArticlesSorting"></label>
+                <select asp-for="@Model.ArticlesSorting" class="form-control">
                     <option value="0">Newest</option>
                     <option value="1">Oldest</option>
-                    <option value="2">Participants Ascending</option>
-                    <option value="3"> Participants Descending</option>
                 </select>
             </div>
         </div>
@@ -88,7 +87,7 @@
         previousPage = 1;
     }
 
-    int maxPage = (int)Math.Ceiling((double)Model.TotalEventsCount / Model.EventsPerPage);
+    int maxPage = (int)Math.Ceiling((double)Model.TotalArticlesCount / Model.ArticlesPerPage);
 }
 
 <div class="row mb-5">
@@ -100,12 +99,12 @@ string.Empty)"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@previousPage"
-           asp-route-category="@Model.EventType"
+           asp-route-category="@Model.CategoryId"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.EventsSorting)"><<</a>
+           asp-route-sorting="@((int)Model.ArticlesSorting)"><<</a>
     </div>
     @{
-        bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Events.Any();
+        bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Articles.Any();
     }
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
         <a class="btn btn-primary
@@ -115,40 +114,64 @@ string.Empty)"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-category="@Model.EventType"
+           asp-route-category="@Model.CategoryId"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.EventsSorting)">>></a>
+           asp-route-sorting="@((int)Model.ArticlesSorting)">>></a>
     </div>
 </div>
 
-@if (!Model.Events.Any())
+@if (!Model.Articles.Any())
 {
-    <h2 class="text-center">No Events were found by the given criteria!</h2>
+    <h2 class="text-center">No Articles were found by the given criteria!</h2>
 }
 
 <div class="row">
-    @foreach (EventViewModel eventViewModel in Model.Events)
+    @foreach (ArticleViewModel articleViewModel in Model.Articles)
     {
+        var timeSinceNotificationCreated = DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalMinutes;
+
         <div class="card" style="width: 18rem; margin-right: 30px;  padding: 20px;
     background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
 
-        @if(eventViewModel.EndDate <= DateTime.UtcNow)
+            @if (timeSinceNotificationCreated >= 60)
+            {
+                if (timeSinceNotificationCreated >= 1440)
+                {
+                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalDays.ToString("f0") days ago</small>
+                }
+                else
+                {
+                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalHours.ToString("f0") hours ago</small>
+                }
+            }
+            else
+            {
+                if (timeSinceNotificationCreated < 1)
+                {
+                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
+                }
+                else
+                {
+                    <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
+                }
+            }
+
+       @* @if(articleViewModel.EndDate <= DateTime.UtcNow)
         {
             <span class="badge badge-danger" style="position: absolute; top: 10px; right: 10px;">Ended</span>
         }
-        else if(eventViewModel.StartDate < DateTime.UtcNow && eventViewModel.EndDate > DateTime.UtcNow)
+        else if(articleViewModel.StartDate < DateTime.UtcNow && articleViewModel.EndDate > DateTime.UtcNow)
         {
             <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">Running</span>
         }
         else
         {
             <span class="badge badge-primary" style="position: absolute; top: 10px; right: 10px;">Starting soon</span>
-        }
-            <img style="border-radius: 50%; width: 100px; height: 100px;  object-fit: cover;" class="card-img-top" src="@eventViewModel.LogoUri" alt="Card image cap">
+        }*@
             <div class="card-body">
-                <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>
-                <p style="text-align: center;" class="card-text">Created on: @eventViewModel.CreatedOn</p>
-                <a asp-area="" asp-controller="Article" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
+                <h5 class="card-title" style="text-align: center;">@articleViewModel.Title</h5>
+                <p style="text-align: center;" class="card-text">Created on: @articleViewModel.CreatedOn</p>
+                <a asp-area="" asp-controller="Article" asp-action="Details" asp-route-articleId="@articleViewModel.Id"
                     style="display: block; margin: 0 auto;" class="btn btn-primary">Details</a>
             </div>
         </div>

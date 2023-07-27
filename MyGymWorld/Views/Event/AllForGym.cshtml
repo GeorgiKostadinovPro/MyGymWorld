@@ -1,10 +1,10 @@
-﻿@using MyGymWorld.Core.Contracts;
-@using MyGymWorld.Data.Models;
-@using MyGymWorld.Web.Infrastructure.Extensions;
+﻿@using MyGymWorld.Core.Contracts
+@using MyGymWorld.Data.Models
+@using MyGymWorld.Web.Infrastructure.Extensions
 
 @model AllEventsForGymQueryModel
 
-@inject IGymService GymService;
+@inject IGymService GymService
 @inject IManagerService ManagerService
 
 @{
@@ -41,7 +41,8 @@
     <hr />
 
     <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-        <a asp-area="Manager"
+        <a 
+            asp-area="Manager"
        asp-controller="Event"
        asp-action="Create"
        asp-route-gymId="@Model.GymId"

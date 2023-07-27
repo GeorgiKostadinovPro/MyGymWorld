@@ -1,10 +1,10 @@
 ﻿namespace MyGymWorld.Web.Areas.Manager.Controllers
 {
+    using Ganss.Xss;
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Articles;
-    using MyGymWorld.Web.ViewModels.Managers.Events;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
@@ -92,6 +92,65 @@
             if (!this.ModelState.IsValid)
             {
                 return this.View(createArticleInputModel);
+            }
+
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(createArticleInputModel.GymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(createArticleInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Category? category = await this.categoryService.GetCategoryByIdAsync(createArticleInputModel.CategoryId);
+
+                if (createArticleInputModel.CategoryId == "None" || category == null)
+                {
+                    this.ModelState.AddModelError("CategoryId", "You must choose a valid catgeory type!");
+
+                    return this.View(createArticleInputModel);
+                }
+
+                createArticleInputModel.Content = new HtmlSanitizer().Sanitize(createArticleInputModel.Content);
+
+                Article createdArticle = await this.articleService.CreateArticleAsync(createArticleInputModel);
+
+                this.TempData[SuccessMessage] = "You created an article!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You created an articlwe for {gym.Name}",
+                    $"/Article/Details?articleId={createdArticle.Id.ToString()}",
+                    userId);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
             }
 
             return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = createArticleInputModel.GymId });

@@ -5,5 +5,7 @@
     public interface ICategoryService
     {
         Task<IEnumerable<Category>> GetActiveCategoriesAsync();
+
+        Task<Category?> GetCategoryByIdAsync(string categoryId);
     }
 }

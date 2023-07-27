@@ -21,5 +21,11 @@
             return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false)
                 .ToArrayAsync();
         }
+
+        public async Task<Category?> GetCategoryByIdAsync(string categoryId)
+        {
+            return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false && c.Id == Guid.Parse(categoryId))
+                .FirstOrDefaultAsync();
+        }
     }
 }
