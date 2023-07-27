@@ -54,6 +54,8 @@
             services.AddScoped<IDislikeService, DislikeService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IArticleService, ArticleService>();
+
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
             services.AddScoped<IAddressService, AddressService>();

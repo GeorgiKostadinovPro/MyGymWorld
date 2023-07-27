@@ -65,4 +65,8 @@
     <None Include="Areas\Manager\Views\Event\Create.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Manager\Views\Article\" />
+  </ItemGroup>
+
 </Project>

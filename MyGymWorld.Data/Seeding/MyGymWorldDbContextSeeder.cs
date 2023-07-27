@@ -24,7 +24,8 @@ namespace MyGymWorld.Data.Seeding
                           {
                               new RolesSeeder(),
                               new CountriesSeeder(),
-                              new TownsSeeder()
+                              new TownsSeeder(),
+                              new CategoriesSeeder()
                           };
 
             foreach (var seeder in seeders)
