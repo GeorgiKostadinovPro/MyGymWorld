@@ -12,7 +12,6 @@
             this.Notifications = new HashSet<Notification>();
             this.UsersGyms = new HashSet<UserGym>();
             this.UsersEvents = new HashSet<UserEvent>();
-            this.UsersArticles = new HashSet<UserArticle>();
             this.UsersMemberships = new HashSet<UserMembership>();
             this.UsersChatGroups = new HashSet<UserChatGroup>();
 
@@ -51,8 +50,6 @@
         public virtual ICollection<UserGym> UsersGyms { get; set; }
 
         public virtual ICollection<UserEvent> UsersEvents { get; set; }
-
-        public virtual ICollection<UserArticle> UsersArticles { get; set; }
 
         public virtual ICollection<UserMembership> UsersMemberships { get; set; }
 
