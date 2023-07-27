@@ -24,15 +24,6 @@
 @*Create Button*@
 <link href="~/css/create-event-button.css" rel="stylesheet" />
 
-@*Fitness card*@
-@*<link href="~/css/fitness-card.css" rel="stylesheet" />*@
-
-@*Particles*@
-@*<link href="~/css/particles.css" rel="stylesheet" />*@
-
-@*Particles*@
-@*<script src="~/js/particles.js"></script>*@
-
 <h1 style="text-align: center;">Welcome to the Events page!</h1>
 <p style="text-align: center">Below you can search events by your choice.</p>
 
@@ -159,7 +150,7 @@ string.Empty)"
                 <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>
                 <p style="text-align: center;" class="card-text">Created on: @eventViewModel.CreatedOn</p>
                 <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
-                    style="display: block; margin: 0 auto;" class="btn btn-primary">Details</a>
+                    style="display: block; margin: 0 auto;" class="btn btn-primary">Read More</a>
             </div>
         </div>
     }
