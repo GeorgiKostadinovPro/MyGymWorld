@@ -1,18 +1,17 @@
 ﻿namespace MyGymWorld.Data.Seeding
 {
+    using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Seeding.Contracts;
     using System;
     using System.Linq;
-    using System.Reflection.Emit;
     using System.Threading.Tasks;
-    using System.Xml.Linq;
 
     public class TownsSeeder : ISeeder
     {
         public async Task SeedAsync(MyGymWorldDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Towns.Any())
+            if (await dbContext.Towns.AnyAsync())
             {
                 return;
             }

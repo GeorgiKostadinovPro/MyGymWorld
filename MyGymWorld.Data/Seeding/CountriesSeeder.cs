@@ -1,5 +1,6 @@
 ﻿namespace MyGymWorld.Data.Seeding
 {
+    using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Seeding.Contracts;
     using System;
@@ -9,7 +10,7 @@
     {
         public async Task SeedAsync(MyGymWorldDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Countries.Any())
+            if (await dbContext.Countries.AnyAsync())
             {
                 return;
             }

@@ -8,7 +8,7 @@
 @inject IManagerService ManagerService
 
 @{
-    ViewData["Title"] = "All Events";
+    ViewData["Title"] = "All Articles";
 
     string userId = User.GetId();
 
@@ -24,34 +24,25 @@
 @*Create Button*@
 <link href="~/css/create-event-button.css" rel="stylesheet" />
 
-@*Fitness card*@
-@*<link href="~/css/fitness-card.css" rel="stylesheet" />*@
-
-@*Particles*@
-@*<link href="~/css/particles.css" rel="stylesheet" />*@
-
-@*Particles*@
-@*<script src="~/js/particles.js"></script>*@
-
-<h1 style="text-align: center;">Welcome to the Events page!</h1>
-<p style="text-align: center">Below you can search events by your choice.</p>
+<h1 style="text-align: center;">Welcome to the Artciles page!</h1>
+<p style="text-align: center">Below you can search articles by your choice.</p>
 
 @if(User.IsInRole("Manager") && isUserManagerOfThisGym)
 {   
     <hr />
 
     <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-        <a asp-area="Manager"
-       asp-controller="Event"
+       <a asp-area="Manager"
+       asp-controller="Artcile"
        asp-action="Create"
        asp-route-gymId="@Model.GymId"
-           class="button" type="submit" id="button">Create Event</a>
+           class="button" type="submit" id="button">Create Article</a>
     </div>
 }
 
 <hr />
 
-<form asp-area="" asp-controller="Event" asp-action="AllForGym" method="get">
+<form asp-area="" asp-controller="Article" asp-action="AllForGym" method="get">
     <input type="hidden" name="GymId" value="@Model.GymId"/>
     <div class="row">
         <div class="form-group col-md-3 d-flex justify-content-between">
@@ -105,7 +96,7 @@
         <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" :
 string.Empty)"
            asp-area=""
-           asp-controller="Event"
+           asp-controller="Article"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@previousPage"
@@ -120,7 +111,7 @@ string.Empty)"
         <a class="btn btn-primary
  @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
            asp-area=""
-           asp-controller="Event"
+           asp-controller="Article"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
@@ -157,7 +148,7 @@ string.Empty)"
             <div class="card-body">
                 <h5 class="card-title" style="text-align: center;">@eventViewModel.Name</h5>
                 <p style="text-align: center;" class="card-text">Created on: @eventViewModel.CreatedOn</p>
-                <a asp-area="" asp-controller="Event" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
+                <a asp-area="" asp-controller="Article" asp-action="Details" asp-route-eventId="@eventViewModel.Id"
                     style="display: block; margin: 0 auto;" class="btn btn-primary">Details</a>
             </div>
         </div>
