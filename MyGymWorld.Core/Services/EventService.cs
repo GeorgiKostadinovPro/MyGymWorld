@@ -145,9 +145,9 @@
                 string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
 
                 eventsAsQuery = eventsAsQuery
-                    .Where(e => EF.Functions.Like(e.Name, wildCard))
-                    .Where(e => EF.Functions.Like(e.Description, wildCard))
-                    .Where(e => EF.Functions.Like(e.Gym.Name, wildCard));
+                    .Where(e => EF.Functions.Like(e.Name, wildCard)
+                    || EF.Functions.Like(e.Description, wildCard)
+                    || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
             switch (queryModel.EventsSorting)
@@ -208,9 +208,9 @@
                 string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
 
                 eventsAsQuery = eventsAsQuery
-                    .Where(e => EF.Functions.Like(e.Name, wildCard))
-                    .Where(e => EF.Functions.Like(e.Description, wildCard))
-                    .Where(e => EF.Functions.Like(e.Gym.Name, wildCard));
+                  .Where(e => EF.Functions.Like(e.Name, wildCard)
+                  || EF.Functions.Like(e.Description, wildCard)
+                  || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
             switch (queryModel.EventsSorting)

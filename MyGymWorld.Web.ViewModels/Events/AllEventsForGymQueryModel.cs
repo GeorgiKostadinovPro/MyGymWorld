@@ -20,7 +20,7 @@
 
         public int EventsPerPage { get; set; }
 
-        public string EventType { get; set; } = null!;
+        public string? EventType { get; set; } = null!;
 
         [Display(Name = "Search by text")]
         public string? SearchTerm { get; set; }
