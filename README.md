@@ -213,7 +213,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can use <strong>Authenticated User</strong> functionality.</li>
     <li>Can see all <strong>active</strong> users in the app.</li>
     <li>Can see all <strong>deleted</strong> users in the app.</li>
-    <li>Can delete a user.</li>
+    <li>Can delete a user. (If the user is a Manager his gyms will be deleted as well)</li>
     <li>Can see all manager requests.</li>
     <li>Can see details about a manager request.</li>
     <li>Can approve a manager request.</li>
@@ -227,6 +227,9 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can delete a role.</li>
     <li>Can see all <strong>active</strong> gyms in the app with their manager.</li>
     <li>Can see all <strong>deleted</strong> gyms in the app with their manager.</li>
+    <li>Can create category for gym articles.</li>
+    <li>Can edit category for gym articles.</li>
+    <li>Can delete category for gym articles. (all gym articles with this category will be deleted as well)</li>
   </ul>
 </details>
 
