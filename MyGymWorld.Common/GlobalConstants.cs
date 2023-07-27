@@ -21,5 +21,11 @@
              public const int EventsPerPage = 3;
              public const int DefaultPage = 1;
         }
+
+        public static class ArticleConstants
+        {
+            public const int ArticlesPerPage = 3;
+            public const int DefaultPage = 1;
+        }
     }
 }

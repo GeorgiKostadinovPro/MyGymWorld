@@ -6,11 +6,13 @@
     using MyGymWorld.Web.ViewModels.Administration.Managers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;
+    using MyGymWorld.Web.ViewModels.Articles;
     using MyGymWorld.Web.ViewModels.Comments;
     using MyGymWorld.Web.ViewModels.Countries;
     using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Gyms;
     using MyGymWorld.Web.ViewModels.Managers;
+    using MyGymWorld.Web.ViewModels.Managers.Articles;
     using MyGymWorld.Web.ViewModels.Managers.Events;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using MyGymWorld.Web.ViewModels.Notifications;
@@ -138,6 +140,13 @@
               .ForMember(d => d.EventType, opt => opt.MapFrom(src => src.EventType.ToString()))
               .ForMember(d => d.StartDate, opt => opt.MapFrom(src => src.StartDate.ToString("dd/MM/yyyy h:mm tt")))
               .ForMember(d => d.EndDate, opt => opt.MapFrom(src => src.EndDate.ToString("dd/MM/yyyy h:mm tt")));
+
+            // Articles
+            this.CreateMap<Article, ArticleViewModel>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+                .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
+                .ForMember(d => d.ShortContent, opt => opt.MapFrom(src => src.Content.Substring(0, 50)));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

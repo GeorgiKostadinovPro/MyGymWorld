@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Web.ViewModels.Managers.Events;
 	using System.Globalization;
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -138,9 +139,11 @@
 					return this.View(createEventInputModel);
 				}
 
-				if (createEventInputModel.EventType == "None")
+                bool isEventTypeValid = Enum.TryParse<EventType>(createEventInputModel.EventType, true, out EventType result);
+
+				if (createEventInputModel.EventType == "None" || isEventTypeValid == false)
                 {
-                    this.ModelState.AddModelError("EventType", "You must choose an event type!");
+                    this.ModelState.AddModelError("EventType", "You must choose a valid event type!");
 
                     return this.View(createEventInputModel);
                 }
@@ -284,9 +287,11 @@
                 editEventInputModel.ParsedStartDate = startResult;
                 editEventInputModel.ParsedEndDate = endResult;
 
-                if (editEventInputModel.EventType == "None")
+                bool isEventTypeValid = Enum.TryParse<EventType>(editEventInputModel.EventType, true, out EventType result);
+
+                if (editEventInputModel.EventType == "None" || isEventTypeValid == false)
                 {
-                    this.ModelState.AddModelError("EventType", "You must choose an event type!");
+                    this.ModelState.AddModelError("EventType", "You must choose a valid event type!");
 
                     return this.View(editEventInputModel);
                 }
