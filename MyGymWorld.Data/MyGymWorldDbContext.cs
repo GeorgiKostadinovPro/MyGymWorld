@@ -25,8 +25,6 @@ namespace MyGymWorld.Data
 
         public DbSet<ArticleCategory> ArticlesCategories { get; set; }
 
-        public DbSet<UserArticle> UsersArticles { get; set; }
-
         public DbSet<Event> Events { get; set; }
 
         public DbSet<UserEvent> UsersEvents { get; set; }
