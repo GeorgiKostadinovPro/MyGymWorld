@@ -176,7 +176,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see all articles about a gym.</li>
     <li>Can see details about each article.</li>
     <li>Can subscribe for gym articles.</li>
-    <li>Can see all articles the user subscribed for.</li>
+    <li>Can recieve articles to his email after subscribing.</li>
     <li>Can remove article from his articles collection.</li>
     <li>Can see all membership for each gym.</li>
     <li>Can see details about each membership.</li>
