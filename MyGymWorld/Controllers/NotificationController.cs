@@ -104,5 +104,32 @@
 
             return this.RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> ReadAll()
+        {
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                await this.notificationService.ReadAllNotificationsByUserIdAsync(userId);
+
+                this.TempData[SuccessMessage] = "You read all notifications!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
     }
 }

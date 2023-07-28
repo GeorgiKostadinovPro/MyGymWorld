@@ -4,7 +4,7 @@
     ViewData["Title"] = "Notifications";
 }
 
-<link href="~/css/removeAll-notifications-button.css" rel="stylesheet"/>
+<link href="~/css/notifications-buttons.css" rel="stylesheet"/>
 
 <div class="text-center">
     <h1 class="display-4">Your Notifications</h1>
@@ -15,9 +15,16 @@
     <hr />
 
     <div style="text-align: center;">
-        <form asp-area="" asp-controller="Notification" asp-action="Clear" method="post" id="clearAllForm">
-            <a onclick="document.getElementById('clearAllForm').submit()" class="button primary delete" style="color: whitesmoke; font-size: 20px;">Clear All</a>
-        </form>
+        <div style="display: inline-block; margin-right: 10px;">
+            <form asp-area="" asp-controller="Notification" asp-action="Clear" method="post" id="clearAllForm">
+                <a onclick="document.getElementById('clearAllForm').submit()" class="button primary delete" style="color: whitesmoke; font-size: 25px;">Clear All</a>
+            </form>
+        </div>
+        <div style="display: inline-block;">
+            <form asp-area="" asp-controller="Notification" asp-action="ReadAll" method="post" id="readAllForm">
+                <a onclick="document.getElementById('readAllForm').submit()" class="button primary save" style="color: whitesmoke; font-size: 25px;">Read All</a>
+            </form>
+        </div>
     </div>
 }
 
