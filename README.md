@@ -152,8 +152,10 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can use the given pagination on every page.</li>
     <li>Can recieve notifications.</li>
     <li>Can review his notifications.</li>
-    <li>Can delete his notifications.</li>
+    <li>Can delete notification.</li>
+    <li>Can delete all notifications at once.</li>
     <li>Can mark notification as read.</li>
+    <li>Can mark all notifications as read at once.</li>
     <li>Can see all gyms.</li>
     <li>Can sort all gyms.</li>
     <li>Can filter all gyms.</li>
