@@ -1,0 +1,59 @@
+﻿@model EditArticleInputModel
+
+@{
+    ViewData["Title"] = "Edit Article";
+}
+
+<script src="~/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
+<div id="createArticle" style="padding: 20px; box-shadow: 0 0 10px #2C3142; display: flex; justify-content: center;">
+    <form asp-area="Manager" asp-controller="Article" asp-action="Create" method="post">
+        <input type="hidden" name="GymId" value="@Model.GymId" />
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@Model.Title"></label>
+                <input asp-for="@Model.Title" type="text" class="form-control" placeholder="Name" required>
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-7" style="margin-left: 40px;">
+                <label asp-for="@Model.CategoryIds">Category Types</label>
+                <select multiple="multiple" class="multi-select form-control custom-radio" asp-for="@Model.CategoryIds" asp-items="@Model.CategoriesListItems" id="categoryTypes" class="form-select">
+                </select>
+                <span asp-validation-for="@Model.CategoryIds" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <textarea asp-for="@Model.Content" id="editor" required>Enter your Article content.</textarea>
+                <span asp-validation-for="@Model.Content" class="text-danger"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mx-auto d-block">Save Changes</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        tinymce.init({
+            selector: '#editor',
+            width: 540,
+            height: 300,
+            resize: false,
+            plugins: [
+                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
+                'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
+                'media', 'table', 'emoticons', 'template', 'help'
+            ],
+            toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+                'forecolor backcolor emoticons | help',
+            menu: {
+                favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+            },
+            menubar: 'favs file edit view insert format tools table help',
+            content_css: 'css/content.css'
+        });
+    </script>
+}

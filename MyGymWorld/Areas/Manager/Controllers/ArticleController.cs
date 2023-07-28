@@ -157,6 +157,66 @@
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(string articleId, string gymId)
+        {
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                bool doesEventExists = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
+
+                if (doesEventExists == false)
+                {
+                    this.TempData[ErrorMessage] = "Such article does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                EditArticleInputModel editArticleInputModel = await this.articleService.GetArticleForEditByIdAsync(articleId);
+
+                editArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
+
+                return this.View(editArticleInputModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
+        }
+
         [HttpPost]
 
         public async Task<IActionResult> Delete(string articleId)

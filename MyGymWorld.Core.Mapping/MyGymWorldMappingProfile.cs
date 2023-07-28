@@ -158,8 +158,12 @@
 			   .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
 			   .ForMember(d => d.Content, opt => opt.MapFrom(src => src.Content));
 
-			// Countries
-			this.CreateMap<Country, CountryViewModel>();
+            this.CreateMap<Article, EditArticleInputModel>()
+             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+             .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()));
+
+            // Countries
+            this.CreateMap<Country, CountryViewModel>();
         }
     }
 }

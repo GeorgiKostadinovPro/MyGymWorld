@@ -1,4 +1,4 @@
-﻿@using MyGymWorld.Core.Contracts;
+﻿﻿@using MyGymWorld.Core.Contracts;
 @using MyGymWorld.Data.Models;
 @using MyGymWorld.Web.Infrastructure.Extensions;
 
@@ -26,13 +26,14 @@
 
 <link href="~/css/article-details-card.css" rel="stylesheet" />
 
-<div class="container d-flex height-vh" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 30px; padding-top: 20px; padding-bottom: 10px;">
+@*
+<div class="container d-flex height-vh" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 30px; padding-top: 20px; padding-bottom: 10px;">*@
 	<div class="row d-flex justify-content-center">
 		<div class="col-md-12">
 			<div class="d-flex flex-column" id="comment-container">
 				<div class="bg-white">
 					<div class="flex-row d-flex">
-						<img src="@Model.LogoUri" width="40" class="rounded-circle">
+						<img src="@Model.LogoUri" width="60" class="rounded-circle">
 						<div class="d-flex flex-column justify-content-start ml-2">
 							<h2 class="d-block font-weight-bold name">@Model.Title</h2>
 							<span class="date text-black-50">@Model.CreatedOn.ToString("d MMMM yyyy")</span>
@@ -67,46 +68,12 @@
 				</div>
 				<div class="bg-white">
 					<hr />
-                    <p>Thanks for reading! For more news <a asp-area="" asp-controller="Article" asp-action="AllForGym" asp-route-gymId="@Model.GymId">click here</a>.</p>
+					<p>Thanks for reading! For more news <a asp-area="" asp-controller="Article" asp-action="AllForGym" asp-route-gymId="@Model.GymId">click here</a>.</p>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-@*<div class="blog_post">
-	<div class="img_pod">
-		<img src="@Model.LogoUri" alt="random image">
-	</div>
-	<div class="container_copy">
-		<h3>@Model.CreatedOn.ToString("d MMMM yyyy")</h3>
-		<h1>@Model.Title</h1>
-        <p>@Html.Raw(Model.Content)</p>
-		<hr />
-		@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
-		{
-			
-			
-			<div class="projcard-tagbox" style=" display: flex; align-items: center;">
-				<form asp-area="Manager"
-				  asp-controller="Article"
-				  asp-action="Edit"
-		  method="get" style="margin-right: 10px;">
-					<input type="hidden" name="articleId" value="@Model.Id" />
-					<input type="hidden" name="gymId" value="@Model.GymId" />
-					<button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;">Edit</button>
-				</form>
-
-
-				<a href="#deleteEventModal" data-articleId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
-			 		Delete
-			  </a>
-			
-			</div>
-		}
-	</div>
-
-</div>*@
+@*</div>*@
 
 <!-- Delete Modal HTML -->
 <div id="deleteArticleModal" class="modal fade">

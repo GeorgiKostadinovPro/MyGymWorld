@@ -53,6 +53,11 @@
             return article;
         }
 
+        public Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Article> DeleteArticleAsync(string articleId)
         {
             Article? articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
@@ -151,6 +156,17 @@
         {
             return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<EditArticleInputModel> GetArticleForEditByIdAsync(string articleId)
+        {
+            Article articleToEdit = await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+                .Include(a => a.Gym)
+                .FirstAsync();
+
+            EditArticleInputModel editArticleInputModel = this.mapper.Map<EditArticleInputModel>(articleToEdit);
+
+            return editArticleInputModel;
         }
     }
 }
