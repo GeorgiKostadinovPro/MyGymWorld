@@ -2,12 +2,8 @@
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
     using MyGymWorld.Common;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class EditArticleInputModel
     {
@@ -27,7 +23,7 @@
             MinimumLength = ValidationalConstants.ArticleConstants.ContentMinLength)]
         public string Content { get; set; } = null!;
 
-        public IEnumerable<string> CategoryIds { get; set; } = null!;
+        public IEnumerable<string> CategoryIds { get; set; }
 
         public IEnumerable<SelectListItem> CategoriesListItems { get; set; }
 

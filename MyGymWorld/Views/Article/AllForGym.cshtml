@@ -148,7 +148,7 @@ string.Empty)"
             {
                 if (timeSinceNotificationCreated < 1)
                 {
-                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">>@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalSeconds.ToString("f0") seconds ago</span>
+                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalSeconds.ToString("f0") seconds ago</span>
                 }
                 else
                 {
