@@ -97,7 +97,7 @@
         {
             return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
                                         .Where(n => n.UserId == Guid.Parse(userId) && n.IsRead == isRead)
-                                        .OrderByDescending(x => x.CreatedOn)
+                                        .OrderByDescending(n => n.CreatedOn)
                                         .ProjectTo<NotificationViewModel>(this.mapper.ConfigurationProvider)
                                         .ToArrayAsync();
         }
@@ -106,6 +106,7 @@
         {
             IQueryable<Notification> notificationsAsQuery =
                 this.repository.AllReadonly<Notification>(n => n.IsDeleted == false && n.UserId == Guid.Parse(userId))
+                               .OrderByDescending(n => n.CreatedOn)
                                .Skip(skip);
 
             if (take.HasValue)
@@ -114,7 +115,6 @@
             }
 
             return await notificationsAsQuery
-                        .OrderByDescending(x => x.CreatedOn)
                         .ProjectTo<NotificationViewModel>(this.mapper.ConfigurationProvider)
                         .ToArrayAsync();
         }

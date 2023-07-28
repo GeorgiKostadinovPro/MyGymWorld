@@ -2,32 +2,44 @@
 {
     using Ganss.Xss;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Articles;
-	using static MyGymWorld.Common.NotificationMessagesConstants;
+    using System;
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
 	public class ArticleController : ManagerController
 	{
+        private readonly IConfiguration configuration;
+
 		private readonly IArticleService articleService;
         private readonly ICategoryService categoryService;
         private readonly IUserService userService;
         private readonly IGymService gymService;
+
         private readonly INotificationService notificationService;
+        private readonly IEmailSenderService emailSenderService;
 
         public ArticleController (
-            IArticleService articleService,
+            IConfiguration  _configuration,
+            IArticleService _articleService,
             ICategoryService _categoryService,
             IUserService _userService,
             IGymService _gymService,
-            INotificationService _notificationService)
+            INotificationService _notificationService,
+            IEmailSenderService _emailSenderService)
         {
-            this.articleService = articleService;
+            this.configuration = _configuration;
+
+            this.articleService = _articleService;
             this.categoryService = _categoryService;
 
             this.userService = _userService;
             this.gymService = _gymService;
+
             this.notificationService = _notificationService;
+            this.emailSenderService = _emailSenderService;
         }
 
         [HttpGet]
@@ -48,6 +60,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
@@ -56,15 +77,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "Such gym does not exists!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 CreateArticleInputModel createEventInputModel = new CreateArticleInputModel
@@ -108,6 +120,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(createArticleInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(createArticleInputModel.GymId, user.ManagerId.ToString()!);
@@ -116,15 +137,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(createArticleInputModel.GymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (createArticleInputModel.CategoryIds.Count() == 0)
@@ -144,6 +156,19 @@
                     $"You created an article for {gym.Name}.",
                     $"/Article/Details?articleId={createdArticle.Id.ToString()}",
                     userId);
+
+                IEnumerable<ApplicationUser> subsribers = await this.articleService.GetAllUsersWhoAreSubscribedForGymArticlesAsync(createArticleInputModel.GymId);
+
+                foreach (ApplicationUser subsriber in subsribers)
+                {
+                   await this.notificationService.CreateNotificationAsync(
+                   $"New article for {gym.Name}.",
+                   $"/Article/Details?articleId={createdArticle.Id.ToString()}",
+                   userId);
+
+                    await this.emailSenderService.SendEmailAsync(
+                        subsriber.Email, $">New Article for {gym.Name}", $"<p>Want to read more, click <a href='{this.configuration["ApplicationUrl"]}/Article/Details?articleId={createdArticle.Id}'>here</a></p>");
+                }
                 
                 return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = createArticleInputModel.GymId });
             } 
@@ -173,6 +198,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
@@ -181,15 +215,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 bool doesEventExists = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
@@ -238,9 +263,18 @@
 					this.TempData[ErrorMessage] = "You are NOT a Manager!";
 
 					return this.RedirectToAction("All", "Gym", new { area = "" });
-				}
+                }
 
-				if (user.ManagerId != null)
+                Gym gym = await this.gymService.GetGymByIdAsync(editArticleInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
 				{
 					bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(editArticleInputModel.GymId, user.ManagerId.ToString()!);
 
@@ -248,15 +282,6 @@
 					{
 						return this.Forbid();
 					}
-				}
-
-				Gym gym = await this.gymService.GetGymByIdAsync(editArticleInputModel.GymId);
-
-				if (gym == null)
-				{
-					this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-					return this.RedirectToAction("All", "Gym", new { area = "" });
 				}
 
                 editArticleInputModel.Content = new HtmlSanitizer().Sanitize(editArticleInputModel.Content);
