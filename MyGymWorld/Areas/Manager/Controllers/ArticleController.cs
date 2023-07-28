@@ -6,12 +6,10 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Managers.Articles;
-
-    using static MyGymWorld.Common.NotificationMessagesConstants;
-
-    public class ArticleController : ManagerController
-    {
-        private readonly IArticleService articleService;
+	using static MyGymWorld.Common.NotificationMessagesConstants;
+	public class ArticleController : ManagerController
+	{
+		private readonly IArticleService articleService;
         private readonly ICategoryService categoryService;
         private readonly IUserService userService;
         private readonly IGymService gymService;
@@ -143,7 +141,7 @@
                 this.TempData[SuccessMessage] = "You created an article!";
 
                 await this.notificationService.CreateNotificationAsync(
-                    $"You created an article for {gym.Name}",
+                    $"You created an article for {gym.Name}.",
                     $"/Article/Details?articleId={createdArticle.Id.ToString()}",
                     userId);
                 
@@ -217,8 +215,73 @@
             }
         }
 
-        [HttpPost]
+		[HttpPost]
+		public async Task<IActionResult> Edit(string articleId, EditArticleInputModel editArticleInputModel)
+		{
+			editArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
 
+			if (!this.ModelState.IsValid)
+			{
+				return this.View(editArticleInputModel);
+			}
+
+			try
+			{
+				string userId = this.GetUserId();
+
+				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+				if (!this.User.IsInRole("Manager")
+					|| user == null
+					|| user.ManagerId == null)
+				{
+					this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+					return this.RedirectToAction("All", "Gym", new { area = "" });
+				}
+
+				if (user.ManagerId != null)
+				{
+					bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(editArticleInputModel.GymId, user.ManagerId.ToString()!);
+
+					if (isGymManagedByCorrectManager == false)
+					{
+						return this.Forbid();
+					}
+				}
+
+				Gym gym = await this.gymService.GetGymByIdAsync(editArticleInputModel.GymId);
+
+				if (gym == null)
+				{
+					this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+					return this.RedirectToAction("All", "Gym", new { area = "" });
+				}
+
+                editArticleInputModel.Content = new HtmlSanitizer().Sanitize(editArticleInputModel.Content);
+
+				Article editedArticle = await this.articleService.EditArticleAsync(articleId, editArticleInputModel);
+
+				this.TempData[SuccessMessage] = "You edited an article!";
+
+				await this.notificationService.CreateNotificationAsync(
+					$"You edited an article for {gym.Name}.",
+					$"/Event/Details?articleId={editedArticle.Id.ToString()}",
+					userId);
+
+				return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = editArticleInputModel.GymId });
+			}
+			catch (Exception)
+			{
+				this.TempData[ErrorMessage] = "Something went wrong!";
+
+				return this.RedirectToAction("All", "Gym", new { area = "" });
+			}
+		}
+
+
+		[HttpPost]
         public async Task<IActionResult> Delete(string articleId)
         {
             Article? articleToDelete = await this.articleService.GetArticleByIdAsync(articleId);

@@ -53,9 +53,48 @@
             return article;
         }
 
-        public Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
+        public async Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
         {
-            throw new NotImplementedException();
+            Article articleToEdit = await this.repository.All<Article>(e => e.IsDeleted == false && e.Id == Guid.Parse(articleId))
+                .Include(a => a.ArticlesCategories)
+                .FirstAsync();
+
+            articleToEdit.Title = editArticleInputModel.Title;
+            articleToEdit.Content = editArticleInputModel.Content;
+            articleToEdit.ModifiedOn = DateTime.UtcNow;
+
+            foreach (ArticleCategory articleCategory in articleToEdit.ArticlesCategories.Where(ac => ac.IsDeleted == false))
+            {
+                articleCategory.IsDeleted = true;
+                articleCategory.DeletedOn = DateTime.UtcNow;
+            }
+
+            foreach (string categoryId in editArticleInputModel.CategoryIds)
+            {
+                ArticleCategory? articleCategory = await this.repository.All<ArticleCategory>()
+                    .FirstOrDefaultAsync(ac => ac.ArticleId == articleToEdit.Id && ac.CategoryId == Guid.Parse(categoryId));
+
+                if (articleCategory != null)
+                {
+                    articleCategory.IsDeleted = false;
+                    articleCategory.DeletedOn = null;
+                }
+                else
+                {
+                    articleCategory = new ArticleCategory
+                    {
+                        ArticleId = articleToEdit.Id,
+                        CategoryId = Guid.Parse(categoryId),
+                        CreatedOn = DateTime.UtcNow
+                    };
+
+                    await this.repository.AddAsync(articleCategory);
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+
+            return articleToEdit;
         }
 
         public async Task<Article> DeleteArticleAsync(string articleId)
