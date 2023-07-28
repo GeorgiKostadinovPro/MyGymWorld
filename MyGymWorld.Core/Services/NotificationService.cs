@@ -93,6 +93,21 @@
             return notification;
         }
 
+        public async Task DeleteAllNotificationsByUserIdAsync(string userId)
+        {
+            IEnumerable<Notification> notificationsToDelete = await this.repository
+                .All<Notification>(n => n.IsDeleted == false && n.UserId == Guid.Parse(userId))
+                .ToArrayAsync();
+
+            foreach (Notification notification in notificationsToDelete)
+            {
+                notification.IsDeleted = true;
+                notification.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead)
         {
             return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
