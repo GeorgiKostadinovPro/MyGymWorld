@@ -164,10 +164,10 @@
                    await this.notificationService.CreateNotificationAsync(
                    $"New article for {gym.Name}.",
                    $"/Article/Details?articleId={createdArticle.Id.ToString()}",
-                   userId);
+                   subsriber.Id.ToString());
 
                     await this.emailSenderService.SendEmailAsync(
-                        subsriber.Email, $">New Article for {gym.Name}", $"<p>Want to read more, click <a href='{this.configuration["ApplicationUrl"]}/Article/Details?articleId={createdArticle.Id}'>here</a></p>");
+                        subsriber.Email, $"New Article for {gym.Name}", $"<p>Want to read more, click <a href='{this.configuration["ApplicationUrl"]}/Article/Details?articleId={createdArticle.Id}'>here</a></p>");
                 }
                 
                 return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = createArticleInputModel.GymId });
