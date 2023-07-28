@@ -137,36 +137,25 @@ string.Empty)"
             {
                 if (timeSinceNotificationCreated >= 1440)
                 {
-                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalDays.ToString("f0") days ago</small>
+                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalDays.ToString("f0") days ago</span>
                 }
                 else
                 {
-                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalHours.ToString("f0") hours ago</small>
+                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalHours.ToString("f0") hours ago</span>
                 }
             }
             else
             {
                 if (timeSinceNotificationCreated < 1)
                 {
-                    <small style="margin-left: 20px;">@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalSeconds.ToString("f0") seconds ago</small>
+                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">>@DateTime.UtcNow.Subtract(articleViewModel.CreatedOn).TotalSeconds.ToString("f0") seconds ago</span>
                 }
                 else
                 {
-                    <small style="margin-left: 20px;">@timeSinceNotificationCreated.ToString("f0") mins ago</small>
+                    <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">@timeSinceNotificationCreated.ToString("f0") mins ago</span>
                 }
             }
-        @*if(articleViewModel.EndDate <= DateTime.UtcNow)
-        {
-            <span class="badge badge-danger" style="position: absolute; top: 10px; right: 10px;">Ended</span>
-        }
-        else if(articleViewModel.StartDate < DateTime.UtcNow && articleViewModel.EndDate > DateTime.UtcNow)
-        {
-            <span class="badge badge-warning" style="position: absolute; top: 10px; right: 10px;">Running</span>
-        }
-        else
-        {
-            <span class="badge badge-primary" style="position: absolute; top: 10px; right: 10px;">Starting soon</span>
-        }*@
+
           @*  <img style="border-radius: 50%; width: 100px; height: 100px;  object-fit: cover;" class="card-img-top" src="@articleViewModel.LogoUri" alt="Card image cap">*@
             <div class="card-body">
                 <h5 class="card-title" style="text-align: center;">@articleViewModel.Title</h5>
