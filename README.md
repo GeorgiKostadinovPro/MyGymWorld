@@ -174,9 +174,11 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li><strong>CANNOT</strong> leave already ended events.</li>
     <li>Can see all his joined events (search, filter and sort them).</li>
     <li>Can see all articles about a gym.</li>
-    <li>Can see details about each article.</li>
+    <li>Can read each article.</li>
     <li>Can subscribe for gym articles.</li>
+    <li>Can recieve notifications to his notifications page for every newly created article and read it.</li>
     <li>Can recieve articles to his email after subscribing.</li>
+    <li>Can unsubscribe for gym articles. (stop receiving articles notifications)</li>
     <li>Can remove article from his articles collection.</li>
     <li>Can see all membership for each gym.</li>
     <li>Can see details about each membership.</li>
