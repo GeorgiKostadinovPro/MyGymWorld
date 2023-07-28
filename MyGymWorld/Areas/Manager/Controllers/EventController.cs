@@ -47,6 +47,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
@@ -55,15 +64,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 CreateEventInputModel createEventInputModel = new CreateEventInputModel
@@ -107,6 +107,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(createEventInputModel.GymId, user.ManagerId.ToString()!);
@@ -115,15 +124,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 if (createEventInputModel.StartDate >= createEventInputModel.EndDate)
@@ -188,6 +188,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
@@ -196,15 +205,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 bool doesEventExists = await this.eventService.CheckIfEventExistsByIdAsync(eventId);
@@ -255,6 +255,15 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
+                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
                 if (user.ManagerId != null)
                 {
                     bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(editEventInputModel.GymId, user.ManagerId.ToString()!);
@@ -263,15 +272,6 @@
                     {
                         return this.Forbid();
                     }
-                }
-
-                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 var startDateResult = DateTime.TryParseExact(editEventInputModel.StartDate, "dd/MM/yyyy H:mm tt",

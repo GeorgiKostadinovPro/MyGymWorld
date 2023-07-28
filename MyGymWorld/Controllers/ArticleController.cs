@@ -4,7 +4,6 @@
 	using MyGymWorld.Core.Contracts;
 	using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Articles;
-    using MyGymWorld.Web.ViewModels.Events;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
@@ -46,7 +45,7 @@
 
                 if (hasUserJoinedGym == false)
                 {
-                    this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+                    this.TempData[ErrorMessage] = "You have to JOIN the gym to see articles!";
 
                     return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
                 }
@@ -81,5 +80,67 @@
 
 			return this.View(articleDetailsViewModel);
 		}
+
+        [HttpGet]
+        public async Task<IActionResult> Subscribe(string userId, string gymId)
+        {
+            try
+            {
+                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+                
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction(nameof(AllForGym), new { GymId = gymId });
+                }
+
+                if (user.ManagerId == null
+                    || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!))))
+                {
+                    bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(gymId, userId);
+
+                    if (hasUserJoinedGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You have to JOIN the gym to see articles!";
+
+                        return this.RedirectToAction("Details", "Gym", new { gymId = gymId });
+                    }
+                }
+
+                bool isUseralreadySubscribed = await this.articleService.CheckIfUserIsSubscribedForGymArticles(userId, gymId);
+
+                if (isUseralreadySubscribed)
+                {
+                    this.TempData[ErrorMessage] = "You have alreeady subscribed!";
+
+                    return this.RedirectToAction(nameof(AllForGym), new { GymId = gymId });
+                }
+
+                await this.articleService.SubscribeUserToGymArticlesAsync(userId, gymId);
+
+                this.TempData[SuccessMessage] = "You successfully subscribed!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You subscribed for articles by gym - {gym.Name} and now will receive new articles in your Inbox or by email!",
+                    $"/Article/AllForGym?gymId={gymId}",
+                    user.Id.ToString());
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+            }
+
+            return this.RedirectToAction(nameof(AllForGym), new { GymId = gymId });
+        }
     }
 }

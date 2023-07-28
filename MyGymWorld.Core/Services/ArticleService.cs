@@ -99,25 +99,36 @@
 
         public async Task<Article> DeleteArticleAsync(string articleId)
         {
-            Article? articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+            Article articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
-            if (articleToDelete != null)
+            articleToDelete.IsDeleted = true;
+            articleToDelete.DeletedOn = DateTime.UtcNow;
+
+            foreach (var articleCategory in articleToDelete.ArticlesCategories)
             {
-                articleToDelete.IsDeleted = true;
-                articleToDelete.DeletedOn = DateTime.UtcNow;
+                articleCategory.IsDeleted = true;
+				articleCategory.DeletedOn = DateTime.UtcNow;
+			}
 
-                foreach (var articleCategory in articleToDelete.ArticlesCategories)
-                {
-                    articleCategory.IsDeleted = true;
-					articleCategory.DeletedOn = DateTime.UtcNow;
-				}
+			await this.repository.SaveChangesAsync();
+            
+            return articleToDelete;
+        }
 
-				await this.repository.SaveChangesAsync();
+        public async Task SubscribeUserToGymArticlesAsync(string userId, string gymId)
+        {
+            UserGym userGym = await this.repository.All<UserGym>(ug => ug.IsDeleted == false)
+                .FirstAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId));
+
+            if (userGym.IsSubscribedForArticles == false)
+            {
+                userGym.IsSubscribedForArticles = true;
+                userGym.ModifiedOn = DateTime.UtcNow;
             }
 
-            return articleToDelete;
+            await this.repository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel)
@@ -206,6 +217,22 @@
             EditArticleInputModel editArticleInputModel = this.mapper.Map<EditArticleInputModel>(articleToEdit);
 
             return editArticleInputModel;
+        }
+
+        public async Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId)
+        {
+            bool isSubscribedForArticles = await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false)
+                .AnyAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId) && ug.IsSubscribedForArticles == true);
+
+            return isSubscribedForArticles;
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId)
+        {
+            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false && ug.GymId == Guid.Parse(gymId))
+                .Include(ug => ug.User)
+                .Select(ug => ug.User)
+                .ToArrayAsync();
         }
     }
 }

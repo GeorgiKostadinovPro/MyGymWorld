@@ -12,6 +12,8 @@
 
         Task<Article> DeleteArticleAsync(string articleId);
 
+        Task SubscribeUserToGymArticlesAsync(string userId, string gymId);
+
         Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel);
 
         Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId);
@@ -23,5 +25,9 @@
         Task<Article?> GetArticleByIdAsync(string articleId);
 
         Task<bool> CheckIfArticleExistsByIdAsync(string articleId);
+
+        Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId);
+
+        Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId);
     }
 }

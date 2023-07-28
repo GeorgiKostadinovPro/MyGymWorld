@@ -323,6 +323,15 @@
         [HttpPost]
         public async Task<IActionResult> Edit([FromQuery]string gymId, EditGymInputModel editGymInputModel)
         {
+            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+            if (gym == null)
+            {
+                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
             editGymInputModel.Id = gymId;
             editGymInputModel.GymTypes = this.gymService.GetAllGymTypes();
             editGymInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();

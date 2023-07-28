@@ -6,6 +6,7 @@
 
 @inject IGymService GymService
 @inject IManagerService ManagerService
+@inject IArticleService ArticleService
 
 @{
     ViewData["Title"] = "All Articles";
@@ -19,6 +20,8 @@
     {
         isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
     }
+
+    bool hasUserSubscribedForArticles = await this.ArticleService.CheckIfUserIsSubscribedForGymArticles(userId, Model.GymId);
 }
 
 @*Create Button*@
@@ -27,18 +30,46 @@
 <h1 style="text-align: center;">Welcome to the Artciles page!</h1>
 <p style="text-align: center">Below you can search articles by your choice.</p>
 
-@if(User.IsInRole("Manager") && isUserManagerOfThisGym)
-{   
+@if(User.Identity.IsAuthenticated)
+{ 
     <hr />
 
-    <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-       <a 
-           asp-area="Manager"
+    @if(User.IsInRole("Manager") && isUserManagerOfThisGym)
+    {   
+        <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+           <a 
+               asp-area="Manager"
+           asp-controller="Article"
+           asp-action="Create"
+           asp-route-gymId="@Model.GymId"
+               class="button" type="submit" id="button">Create Article</a>
+        </div>
+    }
+    else
+    {
+        if(hasUserSubscribedForArticles)
+        {
+            <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                <a asp-area=""
        asp-controller="Article"
-       asp-action="Create"
+       asp-action="Unsubscribe"
+       asp-route-userId="@userId"
        asp-route-gymId="@Model.GymId"
-           class="button" type="submit" id="button">Create Article</a>
-    </div>
+                   class="button" type="submit" id="button" style="background-color: #fa323f">Unsubscribe</a>
+            </div>
+        }
+        else
+        {
+            <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                <a asp-area=""
+       asp-controller="Article"
+       asp-action="Subscribe"
+       asp-route-userId="@userId"
+       asp-route-gymId="@Model.GymId"
+                   class="button" type="submit" id="button" style="background-color: #19c8cf">Subscribe</a>
+            </div>
+        }
+    }
 }
 
 <hr />
