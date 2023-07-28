@@ -8,6 +8,8 @@
     {
         Task<Article> CreateArticleAsync(CreateArticleInputModel createArticleInputModel);
 
+        Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel);
+
         Task<Article> DeleteArticleAsync(string articleId);
 
         Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel);
@@ -15,6 +17,8 @@
         Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId);
         
         Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId);
+
+        Task<EditArticleInputModel> GetArticleForEditByIdAsync(string articleId);
 
         Task<Article?> GetArticleByIdAsync(string articleId);
 
