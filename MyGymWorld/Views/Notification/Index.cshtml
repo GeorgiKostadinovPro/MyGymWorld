@@ -4,9 +4,22 @@
     ViewData["Title"] = "Notifications";
 }
 
+<link href="~/css/removeAll-notifications-button.css" rel="stylesheet"/>
+
 <div class="text-center">
     <h1 class="display-4">Your Notifications</h1>
 </div>
+
+@if (Model.Notifications.Any())
+{
+    <hr />
+
+    <div style="text-align: center;">
+        <form asp-area="" asp-controller="Notification" asp-action="Clear" method="post" id="clearAllForm">
+            <a onclick="document.getElementById('clearAllForm').submit()" class="button primary delete" style="color: whitesmoke; font-size: 20px;">Clear All</a>
+        </form>
+    </div>
+}
 
 <hr />
 

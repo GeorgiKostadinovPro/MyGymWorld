@@ -12,6 +12,8 @@
 
         Task<Notification> ReadNotificationByIdAsync(string notificationId);
 
+        Task DeleteAllNotificationsByUserIdAsync(string userId);
+
         Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead);
 
         Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId, int skip = 0, int? take = null);

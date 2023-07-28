@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Notifications;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -11,10 +12,15 @@
         private readonly int NotificationsPerPage = 5;
 
         private readonly INotificationService notificationService;
+        private readonly IUserService userService;
 
-        public NotificationController(INotificationService _notificationService)
+        public NotificationController
+            (INotificationService _notificationService, 
+            IUserService userService)
         {
             this.notificationService = _notificationService;
+
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -63,6 +69,33 @@
                 await this.notificationService.ReadNotificationByIdAsync(notificationId);
 
                 this.TempData[SuccessMessage] = "You read notification!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData[ErrorMessage] = ex.Message;
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Clear()
+        {
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                await this.notificationService.DeleteAllNotificationsByUserIdAsync(userId);
+
+                this.TempData[SuccessMessage] = "You cleared all notifications!";
             }
             catch (Exception ex)
             {

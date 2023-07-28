@@ -1,0 +1,126 @@
+﻿@charset "UTF-8";
+
+.button {
+    font-family: "Open Sans";
+    font-size: 16px;
+    font-weight: 400;
+    display: inline-block;
+    color: #FFF;
+    border-radius: 0.25em;
+    text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.4);
+}
+
+.primary {
+    line-height: 40px;
+    transition: ease-in-out 0.2s;
+    padding: 0 16px;
+}
+
+    .primary:hover, .condensed:hover, .touch:hover {
+        transform: scale(1.02);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2), inset 0 0 0 99999px rgba(0, 0, 0, 0.2);
+    }
+
+.condensed {
+    transition: ease-in-out 0.2s;
+    line-height: 24px;
+    padding: 0 8px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.touch {
+    transition: ease-in-out 0.2s;
+    line-height: 40px;
+    width: 40px;
+    padding: 0px;
+    text-align: center;
+}
+
+.edit:before, .save:before, .new:before, .cancel:before, .delete:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    font-size: 1rem;
+    padding-right: 12px;
+    background: none;
+    color: #FFF;
+}
+
+.condensed.edit:before, .condensed.save:before, .condensed.new:before, .condensed.cancel:before, .condensed.delete:before {
+    content: none;
+}
+
+.touch.edit:before, .touch.save:before, .touch.new:before, .touch.cancel:before, .touch.delete:before {
+    width: 100%;
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.inlineIcon.edit, .inlineIcon.save, .inlineIcon.new, .inlineIcon.cancel, .inlineIcon.delete {
+    background: transparent;
+}
+
+    .inlineIcon.edit:before, .inlineIcon.save:before, .inlineIcon.new:before, .inlineIcon.cancel:before, .inlineIcon.delete:before {
+        line-height: 32px;
+        font-size: 32px;
+        padding: 4px 0px;
+    }
+
+.edit {
+    background: #3498db;
+}
+
+    .edit:before {
+        content: "";
+    }
+
+.inlineIcon.edit:before {
+    color: #3498db;
+}
+
+.save {
+    background: #8e44ad;
+}
+
+    .save:before {
+        content: "";
+    }
+
+.inlineIcon.save:before {
+    color: #8e44ad;
+}
+
+.new {
+    background: #2ecc71;
+}
+
+    .new:before {
+        content: "";
+    }
+
+.inlineIcon.new:before {
+    color: #2ecc71;
+}
+
+.cancel {
+    background: #555555;
+}
+
+    .cancel:before {
+        content: "";
+    }
+
+.inlineIcon.cancel:before {
+    color: #555555;
+}
+
+.delete {
+    background: #c0392b;
+}
+
+    .delete:before {
+        content: "";
+    }
+
+.inlineIcon.delete:before {
+    color: #c0392b;
+}
