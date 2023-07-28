@@ -131,6 +131,20 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task UnsubscribeUserToGymArticlesAsync(string userId, string gymId)
+        {
+            UserGym userGym = await this.repository.All<UserGym>(ug => ug.IsDeleted == false)
+               .FirstAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId));
+
+            if (userGym.IsSubscribedForArticles == true)
+            {
+                userGym.IsSubscribedForArticles = false;
+                userGym.ModifiedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel)
         {
             IQueryable<Article> articlesAsQuery =
@@ -229,7 +243,8 @@
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId)
         {
-            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false && ug.GymId == Guid.Parse(gymId))
+            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false)
+                .Where(ug => ug.GymId == Guid.Parse(gymId) && ug.IsSubscribedForArticles == true)
                 .Include(ug => ug.User)
                 .Select(ug => ug.User)
                 .ToArrayAsync();
