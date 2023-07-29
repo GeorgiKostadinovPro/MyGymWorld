@@ -85,7 +85,6 @@ Maybe you can mention me or this repo in the acknowledgements too
   <summary>Server</summary>
   <ul>
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-6.0?view=aspnetcore-6.0">ASP.NET Core 6.0</a></li>
-    <li><a href="https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-6.0&tabs=visual-studio">ASP.NET Core MVC (.NET 6.0)</a></li>
     <li><a href="https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/areas?view=aspnetcore-6.0">ASP.NET Core Areas</a></li>
     <li><a href="https://learn.microsoft.com/en-us/ef/core/">Entity Framework Core 6.0</a></li>
     <li><a href="https://automapper.org/">AutoMapper</a></li>
@@ -98,10 +97,8 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://github.com/drygiel/csslider">CSS Slider (Pure CSS, simple slider)</a></li>
     <li><a href="https://owlcarousel2.github.io/OwlCarousel2/">Owl Carousel 2</a></li>
     <li><a href="https://www.cssscript.com/animated-particles-background-pure-javascript/">Animated Particles Background With Pure JavaScript (By Nash Vail)</a></li>
-    <li><a href="https://codepen.io/choogoor/pen/RwBKZey">CARD HOVER WITH :HAS() (By Aleksandar Čugurović)</a></li>
     <li><a href="https://fonts.google.com/icons">Material Fonts and Icons (Google Fonts)</a></li>
     <li><a href="https://www.w3schools.com/icons/fontawesome_icons_intro.asp">FontAwesome</a></li>
-    <li><a href="https://feathericons.com/">Feather</a></li>
   </ul>
 </details>
 
