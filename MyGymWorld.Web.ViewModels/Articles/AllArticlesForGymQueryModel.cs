@@ -1,12 +1,11 @@
 ﻿namespace MyGymWorld.Web.ViewModels.Articles
 {
-    using MyGymWorld.Web.ViewModels.Events.Enums;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using MyGymWorld.Data.Models;
-
-    using static MyGymWorld.Common.GlobalConstants;
     using MyGymWorld.Web.ViewModels.Articles.Enums;
+    
+    using static MyGymWorld.Common.GlobalConstants;
 
     public class AllArticlesForGymQueryModel
     {
@@ -23,13 +22,13 @@
 
         public int ArticlesPerPage { get; set; }
 
-        public string? CategoryId { get; set; } = null!;
+        public string? CategoryId { get; set; }
 
         [Display(Name = "Search by text")]
         public string? SearchTerm { get; set; }
 
-        [Display(Name = "Sort Events By")]
-        public ArticlesSorting ArticlesSorting { get; set; }
+        [Display(Name = "Sort Articles By")]
+        public ArticlesSorting Sorting { get; set; }
 
         public int CurrentPage { get; set; }
 

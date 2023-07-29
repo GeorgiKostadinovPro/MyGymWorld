@@ -171,7 +171,7 @@
                     || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
-            switch (queryModel.ArticlesSorting)
+            switch (queryModel.Sorting)
             {
                 case ArticlesSorting.Newest:
                     articlesAsQuery = articlesAsQuery

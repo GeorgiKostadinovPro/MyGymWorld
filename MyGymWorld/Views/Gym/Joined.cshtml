@@ -39,8 +39,8 @@
         </div>
         <div class="form-group col-md-3">
             <div class="form-group">
-                <label asp-for="@Model.GymsSorting"></label>
-                <select asp-for="@Model.GymsSorting" class="form-control">
+                <label asp-for="@Model.Sorting"></label>
+                <select asp-for="@Model.Sorting" class="form-control">
                     <option value="0">Newest</option>
                     <option value="1">Oldest</option>
                     <option value="2">Likes Ascending</option>
@@ -78,9 +78,9 @@ string.Empty)"
            asp-action="Joined"
            asp-route-userId="@Model.UserId"
            asp-route-currentPage="@previousPage"
-           asp-route-category="@Model.GymType"
+           asp-route-gymType="@Model.GymType"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.GymsSorting)"><<</a>
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
     @{
         bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Gyms.Any();
@@ -93,9 +93,9 @@ string.Empty)"
            asp-action="Joined"
            asp-route-userId="@Model.UserId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-category="@Model.GymType"
+           asp-route-gymType="@Model.GymType"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.GymsSorting)">>></a>
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
 

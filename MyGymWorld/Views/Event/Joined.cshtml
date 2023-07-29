@@ -42,8 +42,8 @@
         </div>
         <div class="form-group col-md-3">
             <div class="form-group">
-                <label asp-for="@Model.EventsSorting"></label>
-                <select asp-for="@Model.EventsSorting" class="form-control">
+                <label asp-for="@Model.Sorting"></label>
+                <select asp-for="@Model.Sorting" class="form-control">
                     <option value="0">Newest</option>
                     <option value="1">Oldest</option>
                     <option value="2">Participants Ascending</option>
@@ -79,9 +79,9 @@ string.Empty)"
            asp-action="Joined"
            asp-route-userId="@Model.UserId"
            asp-route-currentPage="@previousPage"
-           asp-route-category="@Model.EventType"
+           asp-route-eventType="@Model.EventType"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.EventsSorting)"><<</a>
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
     @{
         bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Events.Any();
@@ -94,9 +94,9 @@ string.Empty)"
            asp-action="Joined"
            asp-route-userId="@Model.UserId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-category="@Model.EventType"
+           asp-route-eventType="@Model.EventType"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.EventsSorting)">>></a>
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
 
