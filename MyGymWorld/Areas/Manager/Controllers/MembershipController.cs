@@ -289,5 +289,51 @@
                 return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string membershipId)
+        {
+            Membership? membershipToDelete = await this.membershipService.GetMembershipByIdAsync(membershipId);
+
+            if (membershipToDelete == null)
+            {
+                this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
+
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                Membership deletedMembership = await this.membershipService.DeleteMembershipAsync(membershipId);
+
+                this.TempData[SuccessMessage] = "You deleted an article!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You deleted a membership!",
+                    $"/Membership/AllForGym?gymId={deletedMembership.GymId.ToString()}",
+                    userId);
+
+                return this.RedirectToActionPermanent("AllForGym", "Membership", new { area = "", GymId = membershipToDelete.GymId });
+            }
+            catch (Exception)
+            {
+                this.TempData[SuccessMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
+        }
     }
 }

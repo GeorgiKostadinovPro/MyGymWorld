@@ -9,7 +9,7 @@
 @inject IManagerService ManagerService
 
 @{
-	ViewData["Title"] = "Event Details";
+	ViewData["Title"] = "Membership Details";
 
 	string userId = User.GetId();
 
@@ -46,7 +46,7 @@
 	{
 		<hr />
 
-		<div class="projcard-tagbox" style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+		<div class="projcard-tagbox" style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">
 			<form asp-area="Manager"
 			  asp-controller="Membership"
 			  asp-action="Edit"
@@ -57,7 +57,7 @@
 			</form>
 
 
-			<a href="#deleteEventModal" data-articleId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
+			<a href="#deleteEventModal" data-membershipId="@Model.Id" data-toggle="modal" id="deleteAnchor" class="btn btn-danger" style="font-size: 1.2rem; padding: 10px 20px;">
 				Delete
 			</a>
 
@@ -77,7 +77,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form asp-area="Manager" asp-controller="Membership" asp-action="Delete" method="post">
-				<input type="hidden" id="membershipIdInput" name="eventId" value="" />
+				<input type="hidden" id="membershipIdInput" name="membershipId" value="" />
 				<div class="modal-header">
 					<h4 class="modal-title">Delete Membership</h4>
 					@*			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
@@ -106,9 +106,9 @@
 		deleteAnchor.on('click', function (event) {
 			event.preventDefault();
 
-			const eventId = deleteAnchor.attr('data-eventId');
+			const membershipId = deleteAnchor.attr('data-membershipId');
 
-			$('#membershipIdInput').val(eventId);
+			$('#membershipIdInput').val(membershipId);
 
 			$('#deleteMembershipModal').modal('show');
 		});

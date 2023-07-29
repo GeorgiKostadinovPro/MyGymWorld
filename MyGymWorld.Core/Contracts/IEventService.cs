@@ -10,7 +10,7 @@
 
         Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel);
 
-        Task DeleteEventAsync(string eventId);
+        Task<Event> DeleteEventAsync(string eventId);
 
         Task ParticipateInEventAsync(string eventId, string userId);
 

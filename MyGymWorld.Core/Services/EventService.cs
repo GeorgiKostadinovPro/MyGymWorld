@@ -57,7 +57,7 @@
             return eventToEdit;
         }
 
-		public async Task DeleteEventAsync(string eventId)
+		public async Task<Event> DeleteEventAsync(string eventId)
 		{
             Event eventToDelete = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id== Guid.Parse(eventId))
                 .Include(e => e.UsersEvents)
@@ -66,13 +66,19 @@
             eventToDelete.IsDeleted = true;
             eventToDelete.DeletedOn = DateTime.UtcNow;
 
-            foreach (UserEvent userEvent in eventToDelete.UsersEvents)
+            IEnumerable<UserEvent> userMembershipsToDelete = eventToDelete.UsersEvents
+              .Where(uv => uv.IsDeleted == false && uv.EventId == Guid.Parse(eventId))
+              .ToArray();
+
+            foreach (UserEvent userEvent in userMembershipsToDelete)
             {
                 userEvent.IsDeleted = true;
                 userEvent.DeletedOn = DateTime.UtcNow;
             }
 
             await this.repository.SaveChangesAsync();
+
+            return eventToDelete;
 		}
 
 		public async Task ParticipateInEventAsync(string eventId, string userId)

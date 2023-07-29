@@ -339,7 +339,7 @@
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You deleted an article!",
-                    $"/Article/Details?articleId={deletedArticle.Id.ToString()}",
+                    $"/Article/AllForGym?gymId={deletedArticle.Id.ToString()}",
                     userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Article", new { area = "", GymId = articleToDelete.GymId });
