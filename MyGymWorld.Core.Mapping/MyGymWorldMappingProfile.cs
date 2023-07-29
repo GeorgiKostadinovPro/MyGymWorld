@@ -171,7 +171,12 @@
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))
                 .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => Enum.Parse<MembershipType>(src.MembershipType)));
 
-            this.CreateMap<Membership, MembershipViewModel>()
+            this.CreateMap<Membership, EditMembershipInputModel>()
+				.ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+			    .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+                .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
+
+			this.CreateMap<Membership, MembershipViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
                  .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))

@@ -41,7 +41,22 @@
             return membership;
         }
 
-        public async Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel)
+		public async Task<Membership> EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel)
+		{
+            Membership membershipToEdit = await this.repository
+                .All<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .FirstAsync();
+
+            membershipToEdit.Price = editMembershipInputModel.Price;
+            membershipToEdit.MembershipType = Enum.Parse<MembershipType>(editMembershipInputModel.MembershipType);
+            membershipToEdit.ModifiedOn = DateTime.UtcNow;
+
+            await this.repository.SaveChangesAsync();
+
+            return membershipToEdit;
+		}
+
+		public async Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel)
         {
             IQueryable<Membership> membershipsAsQuery =
                 this.repository.AllReadonly<Membership>(e => e.IsDeleted == false && e.GymId == Guid.Parse(queryModel.GymId))
@@ -111,11 +126,29 @@
             return membershipDetailsViewModel;
         } 
         
+        public async Task<EditMembershipInputModel> GetMembershipForEditByIdAsync(string membershipId)
+		{
+            Membership membershipToEdit = await this.repository
+                .AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .FirstAsync();
+
+            EditMembershipInputModel editMembershipInputModel = this.mapper.Map<EditMembershipInputModel>(membershipToEdit);
+
+            return editMembershipInputModel;
+		}
+
         public async Task<Membership?> GetMembershipByIdAsync(string membershipId)
         {
             return await this.repository.AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
                 .FirstOrDefaultAsync();
         }
+        
+        public async Task<bool> CheckIfMembershipExistsByIdAsync(string membershipId)
+		{
+            return await this.repository
+                .AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .AnyAsync();
+		}
 
         public IEnumerable<string> GetAllMembershipTypes()
         {
@@ -126,5 +159,5 @@
 
             return membershipTypes;
         }
-    }
+	}
 }
