@@ -150,7 +150,7 @@
                     || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
-            switch (queryModel.EventsSorting)
+            switch (queryModel.Sorting)
             {
                 case EventsSorting.Newest:
                     eventsAsQuery = eventsAsQuery
@@ -213,7 +213,7 @@
                   || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
-            switch (queryModel.EventsSorting)
+            switch (queryModel.Sorting)
             {
                 case EventsSorting.Newest:
                     eventsAsQuery = eventsAsQuery

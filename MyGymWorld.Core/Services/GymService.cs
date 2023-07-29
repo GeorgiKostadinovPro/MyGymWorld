@@ -233,7 +233,7 @@
                     || EF.Functions.Like(g.Address.Name, wildCard));
             }
 
-            switch (queryModel.GymsSorting)
+            switch (queryModel.Sorting)
             {
                 case GymsSorting.Newest:
                     gymsAsQuery = gymsAsQuery
@@ -409,7 +409,7 @@
                     || EF.Functions.Like(g.Address.Name, wildCard));
             }
 
-            switch (queryModel.GymsSorting)
+            switch (queryModel.Sorting)
             {
                 case GymsSorting.Newest:
                     gymsAsQuery = gymsAsQuery

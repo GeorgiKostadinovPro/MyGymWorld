@@ -24,7 +24,7 @@
         public string? SearchTerm { get; set; }
 
         [Display(Name = "Sort Gyms By")]
-        public GymsSorting GymsSorting { get; set; }
+        public GymsSorting Sorting { get; set; }
 
         public int CurrentPage { get; set; }
 

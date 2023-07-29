@@ -30,7 +30,7 @@
 <h1 style="text-align: center;">Welcome to the Artciles page!</h1>
 <p style="text-align: center">Below you can search articles by your choice.</p>
 
-@if(User.Identity.IsAuthenticated)
+@if(User.Identity!.IsAuthenticated)
 { 
     <hr />
 
@@ -95,8 +95,8 @@
         </div>
         <div class="form-group col-md-3">
             <div class="form-group">
-                <label asp-for="@Model.ArticlesSorting"></label>
-                <select asp-for="@Model.ArticlesSorting" class="form-control">
+                <label asp-for="@Model.Sorting"></label>
+                <select asp-for="@Model.Sorting" class="form-control">
                     <option value="0">Newest</option>
                     <option value="1">Oldest</option>
                 </select>
@@ -129,10 +129,10 @@ string.Empty)"
            asp-controller="Article"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
-           asp-route-currentPage="@previousPage"
+           asp-route-currentPage="@(Model.CurrentPage - 1)"
            asp-route-categoryId="@Model.CategoryId"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.ArticlesSorting)"><<</a>
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
     @{
         bool shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Articles.Any();
@@ -147,7 +147,7 @@ string.Empty)"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
            asp-route-categoryId="@Model.CategoryId"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.ArticlesSorting)">>></a>
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
 

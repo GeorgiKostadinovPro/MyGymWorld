@@ -20,13 +20,13 @@
 
         public int EventsPerPage { get; set; }
 
-        public string? EventType { get; set; } = null!;
+        public string? EventType { get; set; }
 
         [Display(Name = "Search by text")]
         public string? SearchTerm { get; set; }
 
         [Display(Name = "Sort Events By")]
-        public EventsSorting EventsSorting { get; set; }
+        public EventsSorting Sorting { get; set; }
 
         public int CurrentPage { get; set; }
 
