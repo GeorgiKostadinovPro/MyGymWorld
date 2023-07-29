@@ -165,21 +165,21 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can reply to comment on gym.</li>
     <li>Can join a gym.</li>
     <li>Can leave a gym.</li>
-    <li>Can see all events for gym after joining it.</li>
+    <li>Can see all events for gym after joining it. (filter, sort and search)</li>
     <li>Can see details about each event.</li>
     <li>Can join events.</li>
     <li>Can leave events.</li>
     <li><strong>CANNOT</strong> join already ended events.</li>
     <li><strong>CANNOT</strong> leave already ended events.</li>
     <li>Can see all his joined events (search, filter and sort them).</li>
-    <li>Can see all articles about a gym.</li>
+    <li>Can see all articles about a gym after joining it. (filter, sort and search)</li>
     <li>Can read each article.</li>
     <li>Can subscribe for gym articles.</li>
     <li>Can receive notifications to his notifications page for every newly created article and read it.</li>
     <li>Can receive articles notifications via email after subscribing.</li>
     <li>Can unsubscribe for gym articles. (stop receiving articles notifications)</li>
     <li>Can remove article from his articles collection.</li>
-    <li>Can see all membership for each gym.</li>
+    <li>Can see all membership for each gym after joining it. (filter, sort and search)</li>
     <li>Can see details about each membership.</li>
     <li>Can by a membership.</li>
     <li>Can become manager via request to Admin.</li>
