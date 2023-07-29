@@ -41,7 +41,8 @@
 
         public async Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel)
         {
-            Event eventToEdit = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+            Event eventToEdit = await this.repository
+                .All<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
                 .FirstAsync();
 
             eventToEdit.Name = editEventInputModel.Name;
@@ -275,13 +276,15 @@
 
         public async Task<Event?> GetEventByIdAsync(string eventId)
         {
-            return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+            return await this.repository
+                .AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
                 .FirstOrDefaultAsync();
         }
 
         public async Task<bool> CheckIfEventExistsByIdAsync(string eventId)
         {
-            return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
+            return await this.repository
+                .AllReadonly<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
                 .AnyAsync();
         }
 

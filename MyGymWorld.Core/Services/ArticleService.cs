@@ -55,7 +55,8 @@
 
         public async Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
         {
-            Article articleToEdit = await this.repository.All<Article>(e => e.IsDeleted == false && e.Id == Guid.Parse(articleId))
+            Article articleToEdit = await this.repository
+                .All<Article>(e => e.IsDeleted == false && e.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
                 .FirstAsync();
 
@@ -225,7 +226,6 @@
         public async Task<EditArticleInputModel> GetArticleForEditByIdAsync(string articleId)
         {
             Article articleToEdit = await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
-                .Include(a => a.Gym)
                 .FirstAsync();
 
             EditArticleInputModel editArticleInputModel = this.mapper.Map<EditArticleInputModel>(articleToEdit);

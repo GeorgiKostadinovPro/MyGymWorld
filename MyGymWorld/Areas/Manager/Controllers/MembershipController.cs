@@ -157,5 +157,137 @@
                 return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(string membershipId, string gymId)
+		{
+			try
+			{
+				string userId = this.GetUserId();
+
+				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+				if (!this.User.IsInRole("Manager")
+					|| user == null
+					|| user.ManagerId == null)
+				{
+					this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+					return this.RedirectToAction("All", "Gym", new { area = "" });
+				}
+
+				Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+
+				if (gym == null)
+				{
+					this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+					return this.RedirectToAction("Index", "Home");
+				}
+
+				if (user.ManagerId != null)
+				{
+					bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
+
+					if (isGymManagedByCorrectManager == false)
+					{
+						return this.Forbid();
+					}
+				}
+
+				bool doesEventExists = await this.membershipService.CheckIfMembershipExistsByIdAsync(membershipId);
+
+				if (doesEventExists == false)
+				{
+					this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+					return this.RedirectToAction("All", "Gym", new { area = "" });
+				}
+
+				EditMembershipInputModel editMembershipInputModel = await this.membershipService.GetMembershipForEditByIdAsync(membershipId);
+
+				editMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
+
+				return this.View(editMembershipInputModel);
+			}
+			catch (Exception)
+			{
+				this.TempData[ErrorMessage] = "Something went wrong!";
+
+				return this.RedirectToAction("All", "Gym", new { area = "" });
+			}
+		}
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string membershipId, EditMembershipInputModel editMembershipInputModel)
+        {
+            editMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(editMembershipInputModel);
+            }
+
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                Gym gym = await this.gymService.GetGymByIdAsync(editMembershipInputModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(editMembershipInputModel.GymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.Forbid();
+                    }
+                }
+
+                bool isMembershipTypeValid = Enum.TryParse<MembershipType>(editMembershipInputModel.MembershipType, true, out MembershipType result);
+
+                if (editMembershipInputModel.MembershipType == "None" || isMembershipTypeValid == false)
+                {
+                    this.ModelState.AddModelError("MembershipType", "You must choose a valid membership type!");
+
+                    return this.View(editMembershipInputModel);
+                }
+
+                Membership editedMembership = await this.membershipService.EditMembershipAsync(membershipId, editMembershipInputModel);
+
+                this.TempData[SuccessMessage] = "You edited a membership!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You edited a membership for {gym.Name}",
+                    $"/Membership/Details?membershipId={editedMembership.Id.ToString()}",
+                    userId);
+
+                return this.RedirectToAction("AllForGym", "Membership", new { area = "", gymId = editMembershipInputModel.GymId });
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("All", "Gym", new { area = "" });
+            }
+        }
     }
 }

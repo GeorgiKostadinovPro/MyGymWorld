@@ -1,0 +1,36 @@
+﻿@model EditMembershipInputModel
+
+@{
+    ViewData["Title"] = "Edit Membership";
+}
+
+<div style="display: flex; justify-content: center; align-items: center;">
+    <div style="box-shadow: 0 0 10px #2C3142; padding: 20px;">
+        <form asp-area="Manager" asp-controller="Membership" asp-action="Edit" method="post">
+            <input type="hidden" name="membershipId" value="@Model.Id" />
+            <input type="hidden" asp-for="@Model.Id" />
+            <input type="hidden" asp-for="@Model.GymId" />
+            <div class="form-group">
+                <label asp-for="@Model.Price"></label>
+                <input asp-for="@Model.Price" type="text" class="form-control" placeholder="Price" required>
+                <span asp-validation-for="@Model.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Membership Types</label>
+                <select asp-for="@Model.MembershipType" class="form-control" id="memebrshipsSelect">
+                    <option value="None">-- Please Select a Membership Type --</option>
+                    @foreach (string memebrshipType in Model.MembershipTypes)
+                    {
+                        <option value="@memebrshipType">@memebrshipType</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.MembershipType" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary mx-auto d-block">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

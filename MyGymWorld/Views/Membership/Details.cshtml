@@ -48,10 +48,10 @@
 
 		<div class="projcard-tagbox" style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
 			<form asp-area="Manager"
-			  asp-controller="Article"
+			  asp-controller="Membership"
 			  asp-action="Edit"
 		 method="get" style="margin-right: 10px;">
-				<input type="hidden" name="articleId" value="@Model.Id" />
+				<input type="hidden" name="membershipId" value="@Model.Id" />
 				<input type="hidden" name="gymId" value="@Model.GymId" />
 				<button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;">Edit</button>
 			</form>
