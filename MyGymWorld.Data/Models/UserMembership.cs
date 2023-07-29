@@ -11,6 +11,8 @@
         }
         public Guid Id { get; set; }
 
+        public DateTime ValidTo { get; set; }
+
         public Guid UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; } = null!;
