@@ -5,6 +5,7 @@ using MyGymWorld.Web.Infrastructure.Extensions;
 using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
 using Microsoft.AspNetCore.Mvc;
+using MyGymWorld.Web.Infrastructure.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc(options =>
 {
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+
     options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
 });
 

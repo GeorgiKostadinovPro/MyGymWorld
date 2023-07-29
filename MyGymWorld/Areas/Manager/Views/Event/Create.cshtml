@@ -34,7 +34,7 @@
             <div class="form-group col-md-5" style="margin-left: 30px;">
                 <label asp-for="@Model.EventTypes">Event Types</label>
                 <select asp-for="@Model.EventType" id="eventTypes" class="form-select">
-                    <option value="None">-- Please Select A Event Type --</option>
+                    <option value="None">-- Please Select an Event Type --</option>
                     @foreach (string eventType in Model.EventTypes)
                     {
                         <option value="@eventType">@eventType</option>

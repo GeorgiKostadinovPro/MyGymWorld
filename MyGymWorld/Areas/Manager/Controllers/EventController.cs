@@ -160,7 +160,7 @@
                     $"/Event/Details?eventId={createdEvent.Id.ToString()}",
                 userId);
 
-                return this.RedirectToAction("AllForGym", "event", new { area = "", gymId = createEventInputModel.GymId });
+                return this.RedirectToAction("AllForGym", "Event", new { area = "", gymId = createEventInputModel.GymId });
             }
             catch (Exception)
             {
@@ -310,7 +310,7 @@
                     $"/Event/Details?eventId={editedEvent.Id.ToString()}",
                     userId);
 
-                return this.RedirectToAction("AllForGym", "event", new { area = "", gymId = editEventInputModel.GymId });
+                return this.RedirectToAction("AllForGym", "Event", new { area = "", gymId = editEventInputModel.GymId });
             }
             catch (Exception)
             {

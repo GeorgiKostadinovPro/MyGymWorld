@@ -79,8 +79,8 @@
             public const int PricePrecision = 18;
             public const int PriceScale = 2;
 
-            public const decimal PriceMinValue = 10.00m;
-            public const decimal PriceMaxValue = 500.00m;
+            public const string PriceMinValue = "1";
+            public const string PriceMaxValue = "100";
         }
 
         public static class MessageConstants
