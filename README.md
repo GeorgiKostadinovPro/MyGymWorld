@@ -27,26 +27,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   </p>
   
 <!-- Badges -->
-<p>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/GeorgiKostadinovPro/MyGymWorld" alt="contributors" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/github/last-commit/GeorgiKostadinovPro/MyGymWorld" alt="last update" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/network/members">
-    <img src="https://badgen.net/github/forks/GeorgiKostadinovPro/MyGymWorld" alt="forks" />
-  </a>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/stargazers">
-  <img src="https://badgen.net/github/stars/GeorgiKostadinovPro/MyGymWorld" alt="stars">
-  </a>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/issues/">
-    <img src="https://img.shields.io/github/issues/GeorgiKostadinovPro/MyGymWorld" alt="open issues" />
-  </a>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE.txt">
-    <img src="https://badgen.net/badge/license/MIT/green" alt="license" />
-  </a>
-</p>
+
    
 <h4>
     <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld">Documentation</a>
