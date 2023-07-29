@@ -227,10 +227,11 @@
                     </form>
                 </div>
 
-                <hr />
 
                 @if(User.IsInRole("Manager") && isUserManagerOfThisGym)
                 {
+                    <hr />
+
                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
                     <a
                         asp-area="Manager"

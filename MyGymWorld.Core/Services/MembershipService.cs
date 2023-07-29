@@ -99,6 +99,24 @@
                 .CountAsync();
         }
 
+        public async Task<MembershipDetailsViewModel> GetMembershipDetailsByIdAsync(string membershipId)
+        {
+            Membership membership = await this.repository
+                .AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .Include(m => m.Gym)
+                .FirstAsync();
+
+            MembershipDetailsViewModel membershipDetailsViewModel = this.mapper.Map<MembershipDetailsViewModel>(membership);
+
+            return membershipDetailsViewModel;
+        } 
+        
+        public async Task<Membership?> GetMembershipByIdAsync(string membershipId)
+        {
+            return await this.repository.AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .FirstOrDefaultAsync();
+        }
+
         public IEnumerable<string> GetAllMembershipTypes()
         {
             IEnumerable<string> membershipTypes = Enum.GetValues(typeof(MembershipType))

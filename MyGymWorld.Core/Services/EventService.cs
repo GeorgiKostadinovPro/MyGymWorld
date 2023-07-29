@@ -299,9 +299,8 @@
 
         public async Task<int> GetAllActiveEventsCountAsync()
         {
-            var result =  await this.repository.AllReadonly<Event>(e => e.IsDeleted == false)
+            return await this.repository.AllReadonly<Event>(e => e.IsDeleted == false)
                 .CountAsync();
-            return result;
         }
 
         public IEnumerable<string> GetAllEventTypes()
