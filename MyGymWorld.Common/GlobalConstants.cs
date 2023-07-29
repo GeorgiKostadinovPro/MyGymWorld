@@ -27,5 +27,11 @@
             public const int ArticlesPerPage = 3;
             public const int DefaultPage = 1;
         }
+
+        public static class MembershipConstants
+        {
+            public const int MembershipsPerPage = 3;
+            public const int DefaultPage = 1;
+        }
     }
 }

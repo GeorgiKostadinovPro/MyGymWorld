@@ -16,6 +16,7 @@
     using MyGymWorld.Web.ViewModels.Managers.Events;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
     using MyGymWorld.Web.ViewModels.Managers.Memberships;
+    using MyGymWorld.Web.ViewModels.Memberships;
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Linq;
@@ -102,7 +103,9 @@
                  .ForMember(d => d.LikesCount, opt => opt.MapFrom(src => src.Likes.Count(l => l.IsDeleted == false)))
                  .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(dl => dl.IsDeleted == false)))
                  .ForMember(d => d.CommentsCount, opt => opt.MapFrom(src => src.Comments.Count(c => c.IsDeleted == false)))
+                 .ForMember(d => d.EventsCount, opt => opt.MapFrom(src => src.Events.Count(c => c.IsDeleted == false)))
                  .ForMember(d => d.ArticlesCount, opt => opt.MapFrom(src => src.Articles.Count(c => c.IsDeleted == false)))
+                 .ForMember(d => d.MembershipsCount, opt => opt.MapFrom(src => src.Memberships.Count(c => c.IsDeleted == false)))
                  .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
             // Comments
@@ -167,6 +170,12 @@
             this.CreateMap<CreateMembershipInputModel, Membership>()
                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))
                 .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => Enum.Parse<MembershipType>(src.MembershipType)));
+
+            this.CreateMap<Membership, MembershipViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+                 .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
+                 .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

@@ -39,7 +39,11 @@
 
         public int CommentsCount { get; set; }
 
+        public int EventsCount { get; set; }
+
         public int ArticlesCount { get; set; }
+
+        public int MembershipsCount { get; set; }
 
         public IEnumerable<string> GymImages { get; set; }
     }
