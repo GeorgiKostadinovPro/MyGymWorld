@@ -224,20 +224,31 @@
                 @if(User.IsInRole("Manager") && isUserManagerOfThisGym)
                 {
                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-                    <a asp-area="Manager"
-                   asp-controller="Event"
-                   asp-action="Create"
-                   asp-route-gymId="@Model.Id"
-                       class="button" type="submit" id="button" style="width: 250px;">Create Event</a>
+                    <a
+                        asp-area="Manager"
+                        asp-controller="Event"
+                        asp-action="Create"
+                        asp-route-gymId="@Model.Id"
+                          class="button" type="submit" id="button" style="width: 250px;">Create Event</a>
                   </div>
 
                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
-                    <a asp-area="Manager"
-                   asp-controller="Article"
-                   asp-action="Create"
-                   asp-route-gymId="@Model.Id"
+                    <a 
+                        asp-area="Manager"
+                        asp-controller="Article"
+                        asp-action="Create"
+                        asp-route-gymId="@Model.Id"
                            class="button" type="submit" id="button" style="width: 250px;">Create Article</a>
                   </div>
+
+                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                        <a 
+                            asp-area="Manager"
+                            asp-controller="Membership"
+                            asp-action="Create"
+                            asp-route-gymId="@Model.Id"
+                        class="button" type="submit" id="button" style="width: 250px;">Create Membership</a>
+                    </div>
                 }
             }
             <br>

@@ -55,6 +55,7 @@
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IMembershipService, MembershipService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICountryService, CountryService>();

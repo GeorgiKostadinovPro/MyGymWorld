@@ -15,6 +15,7 @@
     using MyGymWorld.Web.ViewModels.Managers.Articles;
     using MyGymWorld.Web.ViewModels.Managers.Events;
     using MyGymWorld.Web.ViewModels.Managers.Gyms;
+    using MyGymWorld.Web.ViewModels.Managers.Memberships;
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Linq;
@@ -161,6 +162,11 @@
             this.CreateMap<Article, EditArticleInputModel>()
              .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
              .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()));
+
+            // Memberships
+            this.CreateMap<CreateMembershipInputModel, Membership>()
+                .ForMember(d => d.GymId, opt => opt.MapFrom(src => Guid.Parse(src.GymId)))
+                .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => Enum.Parse<MembershipType>(src.MembershipType)));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();
