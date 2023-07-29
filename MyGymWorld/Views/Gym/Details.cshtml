@@ -27,8 +27,6 @@
 
     bool hasUserLikedThisGym = await this.LikeService.CheckIfUserLikedGymAsync(Model.Id, userId);
     bool hasUserDislikedThisGym = await this.DislikeService.CheckIfUserDislikedGymAsync(Model.Id, userId);
-
-    int totalEventsCount = await this.EventService.GetAllActiveEventsCountByGymIdAsync(Model.Id);
 }
 
 <link rel="stylesheet" href="~/css/gym-details.css"/>
@@ -203,8 +201,8 @@
                     <form asp-area="" asp-controller="Event" asp-action="AllForGym" method="get">
                         <input type="hidden" name="GymId" value="@Model.Id" />
                         <button type="submit"
-                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 180px;">
-                            <i class="fa fa-plus"></i>&nbsp;See Events <span>@totalEventsCount</span>
+                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 200px;">
+                            <i class="fa fa-plus"></i>&nbsp;See Events <span>@Model.EventsCount</span>
                         </button>
                     </form>
                 </div>
@@ -213,8 +211,18 @@
                     <form asp-area="" asp-controller="Article" asp-action="AllForGym" method="get">
                         <input type="hidden" name="GymId" value="@Model.Id" />
                         <button type="submit"
-                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 180px;">
+                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 200px;">
                             <i class="fa fa-plus"></i>&nbsp;See Articles <span>@Model.ArticlesCount</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="d-flex justify-content-center align-items-center experience" style="margin-top: 20px;">
+                    <form asp-area="" asp-controller="Membership" asp-action="AllForGym" method="get">
+                        <input type="hidden" name="GymId" value="@Model.Id" />
+                        <button type="submit"
+                                class="border px-3 p-1 add-experience" style="font-weight: bold; border: 3px solid black; width: 200px;">
+                            <i class="fa fa-plus"></i>&nbsp;See Memberships <span>@Model.MembershipsCount</span>
                         </button>
                     </form>
                 </div>
@@ -229,7 +237,7 @@
                         asp-controller="Event"
                         asp-action="Create"
                         asp-route-gymId="@Model.Id"
-                          class="button" type="submit" id="button" style="width: 250px;">Create Event</a>
+                          class="button" type="submit" id="button" style="width: 250px;">Add Event</a>
                   </div>
 
                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
@@ -238,7 +246,7 @@
                         asp-controller="Article"
                         asp-action="Create"
                         asp-route-gymId="@Model.Id"
-                           class="button" type="submit" id="button" style="width: 250px;">Create Article</a>
+                           class="button" type="submit" id="button" style="width: 250px;">Add Article</a>
                   </div>
 
                     <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
@@ -247,7 +255,7 @@
                             asp-controller="Membership"
                             asp-action="Create"
                             asp-route-gymId="@Model.Id"
-                        class="button" type="submit" id="button" style="width: 250px;">Create Membership</a>
+                        class="button" type="submit" id="button" style="width: 250px;">Add Membership</a>
                     </div>
                 }
             }

@@ -45,6 +45,7 @@
             IQueryable<Comment> commentsAsQuery 
                 = this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
                                  .Include(c => c.User)
+                                 .OrderByDescending(c => c.CreatedOn)
                                  .Skip(skip);
 
             if (take.HasValue)
@@ -53,7 +54,7 @@
             }
 
             return await commentsAsQuery
-                .OrderByDescending(c => c.CreatedOn)
+                
                 .ProjectTo<CommentViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
         }

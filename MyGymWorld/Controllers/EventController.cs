@@ -32,6 +32,15 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym([FromQuery] AllEventsForGymQueryModel queryModel)
         {
+            Gym gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
+
+            if (gym == null)
+            {
+                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
             string userId = this.GetUserId();
 
 			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
