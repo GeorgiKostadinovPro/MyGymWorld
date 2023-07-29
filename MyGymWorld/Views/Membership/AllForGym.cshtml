@@ -100,7 +100,7 @@ string.Empty)"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@previousPage"
-           asp-route-category="@Model.MembershipType"
+           asp-route-membershipType="@Model.MembershipType"
            asp-route-searchTerm="@Model.SearchTerm"
            asp-route-sorting="@((int)Model.MembershipsSorting)"><<</a>
     </div>
@@ -115,7 +115,7 @@ string.Empty)"
            asp-action="AllForGym"
            asp-route-gymId="@Model.GymId"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-category="@Model.MembershipType"
+           asp-route-membershipType="@Model.MembershipType"
            asp-route-searchTerm="@Model.SearchTerm"
            asp-route-sorting="@((int)Model.MembershipsSorting)">>></a>
     </div>

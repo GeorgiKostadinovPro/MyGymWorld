@@ -109,9 +109,9 @@
 		deleteAnchor.on('click', function (event) {
 			event.preventDefault();
 
-			const eventId = deleteAnchor.attr('data-articleId');
+			const articleId = deleteAnchor.attr('data-articleId');
 
-			$('#articleIdInput').val(eventId);
+			$('#articleIdInput').val(articleId);
 
 			$('#deleteArticleModal').modal('show');
 		});

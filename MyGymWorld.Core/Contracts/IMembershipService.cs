@@ -11,6 +11,8 @@
 
 		Task<Membership> EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel);
 
+        Task<Membership> DeleteMembershipAsync(string membershipId);
+
 		Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel);
 
         Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId);

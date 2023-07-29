@@ -56,7 +56,32 @@
             return membershipToEdit;
 		}
 
-		public async Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel)
+        public async Task<Membership> DeleteMembershipAsync(string membershipId)
+        {
+            Membership membershipToEdit = await this.repository
+               .All<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+               .Include(m => m.UsersMemberships)
+               .FirstAsync();
+
+            membershipToEdit.IsDeleted = true;
+            membershipToEdit.DeletedOn = DateTime.UtcNow;
+
+            IEnumerable<UserMembership> userMembershipsToDelete = membershipToEdit.UsersMemberships
+                .Where(um => um.IsDeleted == false && um.MembershipId == Guid.Parse(membershipId))
+                .ToArray();
+
+            foreach (UserMembership userMembership in userMembershipsToDelete)
+            {
+                userMembership.IsDeleted = true;
+                userMembership.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+
+            return membershipToEdit;
+        }
+
+        public async Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel)
         {
             IQueryable<Membership> membershipsAsQuery =
                 this.repository.AllReadonly<Membership>(e => e.IsDeleted == false && e.GymId == Guid.Parse(queryModel.GymId))
@@ -159,5 +184,5 @@
 
             return membershipTypes;
         }
-	}
+    }
 }

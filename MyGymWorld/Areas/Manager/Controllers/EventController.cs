@@ -354,9 +354,14 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                await this.eventService.DeleteEventAsync(eventId);
+                Event deletedEvent = await this.eventService.DeleteEventAsync(eventId);
 
                 this.TempData[SuccessMessage] = "You deleted event!";
+
+                await this.notificationService.CreateNotificationAsync(
+                 $"You deleted an event!",
+                 $"/Event/AllForGym?gymId={deletedEvent.GymId.ToString()}",
+                 userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Event", new { area = "", GymId = eventToDelete.GymId });
             }
