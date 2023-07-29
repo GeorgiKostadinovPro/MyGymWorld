@@ -181,7 +181,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can remove article from his articles collection.</li>
     <li>Can see all membership for each gym after joining it. (filter, sort and search)</li>
     <li>Can see details about each membership.</li>
-    <li>Can by a membership.</li>
+    <li>Can buy a membership.</li>
     <li>Can become manager via request to Admin.</li>
   </ul>
 </details>
@@ -199,8 +199,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can delete a gym.</li>
     <li>Can create events for a gym.</li>
     <li>Can edit events for a gym.</li>
-    <li>Can delete events for a gym.</li>
-    <li><strong>CANNOT</strong> delete already running events.</li>
+    <li>Can delete events for a gym. (only <strong>ended</strong> events)</li>
     <li><strong>CANNOT</strong> join his own events</li>
     <li><strong>CANNOT</strong> leave his own events</li>
     <li>Can create articles for a gym.</li>
