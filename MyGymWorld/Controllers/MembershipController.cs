@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Web.ViewModels.Events;
     using MyGymWorld.Web.ViewModels.Memberships;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -64,6 +65,23 @@
             queryModel.Memberships = allMembershipsForGymFilteredAndPagedViewModel.Memberships;
 
             return this.View(queryModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string membershipId)
+        {
+            Membership? membershipToDisplay = await this.membershipService.GetMembershipByIdAsync(membershipId);
+
+            if (membershipToDisplay == null)
+            {
+                this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+                return this.NotFound();
+            }
+
+            MembershipDetailsViewModel membershipDetailsViewModel = await this.membershipService.GetMembershipDetailsByIdAsync(membershipId);
+
+            return this.View(membershipDetailsViewModel);
         }
     }
 }

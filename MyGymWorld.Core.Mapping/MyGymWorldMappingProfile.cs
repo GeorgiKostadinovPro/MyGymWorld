@@ -177,6 +177,14 @@
                  .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
                  .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
 
+            this.CreateMap <Membership, MembershipDetailsViewModel>()
+                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                 .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
+                 .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
+				 .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
+				 .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price.ToString("f2")))
+                 .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
+
             // Countries
             this.CreateMap<Country, CountryViewModel>();
         }

@@ -13,6 +13,10 @@
 
         Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId);
 
+        Task<MembershipDetailsViewModel> GetMembershipDetailsByIdAsync(string membershipId);
+
+        Task<Membership?> GetMembershipByIdAsync(string membershipId);
+
         IEnumerable<string> GetAllMembershipTypes();
     }
 }
