@@ -14,16 +14,13 @@ Maybe you can mention me or this repo in the acknowledgements too
     Fuel your passion for fitness!
   </p>
   <h4>
-    NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid and Cloudinary.
+    NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid, Cloudinary and Stripe.
   </h4> 
-  <p>
-    For further info review [Environment Variables] in Table of Contents.
-  </p>
-   <h4>
-    NOTE: You MUST add appsettings.json, appsettings.Development.json and apsettings.Production.json files.
+  <h4>
+    NOTE: You need to change the ApplicationUrl in both appsettings.json files for SendGrid, Cloudinary and Stripe to work.
   </h4>
   <p>
-    The structures of these files are given in [Getting Started] in Table of Contents.
+    For further info review <strong>[Environment Variables]</strong> and <strong>[Getting Started]</strong> in Table of Contents.
   </p>
   
 <!-- Badges -->
@@ -276,6 +273,10 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     "CloudName": "",
     "APIKey": "",
     "APISecret": ""
+  },
+  "Stripe": {
+    "PublishableKey": "",
+    "SecretKey": ""
   },
 }
 ```
