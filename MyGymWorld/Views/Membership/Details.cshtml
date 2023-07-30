@@ -4,7 +4,7 @@
 
 @model MembershipDetailsViewModel
 
-@inject IEventService EventService
+@inject IMembershipService MembershipService
 @inject IGymService GymService
 @inject IManagerService ManagerService
 
@@ -20,12 +20,21 @@
 	{
 		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
 	}
+
+	UserMembership? userMembership = await this.MembershipService.GetUserMembershipAsync(userId, Model.Id);
 }
 
 <link href="~/css/membership-card.css" rel="stylesheet"/>
 
 <div class="card">
-	<img src="@Model.LogoUri" alt="img" style="width:100%">
+	@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
+	{
+		<img src="@userMembership.QRCodeUri" alt="img" style="width:100%">
+	}
+	else
+	{
+		<img src="@Model.LogoUri" alt="img" style="width:100%">
+	}
 	
 		@if (Model.MembershipType == "Week")
 		{
@@ -41,7 +50,16 @@
 		}
 	
 	<p class="price">Price: $@Model.Price</p>
-	<p class="price">Created on: @Model.CreatedOn.ToString("dd MMMM yyyy")</p>
+	@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
+	{
+		<p class="price">Purchased on: @userMembership.CreatedOn.ToString("dd MMMM yyyy")</p>
+		<p class="price">Valid to: @userMembership.ValidTo.ToString("dd MMMM yyyy")</p>
+	}
+	else
+	{
+		<p class="price">Created on: @Model.CreatedOn.ToString("dd MMMM yyyy")</p>
+	}
+	
 	@if (User.IsInRole("Manager") && isUserManagerOfThisGym)
 	{
 		<hr />
@@ -65,7 +83,15 @@
 	}
 	else
 	{
-		<p style="margin-bottom: 0px;">
+		@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
+		{
+			<p style="margin-bottom: 0px;">
+				<button id="buy-button" disabled>Bought</button>
+			</p>
+		}
+		else
+		{
+			<p style="margin-bottom: 0px;">
 			<form
 				asp-area="" 
 				asp-controller="Checkout"
@@ -75,6 +101,7 @@
 				<button id="buy-button">Buy</button>
 			</form>
 			</p>
+		}
 	}
 	
 </div>

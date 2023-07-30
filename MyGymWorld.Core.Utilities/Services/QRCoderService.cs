@@ -4,7 +4,6 @@
     using MyGymWorld.Core.Utilities.Contracts;
 	using CloudinaryDotNet.Actions;
 	using Microsoft.Extensions.Configuration;
-	using MyGymWorld.Data.Models;
 
 	public class QRCoderService : IQRCoderService
     {
@@ -23,7 +22,7 @@
         {
 
             QRCodeGenerator qRCodeGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qRCodeGenerator.CreateQrCode($"{this.configuration["ApplicationUrl"]}/Membership/UserMembershipDetails?membershipId={content}", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qRCodeGenerator.CreateQrCode($"{this.configuration["ApplicationUrl"]}/Membership/Details?membershipId={content}", QRCodeGenerator.ECCLevel.Q);
             BitmapByteQRCode qrCode = new BitmapByteQRCode(qrCodeData);
             byte[] qrCodeAsBitmapByteArray = qrCode.GetGraphic(20);
 
