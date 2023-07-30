@@ -15,19 +15,28 @@
     using System.Threading.Tasks;
     using MyGymWorld.Web.ViewModels.Memberships.Enums;
     using AutoMapper.QueryableExtensions;
-    using System.Runtime.CompilerServices;
+	using MyGymWorld.Core.Utilities.Contracts;
+	using Microsoft.Extensions.Configuration;
 
-    public class MembershipService : IMembershipService
+	public class MembershipService : IMembershipService
     {
         private readonly IMapper mapper;
         private readonly IRepository repository;
+        private readonly IConfiguration configuration;
+
+        private readonly IQRCoderService qRCoderService;
 
         public MembershipService(
             IMapper _mapper, 
-            IRepository _repository)
+            IRepository _repository,
+            IConfiguration _configuration,
+            IQRCoderService _qRCoderService)
         {
             this.mapper = _mapper;
             this.repository = _repository;
+            this.configuration = _configuration;
+
+            this.qRCoderService = _qRCoderService;
         }
 
         public async Task<Membership> CreateMembershipAsync(CreateMembershipInputModel createMembershipInputModel)
@@ -107,6 +116,8 @@
                 validTo = DateTime.UtcNow.AddYears(1);
             }
 
+            (string qRCodeUri, string publicId) = await this.qRCoderService.GenerateQRCodeAsync(membershipId);
+
             if (userMembership == null)
             {
                 userMembership = new UserMembership
@@ -114,6 +125,8 @@
                     UserId = Guid.Parse(userId),
                     MembershipId = Guid.Parse(membershipId),
                     ValidTo = validTo,
+                    QRCodeUri = qRCodeUri,
+                    PublicId = publicId,
                     CreatedOn = DateTime.UtcNow
                 };
 
@@ -128,6 +141,8 @@
                 }
 
                 userMembership.ValidTo = validTo;
+                userMembership.QRCodeUri = qRCodeUri;
+                userMembership.PublicId = publicId;
             }
 
             await this.repository.SaveChangesAsync();

@@ -35,7 +35,26 @@
             return uploadResult;
         }
 
-        public async Task<DeletionResult> DeletePhotoAsync(string publicId)
+		public async Task<ImageUploadResult> UploadPhotoAsync(byte[] file, string folder)
+		{
+			byte[] imageBytes = file;
+            ImageUploadResult uploadResult;
+
+			using (MemoryStream uploadStream = new MemoryStream(imageBytes))
+			{
+				ImageUploadParams imageUploadParams = new ImageUploadParams()
+				{
+					File = new FileDescription(file.ToString(), uploadStream),
+                    Folder = folder
+				};
+
+				uploadResult = await this.cloudinary.UploadAsync(imageUploadParams);
+			}
+
+			return uploadResult;
+		}
+
+		public async Task<DeletionResult> DeletePhotoAsync(string publicId)
         {
             DeletionParams deletionParams = new DeletionParams(publicId);
 
@@ -62,5 +81,5 @@
 
             return true;
         }
-    }
+	}
 }
