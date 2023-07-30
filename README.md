@@ -90,6 +90,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://sendgrid.com/">SendGrid</a></li>
     <li><a href="https://cloudinary.com/">Cloudinary</a></li>
     <li><a href="https://stripe.com/en-bg">Stripe (Payment Gateway)</a></li>
+    <li><a href="https://github.com/codebude/QRCoder">QRCoder (QR Code generator library)</a></li>
     <li><a href="https://www.tiny.cloud/">TinyMCE (WYSIWYG HTML editor)</a></li>
     <li><a href="https://github.com/CodeSeven/toastr">Toastr (non-blocking notifications)</a></li>
     <li><a href="https://github.com/drygiel/csslider">CSS Slider (Pure CSS, simple slider)</a></li>
@@ -331,8 +332,35 @@ function App() {
 <!-- Roadmap -->
 ## :compass: Roadmap
 
-* [x] Todo 1
-* [ ] Todo 2
+* [x] Built a Solid Project Architecture.
+* [x] Write a Scheme for the Database.
+* [x] Create the Database.
+* [x] Create extension methods for IServiceCollection and ClaimsPrinciple.
+* [x] Create the Areas - Admin and Manager.
+* [x] Start building the app.
+* [x] Add SendGrid, Cloudinary, Stripe and QRCoder Services.
+* [x] Create Notifications functionality. (Receive, Read, Delete, Pagination)
+* [x] Create Authentication Flow. (UserService, AccountService, UserController, AccountController, Views)
+* [x] Create User Profile. (Info, Edit, Upload Profile picture, Delete profile picture)
+* [x] Create Become Manager functionality.
+* [x] Create Approve and Reject Manager Request. (In Admin Area)
+* [x] Create CRUD for Users, Roles and Gyms. (In Admin Area)
+* [x] Create CRUD for Manager Gyms. (In Manager Area)
+* [x] Create Join Gym functionality.
+* [x] Create pagination, filtering, sorting and searching functionality for Gyms and Joined Gyms.
+* [x] Create Likes and Dislikes functionality.
+* [x] Create Comments and Reply Comments functionality.
+* [x] Create CRUD for Gym Events. (In Manager Area)
+* [x] Create Join and Leave Events functionality.
+* [x] Create pagination, filtering, sorting and searching functionality for Gym Events and Joined Events.
+* [x] Create CRUD for Gym Articles. (In Manager Area)
+* [x] Create Read, Subscribe and Unsubscribe for Articles functionality.
+* [x] Create pagination, filtering, sorting and searching functionality for Gym Articles.
+* [x] Create CRUD for Gym Memberships. (In Admin Area)
+* [x] Create Buy Memberships for Gym functionality.
+* [x] Create paging, filtering, sorting and searching functionality for Gym Memberships and Bought Memberships.
+* [ ] Create Chat In Gym funationality. (In Admin Area)
+* [ ] Create Chat for Joined Gym Users functionality.
 
 <!-- License -->
 ## :warning: License
