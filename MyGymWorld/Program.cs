@@ -6,6 +6,7 @@ using MyGymWorld.Data.Models;
 using MyGymWorld.Data.Seeding;
 using Microsoft.AspNetCore.Mvc;
 using MyGymWorld.Web.Infrastructure.ModelBinders;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,8 @@ builder.Services.AddMvc(options =>
 
 // Custom extension method to apply all different services among the application
 builder.Services.AddApplicationServices(builder.Configuration);
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 var app = builder.Build();
 

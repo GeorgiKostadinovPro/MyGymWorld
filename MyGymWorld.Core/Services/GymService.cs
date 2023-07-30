@@ -473,10 +473,10 @@
                 .AnyAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
         }
 
-        public async Task<Gym> GetGymByIdAsync(string gymId)
+        public async Task<Gym?> GetGymByIdAsync(string gymId)
         {
             return await this.repository.AllReadonly<Gym>(g => g.IsDeleted == false)
-                .FirstAsync(g => g.Id == Guid.Parse(gymId));
+                .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
         }
 
         public IEnumerable<string> GetAllGymTypes()
