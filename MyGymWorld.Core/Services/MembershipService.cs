@@ -15,6 +15,7 @@
     using System.Threading.Tasks;
     using MyGymWorld.Web.ViewModels.Memberships.Enums;
     using AutoMapper.QueryableExtensions;
+    using System.Runtime.CompilerServices;
 
     public class MembershipService : IMembershipService
     {
@@ -285,6 +286,12 @@
                 .AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
                 .AnyAsync();
 		}
+
+        public async Task<int> GetAllActiveMembershipsCountAsync()
+        {
+            return await this.repository.AllReadonly<Membership>(m => m.IsDeleted == false)
+                .CountAsync();
+        }
 
         public IEnumerable<string> GetAllMembershipTypes()
         {

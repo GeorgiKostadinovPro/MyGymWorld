@@ -31,6 +31,8 @@
 
         Task<bool> CheckIfMembershipExistsByIdAsync(string membershipId);
 
-		IEnumerable<string> GetAllMembershipTypes();
+        Task<int> GetAllActiveMembershipsCountAsync();
+
+        IEnumerable<string> GetAllMembershipTypes();
     }
 }

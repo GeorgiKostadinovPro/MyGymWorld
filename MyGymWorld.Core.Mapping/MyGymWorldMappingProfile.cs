@@ -53,7 +53,8 @@
                 .ForMember(d => d.DislikesCount, opt => opt.MapFrom(src => src.Dislikes.Count(l => l.IsDeleted == false)))
                 .ForMember(d => d.CommentsCount, opt => opt.MapFrom(src => src.Comments.Count(l => l.IsDeleted == false)))
 				.ForMember(d => d.EventsCount, opt => opt.MapFrom(src => src.UsersEvents.Count(l => l.IsDeleted == false)))
-				.ForMember(d => d.Address, opt => opt.MapFrom(src => src.AddressId != null ? string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name) : "None"));
+                .ForMember(d => d.MembershipsCount, opt => opt.MapFrom(src => src.UsersMemberships.Count(l => l.IsDeleted == false)))
+                .ForMember(d => d.Address, opt => opt.MapFrom(src => src.AddressId != null ? string.Concat(src.Address.Name, ", ", src.Address.Town.Name, ", ", src.Address.Town.Country.Name) : "None"));
 
             // Managers
             this.CreateMap<ApplicationUser, BecomeManagerInputModel>();
