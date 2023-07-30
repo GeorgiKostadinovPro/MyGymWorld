@@ -13,6 +13,10 @@
 
         public DateTime ValidTo { get; set; }
 
+        public string QRCodeUri { get; set; } = null!;
+
+        public string PublicId { get; set; } = null!;
+
         public Guid UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; } = null!;

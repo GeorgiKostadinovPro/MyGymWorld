@@ -158,8 +158,6 @@
                 return this.View(editUserInputModel);
             }
 
-            
-
             if (editUserInputModel.PhoneNumber != null)
             {
                 bool userExistsByPhoneNumber = await this.userService.CheckIfUserExistsByPhoneNumberAsync(editUserInputModel.PhoneNumber);

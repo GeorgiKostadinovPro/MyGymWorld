@@ -2,6 +2,6 @@
 {
     public interface IQRCoderService
     {
-        string GenerateQRCodeAsync(string content);
+        Task<(string, string)> GenerateQRCodeAsync(string content);
     }
 }

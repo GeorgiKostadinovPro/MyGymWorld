@@ -57,6 +57,8 @@
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IMembershipService, MembershipService>();
 
+            services.AddScoped<IQRCoderService, QRCoderService>();
+
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ITownService, TownService>();
