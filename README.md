@@ -256,15 +256,17 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <!-- Env Variables -->
 ### :key: Environment Variables
 
-<p>To run this project, you will need to add the following variables to your appsettings.Development.json and appsettings.Production.json.</p>
-<p>The whole structure of these files is describe in <strong>Getting Started</strong> section below.</p>
+<p>To run this project, you need to add the following variables to your Manager User Secrets json.</p>
+<p>The manage user secrets file should look like the one below.</p>
 
-<p>You need to add these lines of json to your appsettings.json files:</p>
 <strong>NOTE: You need to provide your own APIKeys and APISecrets.</strong>
 
 ```json
 {
-"SendGrid": {
+  "ConnectionStrings": {
+    "DefaultConnection": ""
+  },
+  "SendGrid": {
     "APIKey": "",
     "Email": "",
     "Name": ""
@@ -277,7 +279,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   "Stripe": {
     "PublishableKey": "",
     "SecretKey": ""
-  },
+  }
 }
 ```
 
