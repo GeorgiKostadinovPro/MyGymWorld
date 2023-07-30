@@ -45,7 +45,7 @@
 
         Task<bool> CheckIfGymIsJoinedByUserAsync(string gymId, string userId);
 
-        Task<Gym> GetGymByIdAsync(string gymId);
+        Task<Gym?> GetGymByIdAsync(string gymId);
 
         IEnumerable<string> GetAllGymTypes();
     }

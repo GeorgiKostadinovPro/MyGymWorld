@@ -66,8 +66,15 @@
 	else
 	{
 		<p style="margin-bottom: 0px;">
-			<button id="buy-button">Buy</button
-		></p>
+			<form
+				asp-area="" 
+				asp-controller="Checkout"
+				asp-action="CreateCheckoutSession"
+				method="post">
+                <input type="hidden" name="membershipId" value="@Model.Id">
+				<button id="buy-button">Buy</button>
+			</form>
+			</p>
 	}
 	
 </div>
