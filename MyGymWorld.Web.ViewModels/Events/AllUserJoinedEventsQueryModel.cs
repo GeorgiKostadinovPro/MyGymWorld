@@ -6,10 +6,6 @@
 
     public class AllUserJoinedEventsQueryModel : AllEventsForGymQueryModel
     {
-        public AllUserJoinedEventsQueryModel()
-        {
-        }
-
         public string UserId { get; set; } = null!;
     }
 }
