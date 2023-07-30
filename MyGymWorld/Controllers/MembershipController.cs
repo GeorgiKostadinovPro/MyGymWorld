@@ -1,12 +1,9 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.CodeAnalysis.Operations;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Memberships;
-    using QRCoder;
-    using System.Drawing;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class MembershipController : BaseController

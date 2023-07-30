@@ -29,7 +29,10 @@
 
         Task<Membership?> GetMembershipByIdAsync(string membershipId);
 
-        Task<bool> CheckIfMembershipExistsByIdAsync(string membershipId);
+        Task<UserMembership?> GetUserMembershipAsync(string userId, string membershipId);
+
+
+		Task<bool> CheckIfMembershipExistsByIdAsync(string membershipId);
 
         Task<int> GetAllActiveMembershipsCountAsync();
 

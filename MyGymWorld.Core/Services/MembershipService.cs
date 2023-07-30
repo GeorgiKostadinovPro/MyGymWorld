@@ -16,25 +16,21 @@
     using MyGymWorld.Web.ViewModels.Memberships.Enums;
     using AutoMapper.QueryableExtensions;
 	using MyGymWorld.Core.Utilities.Contracts;
-	using Microsoft.Extensions.Configuration;
 
 	public class MembershipService : IMembershipService
     {
         private readonly IMapper mapper;
         private readonly IRepository repository;
-        private readonly IConfiguration configuration;
 
         private readonly IQRCoderService qRCoderService;
 
         public MembershipService(
             IMapper _mapper, 
             IRepository _repository,
-            IConfiguration _configuration,
             IQRCoderService _qRCoderService)
         {
             this.mapper = _mapper;
             this.repository = _repository;
-            this.configuration = _configuration;
 
             this.qRCoderService = _qRCoderService;
         }
@@ -277,6 +273,12 @@
 
             return membershipDetailsViewModel;
         } 
+
+        public async Task<UserMembership?> GetUserMembershipAsync(string userId, string membershipId)
+        {
+            return await this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false)
+                .FirstOrDefaultAsync(um => um.UserId == Guid.Parse(userId) && um.MembershipId == Guid.Parse(membershipId));
+        }
         
         public async Task<EditMembershipInputModel> GetMembershipForEditByIdAsync(string membershipId)
 		{
