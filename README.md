@@ -279,7 +279,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   "Stripe": {
     "PublishableKey": "",
     "SecretKey": ""
-  }
+  },
+  "ApplicationUrl": "https://localhost:7129" // Here add your application url like in this example
 }
 ```
 
