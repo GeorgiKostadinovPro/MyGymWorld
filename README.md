@@ -179,6 +179,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see all membership for each gym after joining it. (filter, sort and search)</li>
     <li>Can see details about each membership.</li>
     <li>Can buy a membership.</li>
+    <li>Can see all his bought memberships. (Each has a unqiue QR Code)</li>
     <li>Can become manager via request to Admin.</li>
   </ul>
 </details>
