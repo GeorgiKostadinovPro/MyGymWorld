@@ -5,7 +5,8 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Memberships;
-
+    using QRCoder;
+    using System.Drawing;
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class MembershipController : BaseController
@@ -128,6 +129,7 @@
                     }
                 }
 
+
                 await this.membershipService.BuyMembershipAsync(membershipId, userId);
 
                 this.TempData[SuccessMessage] = "You successfully bought a membership!";
@@ -157,7 +159,7 @@
                 AllUserMembershipsFilteredAndPagedViewModel allUserMembershipsFilteredAndPagedViewModel = new AllUserMembershipsFilteredAndPagedViewModel
                 {
                     UserId = userId,
-                    TotalMembershipsCount = await this.membershipService.GetAllUserMembershipsCountByUserIdAsync(queryModel.UserId),
+                    TotalMembershipsCount = await this.membershipService.GetAllUserMembershipsCountByUserIdAsync(userId),
                     Memberships = await this.membershipService.GetAllActiveUserMembershipsFilteredAndPagedByUserIdAsync(userId, queryModel)
                 };
 

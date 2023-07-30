@@ -257,6 +257,7 @@
                 .Include(u => u.Dislikes)
                 .Include(u => u.Comments)
                 .Include(u => u.UsersEvents)
+                .Include(u => u.UsersMemberships)
                 .Include(u => u.Address)
                    .ThenInclude(a => a.Town)
                    .ThenInclude(t => t.Country)

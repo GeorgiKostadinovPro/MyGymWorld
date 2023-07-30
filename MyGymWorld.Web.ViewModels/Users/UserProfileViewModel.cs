@@ -24,7 +24,7 @@
 
         public int EventsCount { get; set; }
 
-        public int ArticlesAcount { get; set; }
+        public int MembershipsCount { get; set; }
 
         public int LikesCount { get; set; }
 
