@@ -78,7 +78,7 @@
                         }
                     },
                     Mode = "payment",
-                    SuccessUrl = string.Concat(domain, $"/Membership/Details?membershipId={membershipId}"),
+                    SuccessUrl = string.Concat(domain, $"/Membership/Buy?membershipId={membershipId}"),
                     CancelUrl = string.Concat(domain, $"/Membership/Details?membershipId={membershipId}")
                 };
 

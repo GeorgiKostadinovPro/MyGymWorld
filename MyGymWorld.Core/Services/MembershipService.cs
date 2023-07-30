@@ -81,6 +81,111 @@
             return membershipToEdit;
         }
 
+        public async Task BuyMembershipAsync(string membershipId, string userId)
+        {
+            UserMembership? userMembership = await this.repository
+                .All<UserMembership>(um => um.MembershipId == Guid.Parse(membershipId) && um.UserId == Guid.Parse(userId))
+                .FirstOrDefaultAsync();
+
+            Membership membership = await this.repository
+                .AllReadonly<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
+                .FirstAsync();
+
+            DateTime validTo = DateTime.UtcNow;
+
+            if ((int)membership.MembershipType == 0)
+            {
+                validTo = DateTime.UtcNow.AddDays(7);
+            }
+            else if ((int)membership.MembershipType == 1)
+            {
+                validTo = DateTime.UtcNow.AddMonths(1);
+            }
+            else
+            {
+                validTo = DateTime.UtcNow.AddYears(1);
+            }
+
+            if (userMembership == null)
+            {
+                userMembership = new UserMembership
+                {
+                    UserId = Guid.Parse(userId),
+                    MembershipId = Guid.Parse(membershipId),
+                    ValidTo = validTo,
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                await this.repository.AddAsync(userMembership);
+            }
+            else
+            {
+                if (userMembership.IsDeleted == true)
+                {
+                    userMembership.IsDeleted = false;
+                    userMembership.DeletedOn = null;
+                }
+
+                userMembership.ValidTo = validTo;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<MembershipViewModel>> GetAllActiveUserMembershipsFilteredAndPagedByUserIdAsync(string userId, AllUserMemberhipsQueryModel queryModel)
+        {
+            IQueryable<Membership> membershipsAsQuery =
+               this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false && um.UserId == Guid.Parse(userId))
+                              .Include(um => um.Membership)
+                                  .ThenInclude(m => m.Gym)
+                                  .ThenInclude(g => g.Manager)
+                                  .ThenInclude(ma => ma.User)
+                              .Select(um => um.Membership);
+
+            if (!string.IsNullOrWhiteSpace(queryModel.MembershipType))
+            {
+                membershipsAsQuery = membershipsAsQuery
+                    .Where(m => m.MembershipType == Enum.Parse<MembershipType>(queryModel.MembershipType));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryModel.SearchTerm))
+            {
+                string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
+
+                membershipsAsQuery = membershipsAsQuery
+                  .Where(m => EF.Functions.Like(m.MembershipType.ToString(), wildCard));
+            }
+
+            switch (queryModel.Sorting)
+            {
+                case MembershipsSorting.Newest:
+                    membershipsAsQuery = membershipsAsQuery
+                        .OrderByDescending(m => m.CreatedOn);
+                    break;
+                case MembershipsSorting.Oldest:
+                    membershipsAsQuery = membershipsAsQuery
+                       .OrderBy(m => m.CreatedOn);
+                    break;
+                case MembershipsSorting.PriceAscending:
+                    membershipsAsQuery = membershipsAsQuery
+                       .OrderBy(m => m.Price);
+                    break;
+                case MembershipsSorting.PriceDescending:
+                    membershipsAsQuery = membershipsAsQuery
+                      .OrderBy(m => m.Price);
+                    break;
+            }
+
+            IEnumerable<MembershipViewModel> membershipsToDisplay
+                = await membershipsAsQuery
+                               .Skip((queryModel.CurrentPage - 1) * queryModel.MembershipsPerPage)
+                               .Take(queryModel.MembershipsPerPage)
+                               .ProjectTo<MembershipViewModel>(this.mapper.ConfigurationProvider)
+                               .ToArrayAsync();
+
+            return membershipsToDisplay;
+        }
+
         public async Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel)
         {
             IQueryable<Membership> membershipsAsQuery =
@@ -103,7 +208,7 @@
                     || EF.Functions.Like(e.Gym.Name, wildCard));
             }
 
-            switch (queryModel.MembershipsSorting)
+            switch (queryModel.Sorting)
             {
                 case MembershipsSorting.Newest:
                     membershipsAsQuery = membershipsAsQuery
@@ -136,6 +241,12 @@
         public async Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllReadonly<Membership>(m => m.IsDeleted == false && m.GymId == Guid.Parse(gymId))
+                .CountAsync();
+        }
+        
+        public async Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId)
+        {
+            return await this.repository.AllReadonly<UserMembership>(m => m.IsDeleted == false && m.UserId == Guid.Parse(userId))
                 .CountAsync();
         }
 

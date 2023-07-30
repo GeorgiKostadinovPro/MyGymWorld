@@ -13,7 +13,13 @@
 
         Task<Membership> DeleteMembershipAsync(string membershipId);
 
-		Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel);
+        Task BuyMembershipAsync(string membershipId, string userId);
+
+        Task<IEnumerable<MembershipViewModel>> GetAllActiveUserMembershipsFilteredAndPagedByUserIdAsync(string userId, AllUserMemberhipsQueryModel queryModel);
+
+        Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId);
+
+        Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel);
 
         Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId);
 

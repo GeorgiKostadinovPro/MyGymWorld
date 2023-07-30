@@ -234,7 +234,7 @@
             {
                 this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("All", "Gym");
+                return this.RedirectToAction("Home", "Index");
             }
         }
     }
