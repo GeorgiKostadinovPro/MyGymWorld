@@ -30,6 +30,7 @@
 			};
 
 			await dbContext.Managers.AddAsync(manager);
+			await dbContext.SaveChangesAsync();
 
 			user.ManagerId = manager.Id;
 

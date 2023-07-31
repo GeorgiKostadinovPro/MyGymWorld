@@ -25,6 +25,7 @@
 			};
 
 			await dbContext.Addresses.AddAsync(address);
+			await dbContext.SaveChangesAsync();
 		}
 	}
 }
