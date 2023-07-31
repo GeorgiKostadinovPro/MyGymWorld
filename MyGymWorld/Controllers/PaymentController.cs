@@ -5,7 +5,7 @@
 	using MyGymWorld.Data.Models;
 	using Stripe.Checkout;
 
-	public class CheckoutController : BaseController
+	public class PaymentController : BaseController
 	{
 		public string? SessionId { get; set; }
 
@@ -14,7 +14,7 @@
 		private readonly IMembershipService membershipService;
 		private readonly IGymService gymService;
 
-        public CheckoutController (
+        public PaymentController (
 			IConfiguration _configuration, 
 			IMembershipService _membershipService,
 			IGymService _gymService)

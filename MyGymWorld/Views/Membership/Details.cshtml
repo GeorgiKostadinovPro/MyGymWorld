@@ -85,22 +85,18 @@
 	{
 		@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
 		{
-			<p style="margin-bottom: 0px;">
 				<button id="buy-button" disabled>Bought</button>
-			</p>
 		}
 		else
 		{
-			<p style="margin-bottom: 0px;">
 			<form
 				asp-area="" 
-				asp-controller="Checkout"
+				asp-controller="Payment"
 				asp-action="CreateCheckoutSession"
 				method="post">
                 <input type="hidden" name="membershipId" value="@Model.Id">
 				<button id="buy-button">Buy</button>
 			</form>
-			</p>
 		}
 	}
 	
