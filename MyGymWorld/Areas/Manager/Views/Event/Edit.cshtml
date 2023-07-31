@@ -19,12 +19,12 @@
             </div>
             <div class="form-group col-md-4">
                 <label asp-for="@Model.StartDate"></label>
-                <input asp-for="@Model.StartDate" class="form-control" value="@DateTime.ParseExact(Model.StartDate, "dd/MM/yyyy h:mm tt", null).ToString("dd/MM/yyyy h:mm tt")" required>
+                <input asp-for="@Model.StartDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd H:mm")" required>
                 <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">
                 <label asp-for="@Model.EndDate"></label>
-                <input asp-for="@Model.EndDate" class="form-control" value="@DateTime.ParseExact(Model.EndDate, "dd/MM/yyyy h:mm tt", null).ToString("dd/MM/yyyy h:mm tt")" required>
+                <input asp-for="@Model.EndDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd H:mm")" required>
                 <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
             </div>
         </div>

@@ -23,13 +23,9 @@
             MinimumLength = ValidationalConstants.EventConstants.DescriptionMinLength)]
         public string Description { get; set; } = null!;
 
-        public string StartDate { get; set; } = null!;
+        public DateTime StartDate { get; set; }
 
-        public string EndDate { get; set; } = null!;
-
-        public DateTime ParsedStartDate { get; set; }
-
-        public DateTime ParsedEndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [Required]
         public string EventType { get; set; } = null!;
