@@ -35,8 +35,8 @@
                     Population = 1_236_000,
                     ZipCode = "1000",
                     CreatedOn = DateTime.UtcNow,
-                    CountryId = bulgariaId
-                },
+                    CountryId = bulgariaId,
+				},
                 new Town
                 {
                     Name = "Plovdiv",

@@ -3,6 +3,7 @@
     using AutoMapper;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
+    using MyGymWorld.Web.ViewModels.Accounts;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
     using MyGymWorld.Web.ViewModels.Administration.Users;

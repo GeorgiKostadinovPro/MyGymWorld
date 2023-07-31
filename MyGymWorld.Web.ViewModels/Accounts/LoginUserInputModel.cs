@@ -1,4 +1,4 @@
-﻿namespace MyGymWorld.Web.ViewModels.Users
+﻿namespace MyGymWorld.Web.ViewModels.Accounts
 {
     using Microsoft.AspNetCore.Authentication;
     using System.ComponentModel.DataAnnotations;

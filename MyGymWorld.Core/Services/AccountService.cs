@@ -8,6 +8,7 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Utilities.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Web.ViewModels.Accounts;
     using MyGymWorld.Web.ViewModels.Users;
     using System;
     using System.Text;

@@ -1,4 +1,4 @@
-﻿namespace MyGymWorld.Web.ViewModels.Users
+﻿namespace MyGymWorld.Web.ViewModels.Accounts
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +17,6 @@
 
         public string Email { get; set; } = null!;
 
-        public string Token { get; set; } = null!;  
+        public string Token { get; set; } = null!;
     }
 }

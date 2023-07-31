@@ -25,7 +25,10 @@ namespace MyGymWorld.Data.Seeding
                               new RolesSeeder(),
                               new CountriesSeeder(),
                               new TownsSeeder(),
-                              new CategoriesSeeder()
+                              new AddressesSeeder(),
+                              new CategoriesSeeder(),
+                              new UsersSeeder(),
+                              new ManagersSeeder(),
                           };
 
             foreach (var seeder in seeders)

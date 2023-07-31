@@ -1,4 +1,4 @@
-﻿namespace MyGymWorld.Web.ViewModels.Users
+﻿namespace MyGymWorld.Web.ViewModels.Accounts
 {
     using System.ComponentModel.DataAnnotations;
 
