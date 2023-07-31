@@ -242,17 +242,28 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![MyGymWorld-Database_lwgzpk](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6817ce80-510b-44f4-b4f1-249f37ca1343)
 
-
 <h2>Authentication flow</h2>
 <h3>Register Page</h3>
-<div align="center"> 
-  <img src="![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/ca4099cc-c109-410f-9fcb-4bcfe9483290)
-" alt="screenshot" />
-</div>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/ffdd883d-5622-4f63-8ca4-21f6962b7bdb)
+
+<h3>Login Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/03754739-4ddb-46c7-ad86-9ac03addc770)
+
+<h3>Forgot Password Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/ec065e3f-54e0-4590-804b-21c8b801121d)
+
+<h3>Reset Password Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
+
 
 <!-- Seeding -->
 ### Seeding
-
+<p>You can review the seeded data <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Data/Seeding">here</a>.</p>
+<ul></ul>
 
 <!-- Color Reference -->
 ### :art: Color Reference
