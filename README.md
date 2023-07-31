@@ -237,8 +237,9 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <!-- Screenshots -->
 ### :camera: Screenshots
 
+<h2>Database</h2>
 <div align="center"> 
-  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
+  <img src="https://res.cloudinary.com/de1i8aava/image/upload/v1690823332/MyGymWorld/assets/MyGymWorld-project-files/MyGymWorld-Database_lwgzpk.png" alt="screenshot" />
 </div>
 
 <!-- Color Reference -->
