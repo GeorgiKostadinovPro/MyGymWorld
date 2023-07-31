@@ -82,7 +82,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <p>After joining a gym users can now read the gym published articles, and can even subscribe for articles (receive notification for every new article that gets published).</p>
 <p>After subscribing he can always unsubscribe and stop receiving notifications.</p>
 <p>One more thing is that members of a gym can easily by cards for that gym directly from the platform (weekly, monthly or yearly membership).</p>
-<p>After paying for card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
+<p>After paying for a card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
 <p>When a membership expires he can easily buy a new one.</p>
 
 <!-- TechStack -->
