@@ -260,6 +260,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
 
 
+<hr />
+
 <!-- Seeding -->
 ### :file_folder: Seeding
 <p>You can review the seeded data <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Data/Seeding">here</a>.</p>
@@ -299,6 +301,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
    </ul>
 </details>
 
+<hr />
+
 <!-- Color Reference -->
 ### :art: Color Reference
 
@@ -309,6 +313,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 | Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
 | Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
 
+<hr />
 
 <!-- Env Variables -->
 ### :key: Environment Variables
@@ -342,14 +347,18 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 ```
 <hr />
 
-Stripe Testing Card Data:
+<strong>Stripe Testing Card Data:</strong>
 <li>Stripe Visa card - 4242 4242 4242 4242</li>
 <li>Stripe Visa CVC - 123</li>
 <li>Country - United States</li>
 <li>ZIP - 10001</li>
 
+<hr />
+
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
+
+<hr />
 
 <!-- Run Locally -->
 ### :running: Run Locally
@@ -378,6 +387,8 @@ Start the server
   yarn start
 ```
 
+<hr />
+
 <!-- Usage -->
 ## :eyes: Usage
 
@@ -391,6 +402,8 @@ function App() {
   return <Component />
 }
 ```
+
+<hr />
 
 <!-- Roadmap -->
 ## :compass: Roadmap
@@ -425,11 +438,14 @@ function App() {
 * [ ] Create Chat In Gym funationality. (In Admin Area)
 * [ ] Create Chat for Joined Gym Users functionality.
 
+<hr />
+
 <!-- License -->
 ## :warning: License
 
 Distributed under the MIT license. See LICENSE.txt for more information.
 
+<hr />
 
 <!-- Contact -->
 ## :handshake: Contact
@@ -438,6 +454,7 @@ Your Name - [LinkedIn](https://www.linkedin.com/in/georgi-kostadinov-125349241) 
 
 Project Link: [MyGymWorld](https://github.com/GeorgiKostadinovPro/MyGymWorld)
 
+<hr />
 
 <!-- Acknowledgments -->
 ## :gem: Acknowledgements
