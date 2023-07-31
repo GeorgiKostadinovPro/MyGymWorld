@@ -76,6 +76,14 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 <!-- About the Project -->
 ## :star2: About the Project
+<p>MyGymWorld is an easy to use platform where fitness enthusiasts can find the perfect gym for them.</p>
+<p>Users can search, filter, sort gyms - like and dislike a gym, post comments, join gyms communities.</p>
+<p>Moreover, after joining a gym, users can review events for the gym, and decide to join or leave an event.</p>
+<p>After joining a gym users can now read the gym published articles, and can even subscribe for articles (receive notification for every new article that gets published).</p>
+<p>After subscribing he can always unsubscribe and stop receiving notifications.</p>
+<p>One more thing is that members of a gym can easily by cards for that gym directly from the platform (weekly, monthly or yearly membership).</p>
+<p>After paying for card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
+<p>When a membership expires he can easily buy a new one.</p>
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
