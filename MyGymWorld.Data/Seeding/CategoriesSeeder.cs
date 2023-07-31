@@ -19,24 +19,29 @@
             {
                 new Category
                 {
-                    Name = "Nutrition & Wellness"
-                },
+                    Name = "Nutrition & Wellness",
+					CreatedOn = DateTime.UtcNow
+				},
                 new Category
                 {
-                    Name = "Fitness Tech & Gear"
-                },
+                    Name = "Fitness Tech & Gear",
+					CreatedOn = DateTime.UtcNow
+				},
                 new Category
                 {
-                    Name = "Health & Mindfulness"
-                },
+                    Name = "Health & Mindfulness",
+					CreatedOn = DateTime.UtcNow
+				},
                 new Category
                 {
-                    Name = "Athlete Spotlights"
-                },
+                    Name = "Athlete Spotlights",
+					CreatedOn = DateTime.UtcNow
+				},
                 new Category
                 {
-                    Name = "Business & Jobs Offers"
-                }
+                    Name = "Business & Jobs Offers",
+					CreatedOn = DateTime.UtcNow
+				}
             };
 
             await dbContext.Categories.AddRangeAsync(catgeories);

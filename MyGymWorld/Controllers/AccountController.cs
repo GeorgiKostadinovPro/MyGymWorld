@@ -6,12 +6,12 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Exceptions;
     using MyGymWorld.Data.Models;
-    using MyGymWorld.Web.ViewModels.Users;
     using Microsoft.AspNetCore.Identity;
-
-    using static MyGymWorld.Common.NotificationMessagesConstants;
+ 
     using MyGymWorld.Core.Utilities.Contracts;
-    using System.Net.WebSockets;
+    using MyGymWorld.Web.ViewModels.Accounts; 
+    
+    using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class AccountController : BaseController
     {

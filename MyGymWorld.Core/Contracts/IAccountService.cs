@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
-    using MyGymWorld.Web.ViewModels.Users;
+    using MyGymWorld.Web.ViewModels.Accounts;
 
     public interface IAccountService
     {

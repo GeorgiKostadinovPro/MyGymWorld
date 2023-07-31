@@ -1,4 +1,4 @@
-﻿namespace MyGymWorld.Web.ViewModels.Users
+﻿namespace MyGymWorld.Web.ViewModels.Accounts
 {
     using MyGymWorld.Common;
     using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@
     public class RegisterUserInputModel
     {
         [Required]
-        [StringLength(ApplicationUserConstants.UsernameMaxLength, ErrorMessage = "The username must be at least 5 and at max 50 characters long.", 
+        [StringLength(ApplicationUserConstants.UsernameMaxLength, ErrorMessage = "The username must be at least 5 and at max 50 characters long.",
             MinimumLength = ApplicationUserConstants.UsernameMinLength)]
         public string UserName { get; set; } = null!;
 
