@@ -192,7 +192,7 @@
             };
 
             await dbContext.Towns.AddRangeAsync(towns);
-            await dbContext.Towns.AddRangeAsync();
+            await dbContext.SaveChangesAsync();
         }
     }
 }
