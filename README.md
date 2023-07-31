@@ -17,7 +17,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid, Cloudinary and Stripe.
   </h4> 
   <h4>
-    NOTE: You need to change the ApplicationUrl in both appsettings.json files for SendGrid, Cloudinary and Stripe to work.
+    NOTE: You need to change the ApplicationUrl in both secrets.json for SendGrid, Cloudinary and Stripe to work.
   </h4>
   <p>
     For further info review <strong>[Environment Variables]</strong> and <strong>[Getting Started]</strong> in Table of Contents.
@@ -260,10 +260,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
 
 
-<hr />
-
 <!-- Seeding -->
-### :file_folder: Seeding
+### Seeding
 <p>You can review the seeded data <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Data/Seeding">here</a>.</p>
 
 <strong>Seeded Data</strong>
@@ -291,7 +289,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <summary>Gym Entities</summary>
   <ul>
      <li>Gyms</li>
-     <li>Gym Images</li>
+     <li>Gym Images (images may repeat themselves)</li>
      <li>Gym Events</li>
      <li>Gym Articles</li>
      <li>Gym Memberships</li>
