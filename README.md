@@ -316,7 +316,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <!-- Env Variables -->
 ### :key: Environment Variables
 
-<p>To run this project, you need to add the following variables to your Manager User Secrets json.</p>
+<p>To run this project, you need to add the following variables to your Manage User Secrets json.</p>
 <p>The manage user secrets file should look like the one below.</p>
 
 <strong>NOTE: You need to provide your own APIKeys and APISecrets.</strong>
@@ -356,34 +356,21 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
 
-<hr />
-
 <!-- Run Locally -->
 ### :running: Run Locally
+<p>Very simple and easy</p>
 
-Clone the project
+<ol>
+  <li>Download the project ZIP folder.</li>
+  <li>Add secrets.json file described above.</li>
+  <li>Replace the data with your own. (SqlServer connection, API keys and secrets, ApplicationUrl)</li>
+  <li>Ensure that you entered correct data.</li>
+  <li>Start the project. (Although data is seeded you can test the application however you want)</li>
+  <p><strong>NOTE:</strong> if you want to register new users ensure that you entered correct email for verification.</p>
+  <p>Otherwise you can confirm the new account by going to the AspNetUsers table and changing the EmailConfirmed <strong>False -> True</strong></p>
+  
+</ol>
 
-```bash
-  git clone https://github.com/Louis3797/awesome-readme-template.git
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install dependencies
-
-```bash
-  yarn install
-```
-
-Start the server
-
-```bash
-  yarn start
-```
 
 <hr />
 
