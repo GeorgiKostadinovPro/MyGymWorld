@@ -48,8 +48,8 @@
             eventToEdit.Name = editEventInputModel.Name;
             eventToEdit.Description = editEventInputModel.Description;
             eventToEdit.EventType = Enum.Parse<EventType>(editEventInputModel.EventType);
-            eventToEdit.StartDate = editEventInputModel.ParsedStartDate;
-            eventToEdit.EndDate = editEventInputModel.ParsedEndDate;
+            eventToEdit.StartDate = editEventInputModel.StartDate;
+            eventToEdit.EndDate = editEventInputModel.EndDate;
             eventToEdit.ModifiedOn = DateTime.UtcNow;
 
             await this.repository.SaveChangesAsync();

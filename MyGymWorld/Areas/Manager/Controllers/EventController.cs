@@ -255,7 +255,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(editEventInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -274,21 +274,12 @@
                     }
                 }
 
-                var startDateResult = DateTime.TryParseExact(editEventInputModel.StartDate, "dd/MM/yyyy H:mm tt",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startResult);
-
-                var endDateResult = DateTime.TryParseExact(editEventInputModel.EndDate, "dd/MM/yyyy H:mm tt",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endResult);
-
-                if (startResult >= endResult)
+                if (editEventInputModel.StartDate >= editEventInputModel.EndDate)
                 {
                     this.ModelState.AddModelError("StartDate", "The start date should be earlier than the end date!");
 
                     return this.View(editEventInputModel);
                 }
-
-                editEventInputModel.ParsedStartDate = startResult;
-                editEventInputModel.ParsedEndDate = endResult;
 
                 bool isEventTypeValid = Enum.TryParse<EventType>(editEventInputModel.EventType, true, out EventType result);
 
