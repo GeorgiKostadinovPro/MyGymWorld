@@ -282,6 +282,13 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   "ApplicationUrl": "https://localhost:7129" // Here add your application url like in this example
 }
 ```
+<hr />
+
+Stripe Testing Card Data:
+<li>Stripe Visa card - 4242 4242 4242 4242</li>
+<li>Stripe Visa CVC - 123</li>
+<li>Country - United States</li>
+<li>ZIP - 10001</li>
 
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
