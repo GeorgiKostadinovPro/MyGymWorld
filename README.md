@@ -261,9 +261,43 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 
 <!-- Seeding -->
-### Seeding
+### :file_folder: Seeding
 <p>You can review the seeded data <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Data/Seeding">here</a>.</p>
-<ul></ul>
+
+<strong>Seeded Data</strong>
+
+<details>
+   <summary>Users - all already authenticated (their password is confirmed)</summary>
+   <ul>
+     <li>Admin - with real gmail to test the authentication flow - forgot and reset password. (the password of the account is the password for the gmail)</li>
+     <li>Manager</li>
+     <li>Regular User</li>
+   </ul>
+</details>
+
+<details>
+   <summary>Common Entities</summary>
+    <ul>
+     <li>Coutries</li>
+     <li>Towns</li>
+     <li>Addresses (1 address)</li>
+     <li>Categories</li>
+   </ul>
+</details>
+
+<details>
+  <summary>Gym Entities</summary>
+  <ul>
+     <li>Gyms</li>
+     <li>Gym Images</li>
+     <li>Gym Events</li>
+     <li>Gym Articles</li>
+     <li>Gym Memberships</li>
+    <li>Likes</li>
+    <li>Dislikes</li>
+    <li>Comments</li>
+   </ul>
+</details>
 
 <!-- Color Reference -->
 ### :art: Color Reference
