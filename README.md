@@ -239,8 +239,15 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 ### :camera: Screenshots
 
 <h2>Database</h2>
+
+![MyGymWorld-Database_lwgzpk](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6817ce80-510b-44f4-b4f1-249f37ca1343)
+
+
+<h2>Authentication flow</h2>
+<h3>Register Page</h3>
 <div align="center"> 
-  <img src="https://res.cloudinary.com/de1i8aava/image/upload/v1690823332/MyGymWorld/assets/MyGymWorld-project-files/MyGymWorld-Database_lwgzpk.png" alt="screenshot" />
+  <img src="![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/ca4099cc-c109-410f-9fcb-4bcfe9483290)
+" alt="screenshot" />
 </div>
 
 <!-- Seeding -->
