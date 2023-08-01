@@ -49,49 +49,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User!.Identity!.IsAuthenticated && !User.IsInRole("Manager") && !User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item">
-                               <a class="nav-link text-light" asp-area="" asp-controller="Manager" asp-action="BecomeManager">Become Manager</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="Joined">My Joined Gyms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Event" asp-action="Joined">My Joined Events</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Membership" asp-action="UserMemberships">My Memberships</a>
-                            </li>
-                        }
-                        else if(User!.Identity!.IsAuthenticated && User.IsInRole("Manager"))
-                        {
-                            <li class="nav-item">
-                               <a class="nav-link text-light" asp-area="Manager" asp-controller="Gym" asp-action="Create">Create Gym</a>
-                            </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="Manager" asp-controller="Gym" asp-action="Active">Created Gyms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="Joined">My Joined Gyms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Event" asp-action="Joined">My Joined Events</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Membership" asp-action="UserMemberships">My Memberships</a>
-                            </li>
-                        }
-                        else if (User!.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                        @if(User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
+                            @if(!User.IsInRole("Manager") && !User.IsInRole("Administrator"))
+                            {
+                                 <li class="nav-item">
+                                   <a class="nav-link text-light" asp-area="" asp-controller="Manager" asp-action="BecomeManager">Become Manager</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Manager"))
+                            {
+                                  <li class="nav-item">
+                                   <a class="nav-link text-light" asp-area="Manager" asp-controller="Gym" asp-action="Create">Create Gym</a>
+                                </li>
+                            
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="Manager" asp-controller="Gym" asp-action="Active">Created Gyms</a>
+                                </li>
+                            }
+
+                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Gym" asp-action="All">All Gyms</a>
                             </li>
                             <li class="nav-item">
@@ -102,6 +80,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Membership" asp-action="UserMemberships">My Memberships</a>
+                            </li>
+                             <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Membership" asp-action="MyPaymentsForMemberships">My Payments</a>
                             </li>
                         }
                     </ul>

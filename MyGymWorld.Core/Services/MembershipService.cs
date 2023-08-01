@@ -250,23 +250,43 @@
             return eventsToDisplay;
         }
 
-        public async Task<List<PurchasedMembershipViewModel>> GetActivePaymentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
+        public async Task<List<PayedMembershipViewModel>> GetPaymentsByGymIdForManagementAsync(string gymId, int skip = 0, int? take = null)
         {
-            IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false)
-                .Include(um => um.Membership)
-                .Include(um => um.User)
-                .OrderByDescending(um => um.CreatedOn)
-                .Skip(skip);
+			IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false)
+			   .Include(um => um.Membership)
+			   .Include(um => um.User)
+			   .Where(um => um.Membership.GymId == Guid.Parse(gymId))
+			   .OrderByDescending(um => um.CreatedOn)
+			   .Skip(skip);
 
-            if (take.HasValue)
+			if (take.HasValue)
+			{
+				userMembershipsAsQuery = userMembershipsAsQuery.Take(take.Value);
+			}
+
+			return await userMembershipsAsQuery
+						   .ProjectTo<PayedMembershipViewModel>(this.mapper.ConfigurationProvider)
+						   .ToListAsync();
+		}
+
+        public async Task<List<PayedMembershipViewModel>> GetPaymentsByUserIdAsync(string userId, int skip = 0, int? take = null)
+        {
+			IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false)
+			   .Include(um => um.Membership)
+			   .Include(um => um.User)
+			   .Where(um => um.UserId == Guid.Parse(userId))
+			   .OrderByDescending(um => um.CreatedOn)
+			   .Skip(skip);
+
+             if (take.HasValue)
             {
                 userMembershipsAsQuery = userMembershipsAsQuery.Take(take.Value);
             }
 
             return await userMembershipsAsQuery
-                           .ProjectTo<PurchasedMembershipViewModel>(this.mapper.ConfigurationProvider)
+                           .ProjectTo<PayedMembershipViewModel>(this.mapper.ConfigurationProvider)
                            .ToListAsync();
-        }
+		}
 
         public async Task<int> GetActivePaymentsCountByGymIdAsync(string gymId)
         {
@@ -283,7 +303,7 @@
         
         public async Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId)
         {
-            return await this.repository.AllReadonly<UserMembership>(m => m.IsDeleted == false && m.UserId == Guid.Parse(userId))
+            return await this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false && um.UserId == Guid.Parse(userId))
                 .CountAsync();
         }
 

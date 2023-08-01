@@ -72,7 +72,18 @@
         [HttpPost]
         public async Task<IActionResult> Join(string gymId)
         {
-            bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
+			string userId = this.GetUserId();
+
+			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+			if (user.IsDeleted == true)
+			{
+				this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+				return this.RedirectToAction("Index", "Home", new { area = "" });
+			}
+
+			bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
 
             if (!doesGymExist)
             {
@@ -102,15 +113,6 @@
 
                     return this.RedirectToAction(nameof(Details), new { gymId = gymId });
                 }
-            }
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-            if (user.IsDeleted == true)
-            {
-                this.TempData[ErrorMessage] = "You were deleted by the Admin!";
-
-                return this.RedirectToAction(nameof(Details), new { gymId = gymId });
             }
 
             try
@@ -143,7 +145,18 @@
         [HttpPost]
         public async Task<IActionResult> Leave(string gymId)
         {
-            bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
+			string userId = this.GetUserId();
+
+			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+			if (user.IsDeleted == true)
+			{
+				this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+				return this.RedirectToAction("Index", "Home", new { area = "" });
+			}
+
+			bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
 
             if (!doesGymExist)
             {
@@ -175,15 +188,6 @@
                 }
             }
 
-            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-            if (user.IsDeleted == true)
-            {
-                this.TempData[ErrorMessage] = "You were deleted by the Admin!";
-
-                return this.RedirectToAction(nameof(Details), new { gymId = gymId });
-            }
-
             try
             {
                 await this.gymService.RemoveGymFromUserAsync(gymId, user.Id.ToString());
@@ -210,11 +214,20 @@
         [HttpGet]
         public async Task<IActionResult> Joined([FromQuery] AllUserJoinedGymsQueryModel queryModel)
         {
-            string userId = this.GetUserId();
-
             try
             {
-                AllUserJoinedGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllUserJoinedGymsFilteredAndPagedViewModel
+				string userId = this.GetUserId();
+
+				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+				if (user.IsDeleted == true)
+				{
+					this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+					return this.RedirectToAction("Index", "Home", new { area = "" });
+				}
+
+				AllUserJoinedGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllUserJoinedGymsFilteredAndPagedViewModel
                 {
                     UserId = userId,
                     TotalGymsCount = await this.gymService.GetAllUserJoinedGymsCountAsync(userId),

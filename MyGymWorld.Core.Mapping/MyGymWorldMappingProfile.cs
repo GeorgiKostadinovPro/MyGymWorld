@@ -191,7 +191,7 @@
 				 .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price.ToString("f2")))
                  .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
 
-            this.CreateMap<UserMembership, PurchasedMembershipViewModel>()
+            this.CreateMap<UserMembership, PayedMembershipViewModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.UserEmail, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(d => d.PurchasedOn, opt => opt.MapFrom(src => src.CreatedOn))

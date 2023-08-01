@@ -16,14 +16,16 @@
         Task BuyMembershipAsync(string membershipId, string userId);
 
         Task<IEnumerable<MembershipViewModel>> GetAllActiveUserMembershipsFilteredAndPagedByUserIdAsync(string userId, AllUserMemberhipsQueryModel queryModel);
+        
+        Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel);   
+        
+        Task<List<PayedMembershipViewModel>> GetPaymentsByGymIdForManagementAsync(string gymId, int skip = 0, int? take = null);
 
-        Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId);
+        Task<List<PayedMembershipViewModel>> GetPaymentsByUserIdAsync(string userId, int skip = 0, int? take = null);
 
-        Task<IEnumerable<MembershipViewModel>> GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(AllMembershipsForGymQueryModel queryModel);
+		Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId);
 
         Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId);
-
-        Task<List<PurchasedMembershipViewModel>> GetActivePaymentsByGymIdAsync(string gymId, int skip = 0, int? take = null);
 
         Task<int> GetActivePaymentsCountByGymIdAsync(string gymId);
 

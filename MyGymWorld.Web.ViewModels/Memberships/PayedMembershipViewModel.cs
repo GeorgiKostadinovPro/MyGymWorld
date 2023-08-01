@@ -1,8 +1,8 @@
-﻿namespace MyGymWorld.Web.ViewModels.Managers.Memberships
+﻿namespace MyGymWorld.Web.ViewModels.Memberships
 {
 	using System;
 
-	public class PurchasedMembershipViewModel
+	public class PayedMembershipViewModel
 	{
 		public string Id { get; set; } = null!;
 
