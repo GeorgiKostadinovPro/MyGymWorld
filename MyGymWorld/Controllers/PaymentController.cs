@@ -3,6 +3,7 @@
 	using Microsoft.AspNetCore.Mvc;
 	using MyGymWorld.Core.Contracts;
 	using MyGymWorld.Data.Models;
+
 	using Stripe.Checkout;
 
 	public class PaymentController : BaseController

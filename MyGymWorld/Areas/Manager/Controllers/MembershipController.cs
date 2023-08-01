@@ -338,6 +338,7 @@
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> MembershipsPurchaseLogForGym(string gymId, int page = 1)
         {
             try
@@ -386,9 +387,9 @@
                 int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
                 totalPages = totalPages == 0 ? 1 : totalPages;
 
-                AllPurchasedMembershipsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllPurchasedMembershipsForGymViewModel
+                AllMembershipPaymentsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllMembershipPaymentsForGymViewModel
                 {
-                    Memberships = await this.membershipService.GetActivePaymentsByGymIdAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
+                    Memberships = await this.membershipService.GetPaymentsByGymIdForManagementAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
                     GlobalConstants.MembershipConstants.MembershipsPerPage),
                     CurrentPage = page,
                     PagesCount = totalPages,
