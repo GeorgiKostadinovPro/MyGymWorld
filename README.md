@@ -276,7 +276,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <strong>Seeded Data</strong>
 
 <details>
-   <summary>Users - all already authenticated (their password is confirmed)</summary>
+   <summary>Users - all already authenticated (their email is confirmed)</summary>
    <ul>
      <li>Admin - with real gmail to test the authentication flow - forgot and reset password. (the password of the account is the password for the gmail)</li>
      <li>Manager</li>
@@ -357,6 +357,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <strong>Stripe Testing Card Data:</strong>
 <li>Stripe Visa card - 4242 4242 4242 4242</li>
 <li>Stripe Visa CVC - 123</li>
+<li>Card name - testCard (or whatever you want)</li>
 <li>Country - United States</li>
 <li>ZIP - 10001</li>
 
@@ -377,7 +378,6 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <li>Start the project. (Although data is seeded you can test the application however you want)</li>
   <p><strong>NOTE:</strong> if you want to register new users ensure that you entered correct email for verification.</p>
   <p>Otherwise you can confirm the new account by going to the AspNetUsers table and changing the EmailConfirmed <strong>False -> True</strong></p>
-  
 </ol>
 
 
