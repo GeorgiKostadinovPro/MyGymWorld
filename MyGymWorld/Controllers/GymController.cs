@@ -30,17 +30,26 @@
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] AllGymsQueryModel queryModel)
         {
-            AllGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllGymsFilteredAndPagedViewModel
+            try
             {
-                TotalGymsCount = await this.gymService.GetActiveGymsCountAsync(),
-                Gyms = await this.gymService.GetAllActiveFilteredAndPagedGymsAsync(queryModel)
-            };
-               
-            queryModel.GymTypes = this.gymService.GetAllGymTypes();
-            queryModel.TotalGymsCount = allGymsFilteredAndPagedViewModel.TotalGymsCount;
-            queryModel.Gyms = allGymsFilteredAndPagedViewModel.Gyms;
+                AllGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllGymsFilteredAndPagedViewModel
+                {
+                    TotalGymsCount = await this.gymService.GetActiveGymsCountAsync(),
+                    Gyms = await this.gymService.GetAllActiveFilteredAndPagedGymsAsync(queryModel)
+                };
 
-            return this.View(queryModel);
+                queryModel.GymTypes = this.gymService.GetAllGymTypes();
+                queryModel.TotalGymsCount = allGymsFilteredAndPagedViewModel.TotalGymsCount;
+                queryModel.Gyms = allGymsFilteredAndPagedViewModel.Gyms;
+                
+                return this.View(queryModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
         }
 
         [HttpGet]
@@ -72,7 +81,14 @@
                 return this.NotFound();
             }
 
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+            Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+            if (gym == null)
+            {
+                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
 
             Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
             
@@ -136,7 +152,14 @@
                 return this.NotFound();
             }
 
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+            Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+            if (gym == null)
+            {
+                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
 
             Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
 

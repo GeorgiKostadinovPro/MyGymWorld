@@ -1,0 +1,130 @@
+﻿@model AllPurchasedMembershipsForGymViewModel
+
+@{
+	this.ViewData["Title"] = "Payments";
+}
+
+<link rel="stylesheet" href="~/css/manager-gyms.css" />
+
+<div class="container-xl">
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Manage <b>Payments</b></h2>
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Email</th>
+						<th>Purchased on</th>
+						<th>Valid to</th>
+						<th>Membership Type</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (int i = 0; i < Model.Memberships.Count; i++)
+					{
+						PurchasedMembershipViewModel userMembership = Model.Memberships[i];
+
+						<tr>
+							<td>@(i + 1)</td>
+							<td><a href="#">@userMembership.UserEmail</a></td>
+							<td>@userMembership.PurchasedOn.ToString("d MMMM yyyy")</td>
+							<td>@userMembership.ValidTo.ToString("d MMMM yyyy")</td>
+							<td>@userMembership.MembershipType</td>
+
+							@if (userMembership.PaymentStatus == true)
+							{
+									<td>
+										<span class="status text-success">&bull;</span> Successful
+									</td>
+							}
+							else
+							{
+									<td>
+										<span class="status text-danger">&bull;</span> Canceled
+									</td>
+							}
+
+							<td>
+								No Actions
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<div class="clearfix">
+				<div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.PagesCount</b> pages</div>
+				<ul class="pagination">
+					@if (Model.CurrentPage == 1)
+					{
+						<li class="page-item disabled">
+							<a href="#" class="page-link" disabled>
+								Previous
+							</a>
+						</li>
+					}
+					else
+					{
+						<li class="page-item disabled">
+							<a asp-area="Manager"
+						   asp-controller="Membership"
+						   asp-action="MembershipsPurchaseLogForGym"
+						   asp-route-gymId="@Model.GymId"
+						   asp-route-page="@(Model.CurrentPage == 1 ? Model.CurrentPage : Model.CurrentPage - 1)">Previous</a>
+						</li>
+					}
+
+					@for (int i = 1; i <= Model.PagesCount; i++)
+					{
+						<li class="page-item">
+							<a 
+								asp-area="Manager" 
+								asp-controller="Membership" 
+								asp-action="MembershipsPurchaseLogForGym" 
+								asp-route-gymId="@Model.GymId"
+								asp-route-page="@i" class="page-link">@i</a>
+						</li>
+					}
+
+					@if (Model.CurrentPage == Model.PagesCount)
+					{
+						<li class="page-item disabled">
+							<a href="#" class="page-link" disabled>
+								Next
+							</a>
+						</li>
+					}
+					else
+					{
+						<li class="page-item disabled">
+							<a asp-area="Manager"
+						   asp-controller="Membership"
+						   asp-action="MembershipsPurchaseLogForGym"
+						   asp-route-gymId="@Model.GymId"
+						   asp-route-page="@(Model.CurrentPage == Model.PagesCount ? Model.CurrentPage : Model.CurrentPage + 1)">Next</a>
+						</li>
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
+	<script>
+		$(document).ready(function () {
+			// Activate tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+}

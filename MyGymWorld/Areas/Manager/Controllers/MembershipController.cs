@@ -1,11 +1,10 @@
 ﻿namespace MyGymWorld.Web.Areas.Manager.Controllers
 {
-    using Ganss.Xss;
     using Microsoft.AspNetCore.Mvc;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Models.Enums;
-    using MyGymWorld.Web.ViewModels.Managers.Events;
     using MyGymWorld.Web.ViewModels.Managers.Memberships;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
@@ -14,6 +13,7 @@
     {
         private readonly IMembershipService membershipService;
 
+        private readonly IManagerService managerService;
         private readonly IUserService userService; 
         private readonly IGymService gymService;
 
@@ -21,12 +21,14 @@
 
         public MembershipController(
             IMembershipService _membershipService,
+            IManagerService _managerService,
             IUserService _userService,
             IGymService _gymService,
             INotificationService _notificationService)
         {
             this.membershipService = _membershipService;
 
+            this.managerService = _managerService;
             this.userService = _userService;
             this.gymService = _gymService;
 
@@ -51,7 +53,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -111,7 +113,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(createMembershipInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(createMembershipInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -176,7 +178,7 @@
 					return this.RedirectToAction("All", "Gym", new { area = "" });
 				}
 
-				Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+				Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
 				if (gym == null)
 				{
@@ -243,7 +245,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(editMembershipInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(editMembershipInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -335,5 +337,72 @@
                 return this.RedirectToAction("All", "Gym", new { area = "" });
             }
         }
-    }
+
+        public async Task<IActionResult> MembershipsPurchaseLogForGym(string gymId, int page = 1)
+        {
+            try
+            {
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (!User.IsInRole("Manager"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+                if (manager != null)
+                {
+                    bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
+
+                    if (isUserManagerOfThisGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You are the NOT manager of this gym!";
+
+                        return this.RedirectToAction("Details", "Gym", new { area = "", gymId = gymId });
+                    }
+                }
+                
+                int count = await this.membershipService.GetActivePaymentsCountByGymIdAsync(gymId);
+
+                int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllPurchasedMembershipsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllPurchasedMembershipsForGymViewModel
+                {
+                    Memberships = await this.membershipService.GetActivePaymentsByGymIdAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
+                    GlobalConstants.MembershipConstants.MembershipsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages,
+                    GymId = gymId
+                };
+                
+                return this.View(allPurchasedMembershipsForGymViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+        }
+	}
 }

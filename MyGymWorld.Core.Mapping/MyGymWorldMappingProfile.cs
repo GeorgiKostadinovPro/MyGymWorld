@@ -21,6 +21,7 @@
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     public class MyGymWorldMappingProfile : Profile
     {
@@ -182,13 +183,20 @@
                  .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
                  .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
 
-            this.CreateMap <Membership, MembershipDetailsViewModel>()
+            this.CreateMap<Membership, MembershipDetailsViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                  .ForMember(d => d.GymId, opt => opt.MapFrom(src => src.Gym.Id.ToString()))
                  .ForMember(d => d.GymName, opt => opt.MapFrom(src => src.Gym.Name))
 				 .ForMember(d => d.LogoUri, opt => opt.MapFrom(src => src.Gym.LogoUri))
 				 .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price.ToString("f2")))
                  .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.MembershipType.ToString()));
+
+            this.CreateMap<UserMembership, PurchasedMembershipViewModel>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.UserEmail, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(d => d.PurchasedOn, opt => opt.MapFrom(src => src.CreatedOn))
+                .ForMember(d => d.MembershipType, opt => opt.MapFrom(src => src.Membership.MembershipType.ToString()))
+                .ForMember(d => d.PaymentStatus, opt => opt.MapFrom(src => src.IsDeleted == false ? true : false));
 
             // Countries
             this.CreateMap<Country, CountryViewModel>();

@@ -32,7 +32,7 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym([FromQuery] AllEventsForGymQueryModel queryModel)
         {
-            Gym gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
+            Gym? gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
 
             if (gym == null)
             {
