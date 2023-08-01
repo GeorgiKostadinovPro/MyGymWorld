@@ -4,39 +4,44 @@
     ViewData["Title"] = "Become Manager";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="editForm" asp-controller="Manager" asp-action="BecomeManager" method="post">
-            <h2>Edit Your Profile</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input id="userId" type="hidden" asp-for="@Model.Id" />
-            <div class="form-floating">
-                <input asp-for="@Model.UserName" class="form-control" autocomplete="username" aria-required="true" minlength="5" maxlength="50" required />
+<div style="padding: 20px; box-shadow: 0 0 10px #2C3142;">
+    <form id="editForm" asp-controller="Manager" asp-action="BecomeManager" method="post">
+        <h2 style="text-align: center;">Become Manager</h2>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input id="userId" type="hidden" asp-for="@Model.Id" />
+        <div class="form-row">
+            <div class="form-group col-md-6">
                 <label asp-for="@Model.UserName"></label>
+                <input asp-for="@Model.UserName" class="form-control" autocomplete="username" aria-required="true" minlength="5" maxlength="50" required />
                 <span asp-validation-for="@Model.UserName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" required />
+            <div class="form-group col-md-6">
                 <label asp-for="@Model.Email"></label>
+                <input asp-for="@Model.Email" class="form-control" autocomplete="email" aria-required="true" required />
                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="@Model.FirstName" class="form-control" autocomplete="first name" aria-required="true" minlength="3" maxlength="20" />
+        </div>
+       <div class="form-row">
+            <div class="form-group col-md-6">
                 <label asp-for="@Model.FirstName"></label>
+                <input asp-for="@Model.FirstName" class="form-control" autocomplete="first name" aria-required="true" minlength="3" maxlength="20" />
                 <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="@Model.LastName" class="form-control" autocomplete="last name" aria-required="true" minlength="3" maxlength="20" />
+            <div class="form-group col-md-6">
                 <label asp-for="@Model.LastName"></label>
+                <input asp-for="@Model.LastName" class="form-control" autocomplete="last name" aria-required="true" minlength="3" maxlength="20" />
                 <span asp-validation-for="@Model.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="@Model.PhoneNumber" class="form-control" autocomplete="phone number" aria-required="true" minlength="5" maxlength="15" />
+       </div>
+       <div class="form-row">
+            <div class="form-group col-md-6">
                 <label asp-for="@Model.PhoneNumber">+(country code)-(phone number)</label>
+                <input asp-for="@Model.PhoneNumber" class="form-control" autocomplete="phone number" aria-required="true" minlength="5" maxlength="15" />
                 <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="mb-3">
+            <div class="form-group col-md-6">
+                <label>Manager Types</label>
                 <select asp-for="@Model.ManagerType" id="managerTypes" class="form-select">
                     <option value="None">-- Please Select A Manager Type --</option>
                     @foreach (string managerType in Model.ManagerTypes!)
@@ -46,10 +51,12 @@
                 </select>
                 <span asp-validation-for="@Model.ManagerType" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Become Manager</button>
-        </form>
-    </div>
+       </div>
+      
+        <button type="submit" class="btn btn-primary mx-auto d-block">Become Manager</button>
+    </form>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -8,6 +8,8 @@
     <form asp-area="" asp-controller="User" asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input id="userId" type="hidden" asp-for="@Model.Id" />
+        <h2 style="text-align: center;">Edit Your Profile</h2>
+        <hr />
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label asp-for="@Model.UserName"></label>

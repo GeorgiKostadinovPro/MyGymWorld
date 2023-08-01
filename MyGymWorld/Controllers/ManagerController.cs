@@ -1,7 +1,6 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
@@ -13,12 +12,10 @@
     public class ManagerController : BaseController
     {
         private readonly IManagerService managerService;
-        private readonly IRoleService roleService;
 
-        public ManagerController(IManagerService _managerService, IRoleService _roleService)
+        public ManagerController(IManagerService _managerService)
         {
             this.managerService = _managerService;
-            this.roleService = _roleService;
         }
 
         [HttpGet]
