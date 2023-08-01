@@ -8,6 +8,8 @@
     <div style="box-shadow: 0 0 10px #2C3142; padding: 20px;">
         <form asp-area="Manager" asp-controller="Membership" asp-action="Create" method="post">
             <input type="hidden" asp-for="@Model.GymId"/>
+            <h2 style="text-align: center;">Create Membership</h2>
+            <hr />
             <div class="form-group">
                 <label asp-for="@Model.Price"></label>
                 <input asp-for="@Model.Price" type="text" class="form-control" placeholder="Price" required>

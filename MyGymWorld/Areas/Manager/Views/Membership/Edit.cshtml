@@ -10,6 +10,8 @@
             <input type="hidden" name="membershipId" value="@Model.Id" />
             <input type="hidden" asp-for="@Model.Id" />
             <input type="hidden" asp-for="@Model.GymId" />
+            <h2 style="text-align: center;">Edit Membership</h2>
+            <hr />
             <div class="form-group">
                 <label asp-for="@Model.Price"></label>
                 <input asp-for="@Model.Price" type="text" class="form-control" placeholder="Price" required>

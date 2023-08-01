@@ -9,6 +9,8 @@
 <div id="createGym" style="padding: 20px; box-shadow: 0 0 10px #2C3142;">
     <form asp-area="Manager" asp-controller="Gym" asp-action="Edit" asp-route-gymId="@Model.Id" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="@Model.Id"/>
+        <h2 style="text-align: center;">Edit Gym</h2>
+        <hr />
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label asp-for="@Model.Name"></label>
