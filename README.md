@@ -85,6 +85,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <p>One more thing is that members of a gym can easily by cards for that gym directly from the platform (weekly, monthly or yearly membership).</p>
 <p>After paying for a card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
 <p>When a membership expires he can easily buy a new one.</p>
+<p>Gym managers can easily keep track of their gyms and payments throught heir Manager Panel.</p>
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
@@ -214,7 +215,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can delete articles for a gym.</li>
     <li>Can create memberships for a gym.</li>
     <li>Can edit memberships for a gym.</li>
-    <li>Can delete delete for a gym.</li>
+    <li>Can delete memberships for a gym.</li>
+    <li>Can keep track of all payments through his Manager Panel.</li>
   </ul>
 </details>
 
