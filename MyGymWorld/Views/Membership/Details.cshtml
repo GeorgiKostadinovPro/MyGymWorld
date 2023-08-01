@@ -26,7 +26,7 @@
 
 <link href="~/css/membership-card.css" rel="stylesheet"/>
 
-<div class="card">
+<div class="card" style="max-width: 400px;">
 	@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
 	{
 		<img src="@userMembership.QRCodeUri" alt="img" style="width:100%">
@@ -49,14 +49,15 @@
 		<h1 style="margin-top: 10px;">Yearly Membership</h1>
 		}
 	
-	<p class="price">Price: $@Model.Price</p>
+
 	@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
 	{
 		<p class="price">Purchased on: @userMembership.CreatedOn.ToString("dd MMMM yyyy")</p>
 		<p class="price">Valid to: @userMembership.ValidTo.ToString("dd MMMM yyyy")</p>
+		<p>You can now visit the @Model.GymName and check your card!</p>
 	}
 	else
-	{
+	{	<p class="price">Price: $@Model.Price</p>
 		<p class="price">Created on: @Model.CreatedOn.ToString("dd MMMM yyyy")</p>
 	}
 	
@@ -85,7 +86,7 @@
 	{
 		@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
 		{
-				<button id="buy-button" disabled>Bought</button>
+				@*<button id="buy-button" disabled>Bought</button>*@
 		}
 		else
 		{
