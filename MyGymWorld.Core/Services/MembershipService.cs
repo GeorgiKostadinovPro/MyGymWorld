@@ -249,7 +249,32 @@
 
             return eventsToDisplay;
         }
-        
+
+        public async Task<List<PurchasedMembershipViewModel>> GetActivePaymentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
+        {
+            IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllReadonly<UserMembership>(um => um.IsDeleted == false)
+                .Include(um => um.Membership)
+                .Include(um => um.User)
+                .OrderByDescending(um => um.CreatedOn)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                userMembershipsAsQuery = userMembershipsAsQuery.Take(take.Value);
+            }
+
+            return await userMembershipsAsQuery
+                           .ProjectTo<PurchasedMembershipViewModel>(this.mapper.ConfigurationProvider)
+                           .ToListAsync();
+        }
+
+        public async Task<int> GetActivePaymentsCountByGymIdAsync(string gymId)
+        {
+            return await this.repository.AllReadonly<UserMembership>(m => m.IsDeleted == false)
+                                        .Include(um => um.Membership)
+                                        .CountAsync(um => um.Membership.IsDeleted == false && um.Membership.GymId == Guid.Parse(gymId));
+        }
+
         public async Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllReadonly<Membership>(m => m.IsDeleted == false && m.GymId == Guid.Parse(gymId))

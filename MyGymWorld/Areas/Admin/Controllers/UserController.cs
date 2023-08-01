@@ -5,7 +5,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.Areas.Administration.Controllers;
     using MyGymWorld.Web.ViewModels.Administration.Users;
-    using System.Text;
+
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
     public class UserController : AdminController

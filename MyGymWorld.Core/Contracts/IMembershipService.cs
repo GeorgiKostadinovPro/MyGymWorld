@@ -23,6 +23,10 @@
 
         Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId);
 
+        Task<List<PurchasedMembershipViewModel>> GetActivePaymentsByGymIdAsync(string gymId, int skip = 0, int? take = null);
+
+        Task<int> GetActivePaymentsCountByGymIdAsync(string gymId);
+
         Task<MembershipDetailsViewModel> GetMembershipDetailsByIdAsync(string membershipId);	
         
         Task<EditMembershipInputModel> GetMembershipForEditByIdAsync(string membershipId);

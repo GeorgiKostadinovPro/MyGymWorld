@@ -84,7 +84,9 @@
 	}
 	else
 	{
-		@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
+		@if (userMembership != null 
+	  	     && userMembership.IsDeleted == false 
+		     && userMembership.ValidTo > DateTime.UtcNow)
 		{
 				@*<button id="buy-button" disabled>Bought</button>*@
 		}

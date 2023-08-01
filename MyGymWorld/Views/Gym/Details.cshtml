@@ -258,6 +258,17 @@
                             asp-route-gymId="@Model.Id"
                         class="button" type="submit" id="button" style="width: 250px;">Add Membership</a>
                     </div>
+
+                    <hr />
+
+                    <div style="text-align: center; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                        <a asp-area="Manager"
+                   asp-controller="Membership"
+                   asp-action="MembershipsPurchaseLogForGym"
+                   asp-route-gymId="@Model.Id"
+                   asp-route-page="1"
+                           class="button" type="submit" id="button" style="width: 250px; background: #1d88b3;  transition: background-color 0.6s ease;">View Payments</a>
+                    </div>
                 }
             }
             <br>
