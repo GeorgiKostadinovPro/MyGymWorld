@@ -82,10 +82,13 @@ Maybe you can mention me or this repo in the acknowledgements too
 <p>Moreover, after joining a gym, users can review events for the gym, and decide to join or leave an event.</p>
 <p>After joining a gym users can now read the gym published articles, and can even subscribe for articles (receive notification for every new article that gets published).</p>
 <p>After subscribing he can always unsubscribe and stop receiving notifications.</p>
-<p>One more thing is that members of a gym can easily by cards for that gym directly from the platform (weekly, monthly or yearly membership).</p>
+<p>One more thing is that gym members can review memberships and buy cards for that gym directly from the platform (weekly, monthly or yearly membership).</p>
 <p>After paying for a card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
+<p>Users can see the memberships they payed for through "My Memberships" page.</p>
+<p>Users can easily keep track of their payments for memberships throught "My Payments" page.</p>
 <p>When a membership expires he can easily buy a new one.</p>
 <p>Gym managers can easily keep track of their gyms and payments throught their Manager Panel.</p>
+<p>For more information review the <strong>Features</strong> section below.</p>
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
@@ -189,7 +192,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see all membership for each gym after joining it. (filter, sort and search)</li>
     <li>Can see details about each membership.</li>
     <li>Can buy a membership.</li>
-    <li>Can see all his bought memberships. (Each has a unqiue QR Code)</li>
+    <li>Can see all memberships he payed for. (Each has a unqiue QR Code)</li>
+    <li>Can keep track of all his payments for gym memberships.</li>
     <li>Can become manager via request to Admin.</li>
   </ul>
 </details>
