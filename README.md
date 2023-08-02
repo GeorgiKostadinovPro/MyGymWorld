@@ -381,7 +381,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <li>Add secrets.json file described above.</li>
   <li>Replace the data with your own. (SqlServer connection, API keys and secrets, ApplicationUrl)</li>
   <li>Ensure that you entered correct data.</li>
-  <li>Start the project. (Although data is seeded you can test the application however you want)</li>
+  <li>Start the project. (The app will automatically apply all migrations and seed data)</li>
   <p><strong>NOTE:</strong> if you want to register new users ensure that you entered correct email for verification.</p>
   <p>Otherwise you can confirm the new account by going to the AspNetUsers table and changing the EmailConfirmed <strong>False -> True</strong></p>
 </ol>
