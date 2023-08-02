@@ -107,55 +107,58 @@
 
         public async Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel)
         {
-            Gym gymToEdit = await this.repository.All<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
+            Gym? gymToEdit = await this.repository.All<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
                 .Include(g => g.Address)
                 .ThenInclude(a => a.Town)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            gymToEdit.Name = editGymInputModel.Name;
-            gymToEdit.Email = editGymInputModel.Email;
-            gymToEdit.PhoneNumber = gymToEdit.PhoneNumber;
-            gymToEdit.WebsiteUrl = editGymInputModel.WebsiteUrl;
-            gymToEdit.Description = editGymInputModel.Description;
-            gymToEdit.GymType = Enum.Parse<GymType>(editGymInputModel.GymType);
-
-            Address address = await this.addressService.GetAddressByNameAsync(editGymInputModel.Address);
-
-            if (address != null)
+            if (gymToEdit != null)
             {
-                gymToEdit.AddressId = address.Id;
-            }
-            else
-            {
-                Address createdAddress = await this.addressService.CreateAddressAsync(editGymInputModel.Address, editGymInputModel.TownId);
+				gymToEdit.Name = editGymInputModel.Name;
+				gymToEdit.Email = editGymInputModel.Email;
+				gymToEdit.PhoneNumber = gymToEdit.PhoneNumber;
+				gymToEdit.WebsiteUrl = editGymInputModel.WebsiteUrl;
+				gymToEdit.Description = editGymInputModel.Description;
+				gymToEdit.GymType = Enum.Parse<GymType>(editGymInputModel.GymType);
 
-                gymToEdit.AddressId = createdAddress.Id;
-            }
+				Address address = await this.addressService.GetAddressByNameAsync(editGymInputModel.Address);
 
-            if (gymLogoAndGalleryImagesInputModel.LogoResultParams != null)
-            {
-                gymToEdit.LogoUri = gymLogoAndGalleryImagesInputModel.LogoResultParams!.SecureUri!.AbsoluteUri;
-                gymToEdit.LogoPublicId = gymLogoAndGalleryImagesInputModel.LogoResultParams.PublicId;
-            }
+				if (address != null)
+				{
+					gymToEdit.AddressId = address.Id;
+				}
+				else
+				{
+					Address createdAddress = await this.addressService.CreateAddressAsync(editGymInputModel.Address, editGymInputModel.TownId);
 
-            if (gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Count > 0)
-            {
-                foreach (var galleryImageResultParams in gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams)
-                {
-                    string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
-                    string publicId = galleryImageResultParams.PublicId;
+					gymToEdit.AddressId = createdAddress.Id;
+				}
 
-                    gymToEdit.GymImages.Add(new GymImage
-                    {
-                        GymId = gymToEdit.Id,
-                        Uri = uri,
-                        PublicId = publicId,
-                        CreatedOn = DateTime.UtcNow,
-                    });
-                }
-            }
+				if (gymLogoAndGalleryImagesInputModel.LogoResultParams != null)
+				{
+					gymToEdit.LogoUri = gymLogoAndGalleryImagesInputModel.LogoResultParams!.SecureUri!.AbsoluteUri;
+					gymToEdit.LogoPublicId = gymLogoAndGalleryImagesInputModel.LogoResultParams.PublicId;
+				}
 
-            await this.repository.SaveChangesAsync();
+				if (gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Count > 0)
+				{
+					foreach (var galleryImageResultParams in gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams)
+					{
+						string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
+						string publicId = galleryImageResultParams.PublicId;
+
+						gymToEdit.GymImages.Add(new GymImage
+						{
+							GymId = gymToEdit.Id,
+							Uri = uri,
+							PublicId = publicId,
+							CreatedOn = DateTime.UtcNow,
+						});
+					}
+				}
+
+				await this.repository.SaveChangesAsync();
+			}
         }
 
         public async Task DeleteGymAsync(string gymId)
@@ -169,62 +172,65 @@
                 .Include(g => g.Comments)
                 .Include(g => g.UsersGyms)
                 .Include(g => g.GymImages)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            gymToDelete.IsDeleted = true;
-            gymToDelete.DeletedOn = DateTime.UtcNow;
-
-            foreach (Event @event in gymToDelete.Events)
+            if (gymToDelete != null)
             {
-                await this.eventService.DeleteEventAsync(@event.Id.ToString());
-            }
+				gymToDelete.IsDeleted = true;
+				gymToDelete.DeletedOn = DateTime.UtcNow;
 
-            foreach (Article article in gymToDelete.Articles)
-            {
-                await this.articleService.DeleteArticleAsync(article.Id.ToString());
-            }
+				foreach (Event @event in gymToDelete.Events)
+				{
+					await this.eventService.DeleteEventAsync(@event.Id.ToString());
+				}
 
-            foreach (Membership membership in gymToDelete.Memberships)
-            {
-                await this.membershipService.DeleteMembershipAsync(membership.Id.ToString());
-            }
+				foreach (Article article in gymToDelete.Articles)
+				{
+					await this.articleService.DeleteArticleAsync(article.Id.ToString());
+				}
 
-            foreach (Like like in gymToDelete.Likes)
-            {
-                await this.likeService.DeleteLikeAsync(like.Id.ToString());
-            }
+				foreach (Membership membership in gymToDelete.Memberships)
+				{
+					await this.membershipService.DeleteMembershipAsync(membership.Id.ToString());
+				}
 
-            foreach (Dislike dislike in gymToDelete.Dislikes)
-            {
-                await this.dislikeService.DeleteDislikeAsync(dislike.Id.ToString());
-            }
+				foreach (Like like in gymToDelete.Likes)
+				{
+					await this.likeService.DeleteLikeAsync(like.Id.ToString());
+				}
 
-            foreach (Comment comment in gymToDelete.Comments)
-            {
-                await this.commentService.DeleteCommentAsync(comment.Id.ToString());
-            }
+				foreach (Dislike dislike in gymToDelete.Dislikes)
+				{
+					await this.dislikeService.DeleteDislikeAsync(dislike.Id.ToString());
+				}
 
-            IEnumerable<UserGym> userGymsToDelete = gymToDelete.UsersGyms
-                .Where(ug => ug.IsDeleted == false)
-                .ToArray();
+				foreach (Comment comment in gymToDelete.Comments)
+				{
+					await this.commentService.DeleteCommentAsync(comment.Id.ToString());
+				}
 
-            foreach (var userGym in userGymsToDelete)
-            {
-                userGym.IsDeleted = true;
-                userGym.DeletedOn = DateTime.UtcNow;
-            }
+				IEnumerable<UserGym> userGymsToDelete = gymToDelete.UsersGyms
+					.Where(ug => ug.IsDeleted == false)
+					.ToArray();
 
-            IEnumerable<GymImage> gymImagesToDelete = gymToDelete.GymImages
-                .Where(gi => gi.IsDeleted == false)
-                .ToArray();
+				foreach (var userGym in userGymsToDelete)
+				{
+					userGym.IsDeleted = true;
+					userGym.DeletedOn = DateTime.UtcNow;
+				}
 
-            foreach (var gymImage in gymImagesToDelete)
-            {
-                gymImage.IsDeleted = true;
-                gymImage.DeletedOn = DateTime.UtcNow;
-            }
+				IEnumerable<GymImage> gymImagesToDelete = gymToDelete.GymImages
+					.Where(gi => gi.IsDeleted == false)
+					.ToArray();
 
-            await this.repository.SaveChangesAsync();
+				foreach (var gymImage in gymImagesToDelete)
+				{
+					gymImage.IsDeleted = true;
+					gymImage.DeletedOn = DateTime.UtcNow;
+				}
+
+				await this.repository.SaveChangesAsync();
+			}
         }
 
         public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null)
