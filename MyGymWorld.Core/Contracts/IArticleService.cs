@@ -8,9 +8,9 @@
     {
         Task<Article> CreateArticleAsync(CreateArticleInputModel createArticleInputModel);
 
-        Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel);
+        Task EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel);
 
-        Task<Article> DeleteArticleAsync(string articleId);
+        Task DeleteArticleAsync(string articleId);
 
         Task SubscribeUserToGymArticlesAsync(string userId, string gymId);
 

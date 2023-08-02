@@ -11,6 +11,8 @@
 
         Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
 
+        Task DeleteGymAsync(string gymId);
+
         Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId);
 
 		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);

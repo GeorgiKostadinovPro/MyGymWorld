@@ -60,7 +60,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -75,7 +75,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -120,7 +120,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(createArticleInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(createArticleInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -135,7 +135,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -198,7 +198,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -213,7 +213,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -280,19 +280,19 @@
 
 					if (isGymManagedByCorrectManager == false)
 					{
-						return this.Forbid();
-					}
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
+                    }
 				}
 
                 editArticleInputModel.Content = new HtmlSanitizer().Sanitize(editArticleInputModel.Content);
 
-				Article editedArticle = await this.articleService.EditArticleAsync(articleId, editArticleInputModel);
+				await this.articleService.EditArticleAsync(articleId, editArticleInputModel);
 
 				this.TempData[SuccessMessage] = "You edited an article!";
 
 				await this.notificationService.CreateNotificationAsync(
 					$"You edited an article for {gym.Name}.",
-					$"/Event/Details?articleId={editedArticle.Id.ToString()}",
+					$"/Event/Details?articleId={articleId}",
 					userId);
 
 				return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = editArticleInputModel.GymId });
@@ -333,13 +333,13 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Article deletedArticle = await this.articleService.DeleteArticleAsync(articleId);
+                await this.articleService.DeleteArticleAsync(articleId);
 
                 this.TempData[SuccessMessage] = "You deleted an article!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You deleted an article!",
-                    $"/Article/AllForGym?gymId={deletedArticle.Id.ToString()}",
+                    $"/Article/AllForGym?gymId={articleId}",
                     userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Article", new { area = "", GymId = articleToDelete.GymId });

@@ -8,9 +8,9 @@
     {
         Task<Event> CreateEventAsync(CreateEventInputModel createEventInputModel);
 
-        Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel);
+        Task EditEventAsync(string eventId, EditEventInputModel editEventInputModel);
 
-        Task<Event> DeleteEventAsync(string eventId);
+        Task DeleteEventAsync(string eventId);
 
         Task ParticipateInEventAsync(string eventId, string userId);
 

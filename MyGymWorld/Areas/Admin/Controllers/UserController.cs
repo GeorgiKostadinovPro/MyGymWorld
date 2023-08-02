@@ -63,28 +63,39 @@
         [HttpPost]
         public async Task<IActionResult> Delete(string userId)
         {
-            ApplicationUser userToDelete = await this.userService.GetUserByIdAsync(userId);
-
-            if (userToDelete == null)
-            {
-                this.TempData[ErrorMessage] = "User does NOT exists!";
-            }
-
             try
             {
+                ApplicationUser userToDelete = await this.userService.GetUserByIdAsync(userId);
+
+                if (userToDelete == null)
+                {
+                    this.TempData[ErrorMessage] = "User does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                if (!this.User.IsInRole("Admin"))
+                {
+                    this.TempData[ErrorMessage] = "You are NOT an admin!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
                 await this.userService.DeleteUserAsync(userId);
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You succesfully deleted user: {userToDelete!.Email}!",
                     $"/Admin/User/All",
                     this.GetUserId());
+                
+                return this.RedirectToAction(nameof(Active));
             }
             catch (Exception ex)
             {
                 this.TempData[ErrorMessage] = ex.Message;
-            }
 
-            return this.RedirectToAction(nameof(Active));
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
         }
     }
 }

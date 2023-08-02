@@ -57,6 +57,21 @@
             return like;
         }
 
+        public async Task DeleteLikeAsync(string likeId)
+        {
+            Like? likeToDelete = await this.repository
+                .All<Like>(l => l.IsDeleted == false && l.Id == Guid.Parse(likeId))
+                .FirstOrDefaultAsync();
+
+            if (likeToDelete != null)
+            {
+                likeToDelete.IsDeleted = true;
+                likeToDelete.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)
         {
             Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))

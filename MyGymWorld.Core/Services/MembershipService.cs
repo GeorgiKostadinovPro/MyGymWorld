@@ -47,44 +47,46 @@
             return membership;
         }
 
-		public async Task<Membership> EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel)
+		public async Task EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel)
 		{
-            Membership membershipToEdit = await this.repository
+            Membership? membershipToEdit = await this.repository
                 .All<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            membershipToEdit.Price = editMembershipInputModel.Price;
-            membershipToEdit.MembershipType = Enum.Parse<MembershipType>(editMembershipInputModel.MembershipType);
-            membershipToEdit.ModifiedOn = DateTime.UtcNow;
+            if (membershipToEdit != null)
+            {
+                membershipToEdit.Price = editMembershipInputModel.Price;
+                membershipToEdit.MembershipType = Enum.Parse<MembershipType>(editMembershipInputModel.MembershipType);
+                membershipToEdit.ModifiedOn = DateTime.UtcNow;
 
-            await this.repository.SaveChangesAsync();
-
-            return membershipToEdit;
+                await this.repository.SaveChangesAsync();
+            }
 		}
 
-        public async Task<Membership> DeleteMembershipAsync(string membershipId)
+        public async Task DeleteMembershipAsync(string membershipId)
         {
-            Membership membershipToEdit = await this.repository
+            Membership? membershipToDelete = await this.repository
                .All<Membership>(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId))
                .Include(m => m.UsersMemberships)
-               .FirstAsync();
+               .FirstOrDefaultAsync();
 
-            membershipToEdit.IsDeleted = true;
-            membershipToEdit.DeletedOn = DateTime.UtcNow;
-
-            IEnumerable<UserMembership> userMembershipsToDelete = membershipToEdit.UsersMemberships
-                .Where(um => um.IsDeleted == false && um.MembershipId == Guid.Parse(membershipId))
-                .ToArray();
-
-            foreach (UserMembership userMembership in userMembershipsToDelete)
+            if (membershipToDelete != null)
             {
-                userMembership.IsDeleted = true;
-                userMembership.DeletedOn = DateTime.UtcNow;
+                membershipToDelete.IsDeleted = true;
+                membershipToDelete.DeletedOn = DateTime.UtcNow;
+
+                IEnumerable<UserMembership> userMembershipsToDelete = membershipToDelete.UsersMemberships
+                    .Where(um => um.IsDeleted == false)
+                    .ToArray();
+
+                foreach (UserMembership userMembership in userMembershipsToDelete)
+                {
+                    userMembership.IsDeleted = true;
+                    userMembership.DeletedOn = DateTime.UtcNow;
+                }
+
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
-
-            return membershipToEdit;
         }
 
         public async Task BuyMembershipAsync(string membershipId, string userId)

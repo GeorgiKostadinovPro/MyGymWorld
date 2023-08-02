@@ -7,6 +7,8 @@
     {
         Task<Dislike> CreateDislikeAsync(string gymId, string userId);
 
+        Task DeleteDislikeAsync(string dislikeId);
+
         Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId);
 
         Task<int> GetAllActiveDislikesCountAsync();

@@ -47,7 +47,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -62,7 +62,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -107,7 +107,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(createEventInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -122,7 +122,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -188,7 +188,7 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -203,7 +203,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -270,7 +270,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 }); ;
                     }
                 }
 
@@ -292,13 +292,13 @@
 
                 editEventInputModel.Description = new HtmlSanitizer().Sanitize(editEventInputModel.Description);
 
-                Event editedEvent = await this.eventService.EditEventAsync(eventId, editEventInputModel);
+               await this.eventService.EditEventAsync(eventId, editEventInputModel);
 
                 this.TempData[SuccessMessage] = "You edited an event!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You edited an event for {gym.Name}",
-                    $"/Event/Details?eventId={editedEvent.Id.ToString()}",
+                    $"/Event/Details?eventId={eventId}",
                     userId);
 
                 return this.RedirectToAction("AllForGym", "Event", new { area = "", gymId = editEventInputModel.GymId });
@@ -314,24 +314,8 @@
         [HttpPost]
         public async Task<IActionResult> Delete(string eventId)
         {
-            Event? eventToDelete = await this.eventService.GetEventByIdAsync(eventId);
-
-            if (eventToDelete == null)
-            {
-                this.TempData[ErrorMessage] = "Such event does NOT exist!";
-
-                return this.RedirectToAction("All", "Gym", new { area = "" });
-            }
-
             try
             {
-                if (eventToDelete.StartDate < DateTime.UtcNow && eventToDelete.EndDate > DateTime.UtcNow)
-                {
-					this.TempData[ErrorMessage] = "You CANNOT delete running event!";
-
-                    return this.RedirectToAction("All", "Gym", new { area = "" });
-                }
-
 				string userId = this.GetUserId();
 
 				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -345,13 +329,29 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Event deletedEvent = await this.eventService.DeleteEventAsync(eventId);
+                Event? eventToDelete = await this.eventService.GetEventByIdAsync(eventId);
+
+                if (eventToDelete == null)
+                {
+                    this.TempData[ErrorMessage] = "Such event does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                if (eventToDelete.StartDate < DateTime.UtcNow && eventToDelete.EndDate > DateTime.UtcNow)
+                {
+                    this.TempData[ErrorMessage] = "You CANNOT delete running event!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                await this.eventService.DeleteEventAsync(eventId);
 
                 this.TempData[SuccessMessage] = "You deleted event!";
 
                 await this.notificationService.CreateNotificationAsync(
                  $"You deleted an event!",
-                 $"/Event/AllForGym?gymId={deletedEvent.GymId.ToString()}",
+                 $"/Event/AllForGym?gymId={eventToDelete.GymId.ToString()}",
                  userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Event", new { area = "", GymId = eventToDelete.GymId });

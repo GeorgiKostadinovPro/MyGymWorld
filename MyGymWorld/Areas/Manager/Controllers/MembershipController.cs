@@ -36,6 +36,74 @@
         }
 
         [HttpGet]
+        public async Task<IActionResult> MembershipsPurchaseLogForGym(string gymId, int page = 1)
+        {
+            try
+            {
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (!User.IsInRole("Manager"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+                if (manager != null)
+                {
+                    bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
+
+                    if (isUserManagerOfThisGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You are the NOT manager of this gym!";
+
+                        return this.RedirectToAction("Details", "Gym", new { area = "", gymId = gymId });
+                    }
+                }
+
+                int count = await this.membershipService.GetActivePaymentsCountByGymIdAsync(gymId);
+
+                int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllMembershipPaymentsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllMembershipPaymentsForGymViewModel
+                {
+                    Memberships = await this.membershipService.GetPaymentsByGymIdForManagementAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
+                    GlobalConstants.MembershipConstants.MembershipsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages,
+                    GymId = gymId
+                };
+
+                return this.View(allPurchasedMembershipsForGymViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create(string gymId)
         {
             try
@@ -68,7 +136,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -128,7 +196,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -192,9 +260,9 @@
 					bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
 
 					if (isGymManagedByCorrectManager == false)
-					{
-						return this.Forbid();
-					}
+                    {
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
+                    }
 				}
 
 				bool doesEventExists = await this.membershipService.CheckIfMembershipExistsByIdAsync(membershipId);
@@ -223,15 +291,15 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string membershipId, EditMembershipInputModel editMembershipInputModel)
         {
-            editMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(editMembershipInputModel);
-            }
-
             try
             {
+                editMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(editMembershipInputModel);
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -260,7 +328,7 @@
 
                     if (isGymManagedByCorrectManager == false)
                     {
-                        return this.Forbid();
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
                 }
 
@@ -273,13 +341,13 @@
                     return this.View(editMembershipInputModel);
                 }
 
-                Membership editedMembership = await this.membershipService.EditMembershipAsync(membershipId, editMembershipInputModel);
+                await this.membershipService.EditMembershipAsync(membershipId, editMembershipInputModel);
 
                 this.TempData[SuccessMessage] = "You edited a membership!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You edited a membership for {gym.Name}",
-                    $"/Membership/Details?membershipId={editedMembership.Id.ToString()}",
+                    $"/Membership/Details?membershipId={membershipId}",
                     userId);
 
                 return this.RedirectToAction("AllForGym", "Membership", new { area = "", gymId = editMembershipInputModel.GymId });
@@ -295,15 +363,6 @@
         [HttpPost]
         public async Task<IActionResult> Delete(string membershipId)
         {
-            Membership? membershipToDelete = await this.membershipService.GetMembershipByIdAsync(membershipId);
-
-            if (membershipToDelete == null)
-            {
-                this.TempData[ErrorMessage] = "Such membership does NOT exist!";
-
-                return this.RedirectToAction("All", "Gym", new { area = "" });
-            }
-
             try
             {
                 string userId = this.GetUserId();
@@ -319,13 +378,22 @@
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Membership deletedMembership = await this.membershipService.DeleteMembershipAsync(membershipId);
+                Membership? membershipToDelete = await this.membershipService.GetMembershipByIdAsync(membershipId);
+
+                if (membershipToDelete == null)
+                {
+                    this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                await this.membershipService.DeleteMembershipAsync(membershipId);
 
                 this.TempData[SuccessMessage] = "You deleted an article!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You deleted a membership!",
-                    $"/Membership/AllForGym?gymId={deletedMembership.GymId.ToString()}",
+                    $"/Membership/AllForGym?gymId={membershipToDelete.GymId.ToString()}",
                     userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Membership", new { area = "", GymId = membershipToDelete.GymId });
@@ -335,74 +403,6 @@
                 this.TempData[SuccessMessage] = "Something went wrong!";
 
                 return this.RedirectToAction("All", "Gym", new { area = "" });
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> MembershipsPurchaseLogForGym(string gymId, int page = 1)
-        {
-            try
-            {
-                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
-
-                if (gym == null)
-                {
-                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
-                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-                if (user == null)
-                {
-                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
-                if (!User.IsInRole("Manager"))
-                {
-                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
-
-                    return this.RedirectToAction("Index", "Home");
-                }
-
-                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
-
-                if (manager != null)
-                {
-                    bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
-
-                    if (isUserManagerOfThisGym == false)
-                    {
-                        this.TempData[ErrorMessage] = "You are the NOT manager of this gym!";
-
-                        return this.RedirectToAction("Details", "Gym", new { area = "", gymId = gymId });
-                    }
-                }
-                
-                int count = await this.membershipService.GetActivePaymentsCountByGymIdAsync(gymId);
-
-                int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
-                totalPages = totalPages == 0 ? 1 : totalPages;
-
-                AllMembershipPaymentsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllMembershipPaymentsForGymViewModel
-                {
-                    Memberships = await this.membershipService.GetPaymentsByGymIdForManagementAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
-                    GlobalConstants.MembershipConstants.MembershipsPerPage),
-                    CurrentPage = page,
-                    PagesCount = totalPages,
-                    GymId = gymId
-                };
-                
-                return this.View(allPurchasedMembershipsForGymViewModel);
-            }
-            catch (Exception)
-            {
-                this.TempData[ErrorMessage] = "Something went wrong!";
-
-                return this.RedirectToAction("Index", "Home", new { area = "" });
             }
         }
 	}
