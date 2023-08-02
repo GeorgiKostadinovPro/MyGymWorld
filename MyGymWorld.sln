@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Web.ViewModels",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Core.Utilities", "MyGymWorld.Core.Utilities\MyGymWorld.Core.Utilities.csproj", "{E5BD6EDC-B0D2-4F2D-8BDD-FD22BDD8E18A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Common", "MyGymWorld.Common\MyGymWorld.Common.csproj", "{8A1EE9B5-3D26-438D-8076-442DF2C04F15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyGymWorld.Common", "MyGymWorld.Common\MyGymWorld.Common.csproj", "{8A1EE9B5-3D26-438D-8076-442DF2C04F15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02ED2994-5854-40C3-A5E5-B89C326DB5B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGymWorld.Core.Tests", "MyGymWorld.Core.Tests\MyGymWorld.Core.Tests.csproj", "{FD476247-C5E0-459D-A6DB-885CE2507902}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,10 @@ Global
 		{8A1EE9B5-3D26-438D-8076-442DF2C04F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A1EE9B5-3D26-438D-8076-442DF2C04F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A1EE9B5-3D26-438D-8076-442DF2C04F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD476247-C5E0-459D-A6DB-885CE2507902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD476247-C5E0-459D-A6DB-885CE2507902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD476247-C5E0-459D-A6DB-885CE2507902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD476247-C5E0-459D-A6DB-885CE2507902}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +90,7 @@ Global
 		{0ECC56A0-BA50-4EF8-8686-3382D519365C} = {78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}
 		{B0DF566B-AF2D-4BC4-BFD2-1C536020F540} = {E18F2EE2-1414-46B7-AF74-688DC801C1F7}
 		{E5BD6EDC-B0D2-4F2D-8BDD-FD22BDD8E18A} = {78A7FE3F-FE5D-45F0-A5EC-DC7EA48E4828}
+		{FD476247-C5E0-459D-A6DB-885CE2507902} = {02ED2994-5854-40C3-A5E5-B89C326DB5B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F7D5DBE-DCEF-439D-8E8E-D072844B3AC3}
