@@ -394,15 +394,6 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources.
 
-
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
-```
-
 <hr />
 
 <!-- Roadmap -->
