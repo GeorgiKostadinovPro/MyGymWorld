@@ -30,19 +30,19 @@
             return address;
         }
 
-        public async Task<Address> GetAddressByNameAsync(string address)
+        public async Task<Address?> GetAddressByNameAsync(string address)
         {
             string wildCard = $"%{address.ToLower()}%";
 
-            Address addressToGet = await this.repository.All<Address>()
+            Address? addressToGet = await this.repository.All<Address>()
                 .FirstOrDefaultAsync(a => EF.Functions.Like(a.Name, wildCard));
 
             return addressToGet;
         } 
         
-        public async Task<Address> GetAddressByIdAsync(Guid addressId)
+        public async Task<Address?> GetAddressByIdAsync(Guid addressId)
         {
-            Address address = await this.repository.AllReadonly<Address>()
+            Address? address = await this.repository.AllReadonly<Address>()
                 .Include(a => a.Town)
                 .ThenInclude(t => t.Country)
                 .FirstOrDefaultAsync(a => a.Id == addressId);
