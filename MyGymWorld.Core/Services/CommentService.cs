@@ -40,6 +40,21 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task DeleteCommentAsync(string commentId)
+        {
+            Comment? commentToDelete = await this.repository
+                .All<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
+                .FirstOrDefaultAsync();
+
+            if (commentToDelete != null)
+            {
+                commentToDelete.IsDeleted = true;
+                commentToDelete.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
             IQueryable<Comment> commentsAsQuery 
@@ -54,7 +69,6 @@
             }
 
             return await commentsAsQuery
-                
                 .ProjectTo<CommentViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
         }

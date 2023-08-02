@@ -39,46 +39,48 @@
             return @event;
         }
 
-        public async Task<Event> EditEventAsync(string eventId, EditEventInputModel editEventInputModel)
+        public async Task EditEventAsync(string eventId, EditEventInputModel editEventInputModel)
         {
-            Event eventToEdit = await this.repository
+            Event? eventToEdit = await this.repository
                 .All<Event>(e => e.IsDeleted == false && e.Id == Guid.Parse(eventId))
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            eventToEdit.Name = editEventInputModel.Name;
-            eventToEdit.Description = editEventInputModel.Description;
-            eventToEdit.EventType = Enum.Parse<EventType>(editEventInputModel.EventType);
-            eventToEdit.StartDate = editEventInputModel.StartDate;
-            eventToEdit.EndDate = editEventInputModel.EndDate;
-            eventToEdit.ModifiedOn = DateTime.UtcNow;
+            if (eventToEdit != null)
+            {
+                eventToEdit.Name = editEventInputModel.Name;
+                eventToEdit.Description = editEventInputModel.Description;
+                eventToEdit.EventType = Enum.Parse<EventType>(editEventInputModel.EventType);
+                eventToEdit.StartDate = editEventInputModel.StartDate;
+                eventToEdit.EndDate = editEventInputModel.EndDate;
+                eventToEdit.ModifiedOn = DateTime.UtcNow;
 
-            await this.repository.SaveChangesAsync();
-
-            return eventToEdit;
+                await this.repository.SaveChangesAsync();
+            }
         }
 
-		public async Task<Event> DeleteEventAsync(string eventId)
+		public async Task DeleteEventAsync(string eventId)
 		{
-            Event eventToDelete = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id== Guid.Parse(eventId))
+            Event? eventToDelete = await this.repository.All<Event>(e => e.IsDeleted == false && e.Id== Guid.Parse(eventId))
                 .Include(e => e.UsersEvents)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            eventToDelete.IsDeleted = true;
-            eventToDelete.DeletedOn = DateTime.UtcNow;
-
-            IEnumerable<UserEvent> userMembershipsToDelete = eventToDelete.UsersEvents
-              .Where(uv => uv.IsDeleted == false && uv.EventId == Guid.Parse(eventId))
-              .ToArray();
-
-            foreach (UserEvent userEvent in userMembershipsToDelete)
+            if (eventToDelete != null)
             {
-                userEvent.IsDeleted = true;
-                userEvent.DeletedOn = DateTime.UtcNow;
+                eventToDelete.IsDeleted = true;
+                eventToDelete.DeletedOn = DateTime.UtcNow;
+
+                IEnumerable<UserEvent> userEventsToDelete = eventToDelete.UsersEvents
+                  .Where(uv => uv.IsDeleted == false)
+                  .ToArray();
+
+                foreach (UserEvent userEvent in userEventsToDelete)
+                {
+                    userEvent.IsDeleted = true;
+                    userEvent.DeletedOn = DateTime.UtcNow;
+                }
+
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
-
-            return eventToDelete;
 		}
 
 		public async Task ParticipateInEventAsync(string eventId, string userId)

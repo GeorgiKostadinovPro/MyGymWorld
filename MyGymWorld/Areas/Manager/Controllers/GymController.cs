@@ -17,7 +17,8 @@
     {
         private const int GymsPerPage = 2;
 
-        private readonly ICloudinaryService cloudinaryService;
+        private readonly ICloudinaryService cloudinaryService; 
+        private readonly INotificationService notificationService;
 
         private readonly IManagerService managerService;
         private readonly IUserService userService;
@@ -27,6 +28,7 @@
 
         public GymController(
             ICloudinaryService _cloudinaryService,
+            INotificationService _notificationService,
             IManagerService _managerService,
             IUserService _userService,
             IGymService _gymService,
@@ -34,6 +36,7 @@
             ITownService _townService)
         {
             this.cloudinaryService = _cloudinaryService;
+            this.notificationService = _notificationService;
 
             this.managerService = _managerService;
             this.userService = _userService;
@@ -323,7 +326,7 @@
         [HttpPost]
         public async Task<IActionResult> Edit([FromQuery]string gymId, EditGymInputModel editGymInputModel)
         {
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+            Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
             if (gym == null)
             {
@@ -478,6 +481,62 @@
             }
 
             return this.RedirectToAction(nameof(Active));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string gymId)
+        {
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                Gym? gymToDelete = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gymToDelete == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (user.ManagerId != null)
+                {
+                    bool isGymManagedByCorrectManager = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, user.ManagerId.ToString()!);
+
+                    if (isGymManagedByCorrectManager == false)
+                    {
+                        return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
+                    }
+                }
+
+                await this.gymService.DeleteGymAsync(gymId);
+
+                this.TempData[SuccessMessage] = $"You successfully deleted {gymToDelete.Name}!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You deleted {gymToDelete.Name}.",
+                    "/Manager/Gym/Deleted?page=1",
+                    userId);
+
+                return this.RedirectToAction(nameof(Deleted));
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction(nameof(Active));
+            }
         }
     }
 }

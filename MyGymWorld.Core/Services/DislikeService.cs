@@ -58,6 +58,21 @@
             return dislike;
         }
 
+        public async Task DeleteDislikeAsync(string dislikeId)
+        {
+            Dislike? dislikeToDelete = await this.repository
+                .All<Dislike>(dl => dl.IsDeleted == false && dl.Id == Guid.Parse(dislikeId))
+                .FirstOrDefaultAsync();
+
+            if (dislikeToDelete != null)
+            {
+                dislikeToDelete.IsDeleted = true;
+                dislikeToDelete.DeletedOn = DateTime.UtcNow;
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId)
         {
             Dislike? like = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))

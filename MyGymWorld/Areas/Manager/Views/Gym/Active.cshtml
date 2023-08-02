@@ -71,7 +71,10 @@
 									asp-route-gymId="@gym.Id"
 									class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i
 							     ></a>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+
+								<a href="#deleteGymModal" data-gymId="@gym.Id"  class="delete" data-toggle="modal">
+									<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+									</a>
 							</td>
 						</tr>
 					}
@@ -129,20 +132,21 @@
 </div>
 
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteGymModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form asp-area="Manager" asp-controller="Gym" asp-action="Delete" method="post">
+				<input type="hidden" id="gymIdInput" name="gymId" value="" />
 				<div class="modal-header">
 					<h4 class="modal-title">Delete Gym</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					@*	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you want to delete this Records?</p>
+					<p>Are you sure you want to delete this record?</p>
 					<p class="text-warning"><small>This action cannot be undone.</small></p>
 				</div>
 				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Click outside the modal to close it.">
 					<input type="submit" class="btn btn-danger" value="Delete">
 				</div>
 			</form>
@@ -152,30 +156,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+		$(document).ready(function () {
+			// Activate tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+
+			const deleteAnchor = $('.delete');
+
+			deleteAnchor.on('click', function (event) {
+				event.preventDefault();
+
+				const gymId = deleteAnchor.attr('data-gymId');
+
+				$('#gymIdInput').val(gymId);
+
+				$('#deleteGymModal').modal('show');
+			});
+		});
+    </script>
 }
-
-<script>
-	$(document).ready(function () {
-		// Activate tooltip
-		$('[data-toggle="tooltip"]').tooltip();
-
-		// Select/Deselect checkboxes
-		var checkbox = $('table tbody input[type="checkbox"]');
-		$("#selectAll").click(function () {
-			if (this.checked) {
-				checkbox.each(function () {
-					this.checked = true;
-				});
-			} else {
-				checkbox.each(function () {
-					this.checked = false;
-				});
-			}
-		});
-		checkbox.click(function () {
-			if (!this.checked) {
-				$("#selectAll").prop("checked", false);
-			}
-		});
-	});
-</script>

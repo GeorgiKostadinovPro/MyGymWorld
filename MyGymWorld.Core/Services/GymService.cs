@@ -23,18 +23,38 @@
         private readonly IRepository repository;
 
         private readonly IUserService userService;
+        private readonly IEventService eventService;
+        private readonly IArticleService articleService;
+        private readonly IMembershipService membershipService;
+        private readonly ILikeService likeService;
+        private readonly IDislikeService dislikeService;
+        private readonly ICommentService commentService;
+
         private readonly IAddressService addressService;
 
         public GymService(
             IMapper _mapper,
             IRepository _repository,
             IUserService _userService,
+            IEventService _eventService,
+            IArticleService _articleService,
+            IMembershipService _membershipService,
+            ILikeService _likeService,
+            IDislikeService _dislikeService,
+            ICommentService _commentService,
             IAddressService _addressService)
         {
             this.mapper = _mapper;
             this.repository = _repository;
 
             this.userService = _userService;
+            this.eventService = _eventService;
+            this.articleService = _articleService;
+            this.membershipService = _membershipService;
+            this.likeService = _likeService;
+            this.dislikeService = _dislikeService;
+            this.commentService = _commentService;
+
             this.addressService = _addressService;
         }
 
@@ -133,6 +153,75 @@
                         CreatedOn = DateTime.UtcNow,
                     });
                 }
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task DeleteGymAsync(string gymId)
+        {
+            Gym? gymToDelete = await this.repository.All<Gym>(g => g.IsDeleted == false && g.Id == Guid.Parse(gymId))
+                .Include(g => g.Events)
+                .Include(g => g.Articles)
+                .Include(g => g.Memberships)
+                .Include(g => g.Likes)
+                .Include(g => g.Dislikes)
+                .Include(g => g.Comments)
+                .Include(g => g.UsersGyms)
+                .Include(g => g.GymImages)
+                .FirstAsync();
+
+            gymToDelete.IsDeleted = true;
+            gymToDelete.DeletedOn = DateTime.UtcNow;
+
+            foreach (Event @event in gymToDelete.Events)
+            {
+                await this.eventService.DeleteEventAsync(@event.Id.ToString());
+            }
+
+            foreach (Article article in gymToDelete.Articles)
+            {
+                await this.articleService.DeleteArticleAsync(article.Id.ToString());
+            }
+
+            foreach (Membership membership in gymToDelete.Memberships)
+            {
+                await this.membershipService.DeleteMembershipAsync(membership.Id.ToString());
+            }
+
+            foreach (Like like in gymToDelete.Likes)
+            {
+                await this.likeService.DeleteLikeAsync(like.Id.ToString());
+            }
+
+            foreach (Dislike dislike in gymToDelete.Dislikes)
+            {
+                await this.dislikeService.DeleteDislikeAsync(dislike.Id.ToString());
+            }
+
+            foreach (Comment comment in gymToDelete.Comments)
+            {
+                await this.commentService.DeleteCommentAsync(comment.Id.ToString());
+            }
+
+            IEnumerable<UserGym> userGymsToDelete = gymToDelete.UsersGyms
+                .Where(ug => ug.IsDeleted == false)
+                .ToArray();
+
+            foreach (var userGym in userGymsToDelete)
+            {
+                userGym.IsDeleted = true;
+                userGym.DeletedOn = DateTime.UtcNow;
+            }
+
+            IEnumerable<GymImage> gymImagesToDelete = gymToDelete.GymImages
+                .Where(gi => gi.IsDeleted == false)
+                .ToArray();
+
+            foreach (var gymImage in gymImagesToDelete)
+            {
+                gymImage.IsDeleted = true;
+                gymImage.DeletedOn = DateTime.UtcNow;
             }
 
             await this.repository.SaveChangesAsync();

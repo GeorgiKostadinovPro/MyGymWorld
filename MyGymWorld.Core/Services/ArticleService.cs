@@ -53,69 +53,71 @@
             return article;
         }
 
-        public async Task<Article> EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
+        public async Task EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
         {
-            Article articleToEdit = await this.repository
+            Article? articleToEdit = await this.repository
                 .All<Article>(e => e.IsDeleted == false && e.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            articleToEdit.Title = editArticleInputModel.Title;
-            articleToEdit.Content = editArticleInputModel.Content;
-            articleToEdit.ModifiedOn = DateTime.UtcNow;
-
-            foreach (ArticleCategory articleCategory in articleToEdit.ArticlesCategories.Where(ac => ac.IsDeleted == false))
+            if (articleToEdit != null)
             {
-                articleCategory.IsDeleted = true;
-                articleCategory.DeletedOn = DateTime.UtcNow;
-            }
+                articleToEdit.Title = editArticleInputModel.Title;
+                articleToEdit.Content = editArticleInputModel.Content;
+                articleToEdit.ModifiedOn = DateTime.UtcNow;
 
-            foreach (string categoryId in editArticleInputModel.CategoryIds)
-            {
-                ArticleCategory? articleCategory = await this.repository.All<ArticleCategory>()
-                    .FirstOrDefaultAsync(ac => ac.ArticleId == articleToEdit.Id && ac.CategoryId == Guid.Parse(categoryId));
-
-                if (articleCategory != null)
+                foreach (ArticleCategory articleCategory in articleToEdit.ArticlesCategories.Where(ac => ac.IsDeleted == false))
                 {
-                    articleCategory.IsDeleted = false;
-                    articleCategory.DeletedOn = null;
+                    articleCategory.IsDeleted = true;
+                    articleCategory.DeletedOn = DateTime.UtcNow;
                 }
-                else
+
+                foreach (string categoryId in editArticleInputModel.CategoryIds)
                 {
-                    articleCategory = new ArticleCategory
+                    ArticleCategory? articleCategory = await this.repository.All<ArticleCategory>()
+                        .FirstOrDefaultAsync(ac => ac.ArticleId == articleToEdit.Id && ac.CategoryId == Guid.Parse(categoryId));
+
+                    if (articleCategory != null)
                     {
-                        ArticleId = articleToEdit.Id,
-                        CategoryId = Guid.Parse(categoryId),
-                        CreatedOn = DateTime.UtcNow
-                    };
+                        articleCategory.IsDeleted = false;
+                        articleCategory.DeletedOn = null;
+                    }
+                    else
+                    {
+                        articleCategory = new ArticleCategory
+                        {
+                            ArticleId = articleToEdit.Id,
+                            CategoryId = Guid.Parse(categoryId),
+                            CreatedOn = DateTime.UtcNow
+                        };
 
-                    await this.repository.AddAsync(articleCategory);
+                        await this.repository.AddAsync(articleCategory);
+                    }
                 }
+
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
-
-            return articleToEdit;
         }
 
-        public async Task<Article> DeleteArticleAsync(string articleId)
+        public async Task DeleteArticleAsync(string articleId)
         {
-            Article articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+            Article? articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            articleToDelete.IsDeleted = true;
-            articleToDelete.DeletedOn = DateTime.UtcNow;
-
-            foreach (var articleCategory in articleToDelete.ArticlesCategories)
+            if (articleToDelete != null)
             {
-                articleCategory.IsDeleted = true;
-				articleCategory.DeletedOn = DateTime.UtcNow;
-			}
+                articleToDelete.IsDeleted = true;
+                articleToDelete.DeletedOn = DateTime.UtcNow;
 
-			await this.repository.SaveChangesAsync();
-            
-            return articleToDelete;
+                foreach (var articleCategory in articleToDelete.ArticlesCategories)
+                {
+                    articleCategory.IsDeleted = true;
+                    articleCategory.DeletedOn = DateTime.UtcNow;
+                }
+
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task SubscribeUserToGymArticlesAsync(string userId, string gymId)

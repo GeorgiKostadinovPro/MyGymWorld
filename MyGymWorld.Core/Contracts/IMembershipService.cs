@@ -9,9 +9,9 @@
     {
         Task<Membership> CreateMembershipAsync(CreateMembershipInputModel createMembershipInputModel);
 
-		Task<Membership> EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel);
+		Task EditMembershipAsync(string membershipId, EditMembershipInputModel editMembershipInputModel);
 
-        Task<Membership> DeleteMembershipAsync(string membershipId);
+        Task DeleteMembershipAsync(string membershipId);
 
         Task BuyMembershipAsync(string membershipId, string userId);
 
