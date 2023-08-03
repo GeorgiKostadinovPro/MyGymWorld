@@ -19,19 +19,19 @@
 
         public async Task<IEnumerable<Category>> GetActiveCategoriesAsync()
         {
-            return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Category>()
                 .ToArrayAsync();
         }
 
         public async Task<Category?> GetCategoryByIdAsync(string categoryId)
         {
-            return await this.repository.AllReadonly<Category>(c => c.IsDeleted == false && c.Id == Guid.Parse(categoryId))
-                .FirstOrDefaultAsync();
+            return await this.repository.AllNotDeletedReadonly<Category>()
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(categoryId));
         }
 
         public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
 		{
-			return await this.repository.AllReadonly<Category>()
+			return await this.repository.AllNotDeletedReadonly<Category>()
 				.Select(c => new SelectListItem
 				{
 					Text = c.Name,

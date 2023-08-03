@@ -81,7 +81,7 @@
             }
             else
             {
-                Address address = await this.addressService.GetAddressByNameAsync(editUserInputModel.Address!);
+                Address? address = await this.addressService.GetAddressByNameAsync(editUserInputModel.Address!);
 
                 if (address != null)
                 {
@@ -103,47 +103,61 @@
 
         public async Task DeleteUserAsync(string userId)
         {
-            ApplicationUser userToDelete = await this.repository.All<ApplicationUser>(u => u.IsDeleted == false)
+            ApplicationUser userToDelete = await this.repository.AllNotDeleted<ApplicationUser>()
                 .Include(u => u.Manager)
                 .FirstAsync(u => u.Id == Guid.Parse(userId));
 
-            userToDelete.IsDeleted = true;
-            userToDelete.DeletedOn = DateTime.UtcNow;
-
-            if (userToDelete.ManagerId != null)
+            if (userToDelete != null)
             {
-                userToDelete.Manager.IsDeleted = true;
-                userToDelete.Manager.DeletedOn = DateTime.UtcNow;
-            }
+                userToDelete.IsDeleted = true;
+                userToDelete.DeletedOn = DateTime.UtcNow;
 
-            await this.repository.SaveChangesAsync();
+                if (userToDelete.ManagerId != null)
+                {
+                    userToDelete.Manager.IsDeleted = true;
+                    userToDelete.Manager.DeletedOn = DateTime.UtcNow;
+                }
+
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task SetUserProfilePictureAsync(string userId, ImageUploadResult imageUploadResult)
         {
             ApplicationUser user = await this.GetUserByIdAsync(userId);
 
-            string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
+            if (user != null && imageUploadResult != null)
+            {
+                string profilePictureUri = imageUploadResult!.SecureUri!.AbsoluteUri;
 
-            user.ProfilePictureUri = profilePictureUri;
-            user.ProfilePicturePublicId = imageUploadResult.PublicId;
+                user.ProfilePictureUri = profilePictureUri;
+                user.ProfilePicturePublicId = imageUploadResult.PublicId;
 
-            await this.userManager.UpdateAsync(user);
+                await this.userManager.UpdateAsync(user);
+            }
         }
 
         public async Task DeleteUserProfilePictureAsync(string userId)
         {
             ApplicationUser user = await this.GetUserByIdAsync(userId);
 
-            user.ProfilePictureUri = null;
-            user.ProfilePicturePublicId = null;
+            if (user != null)
+            {
+                user.ProfilePictureUri = null;
+                user.ProfilePicturePublicId = null;
 
-            await this.userManager.UpdateAsync(user);
+                await this.userManager.UpdateAsync(user);
+            }
         }
 
         public async Task<(string, string)> GetUserProfilePictureUriAndPublicIdAsync(string userId)
         {
             ApplicationUser user = await this.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return (null!, null!);
+            }
 
             return (user.ProfilePictureUri, user.ProfilePicturePublicId);
         }
@@ -244,7 +258,7 @@
 
         public async Task<bool> CheckIfUserExistsByPhoneNumberAsync(string phoneNumber)
         {
-            bool result = await this.repository.AllReadonly<ApplicationUser>()
+            bool result = await this.repository.AllNotDeletedReadonly<ApplicationUser>()
                 .AnyAsync(u => u.PhoneNumber == phoneNumber);
               
             return result;
@@ -252,7 +266,7 @@
 
         public async Task<UserProfileViewModel> GetUserToDisplayByIdAsync(string userId)
         {
-            ApplicationUser? user = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == false)
+            ApplicationUser? user = await this.repository.AllNotDeletedReadonly<ApplicationUser>()
                 .Include(u => u.Likes)
                 .Include(u => u.Dislikes)
                 .Include(u => u.Comments)
@@ -293,7 +307,7 @@
                address = (await this.addressService.GetAddressByIdAsync(user.AddressId.Value.ToString()))!;
             }
 
-            Town town = null!;
+            Town? town = null!;
 
             if (address != null)
             {
@@ -325,7 +339,8 @@
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == isDeleted)
+            IQueryable<ApplicationUser> usersAsQuery = this.repository.AllReadonly<ApplicationUser>()
+                .Where(u => u.IsDeleted == isDeleted)
                 .Include(u => u.Manager)
                 .OrderByDescending(u => u.CreatedOn)
                 .Skip(skip);
@@ -344,7 +359,8 @@
         {
             List<UserViewModel> allUsersViewModel = new List<UserViewModel>();
 
-            ApplicationUser[] users = await this.repository.AllReadonly<ApplicationUser>(u => u.IsDeleted == isDeleted)
+            ApplicationUser[] users = await this.repository.AllReadonly<ApplicationUser>()
+                .Where(u => u.IsDeleted == isDeleted)
                 .Include(u => u.Manager)
                 .ToArrayAsync();
 

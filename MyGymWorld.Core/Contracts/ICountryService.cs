@@ -10,6 +10,6 @@
 
         Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync();
 
-        Task<Country> GetCountryByIdAsync(Guid countryId);
+        Task<Country?> GetCountryByIdAsync(Guid countryId);
     }
 }

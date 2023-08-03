@@ -1,6 +1,7 @@
 ﻿
 namespace MyGymWorld.Data.Repositories
 {
+    using MyGymWorld.Data.Common.Contracts;
     using System.Linq.Expressions;
 
     /// <summary>
@@ -9,28 +10,28 @@ namespace MyGymWorld.Data.Repositories
     public interface IRepository : IDisposable
     {
         /// <summary>
-        /// All records in a table
+        /// All records in a table. The result will be tracked by the context
         /// </summary>
         /// <returns>Queryable expression tree</returns>
         IQueryable<T> All<T>() where T : class;
 
         /// <summary>
-        /// All records in a table
+        /// All records in a table that are NOT deleted. the result will be tracked by the context
         /// </summary>
         /// <returns>Queryable expression tree</returns>
-        IQueryable<T> All<T>(Expression<Func<T, bool>> search) where T : class;
+        IQueryable<T> AllNotDeleted<T>() where T : class, IDeletableModel;
 
         /// <summary>
-        /// The result collection won't be tracked by the context
+        /// All records in a table. The result collection won't be tracked by the context
         /// </summary>
         /// <returns>Expression tree</returns>
         IQueryable<T> AllReadonly<T>() where T : class;
 
         /// <summary>
-        /// The result collection won't be tracked by the context
+        /// All records in a table. The result collection of NOT deleted won't be tracked by the context
         /// </summary>
         /// <returns>Expression tree</returns>
-        IQueryable<T> AllReadonly<T>(Expression<Func<T, bool>> search) where T : class;
+        IQueryable<T> AllNotDeletedReadonly<T>() where T : class, IDeletableModel;
 
         /// <summary>
         /// Gets specific record from database by primary key
@@ -39,6 +40,11 @@ namespace MyGymWorld.Data.Repositories
         /// <returns>Single record</returns>
         Task<T> GetByIdAsync<T>(object id) where T : class;
 
+        /// <summary>
+        /// Gets specific record from database by keys
+        /// </summary>
+        /// <param name="id">record identificator</param>
+        /// <returns>Single record</returns>
         Task<T> GetByIdsAsync<T>(object[] id) where T : class;
 
         /// <summary>

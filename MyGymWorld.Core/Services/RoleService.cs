@@ -96,8 +96,9 @@
 
         public async Task<List<RoleViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
         {
-            IQueryable<ApplicationRole> rolesAsQuery = this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == isDeleted)
-                .OrderByDescending(u => u.CreatedOn)
+            IQueryable<ApplicationRole> rolesAsQuery = this.repository.AllReadonly<ApplicationRole>()
+                .Where(r => r.IsDeleted == isDeleted)
+                .OrderByDescending(r => r.CreatedOn)
                 .Skip(skip);
 
             if (take.HasValue)
@@ -112,13 +113,13 @@
 
         public async Task<int> GetActiveOrDeletedRolesCount(bool isDeleted)
         {
-            return await this.repository.AllReadonly<ApplicationRole>(r => r.IsDeleted == isDeleted)
-                .CountAsync();
+            return await this.repository.AllReadonly<ApplicationRole>()
+                .CountAsync(r => r.IsDeleted == isDeleted);
         }
 
         public async Task<IEnumerable<string>> GetAllRoleNamesAsync()
         {
-            return await this.repository.AllReadonly<ApplicationRole>()
+            return await this.repository.AllNotDeletedReadonly<ApplicationRole>()
                 .Select(r => r.Name)
                 .ToListAsync();
         } 
@@ -148,7 +149,7 @@
         {
             string wildCard = $"%{roleName.ToLower()}%";
 
-            bool result = await this.repository.AllReadonly<ApplicationRole>()
+            bool result = await this.repository.AllNotDeletedReadonly<ApplicationRole>()
                 .AnyAsync(r => EF.Functions.Like(r.Name, wildCard));
 
             return result;

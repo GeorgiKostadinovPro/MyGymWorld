@@ -17,7 +17,7 @@
 
         Task<int> GetAllNotApprovedManagerRequestsCountAsync();
 
-        Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId);
+        Task<ManagerRequestViewModel?> GetSingleManagerRequestByManagerIdAsync(string managerId);
 
         Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId);
 

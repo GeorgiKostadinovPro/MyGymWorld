@@ -17,11 +17,11 @@
 
         public async Task<Like> CreateLikeAsync(string gymId, string userId)
         {
-            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
+            Like? like = await this.repository.All<Like>()
+                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
-            Dislike? dislike = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
+            Dislike? dislike = await this.repository.All<Dislike>()
+                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
             if (dislike != null && dislike.IsDeleted == false)
             {
@@ -60,8 +60,8 @@
         public async Task DeleteLikeAsync(string likeId)
         {
             Like? likeToDelete = await this.repository
-                .All<Like>(l => l.IsDeleted == false && l.Id == Guid.Parse(likeId))
-                .FirstOrDefaultAsync();
+                .AllNotDeleted<Like>()
+                .FirstOrDefaultAsync(l => l.Id == Guid.Parse(likeId));
 
             if (likeToDelete != null)
             {
@@ -74,8 +74,8 @@
 
         public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)
         {
-            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
+            Like? like = await this.repository.All<Like>()
+                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
             if (like == null)
             {
@@ -92,7 +92,7 @@
         
         public async Task<int> GetAllActiveLikesCountAsync()
         {
-            return await this.repository.AllReadonly<Like>(l => l.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Like>()
                 .CountAsync();
         }
     }

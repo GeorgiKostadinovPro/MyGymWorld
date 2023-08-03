@@ -12,7 +12,7 @@
 
         Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync();
 
-        Task<Town> GetTownByIdAsync(Guid townId);
+        Task<Town?> GetTownByIdAsync(Guid townId);
 
 
         Task<bool> CheckIfTownIsPresentByCountryIdAsync(string townId, string countryId);

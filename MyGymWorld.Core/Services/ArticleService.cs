@@ -56,7 +56,8 @@
         public async Task EditArticleAsync(string articleId, EditArticleInputModel editArticleInputModel)
         {
             Article? articleToEdit = await this.repository
-                .All<Article>(e => e.IsDeleted == false && e.Id == Guid.Parse(articleId))
+                .AllNotDeleted<Article>()
+                .Where(a => a.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
                 .FirstOrDefaultAsync();
 
@@ -101,7 +102,8 @@
 
         public async Task DeleteArticleAsync(string articleId)
         {
-            Article? articleToDelete = await this.repository.All<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+            Article? articleToDelete = await this.repository.AllNotDeleted<Article>()
+                .Where(a => a.Id == Guid.Parse(articleId))
                 .Include(a => a.ArticlesCategories)
                 .FirstOrDefaultAsync();
 
@@ -122,10 +124,10 @@
 
         public async Task SubscribeUserToGymArticlesAsync(string userId, string gymId)
         {
-            UserGym userGym = await this.repository.All<UserGym>(ug => ug.IsDeleted == false)
-                .FirstAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId));
+            UserGym? userGym = await this.repository.AllNotDeleted<UserGym>()
+                .FirstOrDefaultAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId));
 
-            if (userGym.IsSubscribedForArticles == false)
+            if (userGym != null && userGym.IsSubscribedForArticles == false)
             {
                 userGym.IsSubscribedForArticles = true;
                 userGym.ModifiedOn = DateTime.UtcNow;
@@ -136,7 +138,7 @@
 
         public async Task UnsubscribeUserToGymArticlesAsync(string userId, string gymId)
         {
-            UserGym userGym = await this.repository.All<UserGym>(ug => ug.IsDeleted == false)
+            UserGym userGym = await this.repository.AllNotDeleted<UserGym>()
                .FirstAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId));
 
             if (userGym.IsSubscribedForArticles == true)
@@ -151,7 +153,8 @@
         public async Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel)
         {
             IQueryable<Article> articlesAsQuery =
-                this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.GymId == Guid.Parse(queryModel.GymId))
+                this.repository.AllNotDeletedReadonly<Article>()
+                               .Where(a => a.GymId == Guid.Parse(queryModel.GymId))
                                .Include(a => a.ArticlesCategories)
                                   .ThenInclude(ac => ac.Category)
                                .Include(a => a.Gym)
@@ -198,13 +201,14 @@
         
         public async Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId)
         {
-            return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.GymId == Guid.Parse(gymId))
-                .CountAsync();
+            return await this.repository.AllNotDeletedReadonly<Article>()
+                .CountAsync(a => a.GymId == Guid.Parse(gymId));
         }
 
 		public async Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId)
 		{
-            Article articleToDisplay = await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
+            Article articleToDisplay = await this.repository.AllNotDeletedReadonly<Article>()
+                .Where(a => a.Id == Guid.Parse(articleId))
                 .Include(a => a.Gym)
                 .FirstAsync();
 
@@ -215,20 +219,20 @@
 
 		public async Task<bool> CheckIfArticleExistsByIdAsync(string articleId)
 		{
-            return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
-                .AnyAsync();
+            return await this.repository.AllNotDeletedReadonly<Article>()
+                .AnyAsync(a => a.Id == Guid.Parse(articleId));
 		}
 
         public async Task<Article?> GetArticleByIdAsync(string articleId)
         {
-            return await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
-                .FirstOrDefaultAsync();
+            return await this.repository.AllNotDeletedReadonly<Article>()
+                .FirstOrDefaultAsync(a => a.Id == Guid.Parse(articleId));
         }
 
         public async Task<EditArticleInputModel> GetArticleForEditByIdAsync(string articleId)
         {
-            Article articleToEdit = await this.repository.AllReadonly<Article>(a => a.IsDeleted == false && a.Id == Guid.Parse(articleId))
-                .FirstAsync();
+            Article articleToEdit = await this.repository.AllNotDeletedReadonly<Article>()
+                .FirstAsync(a => a.Id == Guid.Parse(articleId));
 
             EditArticleInputModel editArticleInputModel = this.mapper.Map<EditArticleInputModel>(articleToEdit);
 
@@ -237,7 +241,7 @@
 
         public async Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId)
         {
-            bool isSubscribedForArticles = await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false)
+            bool isSubscribedForArticles = await this.repository.AllNotDeletedReadonly<UserGym>()
                 .AnyAsync(ug => ug.UserId == Guid.Parse(userId) && ug.GymId == Guid.Parse(gymId) && ug.IsSubscribedForArticles == true);
 
             return isSubscribedForArticles;
@@ -245,7 +249,7 @@
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId)
         {
-            return await this.repository.AllReadonly<UserGym>(ug => ug.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<UserGym>()
                 .Where(ug => ug.GymId == Guid.Parse(gymId) && ug.IsSubscribedForArticles == true)
                 .Include(ug => ug.User)
                 .Select(ug => ug.User)

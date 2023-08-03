@@ -26,14 +26,14 @@
 
         public async Task<IEnumerable<CountryViewModel>> GetAllAsync()
         {
-            return await this.repository.AllReadonly<Country>()
+            return await this.repository.AllNotDeletedReadonly<Country>()
                 .ProjectTo<CountryViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
         }
 
         public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
         {
-            return await this.repository.AllReadonly<Country>()
+            return await this.repository.AllNotDeletedReadonly<Country>()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
@@ -43,9 +43,9 @@
                 .ToArrayAsync();
         }
 
-        public async Task<Country> GetCountryByIdAsync(Guid countryId)
+        public async Task<Country?> GetCountryByIdAsync(Guid countryId)
         {
-            Country country = await this.repository.All<Country>()
+            Country? country = await this.repository.AllNotDeleted<Country>()
                 .FirstOrDefaultAsync(c => c.Id == countryId);
 
             return country;
