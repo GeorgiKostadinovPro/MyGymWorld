@@ -67,28 +67,36 @@
             return await this.repository.AllReadonly<Notification>().LastOrDefaultAsync();
         }
 
-        public async Task<Notification> DeleteNotificationAsync(string notificationId)
+        public async Task<Notification?> DeleteNotificationAsync(string notificationId)
         {
-            Notification notification = await this.repository
-                .GetByIdAsync<Notification>(Guid.Parse(notificationId));
+            Notification? notification = await this.repository
+                .AllNotDeleted<Notification>()
+                .FirstOrDefaultAsync(n => n.Id == Guid.Parse(notificationId));
 
-            notification.IsDeleted = true;
-            notification.DeletedOn = DateTime.UtcNow;
+            if (notification != null)
+            {
+                notification.IsDeleted = true;
+                notification.DeletedOn = DateTime.UtcNow;
 
-            await this.repository.SaveChangesAsync();
+                await this.repository.SaveChangesAsync();
+            }
 
             return notification;
         }
 
-        public async Task<Notification> ReadNotificationByIdAsync(string notificationId)
+        public async Task<Notification?> ReadNotificationByIdAsync(string notificationId)
         {
-            Notification notification = await this.repository
-               .GetByIdAsync<Notification>(Guid.Parse(notificationId));
+            Notification? notification = await this.repository
+              .AllNotDeleted<Notification>()
+              .FirstOrDefaultAsync(n => n.Id == Guid.Parse(notificationId));
 
-            notification.IsRead = true;
-            notification.ModifiedOn = DateTime.UtcNow;
+            if (notification != null)
+            {
+                notification.IsRead = true;
+                notification.ModifiedOn = DateTime.UtcNow;
 
-            await this.repository.SaveChangesAsync();
+                await this.repository.SaveChangesAsync();
+            }
 
             return notification;
         }
@@ -96,7 +104,8 @@
         public async Task DeleteAllNotificationsByUserIdAsync(string userId)
         {
             IEnumerable<Notification> notificationsToDelete = await this.repository
-                .All<Notification>(n => n.IsDeleted == false && n.UserId == Guid.Parse(userId))
+                .AllNotDeleted<Notification>()
+                .Where(n => n.UserId == Guid.Parse(userId))
                 .ToArrayAsync();
 
             foreach (Notification notification in notificationsToDelete)
@@ -111,8 +120,8 @@
         public async Task ReadAllNotificationsByUserIdAsync(string userId)
         {
             IEnumerable<Notification> notificationsToDelete = await this.repository
-                .All<Notification>(n => n.IsDeleted == false 
-                && n.UserId == Guid.Parse(userId) && n.IsRead == false)
+                .AllNotDeleted<Notification>()
+                .Where(n => n.UserId == Guid.Parse(userId) && n.IsRead == false)
                 .ToArrayAsync();
 
             foreach (Notification notification in notificationsToDelete)
@@ -126,7 +135,7 @@
 
         public async Task<IEnumerable<NotificationViewModel>> GetFilteredNotificationsByUserIdAsync(string userId, bool isRead)
         {
-            return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Notification>()
                                         .Where(n => n.UserId == Guid.Parse(userId) && n.IsRead == isRead)
                                         .OrderByDescending(n => n.CreatedOn)
                                         .ProjectTo<NotificationViewModel>(this.mapper.ConfigurationProvider)
@@ -136,7 +145,8 @@
         public async Task<IEnumerable<NotificationViewModel>> GetAllNotificationsByUserIdAsync(string userId, int skip = 0, int? take = null)
         {
             IQueryable<Notification> notificationsAsQuery =
-                this.repository.AllReadonly<Notification>(n => n.IsDeleted == false && n.UserId == Guid.Parse(userId))
+                this.repository.AllNotDeletedReadonly<Notification>()
+                               .Where(n => n.UserId == Guid.Parse(userId))
                                .OrderByDescending(n => n.CreatedOn)
                                .Skip(skip);
 
@@ -152,14 +162,14 @@
 
         public async Task<int> GetUnReadNotificationsCountByUserIdAsync(string userId)
         {
-            return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Notification>()
                                        .Where(n => n.UserId == Guid.Parse(userId) && n.IsRead == false)
                                        .CountAsync();
         }
 
         public async Task<int> GetAllNotificationsCountByUserIdAsync(string userId)
         {
-            return await this.repository.AllReadonly<Notification>(n => n.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Notification>()
                                        .Where(n => n.UserId == Guid.Parse(userId))
                                        .CountAsync();
         }

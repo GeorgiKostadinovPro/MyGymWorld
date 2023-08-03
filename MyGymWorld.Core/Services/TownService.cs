@@ -26,14 +26,14 @@
 
         public async Task<IEnumerable<TownViewModel>> GetAllAsync()
         {
-            return await this.repository.AllReadonly<Town>()
+            return await this.repository.AllNotDeletedReadonly<Town>()
                .ProjectTo<TownViewModel>(this.mapper.ConfigurationProvider)
                .ToArrayAsync();
         } 
 
         public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
         {
-            return await this.repository.AllReadonly<Town>()
+            return await this.repository.AllNotDeletedReadonly<Town>()
                 .Select(t => new SelectListItem
                 {
                     Text = t.Name,
@@ -43,9 +43,9 @@
                 .ToArrayAsync();
         }
 
-        public async Task<Town> GetTownByIdAsync(Guid townId)
+        public async Task<Town?> GetTownByIdAsync(Guid townId)
         {
-            Town town = await this.repository.All<Town>()
+            Town? town = await this.repository.AllNotDeleted<Town>()
                 .FirstOrDefaultAsync(t => t.Id == townId);
 
             return town;
@@ -53,7 +53,7 @@
         
         public async Task<bool> CheckIfTownIsPresentByCountryIdAsync(string townId, string countryId)
         {
-            Town town = await this.repository.AllReadonly<Town>()
+            Town? town = await this.repository.AllNotDeletedReadonly<Town>()
                .FirstOrDefaultAsync(t => t.Id.ToString() == townId && t.CountryId.ToString() == countryId);
 
             return town != null ? true : false;

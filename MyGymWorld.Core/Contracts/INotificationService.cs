@@ -8,9 +8,9 @@
     {
         Task<Notification?> CreateNotificationAsync(string content, string url, string userId);
 
-        Task<Notification> DeleteNotificationAsync(string notificationId);
+        Task<Notification?> DeleteNotificationAsync(string notificationId);
 
-        Task<Notification> ReadNotificationByIdAsync(string notificationId);
+        Task<Notification?> ReadNotificationByIdAsync(string notificationId);
 
         Task DeleteAllNotificationsByUserIdAsync(string userId);
 

@@ -82,7 +82,7 @@
 
         public async Task<Manager> ApproveManagerAsync(string managerId, string adminId)
         {
-            Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+            Manager? manager = await this.repository.AllNotDeleted<Manager>()
                 .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
 
             if (manager == null)
@@ -117,7 +117,7 @@
 
         public async Task<Manager> RejectManagerAsync(string managerId, string adminId)
         {
-            Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+            Manager? manager = await this.repository.AllNotDeleted<Manager>()
                 .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
 
             if (manager == null)
@@ -166,21 +166,22 @@
 
         public async Task<IEnumerable<ManagerRequestViewModel>> GetAllNotApprovedManagerRequestsAsync()
         {
-            return await this.repository.AllReadonly<Manager>(m => m.IsDeleted == false && m.IsApproved == false && m.IsRejected == false)
+            return await this.repository.AllNotDeletedReadonly<Manager>()
+                .Where(m => m.IsApproved == false && m.IsRejected == false)
                 .ProjectTo<ManagerRequestViewModel>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
         }
 
         public async Task<int> GetAllNotApprovedManagerRequestsCountAsync()
         {
-            return await this.repository.AllReadonly<Manager>(m => m.IsDeleted == false && m.IsApproved == false && m.IsRejected == false)
-                .CountAsync();
+            return await this.repository.AllNotDeletedReadonly<Manager>()
+                .CountAsync(m => m.IsApproved == false && m.IsRejected == false);
         }
 
-        public async Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId)
+        public async Task<ManagerRequestViewModel?> GetSingleManagerRequestByManagerIdAsync(string managerId)
         {
-            return await this.repository.AllReadonly<Manager>(
-                m => m.IsDeleted == false && m.IsApproved == false && m.IsRejected == false && m.Id == Guid.Parse(managerId))
+            return await this.repository.AllNotDeletedReadonly<Manager>()
+                .Where(m => m.IsApproved == false && m.IsRejected == false && m.Id == Guid.Parse(managerId))
                 .ProjectTo<ManagerRequestViewModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         }
@@ -196,19 +197,9 @@
             return becomeManagerInputModel;
         }
 
-        public IEnumerable<string> GetAllManagerTypes()
-        {
-            IEnumerable<string> managerTypes =
-                Enum.GetValues(typeof(ManagerType)).Cast<ManagerType>()
-                .Select(mt => mt.ToString())
-                .ToImmutableArray();
-
-            return managerTypes;
-        }
-
         public async Task<bool> CheckIfUserIsAManagerAsync(string userId)
         {
-            bool isManager = await this.repository.AllReadonly<Manager>(m => m.IsDeleted == false)
+            bool isManager = await this.repository.AllNotDeletedReadonly<Manager>()
                 .AnyAsync(m => m.UserId == Guid.Parse(userId));
 
             return isManager;   
@@ -216,7 +207,7 @@
 
         public async Task<bool> CheckIfManagerExistsByPhoneNumberAsync(string phoneNumber)
         {
-            bool existsByPhoneNumber = await this.repository.AllReadonly<ApplicationUser>(m => m.IsDeleted == false)
+            bool existsByPhoneNumber = await this.repository.AllNotDeletedReadonly<ApplicationUser>()
                 .AnyAsync(u => u.PhoneNumber == phoneNumber 
                 && u.ManagerId != null 
                 && u.Manager.IsApproved == true 
@@ -227,7 +218,7 @@
 
         public async Task<Manager?> GetManagerForApprovalAndRejectionAsync(string managerId)
         {
-            Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+            Manager? manager = await this.repository.AllNotDeleted<Manager>()
                 .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
 
             return manager;
@@ -235,10 +226,20 @@
 
         public async Task<Manager?> GetManagerByUserIdAsync(string userId)
         {
-            Manager? manager = await this.repository.All<Manager>(m => m.IsDeleted == false)
+            Manager? manager = await this.repository.AllNotDeleted<Manager>()
                 .FirstOrDefaultAsync(m => m.UserId == Guid.Parse(userId));
 
             return manager;
+        }
+
+        public IEnumerable<string> GetAllManagerTypes()
+        {
+            IEnumerable<string> managerTypes =
+                Enum.GetValues(typeof(ManagerType)).Cast<ManagerType>()
+                .Select(mt => mt.ToString())
+                .ToImmutableArray();
+
+            return managerTypes;
         }
     }
 }

@@ -18,11 +18,11 @@
 
         public async Task<Dislike> CreateDislikeAsync(string gymId, string userId)
         {
-            Dislike? dislike = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
+            Dislike? dislike = await this.repository.All<Dislike>()
+                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
-            Like? like = await this.repository.All<Like>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-               .FirstOrDefaultAsync();
+            Like? like = await this.repository.All<Like>()
+               .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
             if (like != null && like.IsDeleted == false)
             {
@@ -61,8 +61,8 @@
         public async Task DeleteDislikeAsync(string dislikeId)
         {
             Dislike? dislikeToDelete = await this.repository
-                .All<Dislike>(dl => dl.IsDeleted == false && dl.Id == Guid.Parse(dislikeId))
-                .FirstOrDefaultAsync();
+                .AllNotDeleted<Dislike>()
+                .FirstOrDefaultAsync(dl => dl.Id == Guid.Parse(dislikeId));
 
             if (dislikeToDelete != null)
             {
@@ -75,8 +75,8 @@
 
         public async Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId)
         {
-            Dislike? like = await this.repository.All<Dislike>(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId))
-                .FirstOrDefaultAsync();
+            Dislike? like = await this.repository.All<Dislike>()
+                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
 
             if (like == null)
             {
@@ -93,7 +93,7 @@
 
         public async Task<int> GetAllActiveDislikesCountAsync()
         {
-            return await this.repository.AllReadonly<Dislike>(l => l.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Dislike>()
               .CountAsync();
         }
     }

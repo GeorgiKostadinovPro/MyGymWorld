@@ -46,7 +46,7 @@ namespace MyGymWorld.Core.Tests
         public async Task GetAddressByNameShouldWorkProperly()
         {
             var mockRepository = new Mock<IRepository>();
-            
+
             var dbContext = CreateContext();
 
             await dbContext.Addresses.AddAsync(new Address
@@ -65,7 +65,7 @@ namespace MyGymWorld.Core.Tests
 
             await dbContext.SaveChangesAsync();
 
-            mockRepository.Setup(x => x.All<Address>())
+            mockRepository.Setup(x => x.AllNotDeleted<Address>())
                 .Returns(dbContext.Addresses.AsQueryable());
 
             var service = new AddressService(mockRepository.Object);
@@ -100,7 +100,7 @@ namespace MyGymWorld.Core.Tests
             await dbContext.Addresses.AddRangeAsync(new List<Address> { address1, address2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository.Setup(x => x.AllReadonly<Address>())
+            mockRepository.Setup(x => x.AllNotDeletedReadonly<Address>())
                 .Returns(dbContext.Addresses.AsQueryable());
 
             var service = new AddressService(mockRepository.Object);

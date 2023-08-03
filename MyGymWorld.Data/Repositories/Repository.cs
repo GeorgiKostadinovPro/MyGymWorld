@@ -4,6 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Linq.Expressions;
     using System.Linq;
+    using MyGymWorld.Data.Common.Contracts;
 
     /// <summary>
     /// Implementation of repository access methods
@@ -51,7 +52,7 @@
         }
 
         /// <summary>
-        /// All records in a table
+        /// All records in a table. The result will be tracked by the context
         /// </summary>
         /// <returns>Queryable expression tree</returns>
         public IQueryable<T> All<T>() where T : class
@@ -59,13 +60,19 @@
             return DbSet<T>().AsQueryable();
         }
 
-        public IQueryable<T> All<T>(Expression<Func<T, bool>> search) where T : class
+        /// <summary>
+        /// All records in a table that are NOT deleted. the result will be tracked by the context
+        /// </summary>
+        /// <returns>Queryable expression tree</returns>
+        IQueryable<T> IRepository.AllNotDeleted<T>()
         {
-            return DbSet<T>().Where(search);
+            return DbSet<T>()
+                .Where(x => x.IsDeleted == false)
+                .AsQueryable();
         }
 
         /// <summary>
-        /// The result collection won't be tracked by the context
+        /// All records in a table. The result collection won't be tracked by the context
         /// </summary>
         /// <returns>Expression tree</returns>
         public IQueryable<T> AllReadonly<T>() where T : class
@@ -73,11 +80,17 @@
             return DbSet<T>()
                 .AsNoTracking();
         }
-        public IQueryable<T> AllReadonly<T>(Expression<Func<T, bool>> search) where T : class
+
+        /// <summary>
+        /// All records in a table. The result collection of NOT deleted won't be tracked by the context
+        /// </summary>
+        /// <returns>Expression tree</returns>
+        IQueryable<T> IRepository.AllNotDeletedReadonly<T>()
         {
             return DbSet<T>()
-                .Where(search)
-                .AsNoTracking();
+                .AsNoTracking()
+                .Where(x => x.IsDeleted == false)
+                .AsQueryable();
         }
 
         /// <summary>
@@ -177,7 +190,7 @@
 
         public void DeleteRange<T>(Expression<Func<T, bool>> deleteWhereClause) where T : class
         {
-            var entities = All(deleteWhereClause);
+            var entities = All<T>().Where(deleteWhereClause);
             DeleteRange(entities);
         }
     }

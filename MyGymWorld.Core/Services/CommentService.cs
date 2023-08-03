@@ -43,8 +43,8 @@
         public async Task DeleteCommentAsync(string commentId)
         {
             Comment? commentToDelete = await this.repository
-                .All<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
-                .FirstOrDefaultAsync();
+                .AllNotDeleted<Comment>()
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(commentId));
 
             if (commentToDelete != null)
             {
@@ -58,7 +58,7 @@
         public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
             IQueryable<Comment> commentsAsQuery 
-                = this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
+                = this.repository.AllNotDeletedReadonly<Comment>()
                                  .Include(c => c.User)
                                  .OrderByDescending(c => c.CreatedOn)
                                  .Skip(skip);
@@ -75,26 +75,27 @@
 
         public async Task<int> GetActiveCommentsCountByGymIdAsync(string gymId)
         {
-            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false && c.GymId == Guid.Parse(gymId))
-                .CountAsync();
+            return await this.repository.AllNotDeletedReadonly<Comment>()
+                .CountAsync(c => c.GymId == Guid.Parse(gymId));
         }
 
         public async Task<Comment?> GetComentByIdAsync(string commentId)
         {
-            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
-                .FirstOrDefaultAsync();
+            return await this.repository.AllNotDeletedReadonly<Comment>()
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(commentId));
         }
 
         public async Task<int> GetAllActiveCommentsCountAsync()
         {
-            return await this.repository.AllReadonly<Comment>(c => c.IsDeleted == false)
+            return await this.repository.AllNotDeletedReadonly<Comment>()
                 .CountAsync();
         }
 
         public async Task<bool> IsInSameGymByIdAsync(string commentId, string gymId)
         {
             Guid commentGymId = await this.repository
-                .AllReadonly<Comment>(c => c.IsDeleted == false && c.Id == Guid.Parse(commentId))
+                .AllNotDeletedReadonly<Comment>()
+                .Where(c => c.Id == Guid.Parse(commentId))
                 .Select(c => c.GymId)
                 .FirstOrDefaultAsync();
 
