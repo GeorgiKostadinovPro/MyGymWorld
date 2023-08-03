@@ -40,12 +40,12 @@
             return addressToGet;
         } 
         
-        public async Task<Address?> GetAddressByIdAsync(Guid addressId)
+        public async Task<Address?> GetAddressByIdAsync(string addressId)
         {
             Address? address = await this.repository.AllReadonly<Address>()
                 .Include(a => a.Town)
                 .ThenInclude(t => t.Country)
-                .FirstOrDefaultAsync(a => a.Id == addressId);
+                .FirstOrDefaultAsync(a => a.Id == Guid.Parse(addressId));
 
             return address;
         }

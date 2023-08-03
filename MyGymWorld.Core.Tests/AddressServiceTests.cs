@@ -6,6 +6,7 @@ namespace MyGymWorld.Core.Tests
     using MyGymWorld.Data;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
+    using System.Security.Cryptography.X509Certificates;
 
     [TestFixture]
     public class AddressServiceTests
@@ -28,7 +29,6 @@ namespace MyGymWorld.Core.Tests
         public async Task CreateAddressAsyncShouldWorkProperly()
         {
             var mockRepository = new Mock<IRepository>();
-            var dbContext = CreateContext();
 
             var service = new AddressService(mockRepository.Object);
 
@@ -37,10 +37,44 @@ namespace MyGymWorld.Core.Tests
             var address = await service.CreateAddressAsync(addressName, townId);
 
             Assert.IsNotNull(address);
-            Assert.AreEqual(addressName, address.Name);
+            Assert.That(address.Name, Is.EqualTo(addressName));
 
             mockRepository.Verify(r => r.AddAsync(It.IsAny<Address>()), Times.Once);
             mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetAddressByNameShouldWorkProperly()
+        {
+            var mockRepository = new Mock<IRepository>();
+            
+            var dbContext = CreateContext();
+
+            await dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.NewGuid(),
+                Name = "bul. Cherni vrah",
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            await dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.NewGuid(),
+                Name = "bul. Bulgaria 1",
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            await dbContext.SaveChangesAsync();
+
+            mockRepository.Setup(x => x.All<Address>())
+                .Returns(dbContext.Addresses.AsQueryable());
+
+            var service = new AddressService(mockRepository.Object);
+
+            var result = await service.GetAddressByNameAsync("bul. Cherni vrah");
+
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo("bul. Cherni vrah"));
         }
     }
 }

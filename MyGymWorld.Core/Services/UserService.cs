@@ -290,7 +290,7 @@
 
             if (user.AddressId != null)
             {
-               address = await this.addressService.GetAddressByIdAsync(user.AddressId.Value);
+               address = (await this.addressService.GetAddressByIdAsync(user.AddressId.Value.ToString()))!;
             }
 
             EditUserInputModel editUserInputModel = new EditUserInputModel()

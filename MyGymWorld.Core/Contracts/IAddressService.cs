@@ -6,7 +6,7 @@
     {
         Task<Address> CreateAddressAsync(string name, string townId);
 
-        Task<Address?> GetAddressByIdAsync(Guid addressId);
+        Task<Address?> GetAddressByIdAsync(string addressId);
 
         Task<Address?> GetAddressByNameAsync(string address);
     }
