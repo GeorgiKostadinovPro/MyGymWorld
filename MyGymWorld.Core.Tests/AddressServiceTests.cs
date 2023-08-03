@@ -6,7 +6,6 @@ namespace MyGymWorld.Core.Tests
     using MyGymWorld.Data;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
-    using System.Security.Cryptography.X509Certificates;
 
     [TestFixture]
     public class AddressServiceTests
@@ -72,6 +71,43 @@ namespace MyGymWorld.Core.Tests
             var service = new AddressService(mockRepository.Object);
 
             var result = await service.GetAddressByNameAsync("bul. Cherni vrah");
+
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo("bul. Cherni vrah"));
+        }
+
+        [Test]
+        public async Task GetAddressByIdShouldWorkProperly()
+        {
+            var mockRepository = new Mock<IRepository>();
+
+            var dbContext = CreateContext();
+
+            Address address1 = new Address
+            {
+                Id = Guid.NewGuid(),
+                Name = "bul. Cherni vrah",
+                CreatedOn = DateTime.UtcNow
+            };
+
+            Address address2 = new Address
+            {
+                Id = Guid.NewGuid(),
+                Name = "bul. Bulgaria 1",
+                CreatedOn = DateTime.UtcNow
+            };
+
+            await dbContext.Addresses.AddRangeAsync(new List<Address> { address1, address2 });
+            await dbContext.SaveChangesAsync();
+
+            mockRepository.Setup(x => x.AllReadonly<Address>())
+                .Returns(dbContext.Addresses.AsQueryable());
+
+            var service = new AddressService(mockRepository.Object);
+
+            string testId = address1.Id.ToString("D");
+
+            var result = await service.GetAddressByIdAsync(testId);
 
             Assert.IsNotNull(result);
             Assert.That(result.Name, Is.EqualTo("bul. Cherni vrah"));
