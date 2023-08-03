@@ -72,6 +72,15 @@
 							CreatedOn = DateTime.UtcNow
 						}
 			    	},
+                    UsersGyms = new HashSet<UserGym>
+                    {
+                        new UserGym
+                        {
+                            UserId = normalUser.Id,
+                            IsSubscribedForArticles = true,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
 					Events = new HashSet<Event>
 					{
 						new Event
@@ -81,7 +90,19 @@
 							StartDate = DateTime.UtcNow,
 							EndDate = DateTime.UtcNow.AddDays(1),
 							EventType = Models.Enums.EventType.Conference,
-							CreatedOn = DateTime.UtcNow
+							CreatedOn = DateTime.UtcNow,
+                            UsersEvents = new HashSet<UserEvent>{
+                                new UserEvent
+                                {
+                                    UserId = normalUser.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                },
+                                new UserEvent
+                                {
+                                    UserId = admin.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                },
+                            }
 						},
                         new Event
                         {
@@ -90,7 +111,14 @@
                             StartDate = DateTime.UtcNow.AddDays(4),
                             EndDate = DateTime.UtcNow.AddDays(10),
                             EventType = Models.Enums.EventType.Training,
-                            CreatedOn = DateTime.UtcNow
+                            CreatedOn = DateTime.UtcNow,
+                            UsersEvents = new HashSet<UserEvent>{
+                                new UserEvent
+                                {
+                                    UserId = admin.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                }
+                            }
                         },
                         new Event
                         {
