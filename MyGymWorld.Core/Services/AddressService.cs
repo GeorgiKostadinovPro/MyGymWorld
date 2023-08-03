@@ -29,6 +29,14 @@
 
             return address;
         }
+        
+        public async Task<Address?> GetAddressByIdAsync(string addressId)
+        {
+            Address? address = await this.repository.AllNotDeletedReadonly<Address>()
+                .FirstOrDefaultAsync(a => a.Id.ToString() == addressId);
+
+            return address;
+        }
 
         public async Task<Address?> GetAddressByNameAsync(string address)
         {
@@ -39,13 +47,5 @@
 
             return addressToGet;
         } 
-        
-        public async Task<Address?> GetAddressByIdAsync(string addressId)
-        {
-            Address? address = await this.repository.AllNotDeletedReadonly<Address>()
-                .FirstOrDefaultAsync(a => a.Id.ToString() == addressId);
-
-            return address;
-        }
     }
 }

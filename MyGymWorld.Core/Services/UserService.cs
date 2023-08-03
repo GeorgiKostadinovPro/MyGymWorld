@@ -311,7 +311,7 @@
 
             if (address != null)
             {
-                town = await this.townService.GetTownByIdAsync(address.TownId);
+                town = await this.townService.GetTownByIdAsync(address.TownId.ToString());
             }
 
             EditUserInputModel editUserInputModel = new EditUserInputModel()

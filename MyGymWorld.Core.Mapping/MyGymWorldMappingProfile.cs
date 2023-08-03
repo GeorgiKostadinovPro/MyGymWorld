@@ -21,7 +21,6 @@
     using MyGymWorld.Web.ViewModels.Notifications;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Linq;
-    using System.Runtime.InteropServices;
 
     public class MyGymWorldMappingProfile : Profile
     {
