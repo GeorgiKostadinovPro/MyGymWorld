@@ -10,18 +10,18 @@ namespace MyGymWorld.Core.Tests
     [TestFixture]
     public class AddressServiceTests
     {
-        private readonly DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-        .UseInMemoryDatabase(databaseName: "TestDb")
-          .Options;
-
-        private MyGymWorldDbContext CreateContext()
-        {
-            return new MyGymWorldDbContext(_options);
-        }
+        private MyGymWorldDbContext dbContext;
 
         [SetUp]
         public void Setup()
         {
+            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
+                      .UseInMemoryDatabase(databaseName: "TestDb")
+                      .Options;
+
+            this.dbContext = new MyGymWorldDbContext(_options);
+            this.dbContext.Database.EnsureCreated();
+            this.dbContext.Database.EnsureDeleted();
         }
 
         [Test]
@@ -47,8 +47,6 @@ namespace MyGymWorld.Core.Tests
         {
             var mockRepository = new Mock<IRepository>();
 
-            var dbContext = CreateContext();
-
             await dbContext.Addresses.AddAsync(new Address
             {
                 Id = Guid.NewGuid(),
@@ -65,7 +63,8 @@ namespace MyGymWorld.Core.Tests
 
             await dbContext.SaveChangesAsync();
 
-            mockRepository.Setup(x => x.AllNotDeleted<Address>())
+            mockRepository
+                .Setup(x => x.AllNotDeleted<Address>())
                 .Returns(dbContext.Addresses.AsQueryable());
 
             var service = new AddressService(mockRepository.Object);
@@ -80,8 +79,6 @@ namespace MyGymWorld.Core.Tests
         public async Task GetAddressByIdShouldWorkProperly()
         {
             var mockRepository = new Mock<IRepository>();
-
-            var dbContext = CreateContext();
 
             Address address1 = new Address
             {
@@ -100,12 +97,13 @@ namespace MyGymWorld.Core.Tests
             await dbContext.Addresses.AddRangeAsync(new List<Address> { address1, address2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository.Setup(x => x.AllNotDeletedReadonly<Address>())
+            mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Address>())
                 .Returns(dbContext.Addresses.AsQueryable());
 
             var service = new AddressService(mockRepository.Object);
 
-            string testId = address1.Id.ToString("D");
+            string testId = address1.Id.ToString();
 
             var result = await service.GetAddressByIdAsync(testId);
 

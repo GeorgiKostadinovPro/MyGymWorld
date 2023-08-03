@@ -1,14 +1,10 @@
 ﻿namespace MyGymWorld.Core.Services
 {
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
-    using MyGymWorld.Web.ViewModels.Towns;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,20 +12,11 @@
     public class TownService : ITownService
     {
         private readonly IRepository repository;
-        private readonly IMapper mapper;
 
-        public TownService(IRepository _repository, IMapper _mapper)
+        public TownService(IRepository _repository)
         {
             this.repository = _repository;
-            this.mapper = _mapper;
         }
-
-        public async Task<IEnumerable<TownViewModel>> GetAllAsync()
-        {
-            return await this.repository.AllNotDeletedReadonly<Town>()
-               .ProjectTo<TownViewModel>(this.mapper.ConfigurationProvider)
-               .ToArrayAsync();
-        } 
 
         public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
         {
@@ -43,14 +30,14 @@
                 .ToArrayAsync();
         }
 
-        public async Task<Town?> GetTownByIdAsync(Guid townId)
+        public async Task<Town?> GetTownByIdAsync(string townId)
         {
-            Town? town = await this.repository.AllNotDeleted<Town>()
-                .FirstOrDefaultAsync(t => t.Id == townId);
+            Town? town = await this.repository.AllNotDeletedReadonly<Town>()
+                .FirstOrDefaultAsync(t => t.Id.ToString() == townId);
 
             return town;
         }
-        
+
         public async Task<bool> CheckIfTownIsPresentByCountryIdAsync(string townId, string countryId)
         {
             Town? town = await this.repository.AllNotDeletedReadonly<Town>()
