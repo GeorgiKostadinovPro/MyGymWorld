@@ -293,6 +293,13 @@
                address = (await this.addressService.GetAddressByIdAsync(user.AddressId.Value.ToString()))!;
             }
 
+            Town town = null!;
+
+            if (address != null)
+            {
+                town = await this.townService.GetTownByIdAsync(address.TownId);
+            }
+
             EditUserInputModel editUserInputModel = new EditUserInputModel()
             {
                 Id = userId,
@@ -302,8 +309,8 @@
                 LastName = lastName,
                 PhoneNumber = phoneNumber,
                 Address = address != null ? address.Name : string.Empty,
-                TownId = address != null ? address.TownId.ToString() : null,
-                CountryId = address != null ? address.Town.CountryId.ToString() : null
+                TownId = town != null ? address.TownId.ToString() : null,
+                CountryId = address != null ? town!.CountryId.ToString() : null
             };
 
             return editUserInputModel;

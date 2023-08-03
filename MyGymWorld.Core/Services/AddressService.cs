@@ -35,7 +35,7 @@
             string wildCard = $"%{address.ToLower()}%";
 
             Address? addressToGet = await this.repository.All<Address>()
-                .FirstOrDefaultAsync(a => EF.Functions.Like(a.Name, wildCard));
+                .FirstOrDefaultAsync(a => a.IsDeleted == false && EF.Functions.Like(a.Name, wildCard));
 
             return addressToGet;
         } 
@@ -43,9 +43,7 @@
         public async Task<Address?> GetAddressByIdAsync(string addressId)
         {
             Address? address = await this.repository.AllReadonly<Address>()
-                .Include(a => a.Town)
-                .ThenInclude(t => t.Country)
-                .FirstOrDefaultAsync(a => a.Id == Guid.Parse(addressId));
+                .FirstOrDefaultAsync(a => a.IsDeleted == false && a.Id.ToString() == addressId);
 
             return address;
         }
