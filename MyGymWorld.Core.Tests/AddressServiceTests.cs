@@ -43,6 +43,33 @@ namespace MyGymWorld.Core.Tests
         }
 
         [Test]
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task GetAddressByIdShouldReturnNullWhenIdIsInvalid(string addressId)
+        {
+            var mockRepository = new Mock<IRepository>();
+
+            await dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.NewGuid(),
+                Name = "bul. Cherni vrah",
+                CreatedOn = DateTime.UtcNow
+            });
+
+            await dbContext.SaveChangesAsync();
+
+            mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Address>())
+                .Returns(dbContext.Addresses.AsQueryable());
+
+            var service = new AddressService(mockRepository.Object);
+
+            var result = await service.GetAddressByIdAsync(addressId);
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
         public async Task GetAddressByNameShouldWorkProperly()
         {
             var mockRepository = new Mock<IRepository>();
@@ -76,39 +103,30 @@ namespace MyGymWorld.Core.Tests
         }
 
         [Test]
-        public async Task GetAddressByIdShouldWorkProperly()
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task GetAddressByNameShouldReturnNullWhenNameIsInvalid(string name)
         {
             var mockRepository = new Mock<IRepository>();
 
-            Address address1 = new Address
+            await dbContext.Addresses.AddAsync(new Address
             {
                 Id = Guid.NewGuid(),
                 Name = "bul. Cherni vrah",
-                CreatedOn = DateTime.UtcNow
-            };
+                CreatedOn = DateTime.UtcNow,
+            });
 
-            Address address2 = new Address
-            {
-                Id = Guid.NewGuid(),
-                Name = "bul. Bulgaria 1",
-                CreatedOn = DateTime.UtcNow
-            };
-
-            await dbContext.Addresses.AddRangeAsync(new List<Address> { address1, address2 });
             await dbContext.SaveChangesAsync();
 
             mockRepository
-                .Setup(x => x.AllNotDeletedReadonly<Address>())
+                .Setup(x => x.AllNotDeleted<Address>())
                 .Returns(dbContext.Addresses.AsQueryable());
 
             var service = new AddressService(mockRepository.Object);
 
-            string testId = address1.Id.ToString();
+            var result = await service.GetAddressByNameAsync(name);
 
-            var result = await service.GetAddressByIdAsync(testId);
-
-            Assert.IsNotNull(result);
-            Assert.That(result.Name, Is.EqualTo("bul. Cherni vrah"));
+            Assert.IsNull(result);
         }
     }
 }
