@@ -36,16 +36,30 @@
 
         public async Task AddRoleToUserAsync(string userId, string roleName)
         {
-            ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+            if (!string.IsNullOrWhiteSpace(userId)
+                && !string.IsNullOrWhiteSpace(roleName))
+            {
+                ApplicationUser user = await this.userManager.FindByIdAsync(userId);
 
-            await this.userManager.AddToRoleAsync(user, roleName);
+                if (user != null)
+                {
+                    await this.userManager.AddToRoleAsync(user, roleName);
+                }
+            }        
         }
 
         public async Task RemoveRoleFromUserAsync(string userId, string roleName)
         {
-            ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+            if (!string.IsNullOrWhiteSpace(userId)
+                && !string.IsNullOrWhiteSpace(roleName))
+            {
+                ApplicationUser user = await this.userManager.FindByIdAsync(userId);
 
-            await this.userManager.RemoveFromRoleAsync(user, roleName);
+                if (user != null)
+                {
+                    await this.userManager.RemoveFromRoleAsync(user, roleName);
+                }
+            }
         }
 
         public async Task CreateRoleAsync(CreateRoleInputModel createRoleInputModel)
@@ -59,39 +73,48 @@
 
         public async Task EditRoleAsync(string roleId, EditRoleInputModel editRoleInputModel)
         {
-            ApplicationRole role = await this.roleManager.FindByIdAsync(roleId);
-
-            role.Name = editRoleInputModel.Name;
-            role.ModifiedOn = DateTime.UtcNow;
-
-            await this.roleManager.UpdateAsync(role);
-        }
-
-        public async Task<ApplicationRole> DeleteRoleAsync(string roleId)
-        {
-            ApplicationRole role = await this.repository.GetByIdAsync<ApplicationRole>(Guid.Parse(roleId));
-
-            if (role.Name != ApplicationRoleConstants.AdministratorRoleName)
+            if (!string.IsNullOrWhiteSpace(roleId))
             {
-                 role.IsDeleted = true;
-                 role.DeletedOn = DateTime.UtcNow;
+                ApplicationRole role = await this.roleManager.FindByIdAsync(roleId);
 
-                foreach (var user in await this.userManager.Users.ToArrayAsync())
+                if (role != null)
                 {
-                    bool isInRole = await this.userManager.IsInRoleAsync(user, role.Name);
+                    role.Name = editRoleInputModel.Name;
+                    role.ModifiedOn = DateTime.UtcNow;
 
-                    if (!isInRole)
-                    {
-                        continue;
-                    }
-
-                    await this.userManager.RemoveFromRoleAsync(user, role.Name);
+                    await this.roleManager.UpdateAsync(role);
                 }
             }
+        }
 
-            await this.repository.SaveChangesAsync();
+        public async Task DeleteRoleAsync(string roleId)
+        {
+            if (!string.IsNullOrWhiteSpace(roleId))
+            {
+                ApplicationRole? role = await this.repository.
+                    AllNotDeleted<ApplicationRole>()
+                    .FirstOrDefaultAsync(r => r.Id.ToString() == roleId);
 
-            return role;
+                if (role != null && role.Name != ApplicationRoleConstants.AdministratorRoleName)
+                {
+                    role.IsDeleted = true;
+                    role.DeletedOn = DateTime.UtcNow;
+
+                    foreach (var user in await this.userManager.Users.ToArrayAsync())
+                    {
+                        bool isInRole = await this.userManager.IsInRoleAsync(user, role.Name);
+
+                        if (!isInRole)
+                        {
+                            continue;
+                        }
+
+                        await this.userManager.RemoveFromRoleAsync(user, role.Name);
+                    }
+                }
+
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task<List<RoleViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
@@ -111,18 +134,11 @@
                 .ToListAsync();
         }
 
-        public async Task<int> GetActiveOrDeletedRolesCount(bool isDeleted)
+        public async Task<int> GetActiveOrDeletedRolesCountAsync(bool isDeleted)
         {
             return await this.repository.AllReadonly<ApplicationRole>()
                 .CountAsync(r => r.IsDeleted == isDeleted);
         }
-
-        public async Task<IEnumerable<string>> GetAllRoleNamesAsync()
-        {
-            return await this.repository.AllNotDeletedReadonly<ApplicationRole>()
-                .Select(r => r.Name)
-                .ToListAsync();
-        } 
         
         public async Task<EditRoleInputModel> GetRoleForEditAsync(string roleId)
         {
@@ -130,16 +146,32 @@
 
             return this.mapper.Map<EditRoleInputModel>(role);
         }
-        
-        public async Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName)    
+
+        public async Task<bool> CheckIfUserIsInRoleAsync(string userId, string roleName)
         {
+            if (string.IsNullOrWhiteSpace(userId)
+                || string.IsNullOrWhiteSpace(roleName))
+            {
+                return false;
+            }
+
             ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return false;
+            }
 
             return await this.userManager.IsInRoleAsync(user, roleName);
         }
-        
+
         public async Task<bool> CheckIfRoleAlreadyExistsByIdAsync(string roleId)
         {
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                return false;
+            }
+
             ApplicationRole role = await this.roleManager.FindByIdAsync(roleId);
 
             return role != null ? true : false;
@@ -147,6 +179,11 @@
 
         public async Task<bool> CheckIfRoleAlreadyExistsByNameAsync(string roleName)
         {
+            if (string.IsNullOrWhiteSpace(roleName))
+            {
+                return false;
+            }
+
             string wildCard = $"%{roleName.ToLower()}%";
 
             bool result = await this.repository.AllNotDeletedReadonly<ApplicationRole>()
