@@ -25,7 +25,7 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCount(false);
+            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(false);
 
             int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
             totalPages = totalPages == 0 ? 1 : totalPages;
@@ -43,7 +43,7 @@
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCount(true);
+            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(true);
 
             int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
 
@@ -169,10 +169,10 @@
                     throw new InvalidOperationException(ExceptionConstants.ApplicationRoleErrors.InvalidRoleId);
                 }
 
-                ApplicationRole role = await this.roleService.DeleteRoleAsync(roleId);
+                await this.roleService.DeleteRoleAsync(roleId);
 
                 await this.notificationService.CreateNotificationAsync(
-                    $"You successfully deleted role: {role.Name}",
+                    $"You successfully deleted a role!",
                     "/Admin/Role/Deleted",
                     this.GetUserId());
             }
