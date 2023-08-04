@@ -47,8 +47,6 @@ namespace MyGymWorld.Core.Tests
         [TestCase(null)]
         public async Task GetAddressByIdShouldReturnNullWhenIdIsInvalid(string addressId)
         {
-            var mockRepository = new Mock<IRepository>();
-
             await dbContext.Addresses.AddAsync(new Address
             {
                 Id = Guid.NewGuid(),
@@ -57,6 +55,8 @@ namespace MyGymWorld.Core.Tests
             });
 
             await dbContext.SaveChangesAsync();
+            
+            var mockRepository = new Mock<IRepository>();
 
             mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Address>())
@@ -72,8 +72,6 @@ namespace MyGymWorld.Core.Tests
         [Test]
         public async Task GetAddressByNameShouldWorkProperly()
         {
-            var mockRepository = new Mock<IRepository>();
-
             await dbContext.Addresses.AddAsync(new Address
             {
                 Id = Guid.NewGuid(),
@@ -89,6 +87,8 @@ namespace MyGymWorld.Core.Tests
             });
 
             await dbContext.SaveChangesAsync();
+
+            var mockRepository = new Mock<IRepository>();
 
             mockRepository
                 .Setup(x => x.AllNotDeleted<Address>())
@@ -107,8 +107,6 @@ namespace MyGymWorld.Core.Tests
         [TestCase(null)]
         public async Task GetAddressByNameShouldReturnNullWhenNameIsInvalid(string name)
         {
-            var mockRepository = new Mock<IRepository>();
-
             await dbContext.Addresses.AddAsync(new Address
             {
                 Id = Guid.NewGuid(),
@@ -117,6 +115,8 @@ namespace MyGymWorld.Core.Tests
             });
 
             await dbContext.SaveChangesAsync();
+            
+            var mockRepository = new Mock<IRepository>();
 
             mockRepository
                 .Setup(x => x.AllNotDeleted<Address>())

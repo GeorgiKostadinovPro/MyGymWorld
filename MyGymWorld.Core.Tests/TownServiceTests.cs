@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    [TestFixture]
     public class TownServiceTests
     {
         private MyGymWorldDbContext dbContext;

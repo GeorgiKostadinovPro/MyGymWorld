@@ -7,8 +7,6 @@
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
-    using MyGymWorld.Web.ViewModels.Countries;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,19 +14,9 @@
     public class CountryService : ICountryService
     {
         private readonly IRepository repository;
-        private readonly IMapper mapper;
-
-        public CountryService(IRepository _repository, IMapper _mapper)
+        public CountryService(IRepository _repository)
         {
             this.repository = _repository;
-            this.mapper = _mapper;
-        }
-
-        public async Task<IEnumerable<CountryViewModel>> GetAllAsync()
-        {
-            return await this.repository.AllNotDeletedReadonly<Country>()
-                .ProjectTo<CountryViewModel>(this.mapper.ConfigurationProvider)
-                .ToArrayAsync();
         }
 
         public async Task<IEnumerable<SelectListItem>> GetAllAsSelectListItemsAsync()
@@ -43,10 +31,10 @@
                 .ToArrayAsync();
         }
 
-        public async Task<Country?> GetCountryByIdAsync(Guid countryId)
+        public async Task<Country?> GetCountryByIdAsync(string countryId)
         {
             Country? country = await this.repository.AllNotDeleted<Country>()
-                .FirstOrDefaultAsync(c => c.Id == countryId);
+                .FirstOrDefaultAsync(c => c.Id.ToString() == countryId);
 
             return country;
         }
