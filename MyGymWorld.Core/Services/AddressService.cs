@@ -40,6 +40,11 @@
 
         public async Task<Address?> GetAddressByNameAsync(string address)
         {
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                return null;
+            }
+
             string wildCard = $"%{address.ToLower()}%";
 
             Address? addressToGet = await this.repository.AllNotDeleted<Address>()
