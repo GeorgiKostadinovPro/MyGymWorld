@@ -59,6 +59,7 @@
         {
             IQueryable<Comment> commentsAsQuery 
                 = this.repository.AllNotDeletedReadonly<Comment>()
+                                 .Where(c => c.GymId == Guid.Parse(gymId))
                                  .Include(c => c.User)
                                  .OrderByDescending(c => c.CreatedOn)
                                  .Skip(skip);
