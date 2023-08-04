@@ -17,7 +17,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     NOTE: You MUST provide your own APIKeys and AppSecrets for SendGrid, Cloudinary and Stripe.
   </h4> 
   <h4>
-    NOTE: You need to change the ApplicationUrl in both secrets.json for SendGrid, Cloudinary and Stripe to work.
+    NOTE: You need to change the ApplicationUrl in secrets.json for SendGrid, Cloudinary and Stripe to work.
   </h4>
   <p>
     For further info review <strong>[Environment Variables]</strong> and <strong>[Getting Started]</strong> in Table of Contents.
