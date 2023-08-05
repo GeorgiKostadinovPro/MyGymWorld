@@ -1,10 +1,9 @@
 ﻿namespace MyGymWorld.Core.Tests
 {
-    using AutoMapper;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.EntityFrameworkCore;
     using Moq;
     using MyGymWorld.Core.Services;
+    using MyGymWorld.Core.Tests.Helpers;
     using MyGymWorld.Data;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
@@ -21,13 +20,7 @@
         {
             this.mockRepository = new Mock<IRepository>();
 
-            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-                       .UseInMemoryDatabase(databaseName: "TestDb")
-                       .Options;
-
-            this.dbContext = new MyGymWorldDbContext(_options);
-            await this.dbContext.Database.EnsureCreatedAsync();
-            await this.dbContext.Database.EnsureDeletedAsync();
+            this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
         }
 
         [Test]

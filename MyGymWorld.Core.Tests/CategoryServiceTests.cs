@@ -4,9 +4,9 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Data;
-    using Microsoft.EntityFrameworkCore;
     using MyGymWorld.Core.Services;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using MyGymWorld.Core.Tests.Helpers;
 
     [TestFixture]
     public class CategoryServiceTests
@@ -16,17 +16,11 @@
         private Mock<IRepository> mockRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             this.mockRepository = new Mock<IRepository>();
 
-            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-                       .UseInMemoryDatabase(databaseName: "TestDb")
-                       .Options;
-
-            this.dbContext = new MyGymWorldDbContext(_options);
-            this.dbContext.Database.EnsureCreated();
-            this.dbContext.Database.EnsureDeleted();
+            this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
         }
 
         [Test]

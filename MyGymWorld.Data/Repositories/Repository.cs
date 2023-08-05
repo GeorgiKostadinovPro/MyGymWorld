@@ -61,7 +61,7 @@
         }
 
         /// <summary>
-        /// All records in a table that are NOT deleted. the result will be tracked by the context
+        /// All records in a table that are NOT deleted. The result will be tracked by the context
         /// </summary>
         /// <returns>Queryable expression tree</returns>
         IQueryable<T> IRepository.AllNotDeleted<T>()
@@ -82,7 +82,7 @@
         }
 
         /// <summary>
-        /// All records in a table. The result collection of NOT deleted won't be tracked by the context
+        /// All records in a table that are NOT deleted. The result collection won't be tracked by the context
         /// </summary>
         /// <returns>Expression tree</returns>
         IQueryable<T> IRepository.AllNotDeletedReadonly<T>()

@@ -18,12 +18,12 @@
         public async Task<Like> CreateLikeAsync(string gymId, string userId)
         {
             Like? like = await this.repository.All<Like>()
-                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
+                .FirstOrDefaultAsync(l => l.GymId.ToString() == gymId && l.UserId.ToString() == userId);
 
-            Dislike? dislike = await this.repository.All<Dislike>()
-                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
+            Dislike? dislike = await this.repository.AllNotDeleted<Dislike>()
+                .FirstOrDefaultAsync(l => l.GymId.ToString() == gymId && l.UserId.ToString() == userId);
 
-            if (dislike != null && dislike.IsDeleted == false)
+            if (dislike != null)
             {
                 dislike.IsDeleted = true;
                 dislike.DeletedOn = DateTime.UtcNow;
@@ -54,6 +54,8 @@
                 }
             }
 
+            await this.repository.SaveChangesAsync();
+
             return like;
         }
 
@@ -61,21 +63,21 @@
         {
             Like? likeToDelete = await this.repository
                 .AllNotDeleted<Like>()
-                .FirstOrDefaultAsync(l => l.Id == Guid.Parse(likeId));
+                .FirstOrDefaultAsync(l => l.Id.ToString() == likeId);
 
             if (likeToDelete != null)
             {
                 likeToDelete.IsDeleted = true;
                 likeToDelete.DeletedOn = DateTime.UtcNow;
+                
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
         }
 
         public async Task<bool> CheckIfUserLikedGymAsync(string gymId, string userId)
         {
-            Like? like = await this.repository.All<Like>()
-                .FirstOrDefaultAsync(l => l.GymId == Guid.Parse(gymId) && l.UserId == Guid.Parse(userId));
+            Like? like = await this.repository.AllReadonly<Like>()
+                .FirstOrDefaultAsync(l => l.GymId.ToString() == gymId && l.UserId.ToString() == userId);
 
             if (like == null)
             {
@@ -88,8 +90,8 @@
             }
 
             return true;
-        } 
-        
+        }
+
         public async Task<int> GetAllActiveLikesCountAsync()
         {
             return await this.repository.AllNotDeletedReadonly<Like>()
