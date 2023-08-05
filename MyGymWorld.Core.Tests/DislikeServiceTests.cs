@@ -2,15 +2,14 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Moq;
-    using MyGymWorld.Core.Services;
     using MyGymWorld.Core.Tests.Helpers;
-    using MyGymWorld.Data;
-    using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
-    using System;
+    using MyGymWorld.Data;
+    using MyGymWorld.Core.Services;
+    using MyGymWorld.Data.Models;
 
     [TestFixture]
-    public class LikeServiceTests
+    public class DislikeServiceTests
     {
         private MyGymWorldDbContext dbContext;
 
@@ -29,17 +28,17 @@
         }
 
         [Test]
-        public async Task CreateLikeAsyncShouldWorkProperlyWhenLikeDoesNOTExist()
+        public async Task CreateDislikeAsyncShouldWorkProperlyWhenLikeDoesNOTExist()
         {
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
@@ -50,20 +49,20 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.All<Like>())
-                .Returns(this.dbContext.Likes.AsQueryable());
+                .Setup(x => x.All<Dislike>())
+                .Returns(this.dbContext.Dislikes.AsQueryable());
 
             this.mockRepository
-                .Setup(x => x.AllNotDeleted<Dislike>())
-                .Returns(this.dbContext.Dislikes
+                .Setup(x => x.AllNotDeleted<Like>())
+                .Returns(this.dbContext.Likes
                 .Where(dl => dl.IsDeleted == false)
                 .AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            var result = await service.CreateLikeAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+            var result = await service.CreateDislikeAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
-            this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Like>()), Times.Once);
+            this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Dislike>()), Times.Once);
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
             Assert.IsNotNull(result);
@@ -73,17 +72,17 @@
         [Test]
         [TestCase("932fe39a-bc5b-4ea4-b0c5-68b2da06768e", "832fe39a-bc5b-4ea4-b0c5-68b2da06768e", false)]
         [TestCase("932fe39a-bc5b-4ea4-b0c5-68b2da06768e", "832fe39a-bc5b-4ea4-b0c5-68b2da06768e", true)]
-        public async Task CreateLikeAsyncShouldWorkProperlyWhenLikeExistsAndDislikeExist(string gymId, string userId, bool isDeleted)
+        public async Task CreateDislikeAsyncShouldWorkProperlyWhenLikeExistsAndDislikeExist(string gymId, string userId, bool isDeleted)
         {
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
-                    GymId = Guid.Parse(gymId), 
+                    GymId = Guid.Parse(gymId),
                     UserId = Guid.Parse(userId),
                     IsDeleted = isDeleted
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
@@ -91,15 +90,15 @@
                 }
             });
 
-            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
+            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
             {
-                new Dislike
+                new Like
                 {
                     GymId = Guid.Parse(gymId),
                     UserId = Guid.Parse(userId),
                     IsDeleted = false
                 },
-                new Dislike
+                new Like
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
@@ -110,44 +109,44 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.All<Like>())
-                .Returns(this.dbContext.Likes.AsQueryable());
+                .Setup(x => x.All<Dislike>())
+                .Returns(this.dbContext.Dislikes.AsQueryable());
 
             this.mockRepository
-                .Setup(x => x.AllNotDeleted<Dislike>())
-                .Returns(this.dbContext.Dislikes
+                .Setup(x => x.AllNotDeleted<Like>())
+                .Returns(this.dbContext.Likes
                 .Where(dl => dl.IsDeleted == false)
                 .AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            var result = await service.CreateLikeAsync(gymId, userId);
+            var result = await service.CreateDislikeAsync(gymId, userId);
 
-            this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Like>()), Times.Never);
+            this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Dislike>()), Times.Never);
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
-            var dislikeChanged = await this.dbContext.Dislikes
+            var likeChanged = await this.dbContext.Likes
                 .FirstAsync(dl => dl.UserId.ToString() == userId);
 
             Assert.IsNotNull(result);
             Assert.That(result.IsDeleted, Is.EqualTo(!isDeleted));
 
-            Assert.That(dislikeChanged.IsDeleted, Is.True);
+            Assert.That(likeChanged.IsDeleted, Is.True);
         }
 
         [Test]
-        public async Task DeleteLikeAsyncShouldWorkProperly()
+        public async Task DeleteDislikeAsyncShouldWorkProperly()
         {
-            var likeId = Guid.NewGuid();
+            var dislikeId = Guid.NewGuid();
 
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
-                    Id = likeId,
+                    Id = dislikeId,
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     Id =  Guid.NewGuid(),
                     IsDeleted = false
@@ -157,20 +156,20 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.AllNotDeleted<Like>())
-                .Returns(this.dbContext.Likes
+                .Setup(x => x.AllNotDeleted<Dislike>())
+                .Returns(this.dbContext.Dislikes
                 .Where(l => l.IsDeleted == false)
                 .AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            await service.DeleteLikeAsync(likeId.ToString());
+            await service.DeleteDislikeAsync(dislikeId.ToString());
 
-            var deletedLike = await this.dbContext.Likes.FirstAsync(x => x.Id == likeId);
+            var deletedDislike = await this.dbContext.Dislikes.FirstAsync(x => x.Id == dislikeId);
 
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
-            Assert.That(deletedLike.IsDeleted, Is.True);
+            Assert.That(deletedDislike.IsDeleted, Is.True);
         }
 
         [Test]
@@ -178,16 +177,16 @@
         [TestCase(null)]
         [TestCase("932fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
 
-        public async Task DeleteLikeAsyncShouldNotDoAnythingWhenIdIsInvalid(string likeId)
+        public async Task DeleteDislikeAsyncShouldNotDoAnythingWhenIdIsInvalid(string likeId)
         {
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
                     Id = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     Id =  Guid.NewGuid(),
                     IsDeleted = false
@@ -197,43 +196,43 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.AllNotDeleted<Like>())
-                .Returns(this.dbContext.Likes
+                .Setup(x => x.AllNotDeleted<Dislike>())
+                .Returns(this.dbContext.Dislikes
                 .Where(l => l.IsDeleted == false)
                 .AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            await service.DeleteLikeAsync(likeId);
+            await service.DeleteDislikeAsync(likeId);
 
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Never);
 
-            int count = await this.dbContext.Likes.CountAsync(l => l.IsDeleted == false);
+            int count = await this.dbContext.Dislikes.CountAsync(l => l.IsDeleted == false);
 
             Assert.That(count, Is.EqualTo(2));
         }
 
         [Test]
-        public async Task CheckIfUserLikedGymAsyncShouldWorkProperly()
+        public async Task CheckIfUserDislikedGymAsyncShouldWorkProperly()
         {
             var userId = Guid.NewGuid();
             var gymId = Guid.NewGuid();
 
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
                     UserId = userId,
                     GymId = gymId,
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
@@ -244,12 +243,12 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.AllReadonly<Like>())
-                .Returns(this.dbContext.Likes.AsQueryable());
+                .Setup(x => x.AllReadonly<Dislike>())
+                .Returns(this.dbContext.Dislikes.AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            var result = await service.CheckIfUserLikedGymAsync(gymId.ToString(), userId.ToString());
+            var result = await service.CheckIfUserDislikedGymAsync(gymId.ToString(), userId.ToString());
 
             Assert.IsTrue(result);
         }
@@ -258,29 +257,29 @@
         [TestCase("", "932fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
         [TestCase("932fe39a-bc5b-4ea4-b0c5-68b2da06768e", "")]
         [TestCase("932fe39a-bc5b-4ea4-b0c5-68b2da06768e", "832fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
-        public async Task CheckIfUserLikedGymAsyncShouldReturnFalsewWhenDataIsInvalid(string gymId, string userId)
+        public async Task CheckIfUserDislikedGymAsyncShouldReturnFalsewWhenDataIsInvalid(string gymId, string userId)
         {
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     UserId = Guid.Parse("932fe39a-bc5b-4ea4-b0c5-68b2da06768e"),
                     GymId = Guid.Parse("832fe39a-bc5b-4ea4-b0c5-68b2da06768e"),
@@ -291,31 +290,30 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.AllReadonly<Like>())
-                .Returns(this.dbContext.Likes.AsQueryable());
+                .Setup(x => x.AllReadonly<Dislike>())
+                .Returns(this.dbContext.Dislikes.AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            var result = await service.CheckIfUserLikedGymAsync(gymId, userId);
+            var result = await service.CheckIfUserDislikedGymAsync(gymId, userId);
 
             Assert.IsFalse(result);
         }
 
-
         [Test]
-        public async Task GetAllActiveLikesCountAsyncShouldWorkProperly()
+        public async Task GetAllActiveDislikesCountAsyncShouldWorkProperly()
         {
-            await this.dbContext.Likes.AddRangeAsync(new HashSet<Like>
+            await this.dbContext.Dislikes.AddRangeAsync(new HashSet<Dislike>
             {
-                new Like
+                new Dislike
                 {
                     IsDeleted = true
                 },
-                new Like
+                new Dislike
                 {
                     IsDeleted = false
                 },
-                new Like
+                new Dislike
                 {
                     IsDeleted = false
                 }
@@ -324,14 +322,14 @@
             await this.dbContext.SaveChangesAsync();
 
             this.mockRepository
-                .Setup(x => x.AllNotDeletedReadonly<Like>())
-                .Returns(this.dbContext.Likes
+                .Setup(x => x.AllNotDeletedReadonly<Dislike>())
+                .Returns(this.dbContext.Dislikes
                 .Where(l => l.IsDeleted == false)
                 .AsQueryable());
 
-            var service = new LikeService(this.mockRepository.Object);
+            var service = new DislikeService(this.mockRepository.Object);
 
-            var result = await service.GetAllActiveLikesCountAsync();
+            var result = await service.GetAllActiveDislikesCountAsync();
 
             Assert.That(result, Is.EqualTo(2));
         }
