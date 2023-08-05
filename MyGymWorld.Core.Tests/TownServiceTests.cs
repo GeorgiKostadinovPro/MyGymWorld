@@ -15,9 +15,13 @@
     {
         private MyGymWorldDbContext dbContext;
 
+        private Mock<IRepository> mockRepository;
+
         [SetUp]
         public void Setup()
         {
+            this.mockRepository = new Mock<IRepository>();
+
             DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
                        .UseInMemoryDatabase(databaseName: "TestDb")
                        .Options;
@@ -30,8 +34,6 @@
         [Test]
         public async Task GetTownByIdShouldWorkProperly()
         {
-            var mockRepository = new Mock<IRepository>();
-
             Town town1 = new Town
             {
                 Id = Guid.NewGuid(),
@@ -52,11 +54,11 @@
             await dbContext.Towns.AddRangeAsync(new List<Town> { town1, town2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Town>())
                 .Returns(dbContext.Towns.AsQueryable());
 
-            var service = new TownService(mockRepository.Object);
+            var service = new TownService(this.mockRepository.Object);
 
             var result = await service.GetTownByIdAsync(town1.Id.ToString());
 
@@ -70,8 +72,6 @@
         [TestCase(null)]
         public async Task GetTownByIdShoulReturnNullForInvalidId(string townId)
         {
-            var mockRepository = new Mock<IRepository>();
-
             Town town1 = new Town
             {
                 Id = Guid.NewGuid(),
@@ -92,11 +92,11 @@
             await dbContext.Towns.AddRangeAsync(new List<Town> { town1, town2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Town>())
                 .Returns(dbContext.Towns.AsQueryable());
 
-            var service = new TownService(mockRepository.Object);
+            var service = new TownService(this.mockRepository.Object);
 
             var result = await service.GetTownByIdAsync(townId);
 
@@ -107,8 +107,6 @@
         [Test]
         public async Task CheckIfTownIsPresentByCountryIdAsyncShouldWorkProperly()
         {
-            var mockRepository = new Mock<IRepository>();
-
             var countryId = Guid.NewGuid();
 
             Town town1 = new Town
@@ -133,11 +131,11 @@
             await dbContext.Towns.AddRangeAsync(new List<Town> { town1, town2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Town>())
                 .Returns(dbContext.Towns.AsQueryable());
 
-            var service = new TownService(mockRepository.Object);
+            var service = new TownService(this.mockRepository.Object);
 
             var result = await service.CheckIfTownIsPresentByCountryIdAsync(town1.Id.ToString(), countryId.ToString());
 
@@ -150,8 +148,6 @@
 
         public async Task CheckIfTownIsPresentByCountryIdAsyncShouldReturnFalseWhenDataIsNotValid(string townId, string countryId)
         {
-            var mockRepository = new Mock<IRepository>();
-
             Town town1 = new Town
             {
                 Id = Guid.Parse("a130a2c6-5589-48f2-b9d0-36bfeea6ebc5"),
@@ -173,11 +169,11 @@
             await dbContext.Towns.AddRangeAsync(new List<Town> { town1, town2 });
             await dbContext.SaveChangesAsync();
 
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Town>())
                 .Returns(dbContext.Towns.AsQueryable());
 
-            var service = new TownService(mockRepository.Object);
+            var service = new TownService(this.mockRepository.Object);
 
             var result = await service.CheckIfTownIsPresentByCountryIdAsync(townId, countryId);
 
@@ -210,7 +206,7 @@
 
             mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Town>())
-               .Returns(dbContext.Towns.AsQueryable());
+               .Returns(this.dbContext.Towns.AsQueryable());
 
             var service = new TownService(mockRepository.Object);
 

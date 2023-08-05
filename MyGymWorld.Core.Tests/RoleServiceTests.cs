@@ -110,6 +110,7 @@
             var result = await service.GetActiveOrDeletedForAdministrationAsync(false, skip, take);
 
             Assert.That(result.Count(), Is.EqualTo(take));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(RoleViewModel));
         }
 
         [Test]
@@ -149,6 +150,7 @@
             var result = await service.GetActiveOrDeletedForAdministrationAsync(true, skip, take);
 
             Assert.That(result.Count(), Is.EqualTo(take));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(RoleViewModel));
         }
 
         [Test]

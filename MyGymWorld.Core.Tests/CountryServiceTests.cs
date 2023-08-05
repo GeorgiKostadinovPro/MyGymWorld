@@ -14,9 +14,13 @@
     {
         private MyGymWorldDbContext dbContext;
 
+        private Mock<IRepository> mockRepository;
+
         [SetUp]
         public async Task Setup()
         {
+            this.mockRepository = new Mock<IRepository>();
+
             DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
                        .UseInMemoryDatabase(databaseName: "TestDb")
                        .Options;
@@ -38,13 +42,11 @@
             await this.dbContext.Countries.AddAsync(country);
             await this.dbContext.SaveChangesAsync();  
             
-            var mockRepository = new Mock<IRepository>();
-
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeleted<Country>())
                 .Returns(this.dbContext.Countries.AsQueryable());
             
-            var service = new CountryService(mockRepository.Object);
+            var service = new CountryService(this.mockRepository.Object);
 
             string countryId = country.Id.ToString();
 
@@ -68,13 +70,11 @@
             await this.dbContext.Countries.AddAsync(country);
             await this.dbContext.SaveChangesAsync();
 
-            var mockRepository = new Mock<IRepository>();
-
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeleted<Country>())
                 .Returns(this.dbContext.Countries.AsQueryable());
 
-            var service = new CountryService(mockRepository.Object);
+            var service = new CountryService(this.mockRepository.Object);
 
             var result = await service.GetCountryByIdAsync(countryId);
 
@@ -108,14 +108,11 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            var mockRepository = new Mock<IRepository>();
-            var mockMapper = new Mock<IMapper>();
-
-            mockRepository
+            this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Country>())
                 .Returns(this.dbContext.Countries.Where(x => x.IsDeleted == false).AsQueryable());
 
-            var service = new CountryService(mockRepository.Object);
+            var service = new CountryService(this.mockRepository.Object);
 
             var result = await service.GetAllAsSelectListItemsAsync();
 
