@@ -25,6 +25,11 @@
 
         public async Task<Category?> GetCategoryByIdAsync(string categoryId)
         {
+            if (string.IsNullOrWhiteSpace(categoryId))
+            {
+                return null;
+            }
+
             return await this.repository.AllNotDeletedReadonly<Category>()
                 .FirstOrDefaultAsync(c => c.Id == Guid.Parse(categoryId));
         }

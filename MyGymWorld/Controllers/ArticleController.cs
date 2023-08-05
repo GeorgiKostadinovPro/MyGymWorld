@@ -95,7 +95,7 @@
         {
             try
             {
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
@@ -157,7 +157,7 @@
         {
             try
             {
-                Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {
