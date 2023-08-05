@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using MyGymWorld.Core.Services;
+    using MyGymWorld.Core.Tests.Helpers;
     using MyGymWorld.Data;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
@@ -18,17 +19,11 @@
         private Mock<IRepository> mockRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             this.mockRepository = new Mock<IRepository>();
 
-            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-                       .UseInMemoryDatabase(databaseName: "TestDb")
-                       .Options;
-
-            this.dbContext = new MyGymWorldDbContext(_options);
-            this.dbContext.Database.EnsureCreated();
-            this.dbContext.Database.EnsureDeleted();
+            this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
         }
 
         [Test]

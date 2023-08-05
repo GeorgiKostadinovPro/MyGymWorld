@@ -16,7 +16,7 @@ namespace MyGymWorld.Data.Repositories
         IQueryable<T> All<T>() where T : class;
 
         /// <summary>
-        /// All records in a table that are NOT deleted. the result will be tracked by the context
+        /// All records in a table that are NOT deleted. The result will be tracked by the context
         /// </summary>
         /// <returns>Queryable expression tree</returns>
         IQueryable<T> AllNotDeleted<T>() where T : class, IDeletableModel;
@@ -28,7 +28,7 @@ namespace MyGymWorld.Data.Repositories
         IQueryable<T> AllReadonly<T>() where T : class;
 
         /// <summary>
-        /// All records in a table. The result collection of NOT deleted won't be tracked by the context
+        /// All records in a table that are NOT deleted. The result collection won't be tracked by the context
         /// </summary>
         /// <returns>Expression tree</returns>
         IQueryable<T> AllNotDeletedReadonly<T>() where T : class, IDeletableModel;
