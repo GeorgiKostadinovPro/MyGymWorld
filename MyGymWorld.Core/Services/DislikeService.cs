@@ -77,15 +77,15 @@
 
         public async Task<bool> CheckIfUserDislikedGymAsync(string gymId, string userId)
         {
-            Dislike? like = await this.repository.AllReadonly<Dislike>()
+            Dislike? dislike = await this.repository.AllReadonly<Dislike>()
                 .FirstOrDefaultAsync(l => l.GymId.ToString() == gymId && l.UserId.ToString() == userId);
 
-            if (like == null)
+            if (dislike == null)
             {
                 return false;
             }
 
-            if (like.IsDeleted == true)
+            if (dislike.IsDeleted == true)
             {
                 return false;
             }
