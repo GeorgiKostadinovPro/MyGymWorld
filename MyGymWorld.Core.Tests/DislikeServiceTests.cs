@@ -20,10 +20,6 @@
         {
             this.mockRepository = new Mock<IRepository>();
 
-            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-                      .UseInMemoryDatabase(databaseName: "TestDb")
-                      .Options;
-
             this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
         }
 
@@ -58,13 +54,24 @@
                 .Where(dl => dl.IsDeleted == false)
                 .AsQueryable());
 
+            this.mockRepository
+               .Setup(x => x.AddAsync(It.IsAny<Dislike>()))
+               .Callback(async (Dislike dislike) =>
+               {
+                   await this.dbContext.Dislikes.AddAsync(dislike);
+                   await this.dbContext.SaveChangesAsync();
+               });
+
             var service = new DislikeService(this.mockRepository.Object);
 
             var result = await service.CreateDislikeAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
+            var count = await this.dbContext.Dislikes.CountAsync();
+
             this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Dislike>()), Times.Once);
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
+            Assert.That(count, Is.EqualTo(3));
             Assert.IsNotNull(result);
             Assert.That(result.IsDeleted, Is.False);
         }

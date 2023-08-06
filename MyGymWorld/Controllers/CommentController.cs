@@ -13,15 +13,18 @@
 
         private readonly ICommentService commentService;
         private readonly IGymService gymService;
+        private readonly IUserService userService;
         private readonly INotificationService notificationService;
 
         public CommentController(
             ICommentService _commentService, 
             IGymService _gymService,
+            IUserService _userService,
             INotificationService _notificationService)
         {
             this.commentService = _commentService;
             this.gymService = _gymService;
+            this.userService = _userService;
             this.notificationService = _notificationService;
         }
 
@@ -68,7 +71,16 @@
             {
                 string userId = this.GetUserId();
 
-                Gym gym = await this.gymService.GetGymByIdAsync(createCommentInputModel.GymId);
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user.IsDeleted == true)
+                {
+                    this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                Gym? gym = await this.gymService.GetGymByIdAsync(createCommentInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -85,16 +97,23 @@
                     {
                         this.TempData[ErrorMessage] = "You tried creating a comment on different gym!";
 
-                        return this.RedirectToAction(nameof(AllForGym), new { gymid = createCommentInputModel.GymId });
+                        return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
                     }
 
                     Comment? parent = await this.commentService.GetComentByIdAsync(createCommentInputModel.ParentId);
 
-                    if (parent.ParentId != null)
+                    if (parent == null)
+                    {
+                        this.TempData[ErrorMessage] = "No such parent comment!";
+
+                        return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
+                    }
+
+                    if (parent != null && parent.ParentId != null)
                     {
                         this.TempData[ErrorMessage] = "You tried creating a comment on reply comment!";
 
-                        return this.RedirectToAction(nameof(AllForGym), new { gymid = createCommentInputModel.GymId });
+                        return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
                     }
                 }
 

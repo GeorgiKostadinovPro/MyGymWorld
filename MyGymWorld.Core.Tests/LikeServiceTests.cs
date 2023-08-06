@@ -8,6 +8,7 @@
     using MyGymWorld.Data.Models;
     using MyGymWorld.Data.Repositories;
     using System;
+    using System.Security.Cryptography.X509Certificates;
 
     [TestFixture]
     public class LikeServiceTests
@@ -20,10 +21,6 @@
         public async Task Setup()
         {
             this.mockRepository = new Mock<IRepository>();
-
-            DbContextOptions<MyGymWorldDbContext> _options = new DbContextOptionsBuilder<MyGymWorldDbContext>()
-                      .UseInMemoryDatabase(databaseName: "TestDb")
-                      .Options;
 
             this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
         }
@@ -59,13 +56,24 @@
                 .Where(dl => dl.IsDeleted == false)
                 .AsQueryable());
 
+            this.mockRepository
+                .Setup(x => x.AddAsync(It.IsAny<Like>()))
+                .Callback(async (Like like) =>
+                {
+                    await this.dbContext.Likes.AddAsync(like);
+                    await this.dbContext.SaveChangesAsync();
+                });
+
             var service = new LikeService(this.mockRepository.Object);
 
             var result = await service.CreateLikeAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
+            var count = await this.dbContext.Likes.CountAsync();
+
             this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Like>()), Times.Once);
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
+            Assert.That(count, Is.EqualTo(3));
             Assert.IsNotNull(result);
             Assert.That(result.IsDeleted, Is.False);
         }
