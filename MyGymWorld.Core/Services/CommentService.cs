@@ -44,22 +44,22 @@
         {
             Comment? commentToDelete = await this.repository
                 .AllNotDeleted<Comment>()
-                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(commentId));
+                .FirstOrDefaultAsync(c => c.Id.ToString() == commentId);
 
             if (commentToDelete != null)
             {
                 commentToDelete.IsDeleted = true;
-                commentToDelete.DeletedOn = DateTime.UtcNow;
+                commentToDelete.DeletedOn = DateTime.UtcNow; 
+                
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<CommentViewModel>> GetActiveCommentsByGymIdAsync(string gymId, int skip = 0, int? take = null)
         {
-            IQueryable<Comment> commentsAsQuery 
+            IQueryable<Comment> commentsAsQuery
                 = this.repository.AllNotDeletedReadonly<Comment>()
-                                 .Where(c => c.GymId == Guid.Parse(gymId))
+                                 .Where(c => c.GymId.ToString() == gymId)
                                  .Include(c => c.User)
                                  .OrderByDescending(c => c.CreatedOn)
                                  .Skip(skip);
@@ -77,13 +77,13 @@
         public async Task<int> GetActiveCommentsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllNotDeletedReadonly<Comment>()
-                .CountAsync(c => c.GymId == Guid.Parse(gymId));
+                .CountAsync(c => c.GymId.ToString() == gymId);
         }
 
         public async Task<Comment?> GetComentByIdAsync(string commentId)
         {
             return await this.repository.AllNotDeletedReadonly<Comment>()
-                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(commentId));
+                .FirstOrDefaultAsync(c => c.Id.ToString() == commentId);
         }
 
         public async Task<int> GetAllActiveCommentsCountAsync()
@@ -96,11 +96,11 @@
         {
             Guid commentGymId = await this.repository
                 .AllNotDeletedReadonly<Comment>()
-                .Where(c => c.Id == Guid.Parse(commentId))
+                .Where(c => c.Id.ToString() == commentId)
                 .Select(c => c.GymId)
                 .FirstOrDefaultAsync();
 
-            return commentGymId == Guid.Parse(gymId);
+            return commentGymId.ToString() == gymId;
         }
     }
 }

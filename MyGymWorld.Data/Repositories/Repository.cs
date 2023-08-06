@@ -67,8 +67,7 @@
         IQueryable<T> IRepository.AllNotDeleted<T>()
         {
             return DbSet<T>()
-                .Where(x => x.IsDeleted == false)
-                .AsQueryable();
+                .Where(x => x.IsDeleted == false);
         }
 
         /// <summary>
@@ -89,8 +88,7 @@
         {
             return DbSet<T>()
                 .AsNoTracking()
-                .Where(x => x.IsDeleted == false)
-                .AsQueryable();
+                .Where(x => x.IsDeleted == false);
         }
 
         /// <summary>

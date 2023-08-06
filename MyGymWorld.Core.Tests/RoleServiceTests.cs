@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
     using Moq;
     using MyGymWorld.Core.Services;
     using MyGymWorld.Core.Tests.Helpers;

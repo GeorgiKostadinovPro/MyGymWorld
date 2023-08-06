@@ -1,5 +1,6 @@
 namespace MyGymWorld.Core.Tests
 {
+    using Microsoft.EntityFrameworkCore;
     using Moq;
     using MyGymWorld.Core.Services;
     using MyGymWorld.Core.Tests.Helpers;
@@ -29,10 +30,22 @@ namespace MyGymWorld.Core.Tests
 
             var addressName = "Sample Address";
             var townId = Guid.NewGuid().ToString();
+
+            this.mockRepository
+                .Setup(x => x.AddAsync(It.IsAny<Address>()))
+                .Callback(async (Address address) =>
+                {
+                    await this.dbContext.Addresses.AddAsync(address);
+                    await this.dbContext.SaveChangesAsync();
+                });
+
             var address = await service.CreateAddressAsync(addressName, townId);
+
+            var count = await this.dbContext.Addresses.CountAsync();
 
             Assert.IsNotNull(address);
             Assert.That(address.Name, Is.EqualTo(addressName));
+            Assert.That(count, Is.EqualTo(1));
 
             this.mockRepository.Verify(r => r.AddAsync(It.IsAny<Address>()), Times.Once);
             this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
