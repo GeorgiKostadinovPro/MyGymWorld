@@ -25,15 +25,13 @@
 
         private readonly IAddressService addressService;
         private readonly ITownService townService;
-        private readonly ICountryService countryService;
 
         public UserService(
             UserManager<ApplicationUser> _userManager, 
             IMapper _mapper,
             IRepository _repository,
             IAddressService _addressService,
-            ITownService _townService,
-            ICountryService _countryService)
+            ITownService _townService)
         {
             this.userManager = _userManager;
 
@@ -42,7 +40,6 @@
 
             this.addressService = _addressService;
             this.townService = _townService;
-            this.countryService = _countryService;
         }
 
         public async Task<(ApplicationUser, IdentityResult)> CreateUserAsync(CreateUserInputModel createUserInputModel)

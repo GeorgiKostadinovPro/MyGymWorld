@@ -21,7 +21,7 @@
         isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
     }
 
-    bool hasUserSubscribedForArticles = await this.ArticleService.CheckIfUserIsSubscribedForGymArticles(userId, Model.GymId);
+    bool hasUserSubscribedForArticles = await this.GymService.CheckIfUserIsSubscribedForGymArticles(userId, Model.GymId);
 }
 
 @*Create Button*@
