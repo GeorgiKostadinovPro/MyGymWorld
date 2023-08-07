@@ -18,8 +18,6 @@
 
         Task<IEnumerable<ArticleViewModel>> GetAllActiveArticlesFilteredAndPagedByGymIdAsync(AllArticlesForGymQueryModel queryModel);
         
-        Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId);
-
         Task<int> GetAllActiveArticlesCountByGymIdAsync(string gymId);
         
         Task<ArticleDetailsViewModel> GetArticleDetailsByIdAsync(string articleId);
@@ -29,7 +27,5 @@
         Task<Article?> GetArticleByIdAsync(string articleId);
 
         Task<bool> CheckIfArticleExistsByIdAsync(string articleId);
-
-        Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId);
     }
 }

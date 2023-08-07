@@ -13,6 +13,10 @@
 
         Task DeleteGymAsync(string gymId);
 
+        Task AddGymToUserAsync(string gymId, string userId);
+
+        Task RemoveGymFromUserAsync(string gymId, string userId);
+
         Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId);
 
 		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
@@ -31,13 +35,11 @@
 
         Task<IEnumerable<DisplayGymViewModel>> GetAllActiveFilteredAndPagedGymsAsync(AllGymsQueryModel queryModel);
 
-        Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId);
-
-        Task AddGymToUserAsync(string gymId, string userId);
-
-        Task RemoveGymFromUserAsync(string gymId, string userId);
-
         Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllUserJoinedGymsQueryModel queryModel);
+
+        Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId);
+
+        Task<GymDetailsViewModel> GetGymDetailsByIdAsync(string gymId);
 
         Task<int> GetAllUserJoinedGymsCountAsync(string userId);
 
@@ -48,6 +50,8 @@
         Task<bool> CheckIfGymIsJoinedByUserAsync(string gymId, string userId);
 
         Task<Gym?> GetGymByIdAsync(string gymId);
+
+        Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId);
 
         IEnumerable<string> GetAllGymTypes();
     }

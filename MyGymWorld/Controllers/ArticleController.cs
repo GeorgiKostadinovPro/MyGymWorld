@@ -82,7 +82,7 @@
 			{
 				this.TempData[ErrorMessage] = "Such article does NOT exist!";
 
-				return this.NotFound();
+				return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
 			}
 
 			ArticleDetailsViewModel articleDetailsViewModel = await this.articleService.GetArticleDetailsByIdAsync(articleId);
@@ -126,7 +126,7 @@
                     }
                 }
 
-                bool isUserAlreadySubscribed = await this.articleService.CheckIfUserIsSubscribedForGymArticles(userId, gymId);
+                bool isUserAlreadySubscribed = await this.gymService.CheckIfUserIsSubscribedForGymArticles(userId, gymId);
 
                 if (isUserAlreadySubscribed)
                 {
@@ -188,7 +188,7 @@
                     }
                 }
 
-                bool isSubscribed = await this.articleService.CheckIfUserIsSubscribedForGymArticles(userId, gymId);
+                bool isSubscribed = await this.gymService.CheckIfUserIsSubscribedForGymArticles(userId, gymId);
 
                 if (isSubscribed == false)
                 {

@@ -157,7 +157,7 @@
                     $"/Article/Details?articleId={createdArticle.Id.ToString()}",
                     userId);
 
-                IEnumerable<ApplicationUser> subsribers = await this.articleService.GetAllUsersWhoAreSubscribedForGymArticlesAsync(createArticleInputModel.GymId);
+                IEnumerable<ApplicationUser> subsribers = await this.gymService.GetAllUsersWhoAreSubscribedForGymArticlesAsync(createArticleInputModel.GymId);
 
                 foreach (ApplicationUser subsriber in subsribers)
                 {
@@ -217,9 +217,9 @@
                     }
                 }
 
-                bool doesEventExists = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
+                bool doesArticleExist = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
 
-                if (doesEventExists == false)
+                if (doesArticleExist == false)
                 {
                     this.TempData[ErrorMessage] = "Such article does NOT exist!";
 

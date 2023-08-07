@@ -22,7 +22,6 @@
         private readonly IMapper mapper;
         private readonly IRepository repository;
 
-        private readonly IUserService userService;
         private readonly IEventService eventService;
         private readonly IArticleService articleService;
         private readonly IMembershipService membershipService;
@@ -35,7 +34,6 @@
         public GymService(
             IMapper _mapper,
             IRepository _repository,
-            IUserService _userService,
             IEventService _eventService,
             IArticleService _articleService,
             IMembershipService _membershipService,
@@ -47,7 +45,6 @@
             this.mapper = _mapper;
             this.repository = _repository;
 
-            this.userService = _userService;
             this.eventService = _eventService;
             this.articleService = _articleService;
             this.membershipService = _membershipService;
@@ -235,6 +232,72 @@
 			}
         }
 
+        public async Task AddGymToUserAsync(string gymId, string userId)
+        {
+            UserGym? userGym = await this.repository.All<UserGym>()
+                .Include(ug => ug.User)
+                   .ThenInclude(u => u.UsersEvents)
+                .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+
+            if (userGym == null)
+            {
+                userGym = new UserGym
+                {
+                    GymId = Guid.Parse(gymId),
+                    UserId = Guid.Parse(userId),
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                await this.repository.AddAsync(userGym);
+            }
+            else
+            {
+                if (userGym.IsDeleted == true)
+                {
+                    userGym.IsDeleted = false;
+                    userGym.DeletedOn = null;
+
+                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
+                    {
+                        userEvent.IsDeleted = false;
+                        userEvent.DeletedOn = null;
+                    }
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task RemoveGymFromUserAsync(string gymId, string userId)
+        {
+            UserGym userGym = await this.repository.All<UserGym>()
+                .Include(ug => ug.User)
+                    .ThenInclude(g => g.UsersEvents)
+                .FirstAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+
+            if (userGym == null)
+            {
+                throw new InvalidOperationException(ExceptionConstants.GymErrors.GymNotJoinedToBeLeft);
+            }
+            else
+            {
+                if (userGym.IsDeleted == false)
+                {
+                    userGym.IsDeleted = true;
+                    userGym.DeletedOn = DateTime.UtcNow;
+
+                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
+                    {
+                        userEvent.IsDeleted = true;
+                        userEvent.DeletedOn = DateTime.UtcNow;
+                    }
+                }
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
+
+
         public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null)
         {
             IQueryable<Gym> gymsAsQuery = this.repository
@@ -419,72 +482,7 @@
 
             return editGymInputModel;
 		} 
-        
-        public async Task AddGymToUserAsync(string gymId, string userId)
-        {
-            UserGym? userGym = await this.repository.All<UserGym>()
-                .Include(ug => ug.User)
-                   .ThenInclude(u => u.UsersEvents)
-                .FirstOrDefaultAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
-
-            if (userGym == null)
-            {
-                userGym = new UserGym
-                {
-                    GymId = Guid.Parse(gymId),
-                    UserId = Guid.Parse(userId),
-                    CreatedOn = DateTime.UtcNow
-                };
-
-                await this.repository.AddAsync(userGym);
-            }
-            else
-            {
-               if (userGym.IsDeleted == true)
-                {
-                    userGym.IsDeleted = false;
-                    userGym.DeletedOn = null;
-
-                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
-                    {
-                        userEvent.IsDeleted = false;
-                        userEvent.DeletedOn = null;
-                    }
-                }
-            }
-
-            await this.repository.SaveChangesAsync();
-        }
-
-        public async Task RemoveGymFromUserAsync(string gymId, string userId)
-        {
-            UserGym userGym = await this.repository.All<UserGym>()
-                .Include(ug => ug.User)
-                    .ThenInclude(g => g.UsersEvents)
-                .FirstAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
-
-            if (userGym == null)
-            {
-                throw new InvalidOperationException(ExceptionConstants.GymErrors.GymNotJoinedToBeLeft);
-            }
-            else
-            {
-                if (userGym.IsDeleted == false)
-                { 
-                    userGym.IsDeleted = true;
-                    userGym.DeletedOn = DateTime.UtcNow;
-
-                    foreach (UserEvent userEvent in userGym.User.UsersEvents)
-                    {
-                        userEvent.IsDeleted = true;
-                        userEvent.DeletedOn = DateTime.UtcNow;
-                    }
-                }
-            }
-
-            await this.repository.SaveChangesAsync();
-        }
-
+       
         public async Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllUserJoinedGymsQueryModel queryModel)
         {
             IQueryable<Gym> gymsAsQuery = this.repository
@@ -554,6 +552,23 @@
         {
             return await this.repository.AllNotDeletedReadonly<UserGym>()
                 .CountAsync(ug => ug.UserId == Guid.Parse(userId));
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId)
+        {
+            return await this.repository.AllNotDeletedReadonly<UserGym>()
+                .Where(ug => ug.GymId.ToString() == gymId && ug.IsSubscribedForArticles == true)
+                .Include(ug => ug.User)
+                .Select(ug => ug.User)
+                .ToArrayAsync();
+        }
+
+        public async Task<bool> CheckIfUserIsSubscribedForGymArticles(string userId, string gymId)
+        {
+            bool isSubscribedForArticles = await this.repository.AllNotDeletedReadonly<UserGym>()
+                .AnyAsync(ug => ug.UserId.ToString() == userId && ug.GymId.ToString() == gymId && ug.IsSubscribedForArticles == true);
+
+            return isSubscribedForArticles;
         }
 
         public async Task<bool> CheckIfGymExistsByIdAsync(string gymId)
