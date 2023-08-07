@@ -292,7 +292,7 @@
 
 				await this.notificationService.CreateNotificationAsync(
 					$"You edited an article for {gym.Name}.",
-					$"/Event/Details?articleId={articleId}",
+					$"/Article/Details?articleId={articleId}",
 					userId);
 
                 return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = editArticleInputModel.GymId });
