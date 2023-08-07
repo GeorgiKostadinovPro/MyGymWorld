@@ -28,7 +28,7 @@
         {
             string userId = this.GetUserId();
 
-            int count = await this.notificationService.GetAllNotificationsCountByUserIdAsync(userId);
+            int count = await this.notificationService.GetActiveNotificationsCountByUserIdAsync(userId);
 
             int totalPages = (int)Math.Ceiling((double)count / NotificationsPerPage);
             totalPages = totalPages == 0 ? 1 : totalPages;
@@ -38,7 +38,7 @@
                 UserId = userId,
                 CurrentPage = page,
                 PagesCount = totalPages,
-                Notifications = await this.notificationService.GetAllNotificationsByUserIdAsync(userId, (page - 1) * NotificationsPerPage, NotificationsPerPage)
+                Notifications = await this.notificationService.GetActiveNotificationsByUserIdAsync(userId, (page - 1) * NotificationsPerPage, NotificationsPerPage)
             };
 
             return this.View(viewModel);
@@ -66,7 +66,7 @@
         {
             try
             {
-                await this.notificationService.ReadNotificationByIdAsync(notificationId);
+                await this.notificationService.ReadNotificationAsync(notificationId);
 
                 this.TempData[SuccessMessage] = "You read notification!";
             }
