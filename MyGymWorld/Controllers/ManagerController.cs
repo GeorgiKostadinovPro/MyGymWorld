@@ -13,9 +13,14 @@
     {
         private readonly IManagerService managerService;
 
-        public ManagerController(IManagerService _managerService)
+        private readonly INotificationService notificationService;
+
+        public ManagerController(
+            IManagerService _managerService,
+            INotificationService _notificationService)
         {
             this.managerService = _managerService;
+            this.notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -82,6 +87,11 @@
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
 
                 this.TempData[InformationMessage] = "Manager will aprove you soon!";
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You send a request for manager!",
+                   "/User/UserProfile",
+                   this.GetUserId());
 
                 return this.RedirectToAction("Index", "Home");
             }

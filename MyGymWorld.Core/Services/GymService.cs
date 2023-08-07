@@ -238,8 +238,8 @@
         public async Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null)
         {
             IQueryable<Gym> gymsAsQuery = this.repository
-                .AllNotDeletedReadonly<Gym>()
-                .Where(g => g.ManagerId == managerId)
+                .AllReadonly<Gym>()
+                .Where(g => g.IsDeleted == isDeleted && g.ManagerId == managerId)
                 .OrderByDescending(g => g.CreatedOn)
                 .Skip(skip);
 
