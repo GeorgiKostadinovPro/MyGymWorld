@@ -150,8 +150,7 @@
             this.mockRepository
                 .Setup(x => x.AllNotDeleted<Comment>())
                 .Returns(this.dbContext.Comments
-                .Where(c => c.IsDeleted == false)
-                .AsQueryable());
+                .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -227,8 +226,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -270,8 +268,7 @@
             this.mockRepository
                 .Setup(x => x.AllNotDeletedReadonly<Comment>())
                 .Returns(this.dbContext.Comments
-                .Where(c => c.IsDeleted == false)
-                .AsQueryable());
+                .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -308,8 +305,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -345,8 +341,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -385,8 +380,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -428,8 +422,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -468,8 +461,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 
@@ -514,8 +506,7 @@
             this.mockRepository
                .Setup(x => x.AllNotDeletedReadonly<Comment>())
                .Returns(this.dbContext.Comments
-               .Where(c => c.IsDeleted == false)
-               .AsQueryable());
+               .Where(c => c.IsDeleted == false));
 
             var service = new CommentService(this.mapper, this.mockRepository.Object);
 

@@ -332,7 +332,9 @@
 
         public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
-            return await this.userManager.Users.ToArrayAsync();
+            return await this.repository
+                .AllNotDeletedReadonly<ApplicationUser>()
+                .ToArrayAsync();
         }
 
         public async Task<List<UserViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null)
