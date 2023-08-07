@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
-    using MyGymWorld.Data.Models;
     using MyGymWorld.Web.Areas.Administration.Controllers;
     using MyGymWorld.Web.ViewModels.Administration.Roles;
 
@@ -86,6 +85,8 @@
 
                 await this.roleService.CreateRoleAsync(createRoleInputModel);
 
+                this.TempData[SuccessMessage] = "You successfully created a role!";
+
                 await this.notificationService.CreateNotificationAsync(
                     $"You successfully created role: {createRoleInputModel.Name}",
                     "/Admin/Role/Active",
@@ -144,6 +145,9 @@
 
                 await this.roleService.EditRoleAsync(editRoleInputModel.Id, editRoleInputModel);
 
+
+                this.TempData[SuccessMessage] = "You successfully edited a role!";
+
                 await this.notificationService.CreateNotificationAsync(
                    $"You successfully edited role: {editRoleInputModel.Name}",
                    "/Admin/Role/Active",
@@ -170,6 +174,8 @@
                 }
 
                 await this.roleService.DeleteRoleAsync(roleId);
+
+                this.TempData[SuccessMessage] = "You successfully deleted a role!";
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You successfully deleted a role!",

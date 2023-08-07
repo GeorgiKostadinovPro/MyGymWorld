@@ -12,12 +12,15 @@
         private readonly IUserService userService;
         private readonly IManagerService managerService;
 
+        private readonly INotificationService notificationService;
         public ManagerController(
             IUserService _userService,
-            IManagerService _managerService)
+            IManagerService _managerService,
+            INotificationService _notificationService)
         {
             this.userService = _userService;
             this.managerService = _managerService;
+            this.notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -35,7 +38,7 @@
         [HttpGet]
         public async Task<IActionResult> RequestDetails(string managerId)
         {
-            ManagerRequestViewModel managerRequestViewModel = await this.managerService.GetSingleManagerRequestByManagerIdAsync(managerId);
+            ManagerRequestViewModel? managerRequestViewModel = await this.managerService.GetSingleManagerRequestByManagerIdAsync(managerId);
 
             return this.View(managerRequestViewModel);
         }
@@ -59,6 +62,16 @@
                 await this.managerService.ApproveManagerAsync(managerId, adminId);
 
                 this.TempData[SuccessMessage] = "You succesfully approved a manager request!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You successfully approved a manager!",
+                    "/Admin/Role/Active",
+                    this.GetUserId());
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You were approved for a manager!",
+                   "/User/UserProfile",
+                   manager.UserId.ToString());
             }
             catch (Exception ex)
             {
@@ -87,6 +100,16 @@
                 await this.managerService.RejectManagerAsync(managerId, adminId);
 
                 this.TempData[SuccessMessage] = "You succesfully rejected a Manager!";
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You successfully rejected a manager!",
+                    "/Admin/Role/Active",
+                    this.GetUserId());
+
+                await this.notificationService.CreateNotificationAsync(
+                    $"You were rejected for a manager!",
+                    "/User/UserProfile",
+                    manager.UserId.ToString());
             }
             catch (Exception ex)
             {

@@ -265,7 +265,7 @@
 					return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
-                Gym gym = await this.gymService.GetGymByIdAsync(editArticleInputModel.GymId);
+                Gym? gym = await this.gymService.GetGymByIdAsync(editArticleInputModel.GymId);
 
                 if (gym == null)
                 {
@@ -295,7 +295,7 @@
 					$"/Event/Details?articleId={articleId}",
 					userId);
 
-				return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = editArticleInputModel.GymId });
+                return this.RedirectToAction("AllForGym", "Article", new { area = "", gymId = editArticleInputModel.GymId });
 			}
 			catch (Exception)
 			{
@@ -339,7 +339,7 @@
 
                 await this.notificationService.CreateNotificationAsync(
                     $"You deleted an article!",
-                    $"/Article/AllForGym?gymId={articleId}",
+                    $"/Article/AllForGym?gymId={articleToDelete.GymId}",
                     userId);
 
                 return this.RedirectToActionPermanent("AllForGym", "Article", new { area = "", GymId = articleToDelete.GymId });

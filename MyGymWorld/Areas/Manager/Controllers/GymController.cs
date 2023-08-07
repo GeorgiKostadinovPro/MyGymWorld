@@ -272,6 +272,13 @@
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
                 await this.gymService.CreateGymAsync(user.ManagerId!.Value, createGymInputModel, gymLogoAndGalleryImagesInputModel);
+
+                this.TempData[SuccessMessage] = $"You successfully created a gym!";
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You created a gym.",
+                   "/Manager/Gym/Active?page=1",
+                   this.GetUserId());
             }
             catch (InvalidOperationException ex)
             {
@@ -466,6 +473,13 @@
                 }
 
                 await this.gymService.EditGymAsync(gymId, editGymInputModel, gymLogoAndGalleryImagesInputModel);
+
+                this.TempData[SuccessMessage] = $"You successfully edited {gym.Name}!";
+
+                await this.notificationService.CreateNotificationAsync(
+                   $"You edited {gym.Name}.",
+                   "/Manager/Gym/Active?page=1",
+                   this.GetUserId());
             }
             catch (InvalidOperationException ex)
             {

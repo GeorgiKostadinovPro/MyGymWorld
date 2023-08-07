@@ -83,6 +83,9 @@
 
                 await this.userService.DeleteUserAsync(userId);
 
+
+                this.TempData[SuccessMessage] = "You deleted a user!";
+
                 await this.notificationService.CreateNotificationAsync(
                     $"You succesfully deleted user: {userToDelete!.Email}!",
                     $"/Admin/User/All",
