@@ -51,10 +51,12 @@
             {
                 user.LastName = becomeManagerInputModel.LastName;
             }
-           
-            user.PhoneNumber = becomeManagerInputModel.PhoneNumber;
-            
 
+            if (user.PhoneNumber == null)
+            {
+                user.PhoneNumber = becomeManagerInputModel.PhoneNumber;
+            }
+            
             Manager manager = new Manager
             {
                 UserId = Guid.Parse(becomeManagerInputModel.Id),
@@ -83,7 +85,7 @@
         public async Task<Manager> ApproveManagerAsync(string managerId, string adminId)
         {
             Manager? manager = await this.repository.AllNotDeleted<Manager>()
-                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
+                .FirstOrDefaultAsync(m => m.Id.ToString() == managerId);
 
             if (manager == null)
             {
@@ -100,7 +102,7 @@
 
             await this.repository.SaveChangesAsync();
 
-            await this.roleService.AddRoleToUserAsync(manager.UserId.ToString(), "Manager");
+            await this.roleService.AddRoleToUserAsync(manager.UserId.ToString(), ApplicationRoleConstants.ManagerRoleName);
 
             await this.notificationService.CreateNotificationAsync(
                 "Your request was approved by the Admin! You are now a manager!",
@@ -178,58 +180,54 @@
                 .CountAsync(m => m.IsApproved == false && m.IsRejected == false);
         }
 
-        public async Task<ManagerRequestViewModel?> GetSingleManagerRequestByManagerIdAsync(string managerId)
+        public async Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId)
         {
             return await this.repository.AllNotDeletedReadonly<Manager>()
-                .Where(m => m.IsApproved == false && m.IsRejected == false && m.Id == Guid.Parse(managerId))
+                .Where(m => m.IsApproved == false && m.IsRejected == false && m.Id.ToString() == managerId)
                 .ProjectTo<ManagerRequestViewModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId)
-        {
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            BecomeManagerInputModel becomeManagerInputModel = this.mapper.Map<BecomeManagerInputModel>(user);
-            becomeManagerInputModel.IsApproved = false;
-            becomeManagerInputModel.ManagerTypes = this.GetAllManagerTypes();
-
-            return becomeManagerInputModel;
-        }
-
-        public async Task<bool> CheckIfUserIsAManagerAsync(string userId)
-        {
-            bool isManager = await this.repository.AllNotDeletedReadonly<Manager>()
-                .AnyAsync(m => m.UserId == Guid.Parse(userId));
-
-            return isManager;   
-        }
-
-        public async Task<bool> CheckIfManagerExistsByPhoneNumberAsync(string phoneNumber)
-        {
-            bool existsByPhoneNumber = await this.repository.AllNotDeletedReadonly<ApplicationUser>()
-                .AnyAsync(u => u.PhoneNumber == phoneNumber 
-                && u.ManagerId != null 
-                && u.Manager.IsApproved == true 
-                && u.Manager.IsRejected == false);
-
-            return existsByPhoneNumber;
+                .FirstAsync();
         }
 
         public async Task<Manager?> GetManagerForApprovalAndRejectionAsync(string managerId)
         {
-            Manager? manager = await this.repository.AllNotDeleted<Manager>()
-                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(managerId));
+            Manager? manager = await this.repository.AllNotDeletedReadonly<Manager>()
+                .FirstOrDefaultAsync(m => m.Id.ToString() == managerId);
 
             return manager;
         }
 
         public async Task<Manager?> GetManagerByUserIdAsync(string userId)
         {
-            Manager? manager = await this.repository.AllNotDeleted<Manager>()
-                .FirstOrDefaultAsync(m => m.UserId == Guid.Parse(userId));
+            Manager? manager = await this.repository.AllNotDeletedReadonly<Manager>()
+                .FirstOrDefaultAsync(m => m.UserId.ToString() == userId);
 
             return manager;
+        }
+        
+        public async Task<Manager?> GetManagerByIdAsync(string managerId)
+        {
+            Manager? manager = await this.repository.AllNotDeletedReadonly<Manager>()
+                .FirstOrDefaultAsync(m => m.Id.ToString() == managerId);
+
+            return manager;
+        }
+
+        public async Task<bool> CheckIfUserIsAManagerAsync(string userId)
+        {
+            bool isManager = await this.repository.AllNotDeletedReadonly<Manager>()
+                .AnyAsync(m => m.UserId.ToString() == userId);
+
+            return isManager;
+        }
+
+        public async Task<bool> CheckIfManagerExistsByPhoneNumberAsync(string phoneNumber)
+        {
+            bool existsByPhoneNumber = await this.repository.AllNotDeletedReadonly<Manager>()
+                .AnyAsync(m => m.User.PhoneNumber == phoneNumber
+                && m.IsApproved == true
+                && m.IsRejected == false);
+
+            return existsByPhoneNumber;
         }
 
         public IEnumerable<string> GetAllManagerTypes()

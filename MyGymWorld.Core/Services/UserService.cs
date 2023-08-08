@@ -8,10 +8,13 @@
     using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Data.Repositories;
     using MyGymWorld.Web.ViewModels.Administration.Users;
+    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Users;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -396,6 +399,19 @@
             }
 
             return allUsersViewModel;
+        }
+
+        public async Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId)
+        {
+            ApplicationUser user = await this.GetUserByIdAsync(userId);
+
+            BecomeManagerInputModel becomeManagerInputModel = this.mapper.Map<BecomeManagerInputModel>(user);
+            becomeManagerInputModel.IsApproved = false;
+            becomeManagerInputModel.ManagerTypes = Enum.GetValues(typeof(ManagerType)).Cast<ManagerType>()
+                                                       .Select(mt => mt.ToString())
+                                                       .ToImmutableArray();
+
+            return becomeManagerInputModel;
         }
     }
 }

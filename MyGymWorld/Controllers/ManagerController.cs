@@ -11,16 +11,15 @@
 
     public class ManagerController : BaseController
     {
+        private readonly IUserService userService;
         private readonly IManagerService managerService;
 
-        private readonly INotificationService notificationService;
-
         public ManagerController(
-            IManagerService _managerService,
-            INotificationService _notificationService)
+            IUserService _userService,
+            IManagerService _managerService)
         {
+            this.userService = _userService;
             this.managerService = _managerService;
-            this.notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -44,7 +43,7 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
-            BecomeManagerInputModel becomeManagerInputModel = await this.managerService.GetUserToBecomeManagerByIdAsync(userId);
+            BecomeManagerInputModel becomeManagerInputModel = await this.userService.GetUserToBecomeManagerByIdAsync(userId);
 
             return this.View(becomeManagerInputModel);
         }
@@ -87,11 +86,6 @@
                 await this.managerService.CreateManagerAsync(id, becomeManagerInputModel);
 
                 this.TempData[InformationMessage] = "Manager will aprove you soon!";
-
-                await this.notificationService.CreateNotificationAsync(
-                   $"You send a request for manager!",
-                   "/User/UserProfile",
-                   this.GetUserId());
 
                 return this.RedirectToAction("Index", "Home");
             }
