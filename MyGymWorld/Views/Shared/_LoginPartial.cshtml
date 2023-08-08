@@ -13,23 +13,27 @@
 {
         if (User.IsInRole("Administrator"))
         {
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a asp-area="Admin" asp-controller="Manager" asp-action="Requests" class="notification">
                     <span>Requests</span>
                     <span class="badge">@(await this.managerService.GetAllNotApprovedManagerRequestsCountAsync())</span>
                 </a>
             </li>
         }
-        <li class="nav-item active">
+        <li class="nav-item">
             <a asp-area="" asp-controller="Notification" asp-action="Index" class="notification">
-                <span>Inbox</span>
-                <span class="badge">@(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))</span>
+                <span>
+                    <i class="fas fa-bell"></i>
+                </span>
+                <span class="badge">
+                    @(await this.notificationService.GetUnReadNotificationsCountByUserIdAsync(this.UserManager.GetUserId(this.User)))
+                    </span>
             </a>
         </li>
-    <li class="nav-item active">
+    <li class="nav-item" style="display: flex; align-items: center;">
         <a  class="nav-link text-light" asp-area="" asp-controller="User" asp-action="UserProfile">My Profile</a>
     </li>
-        <li class="nav-item active" style="text-align: right">
+        <li class="nav-item" style="display: flex; align-items: center; text-align: right;">
         <form  class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-light">Logout</button>
         </form>

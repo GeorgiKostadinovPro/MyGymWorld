@@ -22,13 +22,29 @@
 
 			Address address = await dbContext.Addresses.FirstAsync(a => a.Name == "bul. Cherni vrah");
 
+			ICollection<Notification> notifications = new HashSet<Notification>
+			{
+				new Notification
+				{
+					Content = "This is a test notification!",
+					CreatedOn = DateTime.UtcNow
+				},
+				new Notification
+				{
+					Content = "This is a read notification!",
+					IsRead = true,
+					CreatedOn = DateTime.UtcNow
+				}
+			};
+
 			ApplicationUser admin = new ApplicationUser
 			{
 				UserName = "Admin",
 				PasswordHash = "AdminPass123.",
 				Email = "mgmwrlddmnccnt@gmail.com",
 				EmailConfirmed = true,
-				CreatedOn = DateTime.UtcNow
+				CreatedOn = DateTime.UtcNow,
+				Notifications = notifications
 			};
 
 			ApplicationUser manager = new ApplicationUser
@@ -41,8 +57,9 @@
 				PasswordHash = "ManagerPass123.",
 				Email = "manager@gmail.com",
 				EmailConfirmed = true,
-				CreatedOn = DateTime.UtcNow
-			};
+				CreatedOn = DateTime.UtcNow,
+                Notifications = notifications
+            };
 
 			ApplicationUser user = new ApplicationUser
 			{
@@ -50,8 +67,9 @@
 				PasswordHash = "UserPass123.",
 				Email = "user@gmail.com",
 				EmailConfirmed = true,
-				CreatedOn = DateTime.UtcNow
-			};
+				CreatedOn = DateTime.UtcNow,
+                Notifications = notifications
+            };
 
 			await userManager.CreateAsync(admin, admin.PasswordHash);
 			await userManager.CreateAsync(manager, manager.PasswordHash);
