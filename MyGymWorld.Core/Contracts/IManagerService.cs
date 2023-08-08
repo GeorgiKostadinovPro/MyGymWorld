@@ -17,18 +17,18 @@
 
         Task<int> GetAllNotApprovedManagerRequestsCountAsync();
 
-        Task<ManagerRequestViewModel?> GetSingleManagerRequestByManagerIdAsync(string managerId);
+        Task<ManagerRequestViewModel> GetSingleManagerRequestByManagerIdAsync(string managerId);
 
-        Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId);
+        Task<Manager?> GetManagerForApprovalAndRejectionAsync(string managerId);
+
+        Task<Manager?> GetManagerByUserIdAsync(string userId);
+
+        Task<Manager?> GetManagerByIdAsync(string managerId);
 
         Task<bool> CheckIfUserIsAManagerAsync(string userId);
 
         Task<bool> CheckIfManagerExistsByPhoneNumberAsync(string phoneNumber);
 
         IEnumerable<string> GetAllManagerTypes();
-
-        Task<Manager?> GetManagerForApprovalAndRejectionAsync(string managerId);
-
-        Task<Manager?> GetManagerByUserIdAsync(string userId);
     }  
 }

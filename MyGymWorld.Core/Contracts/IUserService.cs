@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Identity;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Administration.Users;
+    using MyGymWorld.Web.ViewModels.Managers;
     using MyGymWorld.Web.ViewModels.Users;
 
     public interface IUserService
@@ -35,6 +36,8 @@
         Task<int> GetActiveOrDeletedUsersCountAsync(bool isDeleted);
 
         Task<ApplicationUser> GetAdministratorAsync();
+
+        Task<BecomeManagerInputModel> GetUserToBecomeManagerByIdAsync(string userId);
 
         Task<IEnumerable<ApplicationUser>> GetAllAsync();
 

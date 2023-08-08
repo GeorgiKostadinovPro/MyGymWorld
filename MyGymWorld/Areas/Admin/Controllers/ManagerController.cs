@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Server.IIS.Core;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
     using MyGymWorld.Web.ViewModels.Administration.Managers;
@@ -12,7 +13,6 @@
         private readonly IUserService userService;
         private readonly IManagerService managerService;
 
-        private readonly INotificationService notificationService;
         public ManagerController(
             IUserService _userService,
             IManagerService _managerService,
@@ -20,7 +20,6 @@
         {
             this.userService = _userService;
             this.managerService = _managerService;
-            this.notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -38,9 +37,27 @@
         [HttpGet]
         public async Task<IActionResult> RequestDetails(string managerId)
         {
-            ManagerRequestViewModel? managerRequestViewModel = await this.managerService.GetSingleManagerRequestByManagerIdAsync(managerId);
+            try
+            {
+                Manager? manager = await this.managerService.GetManagerByIdAsync(managerId);
 
-            return this.View(managerRequestViewModel);
+                if (manager == null)
+                {
+                    this.TempData[ErrorMessage] = "Such manager does NOT exist!";
+
+                    return this.RedirectToAction(nameof(Requests), new { area = "Admin" });
+                }
+
+                ManagerRequestViewModel managerRequestViewModel = await this.managerService.GetSingleManagerRequestByManagerIdAsync(managerId);
+
+                return this.View(managerRequestViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction(nameof(Requests), new { area = "Admin" });
+            }
         }
 
         [HttpGet]
@@ -62,16 +79,6 @@
                 await this.managerService.ApproveManagerAsync(managerId, adminId);
 
                 this.TempData[SuccessMessage] = "You succesfully approved a manager request!";
-
-                await this.notificationService.CreateNotificationAsync(
-                    $"You successfully approved a manager!",
-                    "/Admin/Role/Active",
-                    this.GetUserId());
-
-                await this.notificationService.CreateNotificationAsync(
-                   $"You were approved for a manager!",
-                   "/User/UserProfile",
-                   manager.UserId.ToString());
             }
             catch (Exception ex)
             {
@@ -100,16 +107,6 @@
                 await this.managerService.RejectManagerAsync(managerId, adminId);
 
                 this.TempData[SuccessMessage] = "You succesfully rejected a Manager!";
-
-                await this.notificationService.CreateNotificationAsync(
-                    $"You successfully rejected a manager!",
-                    "/Admin/Role/Active",
-                    this.GetUserId());
-
-                await this.notificationService.CreateNotificationAsync(
-                    $"You were rejected for a manager!",
-                    "/User/UserProfile",
-                    manager.UserId.ToString());
             }
             catch (Exception ex)
             {
