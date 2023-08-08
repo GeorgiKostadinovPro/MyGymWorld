@@ -3,7 +3,7 @@
     public enum EventType
     {
         Conference = 0,
-        Bussiness = 1,
+        Business = 1,
         Charity = 2,
         Training = 3
     }

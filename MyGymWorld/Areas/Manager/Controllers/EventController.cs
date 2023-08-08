@@ -274,6 +274,15 @@
                     }
                 }
 
+                bool doesEventExists = await this.eventService.CheckIfEventExistsByIdAsync(eventId);
+
+                if (doesEventExists == false)
+                {
+                    this.TempData[ErrorMessage] = "Such event does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
                 if (editEventInputModel.StartDate >= editEventInputModel.EndDate)
                 {
                     this.ModelState.AddModelError("StartDate", "The start date should be earlier than the end date!");
@@ -292,7 +301,7 @@
 
                 editEventInputModel.Description = new HtmlSanitizer().Sanitize(editEventInputModel.Description);
 
-               await this.eventService.EditEventAsync(eventId, editEventInputModel);
+                await this.eventService.EditEventAsync(eventId, editEventInputModel);
 
                 this.TempData[SuccessMessage] = "You edited an event!";
 

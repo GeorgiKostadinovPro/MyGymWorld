@@ -43,7 +43,7 @@
         {
             Event? eventToEdit = await this.repository
                 .AllNotDeleted<Event>()
-                .FirstOrDefaultAsync(e => e.Id == Guid.Parse(eventId));
+                .FirstOrDefaultAsync(e => e.Id.ToString() == eventId);
 
             if (eventToEdit != null)
             {
@@ -61,7 +61,7 @@
 		public async Task DeleteEventAsync(string eventId)
 		{
             Event? eventToDelete = await this.repository.AllNotDeleted<Event>()
-                .Where(e => e.Id == Guid.Parse(eventId))
+                .Where(e => e.Id.ToString() == eventId)
                 .Include(e => e.UsersEvents)
                 .FirstOrDefaultAsync();
 
@@ -88,7 +88,7 @@
         {
             UserEvent? userEvent = await this.repository
                 .All<UserEvent>()
-                .FirstOrDefaultAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+                .FirstOrDefaultAsync(ue => ue.EventId.ToString() == eventId && ue.UserId.ToString() == userId);
 
             if (userEvent == null)
             {
@@ -117,22 +117,21 @@
         {
 			UserEvent? userEvent = await this.repository
 			   .All<UserEvent>()
-			   .FirstOrDefaultAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+			   .FirstOrDefaultAsync(ue => ue.EventId.ToString() == eventId && ue.UserId.ToString() == userId);
 
             if (userEvent == null)
             {
 				throw new InvalidOperationException(ExceptionConstants.EventErrors.EventNotJoinedToBeLeft);
 			}
-            else
+            
+            if (userEvent.IsDeleted == false)
             {
-                if (userEvent.IsDeleted == false)
-                {
-                    userEvent.IsDeleted = true;
-                    userEvent.DeletedOn = DateTime.UtcNow;
-                }
+            
+                userEvent.IsDeleted = true;
+                userEvent.DeletedOn = DateTime.UtcNow;
+                
+                await this.repository.SaveChangesAsync();
             }
-
-            await this.repository.SaveChangesAsync();
 		}
 
         public async Task<IEnumerable<EventViewModel>> GetAllActiveEventsFilteredAndPagedByGymIdAsync(AllEventsForGymQueryModel queryModel)
@@ -195,7 +194,7 @@
         public async Task<int> GetAllActiveEventsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllNotDeletedReadonly<Event>()
-                .CountAsync(e => e.GymId == Guid.Parse(gymId));
+                .CountAsync(e => e.GymId.ToString() == gymId);
         }
 
         public async Task<IEnumerable<EventViewModel>> GetAllUserJoinedEventsFilteredAndPagedAsync(string userId, AllUserJoinedEventsQueryModel queryModel)
@@ -258,14 +257,14 @@
         public async Task<int> GetAllUserJoinedEventsCountAsync(string userId)
         {
             return await this.repository.AllNotDeletedReadonly<UserEvent>()
-                .CountAsync(ue => ue.UserId == Guid.Parse(userId));
+                .CountAsync(ue => ue.UserId.ToString() == userId);
         }
 
         public async Task<EventDetailsViewModel> GetEventDetailsByIdAsync(string eventId)
         {
             Event eventToDisplay = await this.repository
                    .AllNotDeletedReadonly<Event>()
-                   .Where(e => e.Id == Guid.Parse(eventId))
+                   .Where(e => e.Id.ToString() == eventId)
                    .Include(e => e.Gym)
                       .ThenInclude(g => g.Manager)
                       .ThenInclude(m => m.User)
@@ -279,8 +278,8 @@
         public async Task<EditEventInputModel> GetEventForEditByIdAsync(string eventId)
         {
             Event eventToEdit = await this.repository.AllNotDeletedReadonly<Event>()
-                .FirstAsync(e => e.Id == Guid.Parse(eventId));
-
+                .FirstAsync(e => e.Id.ToString() == eventId);
+             
             EditEventInputModel editEventInputModel = this.mapper.Map<EditEventInputModel>(eventToEdit);
 
             return editEventInputModel;
@@ -290,14 +289,14 @@
         {
             return await this.repository
                 .AllNotDeletedReadonly<Event>()
-                .FirstOrDefaultAsync(e => e.Id == Guid.Parse(eventId));
+                .FirstOrDefaultAsync(e => e.Id.ToString() == eventId);
         }
 
         public async Task<bool> CheckIfEventExistsByIdAsync(string eventId)
         {
             return await this.repository
                 .AllNotDeletedReadonly<Event>()
-                .AnyAsync(e => e.Id == Guid.Parse(eventId));
+                .AnyAsync(e => e.Id.ToString() == eventId);
         }
 
         public async Task<bool> CheckIfUserHasAlreadyJoinedEventByIdAsync(string eventId, string userId)
