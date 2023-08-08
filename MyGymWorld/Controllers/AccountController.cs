@@ -18,17 +18,18 @@
         private readonly IAccountService accountService;
         private readonly IUserService userService;
 
-        private readonly IEmailSenderService emailSenderService;
+        private readonly INotificationService notificationService;
 
         public AccountController(
             IAccountService _accountService, 
             IUserService _userService,
-            IEmailSenderService _emailSenderService)
+            IEmailSenderService _emailSenderService,
+            INotificationService _notificationService)
         {
             this.accountService = _accountService;
             this.userService = _userService;
 
-            this.emailSenderService = _emailSenderService;
+            this.notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -154,8 +155,10 @@
                     throw new InvalidOperationException(ExceptionConstants.LoginUser.InvalidLoginAttempt);
                 }
 
-                //await this.emailSenderService.SendEmailAsync(user.Email, "Successful login", "<h1>Hi, new login to your account was noticed!</h1>" +
-                //$"<p>New login to your account at {DateTime.UtcNow}</p>");
+                await this.notificationService.CreateNotificationAsync(
+                    $"New login to your account at {DateTime.UtcNow.ToString("dd MMMM yyyy H:mm tt")}",
+                    "/User/UserProfile",
+                    user.Id.ToString());
 
                 return this.RedirectToAction("Index", "Home");
             }
