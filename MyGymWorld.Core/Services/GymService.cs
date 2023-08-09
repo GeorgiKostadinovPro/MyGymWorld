@@ -551,7 +551,7 @@
         public async Task<int> GetAllUserJoinedGymsCountAsync(string userId)
         {
             return await this.repository.AllNotDeletedReadonly<UserGym>()
-                .CountAsync(ug => ug.UserId == Guid.Parse(userId));
+                .CountAsync(ug => ug.UserId.ToString() == userId);
         }
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersWhoAreSubscribedForGymArticlesAsync(string gymId)
@@ -574,25 +574,25 @@
         public async Task<bool> CheckIfGymExistsByIdAsync(string gymId)
 		{
             return await this.repository.AllNotDeletedReadonly<Gym>()
-                .AnyAsync(g => g.Id == Guid.Parse(gymId));
+                .AnyAsync(g => g.Id.ToString() == gymId);
 		}
 
         public async Task<bool> CheckIfGymIsManagedByManagerAsync(string gymId, string mananerId)
         {
             return await this.repository.AllNotDeletedReadonly<Gym>()
-                .AnyAsync(g => g.Id == Guid.Parse(gymId) && g.ManagerId == Guid.Parse(mananerId));
+                .AnyAsync(g => g.Id.ToString() == gymId && g.ManagerId.ToString() == mananerId);
         }
 
         public async Task<bool> CheckIfGymIsJoinedByUserAsync(string gymId, string userId)
         {
             return await this.repository.AllNotDeletedReadonly<UserGym>()
-                .AnyAsync(ug => ug.GymId == Guid.Parse(gymId) && ug.UserId == Guid.Parse(userId));
+                .AnyAsync(ug => ug.GymId.ToString() == gymId && ug.UserId.ToString() == userId);
         }
 
         public async Task<Gym?> GetGymByIdAsync(string gymId)
         {
             return await this.repository.AllNotDeletedReadonly<Gym>()
-                .FirstOrDefaultAsync(g => g.Id == Guid.Parse(gymId));
+                .FirstOrDefaultAsync(g => g.Id.ToString() == gymId);
         }
 
         public IEnumerable<string> GetAllGymTypes()

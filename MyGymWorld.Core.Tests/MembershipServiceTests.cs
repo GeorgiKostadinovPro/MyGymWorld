@@ -1574,7 +1574,7 @@
 
 
         [Test]
-        public async Task GetAllMembershipTypesShouldWorkProperly()
+        public void GetAllMembershipTypesShouldWorkProperly()
         {
             var service = new MembershipService(this.mapper, this.mockRepository.Object, this.qrCodeServiceMock.Object);
 
