@@ -94,11 +94,11 @@
         {
             UserMembership? userMembership = await this.repository
                 .All<UserMembership>()
-                .FirstOrDefaultAsync(um => um.MembershipId == Guid.Parse(membershipId) && um.UserId == Guid.Parse(userId));
+                .FirstOrDefaultAsync(um => um.MembershipId.ToString() == membershipId && um.UserId.ToString() == userId);
 
             Membership membership = await this.repository
-                .All<Membership>()
-                .FirstAsync(m => m.IsDeleted == false && m.Id == Guid.Parse(membershipId));
+                .AllNotDeletedReadonly<Membership>()
+                .FirstAsync(m => m.Id.ToString() == membershipId);
 
             DateTime validTo = DateTime.UtcNow;
 
@@ -151,11 +151,9 @@
         {
             IQueryable<Membership> membershipsAsQuery =
                this.repository.AllNotDeletedReadonly<UserMembership>()
-                              .Where(um => um.UserId == Guid.Parse(userId))
+                              .Where(um => um.UserId.ToString() == userId)
                               .Include(um => um.Membership)
-                                  .ThenInclude(m => m.Gym)
-                                  .ThenInclude(g => g.Manager)
-                                  .ThenInclude(ma => ma.User)
+                                   .ThenInclude(m => m.Gym)
                               .Select(um => um.Membership);
 
             if (!string.IsNullOrWhiteSpace(queryModel.MembershipType))
@@ -206,7 +204,7 @@
         {
             IQueryable<Membership> membershipsAsQuery =
                 this.repository.AllNotDeletedReadonly<Membership>()
-                               .Where(e => e.GymId == Guid.Parse(queryModel.GymId))
+                               .Where(e => e.GymId.ToString() == queryModel.GymId)
                                .Include(e => e.Gym);
 
             if (!string.IsNullOrWhiteSpace(queryModel.MembershipType))
@@ -255,12 +253,12 @@
             return eventsToDisplay;
         }
 
-        public async Task<List<PayedMembershipViewModel>> GetPaymentsByGymIdForManagementAsync(string gymId, int skip = 0, int? take = null)
+        public async Task<List<PayedMembershipViewModel>> GetActivePaymentsByGymIdForManagementAsync(string gymId, int skip = 0, int? take = null)
         {
 			IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllNotDeletedReadonly<UserMembership>()
 			   .Include(um => um.Membership)
 			   .Include(um => um.User)
-			   .Where(um => um.Membership.GymId == Guid.Parse(gymId))
+			   .Where(um => um.Membership.GymId.ToString() == gymId)
 			   .OrderByDescending(um => um.CreatedOn)
 			   .Skip(skip);
 
@@ -274,12 +272,12 @@
 						   .ToListAsync();
 		}
 
-        public async Task<List<PayedMembershipViewModel>> GetPaymentsByUserIdAsync(string userId, int skip = 0, int? take = null)
+        public async Task<List<PayedMembershipViewModel>> GetActivePaymentsByUserIdAsync(string userId, int skip = 0, int? take = null)
         {
 			IQueryable<UserMembership> userMembershipsAsQuery = this.repository.AllNotDeletedReadonly<UserMembership>()
 			   .Include(um => um.Membership)
 			   .Include(um => um.User)
-			   .Where(um => um.UserId == Guid.Parse(userId))
+			   .Where(um => um.UserId.ToString() == userId)
 			   .OrderByDescending(um => um.CreatedOn)
 			   .Skip(skip);
 
@@ -297,19 +295,19 @@
         {
             return await this.repository.AllNotDeletedReadonly<UserMembership>()
                                         .Include(um => um.Membership)
-                                        .CountAsync(um => um.Membership.IsDeleted == false && um.Membership.GymId == Guid.Parse(gymId));
+                                        .CountAsync(um => um.Membership.IsDeleted == false && um.Membership.GymId.ToString() == gymId);
         }
 
         public async Task<int> GetAllActiveMembershipsCountByGymIdAsync(string gymId)
         {
             return await this.repository.AllNotDeletedReadonly<Membership>()
-                .CountAsync(m => m.GymId == Guid.Parse(gymId));
+                .CountAsync(m => m.GymId.ToString() == gymId);
         }
         
-        public async Task<int> GetAllUserMembershipsCountByUserIdAsync(string userId)
+        public async Task<int> GetAllActiveUserMembershipsCountByUserIdAsync(string userId)
         {
             return await this.repository.AllNotDeletedReadonly<UserMembership>()
-                .CountAsync(um => um.UserId == Guid.Parse(userId));
+                .CountAsync(um => um.UserId.ToString() == userId);
         }
 
         public async Task<MembershipDetailsViewModel> GetMembershipDetailsByIdAsync(string membershipId)
