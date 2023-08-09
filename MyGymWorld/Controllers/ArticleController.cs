@@ -76,18 +76,27 @@
         [HttpGet]
         public async Task<IActionResult> Details(string articleId)
         {
-			bool doesArticleExist = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
+            try
+            {
+                bool doesArticleExist = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
 
-			if (doesArticleExist == false)
-			{
-				this.TempData[ErrorMessage] = "Such article does NOT exist!";
+                if (doesArticleExist == false)
+                {
+                    this.TempData[ErrorMessage] = "Such article does NOT exist!";
 
-				return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
-			}
+                    return this.RedirectToAction("Error", "Home", new { area = "", statusCode = 404 });
+                }
 
-			ArticleDetailsViewModel articleDetailsViewModel = await this.articleService.GetArticleDetailsByIdAsync(articleId);
+                ArticleDetailsViewModel articleDetailsViewModel = await this.articleService.GetArticleDetailsByIdAsync(articleId);
 
-			return this.View(articleDetailsViewModel);
+                return this.View(articleDetailsViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
 		}
 
         [HttpGet]

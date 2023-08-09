@@ -284,6 +284,15 @@
                     }
 				}
 
+                bool doesArticleExist = await this.articleService.CheckIfArticleExistsByIdAsync(articleId);
+
+                if (doesArticleExist == false)
+                {
+                    this.TempData[ErrorMessage] = "Such article does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
                 editArticleInputModel.Content = new HtmlSanitizer().Sanitize(editArticleInputModel.Content);
 
 				await this.articleService.EditArticleAsync(articleId, editArticleInputModel);

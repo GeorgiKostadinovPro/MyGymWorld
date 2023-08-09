@@ -145,7 +145,6 @@
 
                 await this.roleService.EditRoleAsync(editRoleInputModel.Id, editRoleInputModel);
 
-
                 this.TempData[SuccessMessage] = "You successfully edited a role!";
 
                 await this.notificationService.CreateNotificationAsync(
