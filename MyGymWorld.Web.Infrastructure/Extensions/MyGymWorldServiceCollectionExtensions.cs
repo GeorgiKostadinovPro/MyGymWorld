@@ -41,13 +41,16 @@
             services.AddSingleton(cloudinary);
             services.AddScoped<ICloudinaryService, CloudinaryService>();
 
+            // QrCoder services
+            services.AddScoped<IQRCoderService, QRCoderService>();
+
             // Authentication services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IManagerService, ManagerService>();
 
-            // standard services
+            // Standard services
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IGymService, GymService>();
             services.AddScoped<ILikeService, LikeService>();
@@ -56,8 +59,6 @@
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IMembershipService, MembershipService>();
-
-            services.AddScoped<IQRCoderService, QRCoderService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICountryService, CountryService>();
