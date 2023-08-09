@@ -32,9 +32,9 @@
         
         Task<bool> CheckIfEventExistsByIdAsync(string eventId);
 
-		Task<bool> CheckIfUserHasAlreadyJoinedEventByIdAsync(string eventId, string userId);
+		Task<bool> CheckIfUserHasAlreadyJoinedEventAsync(string eventId, string userId);
 
-        Task<bool> CheckIfUserHasAlreadyLeftEventByIdAsync(string eventId, string userId);
+        Task<bool> CheckIfUserHasAlreadyLeftEventAsync(string eventId, string userId);
 
         Task<int> GetAllActiveEventsCountAsync();
 

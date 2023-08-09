@@ -11,8 +11,8 @@
     using MyGymWorld.Core.Services;
     using MyGymWorld.Data.Models.Enums;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Logging;
     using MyGymWorld.Common;
+    using MyGymWorld.Web.ViewModels.Events;
 
     [TestFixture]
     public class EventServiceTests
@@ -512,6 +512,90 @@
         }
 
         [Test]
+        public async Task GetEventDetailsByIdAsyncShouldWorkProperly()
+        {
+            var userId = "132fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var managerId = "232fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymId = "332fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var eventId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Users.AddAsync(new ApplicationUser
+            {
+                Id = Guid.Parse(userId),
+                Email = "user@gmail.com",
+                UserName = "Test",
+                FirstName = "User",
+                LastName = "User",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Managers.AddAsync(new Manager 
+            { 
+                Id = Guid.Parse(managerId),
+                UserId = Guid.Parse(userId),
+                IsDeleted = false
+            });
+
+            await this.dbContext.Gyms.AddAsync(new Gym
+            {
+                Id = Guid.Parse(gymId),
+                ManagerId = Guid.Parse(managerId),
+                Email = "test@gmail.com",
+                PhoneNumber = "1234567890",
+                Name = "Gym Test",
+                Description = "Gym Test",
+                LogoUri = "test",
+                LogoPublicId = "test",
+                WebsiteUrl = "test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Events.AddRangeAsync(new HashSet<Event>
+            {
+                new Event
+                {
+                    Id = Guid.Parse(eventId),
+                    GymId = Guid.Parse(gymId),
+                    Name = "Test 1",
+                    Description = "Test 1",
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddHours(1),
+                    EventType = EventType.Business,
+                    CreatedOn = DateTime.UtcNow,
+                    IsDeleted = false
+                },
+                new Event
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Test 2",
+                    Description = "Test 2",
+                    IsDeleted = false,
+                },
+                new Event
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Test 3",
+                    Description = "Test 3",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Event>())
+                .Returns(this.dbContext.Events
+                .Where(e => e.IsDeleted == false));
+
+            var service = new EventService(this.mapper, this.mockRepository.Object);
+
+            var result = await service.GetEventDetailsByIdAsync(eventId);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<EventDetailsViewModel>(result);
+        }
+
+        [Test]
         public async Task GetEventForEditByIdAsyncShouldWorkProperly() 
         {
             var eventId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
@@ -725,6 +809,158 @@
             var service = new EventService(this.mapper, this.mockRepository.Object);
 
             var result = await service.CheckIfEventExistsByIdAsync(eventId);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task CheckIfUserHasAlreadyJoinedEvenAsyncShouldReturnTrueWhenUserHasJoinedEvent()
+        {
+            var userId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var eventId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.UsersEvents.AddRangeAsync(new HashSet<UserEvent>
+            {
+                new UserEvent
+                {
+                    UserId = Guid.Parse(userId),
+                    EventId = Guid.Parse(eventId),
+                    IsDeleted = false
+                },
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = false,
+                },
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = true,
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+
+            this.mockRepository
+                 .Setup(x => x.AllNotDeletedReadonly<UserEvent>())
+                 .Returns(this.dbContext.UsersEvents
+                 .Where(x => x.IsDeleted == false));
+
+            var service = new EventService(this.mapper, this.mockRepository.Object);
+
+            var result = await service.CheckIfUserHasAlreadyJoinedEventAsync(eventId, userId);
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public async Task CheckIfUserHasAlreadyJoinedEvenAsyncShouldReturnFalseWhenUserHasNotJoinedEvent()
+        {
+            var userId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var eventId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.UsersEvents.AddRangeAsync(new HashSet<UserEvent>
+            {
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = false
+                },
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = true,
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+
+            this.mockRepository
+                 .Setup(x => x.AllNotDeletedReadonly<UserEvent>())
+                 .Returns(this.dbContext.UsersEvents
+                 .Where(x => x.IsDeleted == false));
+
+            var service = new EventService(this.mapper, this.mockRepository.Object);
+
+            var result = await service.CheckIfUserHasAlreadyJoinedEventAsync(eventId, userId);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task CheckIfUserHasAlreadyLeftEvenAsyncShouldReturnTrueWhenUserHasLeftEvent()
+        {
+            var userId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var eventId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.UsersEvents.AddRangeAsync(new HashSet<UserEvent>
+            {
+                new UserEvent
+                {
+                    UserId = Guid.Parse(userId),
+                    EventId = Guid.Parse(eventId),
+                    IsDeleted = true
+                },
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = false,
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                 .Setup(x => x.All<UserEvent>())
+                 .Returns(this.dbContext.UsersEvents
+                 .AsQueryable());
+
+            var service = new EventService(this.mapper, this.mockRepository.Object);
+
+            var result = await service.CheckIfUserHasAlreadyLeftEventAsync(eventId, userId);
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public async Task CheckIfUserHasAlreadyLeftEvenAsyncShouldReturnFalseWhenUserHasNotLeftEvent()
+        {
+            var userId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var eventId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.UsersEvents.AddRangeAsync(new HashSet<UserEvent>
+            {
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = true
+                },
+                new UserEvent
+                {
+                    UserId = Guid.NewGuid(),
+                    EventId = Guid.NewGuid(),
+                    IsDeleted = false,
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                 .Setup(x => x.All<UserEvent>())
+                 .Returns(this.dbContext.UsersEvents
+                 .AsQueryable());
+
+            var service = new EventService(this.mapper, this.mockRepository.Object);
+
+            var result = await service.CheckIfUserHasAlreadyLeftEventAsync(eventId, userId);
 
             Assert.IsFalse(result);
         }
