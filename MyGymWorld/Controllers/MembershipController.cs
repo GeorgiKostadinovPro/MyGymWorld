@@ -33,18 +33,18 @@
 		[HttpGet]
 		public async Task<IActionResult> Buy(string membershipId)
 		{
-			Membership? membershipToBuy = await this.membershipService.GetMembershipByIdAsync(membershipId);
-
-			if (membershipToBuy == null)
-			{
-				this.TempData[ErrorMessage] = "Such membership does NOT exist!";
-
-				return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
-			}
-
 			try
 			{
-				Gym? gym = await this.gymService.GetGymByIdAsync(membershipToBuy.GymId.ToString());
+                Membership? membershipToBuy = await this.membershipService.GetMembershipByIdAsync(membershipId);
+
+                if (membershipToBuy == null)
+                {
+                    this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+                }
+
+                Gym? gym = await this.gymService.GetGymByIdAsync(membershipToBuy.GymId.ToString());
 
 				if (gym == null)
 				{
@@ -106,14 +106,14 @@
 					return this.RedirectToAction("Index", "Home", new { area = "" });
 				}
 
-				int count = await this.membershipService.GetAllUserMembershipsCountByUserIdAsync(userId);
+				int count = await this.membershipService.GetAllActiveUserMembershipsCountByUserIdAsync(userId);
 
 				int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
 				totalPages = totalPages == 0 ? 1 : totalPages;
 
 				AllUserMembershipPaymentsViewModel allUserMembershipPaymentsViewModel = new AllUserMembershipPaymentsViewModel 
 				{ 
-					Memberships = await this.membershipService.GetPaymentsByUserIdAsync(userId),
+					Memberships = await this.membershipService.GetActivePaymentsByUserIdAsync(userId),
 					CurrentPage = page,
 					PagesCount = totalPages,
 					UserId = userId
@@ -148,7 +148,7 @@
 				AllUserMembershipsFilteredAndPagedViewModel allUserMembershipsFilteredAndPagedViewModel = new AllUserMembershipsFilteredAndPagedViewModel
 				{
 					UserId = userId,
-					TotalMembershipsCount = await this.membershipService.GetAllUserMembershipsCountByUserIdAsync(userId),
+					TotalMembershipsCount = await this.membershipService.GetAllActiveUserMembershipsCountByUserIdAsync(userId),
 					Memberships = await this.membershipService.GetAllActiveUserMembershipsFilteredAndPagedByUserIdAsync(userId, queryModel)
 				};
 

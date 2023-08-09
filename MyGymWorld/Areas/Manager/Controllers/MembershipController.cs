@@ -86,7 +86,7 @@
 
                 AllMembershipPaymentsForGymViewModel allPurchasedMembershipsForGymViewModel = new AllMembershipPaymentsForGymViewModel
                 {
-                    Memberships = await this.membershipService.GetPaymentsByGymIdForManagementAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
+                    Memberships = await this.membershipService.GetActivePaymentsByGymIdForManagementAsync(gymId, (page - 1) * GlobalConstants.MembershipConstants.MembershipsPerPage,
                     GlobalConstants.MembershipConstants.MembershipsPerPage),
                     CurrentPage = page,
                     PagesCount = totalPages,
