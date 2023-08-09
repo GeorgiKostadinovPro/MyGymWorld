@@ -322,8 +322,8 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <!-- Unit tests -->
 ### Unit Tests
+<p>The technologies that were used for the unit testing are:</p>
 <ul>
-  The technologies that were used for the unit testing are:
   <li><a href="https://nunit.org/">NUnit</a></li>
   <li><a href="https://www.nuget.org/packages/Moq">Moq</a></li>
   <li><a href="https://learn.microsoft.com/en-us/ef/core/providers/in-memory/?tabs=dotnet-core-cli">InMemory Database</a></li>
@@ -331,6 +331,97 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <p>The business layer of the application <strong>MyGymWorold.Core</strong> is covered at 65%.</p>
 <p>You can check all unit tests by going to <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core.Tests">MyGymWorld.Core.Tests</a>.</p>
 <p>Here is an example of test taken from the MembershipServiceTests class:</p>
+
+```cs
+private MyGymWorldDbContext dbContext;
+
+private IMapper mapper;
+private Mock<IRepository> mockRepository;
+
+private Mock<IQRCoderService> qrCodeServiceMock;
+
+[SetUp]
+public async Task Setup()
+{
+    this.mapper = InitializeAutoMapper.CreateMapper();
+
+    this.mockRepository = new Mock<IRepository>();
+
+    this.qrCodeServiceMock = new Mock<IQRCoderService>();
+
+    this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
+}
+```
+
+```cs
+[Test]
+public async Task BuyMembershipAsyncShouldAddMembershipToUserWhenHeBuysItForTheFirstTime()
+{
+    var membershipId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+    var userId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+    await this.dbContext.Memberships.AddRangeAsync(new HashSet<Membership>
+    {
+        new Membership
+        {
+            Id = Guid.Parse(membershipId),
+            GymId = Guid.NewGuid(),
+            Price = 10m,
+            MembershipType = MembershipType.Week,
+            IsDeleted = false
+        },
+        new Membership
+        {
+            Id = Guid.NewGuid(),
+            GymId = Guid.NewGuid(),
+            Price = 10m,
+            MembershipType = MembershipType.Month,
+            IsDeleted = false
+        },
+        new Membership
+        {
+            Id = Guid.NewGuid(),
+            IsDeleted = true
+        }
+    });
+
+    await this.dbContext.SaveChangesAsync();
+
+    this.mockRepository
+        .Setup(x => x.All<UserMembership>())
+        .Returns(this.dbContext.UsersMemberships.AsQueryable());
+
+    this.mockRepository
+        .Setup(x => x.AllNotDeletedReadonly<Membership>())
+        .Returns(this.dbContext.Memberships
+        .Where(m => m.IsDeleted == false));
+
+    this.qrCodeServiceMock
+        .Setup(x => x.GenerateQRCodeAsync(membershipId))
+        .ReturnsAsync(("testQrCodeUri", "testPublicId"));
+
+    this.mockRepository
+        .Setup(x => x.AddAsync(It.IsAny<UserMembership>()))
+        .Callback(async (UserMembership userMembership) =>
+        {
+            await this.dbContext.UsersMemberships.AddAsync(userMembership);
+            await this.dbContext.SaveChangesAsync();
+        });
+
+    var service = new MembershipService(this.mapper, this.mockRepository.Object, this.qrCodeServiceMock.Object);
+
+    await service.BuyMembershipAsync(membershipId, userId);
+
+    var createdUserMembership = await this.dbContext.UsersMemberships
+        .FirstAsync(um => um.MembershipId.ToString() == membershipId && um.UserId.ToString() == userId);
+
+    this.mockRepository.Verify(x => x.AddAsync(It.IsAny<UserMembership>()), Times.Once);
+    this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+
+    Assert.IsNotNull(createdUserMembership);
+    Assert.That(createdUserMembership.UserId.ToString(), Is.EqualTo(userId));
+}
+```
 
 <hr />
 
