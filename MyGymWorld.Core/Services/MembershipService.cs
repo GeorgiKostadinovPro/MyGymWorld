@@ -51,7 +51,7 @@
 		{
             Membership? membershipToEdit = await this.repository
                 .AllNotDeleted<Membership>()
-                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(membershipId));
+                .FirstOrDefaultAsync(m => m.Id.ToString() == membershipId);
 
             if (membershipToEdit != null)
             {
@@ -67,7 +67,7 @@
         {
             Membership? membershipToDelete = await this.repository
                .AllNotDeleted<Membership>()
-               .Where(m => m.Id == Guid.Parse(membershipId))
+               .Where(m => m.Id.ToString() == membershipId)
                .Include(m => m.UsersMemberships)
                .FirstOrDefaultAsync();
 
@@ -316,7 +316,7 @@
         {
             Membership membership = await this.repository
                 .AllNotDeletedReadonly<Membership>()
-                .Where(m => m.Id == Guid.Parse(membershipId))
+                .Where(m => m.Id.ToString() == membershipId)
                 .Include(m => m.Gym)
                 .FirstAsync();
 
@@ -324,35 +324,35 @@
 
             return membershipDetailsViewModel;
         } 
-
-        public async Task<UserMembership?> GetUserMembershipAsync(string userId, string membershipId)
-        {
-            return await this.repository.AllNotDeletedReadonly<UserMembership>()
-                .FirstOrDefaultAsync(um => um.UserId == Guid.Parse(userId) && um.MembershipId == Guid.Parse(membershipId));
-        }
         
         public async Task<EditMembershipInputModel> GetMembershipForEditByIdAsync(string membershipId)
 		{
             Membership membershipToEdit = await this.repository
                 .AllNotDeletedReadonly<Membership>()
-                .FirstAsync(m => m.Id == Guid.Parse(membershipId));
+                .FirstAsync(m => m.Id.ToString() == membershipId);
 
             EditMembershipInputModel editMembershipInputModel = this.mapper.Map<EditMembershipInputModel>(membershipToEdit);
 
             return editMembershipInputModel;
 		}
 
+        public async Task<UserMembership?> GetUserMembershipAsync(string userId, string membershipId)
+        {
+            return await this.repository.AllNotDeletedReadonly<UserMembership>()
+                .FirstOrDefaultAsync(um => um.UserId.ToString() == userId && um.MembershipId.ToString() == membershipId);
+        }
+
         public async Task<Membership?> GetMembershipByIdAsync(string membershipId)
         {
             return await this.repository.AllNotDeletedReadonly<Membership>()
-                .FirstOrDefaultAsync(m => m.Id == Guid.Parse(membershipId));
+                .FirstOrDefaultAsync(m => m.Id.ToString() == membershipId);
         }
         
         public async Task<bool> CheckIfMembershipExistsByIdAsync(string membershipId)
 		{
             return await this.repository
                 .AllNotDeletedReadonly<Membership>()
-                .AnyAsync(m => m.Id == Guid.Parse(membershipId));
+                .AnyAsync(m => m.Id.ToString() == membershipId);
 		}
 
         public async Task<int> GetAllActiveMembershipsCountAsync()

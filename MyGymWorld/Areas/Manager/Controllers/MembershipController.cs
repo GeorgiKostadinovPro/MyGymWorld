@@ -265,9 +265,9 @@
                     }
 				}
 
-				bool doesEventExists = await this.membershipService.CheckIfMembershipExistsByIdAsync(membershipId);
+				bool doesMembershipExist = await this.membershipService.CheckIfMembershipExistsByIdAsync(membershipId);
 
-				if (doesEventExists == false)
+				if (doesMembershipExist == false)
 				{
 					this.TempData[ErrorMessage] = "Such membership does NOT exist!";
 
@@ -330,6 +330,15 @@
                     {
                         return this.RedirectToAction("Error", "Home", new { statusCode = 403 });
                     }
+                }
+
+                bool doesMembershipExist = await this.membershipService.CheckIfMembershipExistsByIdAsync(membershipId);
+
+                if (doesMembershipExist == false)
+                {
+                    this.TempData[ErrorMessage] = "Such membership does NOT exist!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
 
                 bool isMembershipTypeValid = Enum.TryParse<MembershipType>(editMembershipInputModel.MembershipType, true, out MembershipType result);

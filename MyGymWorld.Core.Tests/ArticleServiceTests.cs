@@ -230,25 +230,11 @@
             string articleId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
             string categoryId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
 
-            await this.dbContext.Categories.AddAsync(new Category
-            {
-                Id = Guid.Parse(categoryId),
-                Name = "Test category",
-                IsDeleted = false
-            });
-
             await this.dbContext.Articles.AddAsync(new Article 
             {
                 Id = Guid.Parse(articleId),
                 Title = "Test",
                 Content = "Test",
-                IsDeleted = false
-            });
-
-            await this.dbContext.ArticlesCategories.AddAsync(new ArticleCategory
-            {
-                ArticleId = Guid.Parse(articleId),
-                CategoryId = Guid.Parse(categoryId),
                 IsDeleted = false
             });
 

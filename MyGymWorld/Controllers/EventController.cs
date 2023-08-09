@@ -74,18 +74,27 @@
         [HttpGet]
         public async Task<IActionResult> Details(string eventId)
         {
-            Event? eventToDisplay = await this.eventService.GetEventByIdAsync(eventId);
-
-            if (eventToDisplay == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such event does NOT exist!";
+                Event? eventToDisplay = await this.eventService.GetEventByIdAsync(eventId);
 
-                return this.NotFound();
+                if (eventToDisplay == null)
+                {
+                    this.TempData[ErrorMessage] = "Such event does NOT exist!";
+
+                    return this.RedirectToAction("Error", "Home", new { area = "", statusCode = 404 });
+                }
+
+                EventDetailsViewModel eventDetailsViewModel = await this.eventService.GetEventDetailsByIdAsync(eventId);
+                
+                return this.View(eventDetailsViewModel);
             }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-            EventDetailsViewModel eventDetailsViewModel = await this.eventService.GetEventDetailsByIdAsync(eventId);
-
-            return this.View(eventDetailsViewModel);
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
         }
 
         [HttpPost]
