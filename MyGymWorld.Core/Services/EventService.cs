@@ -299,17 +299,17 @@
                 .AnyAsync(e => e.Id.ToString() == eventId);
         }
 
-        public async Task<bool> CheckIfUserHasAlreadyJoinedEventByIdAsync(string eventId, string userId)
+        public async Task<bool> CheckIfUserHasAlreadyJoinedEventAsync(string eventId, string userId)
         {
-            return await this.repository.AllNotDeleted<UserEvent>()
-                .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+            return await this.repository.AllNotDeletedReadonly<UserEvent>()
+                .AnyAsync(ue => ue.EventId.ToString() == eventId && ue.UserId.ToString() == userId);
         }
 
-        public async Task<bool> CheckIfUserHasAlreadyLeftEventByIdAsync(string eventId, string userId)
+        public async Task<bool> CheckIfUserHasAlreadyLeftEventAsync(string eventId, string userId)
         {
             return await this.repository.All<UserEvent>()
                 .Where(ue => ue.IsDeleted == true)
-                .AnyAsync(ue => ue.EventId == Guid.Parse(eventId) && ue.UserId == Guid.Parse(userId));
+                .AnyAsync(ue => ue.EventId.ToString() == eventId && ue.UserId.ToString() == userId);
         }
 
         public async Task<int> GetAllActiveEventsCountAsync()

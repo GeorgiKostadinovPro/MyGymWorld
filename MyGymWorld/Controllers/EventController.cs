@@ -123,7 +123,7 @@
 					return this.RedirectToAction(nameof(Details), new { eventId = eventId });
 				}
 
-				bool hasUserAlreadyJoinedEvent = await this.eventService.CheckIfUserHasAlreadyJoinedEventByIdAsync(eventId, userId);
+				bool hasUserAlreadyJoinedEvent = await this.eventService.CheckIfUserHasAlreadyJoinedEventAsync(eventId, userId);
 
                 if (hasUserAlreadyJoinedEvent)
                 {
@@ -184,7 +184,7 @@
 					return this.RedirectToAction(nameof(Details), new { eventId = eventId });
 				}
 
-				bool hasUserAlreadyLeftEvent = await this.eventService.CheckIfUserHasAlreadyLeftEventByIdAsync(eventId, userId);
+				bool hasUserAlreadyLeftEvent = await this.eventService.CheckIfUserHasAlreadyLeftEventAsync(eventId, userId);
 
 				if (hasUserAlreadyLeftEvent)
 				{

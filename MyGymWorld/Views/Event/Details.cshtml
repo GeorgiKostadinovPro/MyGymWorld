@@ -21,7 +21,7 @@
 		isUserManagerOfThisGym = await this.GymService.CheckIfGymIsManagedByManagerAsync(Model.GymId, manager.Id.ToString());
 	}
 
-	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasAlreadyJoinedEventByIdAsync(Model.Id, userId);
+	bool hasUserJoinedEvent = await this.EventService.CheckIfUserHasAlreadyJoinedEventAsync(Model.Id, userId);
 }
 
 <link href="~/css/event-details.css" rel="stylesheet"/>
