@@ -328,9 +328,9 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <li><a href="https://www.nuget.org/packages/Moq">Moq</a></li>
   <li><a href="https://learn.microsoft.com/en-us/ef/core/providers/in-memory/?tabs=dotnet-core-cli">InMemory Database</a></li>
 </ul>
-<p>The business layer of the application <strong>MyGymWorold.Core</strong> is covered at 65%.</p>
+<p>The business layer of the application <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core">MyGymWorld.Core</a> is covered at 65%.</p>
 <p>You can check all unit tests by going to <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core.Tests">MyGymWorld.Core.Tests</a>.</p>
-<p>Here is an example of test taken from the MembershipServiceTests class:</p>
+<p>Here is an example of test taken from <a href=https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/MyGymWorld.Core.Tests/MembershipServiceTests.cs">MembershipServiceTests</a> :</p>
 
 ```cs
 private MyGymWorldDbContext dbContext;
