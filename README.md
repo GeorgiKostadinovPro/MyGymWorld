@@ -64,6 +64,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   * [Features](#dart-features)
   * [Screenshots](#camera-screenshots)
   * [Seeding](#seeding)
+  * [Unit Tests](#unit-tests)
   * [Color Reference](#art-color-reference)
   * [Environment Variables](#key-environment-variables)
 - [Getting Started](#toolbox-getting-started)
@@ -276,6 +277,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
 
+<hr />
 
 <!-- Seeding -->
 ### Seeding
@@ -315,6 +317,20 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Comments</li>
    </ul>
 </details>
+
+<hr />
+
+<!-- Unit tests -->
+### Unit Tests
+<ul>
+  The technologies that were used for the unit testing are:
+  <li><a href="https://nunit.org/">NUnit</a></li>
+  <li><a href="https://www.nuget.org/packages/Moq">Moq</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/ef/core/providers/in-memory/?tabs=dotnet-core-cli">InMemory Database</a></li>
+</ul>
+<p>The business layer of the application <strong>MyGymWorold.Core</strong> is covered at 65%.</p>
+<p>You can check all unit tests by going to <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core.Tests">MyGymWorld.Core.Tests</a>.</p>
+<p>Here is an example of test taken from the MembershipServiceTests class:</p>
 
 <hr />
 
