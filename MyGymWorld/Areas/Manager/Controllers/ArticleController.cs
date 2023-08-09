@@ -318,15 +318,6 @@
 		[HttpPost]
         public async Task<IActionResult> Delete(string articleId)
         {
-            Article? articleToDelete = await this.articleService.GetArticleByIdAsync(articleId);
-
-            if (articleToDelete == null)
-            {
-                this.TempData[ErrorMessage] = "Such article does NOT exist!";
-
-                return this.RedirectToAction("All", "Gym", new { area = "" });
-            }
-
             try
             {
                 string userId = this.GetUserId();
@@ -338,6 +329,15 @@
                     || user.ManagerId == null)
                 {
                     this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("All", "Gym", new { area = "" });
+                }
+
+                Article? articleToDelete = await this.articleService.GetArticleByIdAsync(articleId);
+
+                if (articleToDelete == null)
+                {
+                    this.TempData[ErrorMessage] = "Such article does NOT exist!";
 
                     return this.RedirectToAction("All", "Gym", new { area = "" });
                 }
