@@ -9,7 +9,7 @@
     {
         Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel);
 
-        Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
+        Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel);
 
         Task DeleteGymAsync(string gymId);
 
