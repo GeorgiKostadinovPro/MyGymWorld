@@ -17,21 +17,40 @@
             These requests await your approval
         </h3>
         <hr />
-        <ul class="list-group">
-            @foreach (var request in Model.Requests.OrderByDescending(x => x.CreatedOn))
-            {
-                var id = $"a{request.ManagerId}a";
-                <li class="list-group-item">
-                    <a asp-area="Admin" asp-controller="Manager" asp-action="RequestDetails" asp-route-managerId="@request.ManagerId" class="nav-link" data-toggle="modal" data-target="#@id">
-                        Request from @request.CreatedOn.Date.Day @request.CreatedOn.ToString("MMM", CultureInfo.CurrentCulture)
-                        by @request.FirstName @request.LastName
-                    </a>
-                </li>
-            }
-        </ul>
-
+        @if (Model.Requests.Count() == 0)
+        {
+            <div class="alert alert-info col-md-12 text-center" role="alert">
+                You have no requests.
+            </div>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var request in Model.Requests.OrderByDescending(x => x.CreatedOn))
+                {
+                    var id = $"a{request.ManagerId}a";
+                    <li class="list-group-item">
+                        <a asp-area="Admin" asp-controller="Manager" asp-action="RequestDetails" asp-route-managerId="@request.ManagerId" class="nav-link">
+                            Request from @request.CreatedOn.Date.Day @request.CreatedOn.ToString("MMM", CultureInfo.CurrentCulture)
+                            by @request.FirstName @request.LastName
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
     </div>
 </div>
+
+<style>
+    .list-group-item {
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .list-group-item:hover {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

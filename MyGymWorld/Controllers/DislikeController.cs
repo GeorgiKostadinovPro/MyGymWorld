@@ -24,13 +24,15 @@
 
         public async Task<IActionResult> Create(string gymId)
         {
-            if (!User.Identity!.IsAuthenticated)
-            {
-                return this.Unauthorized();
-            }
+           
 
             try
             {
+                if (!User.Identity!.IsAuthenticated)
+                {
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 401 });
+                }
+
                 Gym gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)

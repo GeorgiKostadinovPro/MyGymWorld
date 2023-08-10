@@ -31,44 +31,53 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym(string gymId, int page = 1)
         {
-            Gym gym = await this.gymService.GetGymByIdAsync(gymId);
-
-            if (gym == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such gym does NOT exist!";
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exist!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                int count = await this.commentService.GetActiveCommentsCountByGymIdAsync(gymId);
+
+                int totalPages = (int)Math.Ceiling((double)count / CommentsPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel
+                {
+                    Comments = await this.commentService.GetActiveCommentsByGymIdAsync(gymId, (page - 1) * CommentsPerPage, CommentsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages,
+                    GymId = gymId,
+                    Name = gym.Name
+                };
+
+                return this.View(allCommentsForGymViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
                 return this.RedirectToAction("Index", "Home");
             }
-
-            int count = await this.commentService.GetActiveCommentsCountByGymIdAsync(gymId);
-
-            int totalPages = (int)Math.Ceiling((double)count / CommentsPerPage);
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllCommentsForGymViewModel allCommentsForGymViewModel = new AllCommentsForGymViewModel
-            {
-                Comments = await this.commentService.GetActiveCommentsByGymIdAsync(gymId, (page - 1) * CommentsPerPage, CommentsPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages,
-                GymId = gymId,
-                Name = gym.Name
-            };
-
-            return this.View(allCommentsForGymViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCommentInputModel createCommentInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                this.TempData[ErrorMessage] = "The comment is NOT valid!";
-
-                return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    this.TempData[ErrorMessage] = "The comment is NOT valid!";
+
+                    return this.RedirectToAction(nameof(AllForGym), new { gymId = createCommentInputModel.GymId });
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);

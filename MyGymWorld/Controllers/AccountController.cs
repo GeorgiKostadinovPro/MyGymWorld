@@ -54,13 +54,13 @@
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserInputModel registerUserInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(registerUserInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(registerUserInputModel);
+                }
+
                 bool doesUserExist = await this.userService.CheckIfUserExistsByEmailAsync(registerUserInputModel.Email);
 
                 if (doesUserExist)
@@ -122,13 +122,13 @@
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginUserInputModel loginUserInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(loginUserInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(loginUserInputModel);
+                }
+
                 ApplicationUser user = await this.userService.GetUserByEmailAsync(loginUserInputModel.Email);
 
                 if (user == null)
@@ -182,19 +182,19 @@
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string emailConfirmationToken)
         {
-            if (User != null && User.Identity != null
-                && User.Identity.IsAuthenticated)
-            {
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(emailConfirmationToken))
-            {
-                return this.BadRequest("Invalid confirmation parameters!");
-            }
-
             try
             {
+                if (User != null && User.Identity != null
+                && User.Identity.IsAuthenticated)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(emailConfirmationToken))
+                {
+                    return this.BadRequest("Invalid confirmation parameters!");
+                }
+
                 await this.accountService.ConfirmUserEmailAsync(userId, emailConfirmationToken);
 
                 this.TempData[SuccessMessage] = "Successfully confirmed email!";
@@ -228,13 +228,13 @@
         [AllowAnonymous]
         public async Task<IActionResult> SendResetPasswordEmail(EnterEmailInputModel enterEmailInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(enterEmailInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(enterEmailInputModel);
+                }
+
                 await this.accountService.SendUserResetPasswordEmailAsync(enterEmailInputModel.Email);
 
                 this.TempData[InformationMessage] = "Reset password link was sent to your email!";
@@ -272,13 +272,13 @@
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordInputModel resetPasswordInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(resetPasswordInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(resetPasswordInputModel);
+                }
+
                 await this.accountService.ResetUserPasswordAsync(resetPasswordInputModel);
 
                 this.TempData[SuccessMessage] = "You succesfully reset your password!";
