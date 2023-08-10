@@ -7,7 +7,7 @@
 
     public interface IGymService
     {
-        Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
+        Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel);
 
         Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
 

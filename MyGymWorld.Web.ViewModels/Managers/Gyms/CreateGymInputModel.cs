@@ -16,6 +16,7 @@
             this.CountriesSelectList = new HashSet<SelectListItem>();
 
             this.GalleryImagesFiles = new HashSet<IFormFile>();
+            this.GalleryImagesResultParams = new HashSet<ImageUploadResult>();
         }
 
         [Required]
@@ -40,6 +41,10 @@
 
         [Display(Name = "Gallery")]
         public IEnumerable<IFormFile> GalleryImagesFiles { get; set; }
+
+        public ImageUploadResult? LogoResultParams { get; set; }
+
+        public ICollection<ImageUploadResult> GalleryImagesResultParams { get; set; }
 
         [Required]
         [Display(Name = "Webiste Url")]
