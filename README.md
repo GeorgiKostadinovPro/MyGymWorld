@@ -198,6 +198,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see all memberships he payed for. (Each has a unqiue QR Code)</li>
     <li>Can keep track of all his payments for gym memberships.</li>
     <li>Can become manager via request to Admin.</li>
+    <li>If the user gets rejected by the admin he <strong>CANNOT</strong> apply again.</li>
   </ul>
 </details>
 
@@ -276,6 +277,30 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <h3>Reset Password Page</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
+
+<h3>Home Page Top Part (Not Authenticated User)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/4c3a1b67-1074-4132-bfc8-f5d02efdc0d0)
+
+<h3>Home Page Bottom Part (The Same For All Users)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2c6b76cf-4882-490e-a00a-f9e950a3017d)
+
+<h3>Home Page Top Part (Authenticated User)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/3d70c8db-cbd6-4d94-82f3-130bd0e4f3ac)
+
+<h3>Home Page Top Part (Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2e5bfd80-0906-4479-a918-36bef5577c6b)
+
+<h3>Home Page Top Part (Administrator)</h3>
+
+
+
+<h3>Become Manager Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e32b8945-f454-47d6-8d4e-4785dbbac406)
 
 <hr />
 
