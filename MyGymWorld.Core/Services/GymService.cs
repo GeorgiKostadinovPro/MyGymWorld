@@ -55,7 +55,7 @@
             this.addressService = _addressService;
         }
 
-        public async Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel)
+        public async Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel)
         {
             Gym gym = new Gym
             {
@@ -64,8 +64,8 @@
                 Email = createGymInputModel.Email,
                 PhoneNumber = createGymInputModel.PhoneNumber,
                 Description = createGymInputModel.Description,
-                LogoUri = gymLogoAndGalleryImagesInputModel.LogoResultParams!.SecureUri!.AbsoluteUri,
-                LogoPublicId = gymLogoAndGalleryImagesInputModel.LogoResultParams.PublicId,
+                LogoUri = createGymInputModel.LogoResultParams!.SecureUri!.AbsoluteUri,
+                LogoPublicId = createGymInputModel.LogoResultParams.PublicId,
                 WebsiteUrl = createGymInputModel.WebsiteUrl,
                 GymType = Enum.Parse<GymType>(createGymInputModel.GymType),
                 CreatedOn = DateTime.UtcNow
@@ -84,7 +84,7 @@
                 gym.AddressId = createdAddress.Id;
             }  
             
-            foreach (var galleryImageResultParams in gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams)
+            foreach (var galleryImageResultParams in createGymInputModel.GalleryImagesResultParams)
             {
                 string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
                 string publicId = galleryImageResultParams.PublicId;

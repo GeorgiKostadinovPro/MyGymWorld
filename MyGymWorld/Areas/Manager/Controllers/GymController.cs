@@ -48,203 +48,231 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-            if (user == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such user does NOT exists!";
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
 
-                return this.RedirectToAction("Index", "Home");
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (!User.IsInRole("Manager"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
+
+                int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+
+                AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+                {
+                    Gyms = await this.gymService
+                    .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), false, (page - 1) * GymsPerPage, GymsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return this.View(allGymsForManagement);
             }
-
-            if (!User.IsInRole("Manager"))
+            catch (Exception)
             {
-                this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home", new { area = "" });
             }
-
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
-
-            int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
-
-            AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
-            {
-                Gyms = await this.gymService
-                .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), false, (page - 1) * GymsPerPage, GymsPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
-
-            return this.View(allGymsForManagement);
         }
 
 		[HttpGet]
 		public async Task<IActionResult> Deleted(int page = 1)
 		{
-			ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
+            try
+            {
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
 
-			if (user == null)
-			{
-				this.TempData[ErrorMessage] = "Such user does NOT exists!";
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
 
-				return this.RedirectToAction("Index", "Home");
-			}
+                    return this.RedirectToAction("Index", "Home");
+                }
 
-			if (!User.IsInRole("Manager"))
-			{
-				this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+                if (!User.IsInRole("Manager"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
 
-				return this.RedirectToAction("Index", "Home");
-			}
+                    return this.RedirectToAction("Index", "Home");
+                }
 
-			int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), true);
+                int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), true);
 
-			int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+                int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
-			AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
-			{
-				Gyms = await this.gymService
-				.GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), true, (page - 1) * GymsPerPage, GymsPerPage),
-				CurrentPage = page,
-				PagesCount = totalPages
-			};
+                AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+                {
+                    Gyms = await this.gymService
+                    .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), true, (page - 1) * GymsPerPage, GymsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
 
-			return this.View(allGymsForManagement);
+                return this.View(allGymsForManagement);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+			
 		}
 
 		[HttpGet]
         public async Task<IActionResult> Create()
         {
-            string userId = this.GetUserId();
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            if (!this.User.IsInRole("Manager")
-                || user == null
-                || user.ManagerId == null)
+            try
             {
-                this.TempData[ErrorMessage] = "You are NOT a Manager!";
+                string userId = this.GetUserId();
 
-                return this.RedirectToAction("Index", "Home");
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (!this.User.IsInRole("Manager")
+                    || user == null
+                    || user.ManagerId == null)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT a Manager!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+                int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
+
+                if ((int)manager!.ManagerType == 0 && count > 0)
+                {
+                    this.TempData[ErrorMessage] = "You are NOT allowed to create more than one gym!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                CreateGymInputModel createGymInputModel = new CreateGymInputModel
+                {
+                    GymTypes = this.gymService.GetAllGymTypes(),
+                    CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync(),
+                    TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync()
+                };
+
+                return this.View(createGymInputModel);
             }
-
-            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
-
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
-
-            if ((int)manager!.ManagerType == 0 && count > 0)
+            catch (Exception)
             {
-                this.TempData[ErrorMessage] = "You are NOT allowed to create more than one gym!";
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
                 return this.RedirectToAction("Index", "Home", new { area = "" });
             }
-
-            CreateGymInputModel createGymInputModel = new CreateGymInputModel
-            {
-                GymTypes = this.gymService.GetAllGymTypes(),
-                CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync(),
-                TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync()
-            };
-
-            return this.View(createGymInputModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateGymInputModel createGymInputModel)
         {
-            createGymInputModel.GymTypes = this.gymService.GetAllGymTypes();
-            createGymInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
-            createGymInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(createGymInputModel);
-            }
-
-            if (!this.cloudinaryService.IsFileValid(createGymInputModel.LogoFile))
-            {
-                this.ModelState.AddModelError("LogoFile", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
-
-                return this.View(createGymInputModel);
-            }
-
-            if (createGymInputModel.GalleryImagesFiles == null)
-            {
-                this.ModelState.AddModelError("GalleryImagesFiles", "You must upload at least one gym picture!");
-
-                return this.View(createGymInputModel);
-            }
-
-            foreach (var picture in createGymInputModel.GalleryImagesFiles)
-            {
-                if (!this.cloudinaryService.IsFileValid(picture))
-                {
-                    this.ModelState.AddModelError("GalleryImagesFiles", "The allowed types of pictures are jpg, jpeg and png!");
-
-                    return this.View(createGymInputModel);
-                }
-            }
-
-            if (createGymInputModel.GymType == "None")
-            {
-                this.ModelState.AddModelError(createGymInputModel.GymType, "You have to choose a Gym Type!");
-
-                return this.View(createGymInputModel);
-            }
-
-            if (!string.IsNullOrWhiteSpace(createGymInputModel.Address))
-            {
-                if (createGymInputModel.CountryId == "None")
-                {
-                    this.ModelState.AddModelError("CountryId", "Country is required when you have address!");
-
-                    return this.View(createGymInputModel);
-                }
-
-                if (createGymInputModel.TownId == "None")
-                {
-                    this.ModelState.AddModelError("TownId", "Town is required when you have address!");
-
-                    return this.View(createGymInputModel);
-                }
-
-                bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(createGymInputModel.TownId!, createGymInputModel.CountryId!);
-
-                if (isPresent == false)
-                {
-                    this.ModelState.AddModelError("TownId", "The town should be in the chosen country!");
-
-                    return this.View(createGymInputModel);
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(createGymInputModel.Address))
-            {
-                if (createGymInputModel.CountryId != "None"
-                    && createGymInputModel.TownId != null)
-                {
-                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
-                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
-
-                    return this.View(createGymInputModel);
-                }
-                else if (createGymInputModel.CountryId != "None")
-                {
-                    this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
-
-                    return this.View(createGymInputModel);
-                }
-                else if (createGymInputModel.TownId != null
-                    && createGymInputModel.TownId != "None")
-                {
-                    this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
-                    return this.View(createGymInputModel);
-                }
-            }
-
             try
             {
+                createGymInputModel.GymTypes = this.gymService.GetAllGymTypes();
+                createGymInputModel.CountriesSelectList = await this.countryService.GetAllAsSelectListItemsAsync();
+                createGymInputModel.TownsSelectList = await this.townService.GetAllAsSelectListItemsAsync();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(createGymInputModel);
+                }
+
+                if (!this.cloudinaryService.IsFileValid(createGymInputModel.LogoFile))
+                {
+                    this.ModelState.AddModelError("LogoFile", "The logo is required and the allowed types of pictures are jpg, jpeg and png!");
+
+                    return this.View(createGymInputModel);
+                }
+
+                if (createGymInputModel.GalleryImagesFiles == null)
+                {
+                    this.ModelState.AddModelError("GalleryImagesFiles", "You must upload at least one gym picture!");
+
+                    return this.View(createGymInputModel);
+                }
+
+                foreach (var picture in createGymInputModel.GalleryImagesFiles)
+                {
+                    if (!this.cloudinaryService.IsFileValid(picture))
+                    {
+                        this.ModelState.AddModelError("GalleryImagesFiles", "The allowed types of pictures are jpg, jpeg and png!");
+
+                        return this.View(createGymInputModel);
+                    }
+                }
+
+                if (createGymInputModel.GymType == "None")
+                {
+                    this.ModelState.AddModelError(createGymInputModel.GymType, "You have to choose a Gym Type!");
+
+                    return this.View(createGymInputModel);
+                }
+
+                if (!string.IsNullOrWhiteSpace(createGymInputModel.Address))
+                {
+                    if (createGymInputModel.CountryId == "None")
+                    {
+                        this.ModelState.AddModelError("CountryId", "Country is required when you have address!");
+
+                        return this.View(createGymInputModel);
+                    }
+
+                    if (createGymInputModel.TownId == "None")
+                    {
+                        this.ModelState.AddModelError("TownId", "Town is required when you have address!");
+
+                        return this.View(createGymInputModel);
+                    }
+
+                    bool isPresent = await this.townService.CheckIfTownIsPresentByCountryIdAsync(createGymInputModel.TownId!, createGymInputModel.CountryId!);
+
+                    if (isPresent == false)
+                    {
+                        this.ModelState.AddModelError("TownId", "The town should be in the chosen country!");
+
+                        return this.View(createGymInputModel);
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(createGymInputModel.Address))
+                {
+                    if (createGymInputModel.CountryId != "None"
+                        && createGymInputModel.TownId != null)
+                    {
+                        this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+                        this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+
+                        return this.View(createGymInputModel);
+                    }
+                    else if (createGymInputModel.CountryId != "None")
+                    {
+                        this.ModelState.AddModelError("CountryId", "You cannot choose a country without an address!");
+
+                        return this.View(createGymInputModel);
+                    }
+                    else if (createGymInputModel.TownId != null
+                        && createGymInputModel.TownId != "None")
+                    {
+                        this.ModelState.AddModelError("TownId", "You cannot choose a town without an address!");
+                        return this.View(createGymInputModel);
+                    }
+                }
+
                 createGymInputModel.Description = new HtmlSanitizer().Sanitize(createGymInputModel.Description);
 
                 bool isGymTypeValid = Enum.TryParse<GymType>(createGymInputModel.GymType, true, out GymType gymType);
@@ -254,24 +282,22 @@
                     throw new InvalidOperationException(ExceptionConstants.GymErrors.InvalidGymType);
                 }
 
-                GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel = new GymLogoAndGalleryImagesInputModel();
-
                 ImageUploadResult logoResultParams = await this.cloudinaryService.UploadPhotoAsync(createGymInputModel.LogoFile, "MyGymWorld/assets/gyms-logo-pictures");
                
-                gymLogoAndGalleryImagesInputModel.LogoResultParams = logoResultParams;
+                createGymInputModel.LogoResultParams = logoResultParams;
 
                 foreach (var imageFile in createGymInputModel.GalleryImagesFiles)
                 {
                     ImageUploadResult imageResultParams = await this.cloudinaryService.UploadPhotoAsync(imageFile, "MyGymWorld/assets/gyms-gallery-pictures");
 
-                    gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Add(imageResultParams);
+                    createGymInputModel.GalleryImagesResultParams.Add(imageResultParams);
                 }
                
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
-                await this.gymService.CreateGymAsync(user.ManagerId!.Value.ToString(), createGymInputModel, gymLogoAndGalleryImagesInputModel);
+                await this.gymService.CreateGymAsync(user.ManagerId!.Value.ToString(), createGymInputModel);
 
                 this.TempData[SuccessMessage] = $"You successfully created a gym!";
 
@@ -279,6 +305,8 @@
                    $"You created a gym.",
                    "/Manager/Gym/Active?page=1",
                    this.GetUserId());
+                
+                return this.RedirectToAction(nameof(Active));
             }
             catch (InvalidOperationException ex)
             {
@@ -292,8 +320,6 @@
 
                 return this.View(createGymInputModel);
             }
-
-            return this.RedirectToAction(nameof(Active));
         }
 
 		[HttpGet]
