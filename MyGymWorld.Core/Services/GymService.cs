@@ -162,7 +162,7 @@
         public async Task DeleteGymAsync(string gymId)
         {
             Gym? gymToDelete = await this.repository.AllNotDeleted<Gym>()
-                .Where(g => g.Id == Guid.Parse(gymId))
+                .Where(g => g.Id.ToString() == gymId)
                 .Include(g => g.Events)
                 .Include(g => g.Articles)
                 .Include(g => g.Memberships)
