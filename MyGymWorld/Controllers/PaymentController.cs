@@ -6,6 +6,8 @@
 
 	using Stripe.Checkout;
 
+    using static MyGymWorld.Common.NotificationMessagesConstants;
+
 	public class PaymentController : BaseController
 	{
 		public string? SessionId { get; set; }
@@ -29,38 +31,40 @@
         [HttpPost]
         public async Task<IActionResult> CreateCheckoutSession(string membershipId)
         {
-            string domain = this.configuration["ApplicationUrl"];
-
-            Membership? membership =
-                await this.membershipService.GetMembershipByIdAsync(membershipId);
-
-            if (membership == null)
+            try
             {
-                return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
-            }
+                string domain = this.configuration["ApplicationUrl"];
 
-            Gym? gym = await this.gymService.GetGymByIdAsync(membership.GymId.ToString());
+                Membership? membership =
+                    await this.membershipService.GetMembershipByIdAsync(membershipId);
 
-            if (gym == null)
-            {
-                return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
-            }
-
-            if (domain != null)
-            {
-                string membershipType
-                = string.Concat(membership.MembershipType.ToString(), " Membership");
-
-                string description
-                    = string.Concat(membershipType, " for ", gym.Name);
-
-                SessionCreateOptions sessionCreateOptions = new SessionCreateOptions
+                if (membership == null)
                 {
-                    PaymentMethodTypes = new List<string>
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+                }
+
+                Gym? gym = await this.gymService.GetGymByIdAsync(membership.GymId.ToString());
+
+                if (gym == null)
+                {
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+                }
+
+                if (domain != null)
+                {
+                    string membershipType
+                    = string.Concat(membership.MembershipType.ToString(), " Membership");
+
+                    string description
+                        = string.Concat(membershipType, " for ", gym.Name);
+
+                    SessionCreateOptions sessionCreateOptions = new SessionCreateOptions
+                    {
+                        PaymentMethodTypes = new List<string>
                     {
                         "card"
                     },
-                    LineItems = new List<SessionLineItemOptions>
+                        LineItems = new List<SessionLineItemOptions>
                     {
                         new SessionLineItemOptions
                         {
@@ -78,18 +82,25 @@
                             Quantity = 1
                         }
                     },
-                    Mode = "payment",
-                    SuccessUrl = string.Concat(domain, $"/Membership/Buy?membershipId={membershipId}"),
-                    CancelUrl = string.Concat(domain, $"/Membership/Details?membershipId={membershipId}")
-                };
+                        Mode = "payment",
+                        SuccessUrl = string.Concat(domain, $"/Membership/Buy?membershipId={membershipId}"),
+                        CancelUrl = string.Concat(domain, $"/Membership/Details?membershipId={membershipId}")
+                    };
 
-                SessionService service = new SessionService();
-                Session session = await service.CreateAsync(sessionCreateOptions);
-                this.SessionId = session.Id;
+                    SessionService service = new SessionService();
+                    Session session = await service.CreateAsync(sessionCreateOptions);
+                    this.SessionId = session.Id;
 
-                return this.Redirect(session.Url);
+                    return this.Redirect(session.Url);
+                }
             }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
+                return this.Redirect($"/Membership/Details?membershipId={membershipId}");
+            }
+            
             return this.StatusCode(500);
         }
     }

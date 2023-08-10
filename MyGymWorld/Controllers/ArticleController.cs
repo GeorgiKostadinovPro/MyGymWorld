@@ -34,43 +34,52 @@
         [HttpGet]
         public async Task<IActionResult> AllForGym([FromQuery] AllArticlesForGymQueryModel queryModel)
         {
-            Gym? gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
-
-            if (gym == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+                Gym? gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user.ManagerId == null
+                    || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(queryModel.GymId, user.ManagerId.ToString()!))))
+                {
+                    bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
+
+                    if (hasUserJoinedGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You have to JOIN the gym to see articles!";
+
+                        return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
+                    }
+                }
+
+                AllArticlesForGymFilteredAndPagedViewModel allArticlesForGymFilteredAndPagedViewModel = new AllArticlesForGymFilteredAndPagedViewModel()
+                {
+                    TotalArticlesCount = await this.articleService.GetAllActiveArticlesCountByGymIdAsync(queryModel.GymId),
+                    Articles = await this.articleService.GetAllActiveArticlesFilteredAndPagedByGymIdAsync(queryModel)
+                };
+
+                queryModel.Categories = await this.categoryService.GetActiveCategoriesAsync();
+                queryModel.TotalArticlesCount = allArticlesForGymFilteredAndPagedViewModel.TotalArticlesCount;
+                queryModel.Articles = allArticlesForGymFilteredAndPagedViewModel.Articles;
+
+                return this.View(queryModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
                 return this.RedirectToAction("Index", "Home");
             }
-
-            string userId = this.GetUserId();
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            if (user.ManagerId == null
-                || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(queryModel.GymId, user.ManagerId.ToString()!))))
-            {
-                bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
-
-                if (hasUserJoinedGym == false)
-                {
-                    this.TempData[ErrorMessage] = "You have to JOIN the gym to see articles!";
-
-                    return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
-                }
-            }
-
-            AllArticlesForGymFilteredAndPagedViewModel allArticlesForGymFilteredAndPagedViewModel = new AllArticlesForGymFilteredAndPagedViewModel()
-            {
-                TotalArticlesCount = await this.articleService.GetAllActiveArticlesCountByGymIdAsync(queryModel.GymId),
-                Articles = await this.articleService.GetAllActiveArticlesFilteredAndPagedByGymIdAsync(queryModel)
-            };
-
-            queryModel.Categories = await this.categoryService.GetActiveCategoriesAsync();
-            queryModel.TotalArticlesCount = allArticlesForGymFilteredAndPagedViewModel.TotalArticlesCount;
-            queryModel.Articles = allArticlesForGymFilteredAndPagedViewModel.Articles;
-
-            return this.View(queryModel);
         }
 
         [HttpGet]

@@ -26,22 +26,31 @@
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1)
         {
-            string userId = this.GetUserId();
-
-            int count = await this.notificationService.GetActiveNotificationsCountByUserIdAsync(userId);
-
-            int totalPages = (int)Math.Ceiling((double)count / NotificationsPerPage);
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllNotificationsViewModel viewModel = new AllNotificationsViewModel
+            try
             {
-                UserId = userId,
-                CurrentPage = page,
-                PagesCount = totalPages,
-                Notifications = await this.notificationService.GetActiveNotificationsByUserIdAsync(userId, (page - 1) * NotificationsPerPage, NotificationsPerPage)
-            };
+                string userId = this.GetUserId();
 
-            return this.View(viewModel);
+                int count = await this.notificationService.GetActiveNotificationsCountByUserIdAsync(userId);
+
+                int totalPages = (int)Math.Ceiling((double)count / NotificationsPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllNotificationsViewModel viewModel = new AllNotificationsViewModel
+                {
+                    UserId = userId,
+                    CurrentPage = page,
+                    PagesCount = totalPages,
+                    Notifications = await this.notificationService.GetActiveNotificationsByUserIdAsync(userId, (page - 1) * NotificationsPerPage, NotificationsPerPage)
+                };
+
+                return this.View(viewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
