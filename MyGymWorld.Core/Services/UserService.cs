@@ -58,7 +58,10 @@
 
         public async Task<(ApplicationUser, IdentityResult)> EditUserAsync(string userId, EditUserInputModel editUserInputModel)
         {
-            ApplicationUser userToEdit = await this.GetUserByIdAsync(userId);
+            ApplicationUser? userToEdit = await this.repository.AllNotDeleted<ApplicationUser>()
+                .Where(u => u.Id.ToString() == userId)
+                .Include(u => u.Manager)
+                .FirstOrDefaultAsync();
 
             if (userToEdit == null)
             {
@@ -103,9 +106,9 @@
 
         public async Task DeleteUserAsync(string userId)
         {
-            ApplicationUser userToDelete = await this.repository.AllNotDeleted<ApplicationUser>()
+            ApplicationUser? userToDelete = await this.repository.AllNotDeleted<ApplicationUser>()
                 .Include(u => u.Manager)
-                .FirstAsync(u => u.Id == Guid.Parse(userId));
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);       
 
             if (userToDelete != null)
             {
@@ -275,7 +278,7 @@
                 .Include(u => u.Address)
                    .ThenInclude(a => a.Town)
                    .ThenInclude(t => t.Country)
-                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
             {
