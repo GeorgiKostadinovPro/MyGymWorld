@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Mvc;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Data.Models;
-    using MyGymWorld.Web.Infrastructure.Extensions;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
@@ -31,7 +30,7 @@
             }
 
             try
-            {   Gym gym = await this.gymService.GetGymByIdAsync(gymId);
+            {   Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
 
                 if (gym == null)
                 {

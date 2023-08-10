@@ -1,13 +1,20 @@
 ﻿namespace MyGymWorld.Core.Tests
 {
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
     using Moq;
+    using MyGymWorld.Common;
     using MyGymWorld.Core.Contracts;
     using MyGymWorld.Core.Services;
     using MyGymWorld.Core.Tests.Helpers;
     using MyGymWorld.Data;
     using MyGymWorld.Data.Models;
+    using MyGymWorld.Data.Models.Enums;
     using MyGymWorld.Data.Repositories;
+    using MyGymWorld.Web.ViewModels.Gyms;
+    using MyGymWorld.Web.ViewModels.Gyms.Enums;
+    using MyGymWorld.Web.ViewModels.Managers.Gyms;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -44,6 +51,1022 @@
             this.addressServiceMock = new Mock<IAddressService>();
 
             this.dbContext = await InitializeInMemoryDatabase.CreateInMemoryDatabase();
+        }
+
+        [Test]
+        public async Task CreateGymAsyncShouldWorkProperly()
+        {
+            var managerId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            this.mockRepository
+                .Setup(x => x.AddAsync(It.IsAny<Gym>()))
+                .Callback(async (Gym gym) =>
+                {
+                    await this.dbContext.Gyms.AddAsync(gym);
+                    await this.dbContext.SaveChangesAsync();
+                });
+        }
+
+        [Test]
+        public async Task AddGymToUserAsyncShouldWorkProperlyWhenUserJoinsGymFortheFirstTime()
+        {
+            var userId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            this.mockRepository
+                .Setup(x => x.All<UserGym>())
+                .Returns(this.dbContext.UsersGyms.AsQueryable());
+
+            this.mockRepository
+                .Setup(x => x.AddAsync(It.IsAny<UserGym>()))
+                .Callback(async (UserGym userGym) =>
+                {
+                    await this.dbContext.UsersGyms.AddAsync(userGym);
+                    await this.dbContext.SaveChangesAsync();
+                });
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.AddGymToUserAsync(gymId, userId);
+
+            this.mockRepository.Verify(x => x.AddAsync(It.IsAny<UserGym>()), Times.Once);
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+
+            var createdUserGym = await this.dbContext.UsersGyms
+                .FirstAsync(ug => ug.GymId.ToString() == gymId && ug.UserId.ToString() == userId);
+
+            Assert.IsNotNull(createdUserGym);
+            Assert.IsFalse(createdUserGym.IsDeleted);
+        }
+
+        [Test]
+        public async Task AddGymToUserAsyncShouldWorkProperlyWhenUserHasJoinedGymBeforeButHasLeftItAndNowWantsToJoinAgain()
+        {
+            var userId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Users.AddAsync(new ApplicationUser
+            {
+                Id = Guid.Parse(userId),
+                UserName = "User",
+                Email = "user@gmailc.com",
+                FirstName = "Test",
+                LastName = "Test",
+                PhoneNumber = "123456789",
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersGyms.AddRangeAsync(new HashSet<UserGym>
+            {
+                new UserGym
+                {
+                    UserId = Guid.Parse(userId),
+                    GymId = Guid.Parse(gymId),
+                    IsDeleted = true
+                },
+                new UserGym
+                {
+                    IsDeleted = true
+                },
+            });
+
+            await this.dbContext.UsersEvents.AddAsync(new UserEvent
+            {
+                UserId = Guid.Parse(userId),
+                EventId = Guid.NewGuid(),
+                IsDeleted = true
+            });
+
+            await this.dbContext.UsersMemberships.AddAsync(new UserMembership
+            {
+                UserId = Guid.Parse(userId),
+                MembershipId = Guid.NewGuid(),
+                QRCodeUri = "Test",
+                PublicId = "Test",
+                IsDeleted = true
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.All<UserGym>())
+                .Returns(this.dbContext.UsersGyms.AsQueryable());
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.AddGymToUserAsync(gymId, userId);
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task AddGymToUserAsyncShoulThrowExceptionWhenUserHasJoinedGymAndTriesToJoinAgain()
+        {
+            var userId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Users.AddAsync(new ApplicationUser
+            {
+                Id = Guid.Parse(userId),
+                UserName = "User",
+                Email = "user@gmailc.com",
+                FirstName = "Test",
+                LastName = "Test",
+                PhoneNumber = "123456789",
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersGyms.AddRangeAsync(new HashSet<UserGym>
+            {
+                new UserGym
+                {
+                    UserId = Guid.Parse(userId),
+                    GymId = Guid.Parse(gymId),
+                    IsDeleted = false
+                },
+                new UserGym
+                {
+                    IsDeleted = true
+                },
+            });
+
+            await this.dbContext.UsersEvents.AddAsync(new UserEvent
+            {
+                UserId = Guid.Parse(userId),
+                EventId = Guid.NewGuid(),
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersMemberships.AddAsync(new UserMembership
+            {
+                UserId = Guid.Parse(userId),
+                MembershipId = Guid.NewGuid(),
+                QRCodeUri = "Test",
+                PublicId = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.All<UserGym>())
+                .Returns(this.dbContext.UsersGyms.AsQueryable());
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await service.AddGymToUserAsync(gymId, userId);
+
+            }, ExceptionConstants.GymErrors.GymAlreadyJoined);
+        }
+
+        [Test]
+        public async Task RemoveGymFromUserAsyncShouldWorkProperly()
+        {
+            var userId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Users.AddAsync(new ApplicationUser
+            {
+                Id = Guid.Parse(userId),
+                UserName = "User",
+                Email = "user@gmailc.com",
+                FirstName = "Test",
+                LastName = "Test",
+                PhoneNumber = "123456789",
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersGyms.AddRangeAsync(new HashSet<UserGym>
+            {
+                new UserGym
+                {
+                    UserId = Guid.Parse(userId),
+                    GymId = Guid.Parse(gymId),
+                    IsDeleted = false
+                },
+                new UserGym
+                {
+                    IsDeleted = true
+                },
+            });
+
+            await this.dbContext.UsersEvents.AddAsync(new UserEvent
+            {
+                UserId = Guid.Parse(userId),
+                EventId = Guid.NewGuid(),
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersMemberships.AddAsync(new UserMembership
+            {
+                UserId = Guid.Parse(userId),
+                MembershipId = Guid.NewGuid(),
+                QRCodeUri = "Test",
+                PublicId = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeleted<UserGym>())
+                .Returns(this.dbContext.UsersGyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.RemoveGymFromUserAsync(gymId, userId);
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [Test]
+        [TestCase(null, "832fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
+        [TestCase("832fe39a-bc5b-4ea4-b0c5-68b2da06768e", null)]
+        [TestCase("832fe39a-bc5b-4ea4-b0c5-68b2da06768e", "932fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
+        public async Task RemoveGymFromUserAsyncShouldThrowExceptionWhenUserHasNotJoinedGym(string gymId, string userId)
+        {
+            await this.dbContext.UsersGyms.AddRangeAsync(new HashSet<UserGym>
+            {
+                new UserGym
+                {
+                    UserId = Guid.NewGuid(),
+                    GymId = Guid.NewGuid(),
+                    IsDeleted = false
+                },
+                new UserGym
+                {
+                    IsDeleted = true
+                },
+            });
+
+            await this.dbContext.UsersEvents.AddAsync(new UserEvent
+            {
+                UserId = Guid.NewGuid(),
+                EventId = Guid.NewGuid(),
+                IsDeleted = false
+            });
+
+            await this.dbContext.UsersMemberships.AddAsync(new UserMembership
+            {
+                UserId = Guid.NewGuid(),
+                MembershipId = Guid.NewGuid(),
+                QRCodeUri = "Test",
+                PublicId = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeleted<UserGym>())
+                .Returns(this.dbContext.UsersGyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Never);
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+               await service.RemoveGymFromUserAsync(gymId, userId);
+
+            }, ExceptionConstants.GymErrors.GymNotJoinedToBeLeft);
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetActiveOrDeletedGymsCountForManagementAsyncShouldWorkProperly(bool isDeleted)
+        {
+            var managerId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.Parse(managerId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.Parse(managerId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.Parse(managerId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllReadonly<Gym>())
+                .Returns(this.dbContext.Gyms.AsQueryable());
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetActiveOrDeletedGymsCountForManagementAsync(managerId, isDeleted);
+
+            var expectedCount = await this.dbContext.Gyms
+                .CountAsync(g => g.IsDeleted == isDeleted && g.ManagerId.ToString() == managerId);
+
+            Assert.That(result, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        [TestCase("", false)]
+        [TestCase(null, true)]
+        [TestCase("832fe39a-bc5b-4ea4-b0c5-68b2da06768e", false)]
+        public async Task GetActiveOrDeletedGymsCountForManagementAsyncShouldReturnZeroWhenIdIsInvalid(string managerId, bool isDeleted)
+        {
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllReadonly<Gym>())
+                .Returns(this.dbContext.Gyms.AsQueryable());
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetActiveOrDeletedGymsCountForManagementAsync(managerId, isDeleted);
+
+            var expectedCount = await this.dbContext.Gyms
+                .CountAsync(g => g.IsDeleted == isDeleted && g.ManagerId.ToString() == managerId);
+
+            Assert.That(result, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetActiveOrDeletedGymsCountForAdministrationAsyncShouldWorkProperly(bool isDeleted)
+        {
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllReadonly<Gym>())
+                .Returns(this.dbContext.Gyms.AsQueryable());
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetActiveOrDeletedGymsCountForAdministrationAsync(isDeleted);
+
+            var expectedCount = await this.dbContext.Gyms.CountAsync(g => g.IsDeleted == isDeleted);
+
+            Assert.That(result, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public async Task GetTop10NewestActiveGymsAsyncShouldWorkProperly()
+        {
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    CreatedOn = DateTime.UtcNow,
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    CreatedOn = DateTime.UtcNow.AddMinutes(5),
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetTop10NewestActiveGymsAsync();
+
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(DisplayGymViewModel));
+        }
+
+        [Test]
+        public async Task GetTop10MostLikedActiveGymsAsyncShouldWorkProperly()
+        {
+            var gymId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.Likes.AddAsync(new Like
+            {
+                GymId = Guid.Parse(gymId),
+                UserId = Guid.NewGuid(),
+                IsDeleted = false
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetTop10MostLikedActiveGymsAsync();
+
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(DisplayGymViewModel));
+        }
+
+        [Test]
+        public async Task GetAllActiveGymsFilteredAndPagedAsyncShouldWorkProperly()
+        {
+            var addressId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                Name = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            AllGymsQueryModel allGymsQueryModel = new AllGymsQueryModel
+            {
+                GymsPerPage = 2,
+                SearchTerm = null,
+                Sorting = GymsSorting.Newest,
+                CurrentPage = 1,
+                TotalGymsCount = 3
+            };
+
+            var result = await service.GetAllActiveGymsFilteredAndPagedAsync(allGymsQueryModel);
+
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(DisplayGymViewModel));
+        }
+
+        [Test]
+        public async Task GetGymDetailsByIdAsyncShouldWorkProperly()
+        {
+            var gymId = "432fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var userId = "532fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var managerId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var countryId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Users.AddAsync(new ApplicationUser
+            {
+                Id = Guid.Parse(userId),
+                UserName = "User",
+                Email = "user@gmailc.com",
+                FirstName = "Test",
+                LastName = "Test",
+                PhoneNumber = "123456789",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Managers.AddAsync(new Manager
+            {
+                Id = Guid.Parse(managerId),
+                UserId = Guid.Parse(userId),
+                ManagerType = ManagerType.ManyGymsManager,
+                IsDeleted = false
+            });
+
+            await this.dbContext.Countries.AddAsync(new Country
+            {
+                Id = Guid.Parse(countryId),
+                Name = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Towns.AddAsync(new Town
+            {
+                Id = Guid.Parse(townId),
+                CountryId = Guid.Parse(countryId),
+                Name = "Test",
+                Population = 1000,
+                ZipCode = "10001",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                TownId = Guid.Parse(townId),
+                Name = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymId),
+                    ManagerId = Guid.Parse(managerId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetGymDetailsByIdAsync(gymId);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<GymDetailsViewModel>(result);
+            Assert.That(result.Id, Is.EqualTo(gymId));
+        }
+
+        [Test]
+        public async Task GetGymForEditByIdAsyncShouldWorkProperly()
+        {
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Towns.AddAsync(new Town
+            {
+                Id = Guid.Parse(townId),
+                Name = "Test",
+                Population = 1000,
+                ZipCode = "10001",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                Name = "Test",
+                TownId = Guid.Parse(townId),
+                IsDeleted = false
+            });
+            
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            var result = await service.GetGymForEditByIdAsync(gymId);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<EditGymInputModel>(result);
+            Assert.That(result.Id, Is.EqualTo(gymId));
+        }
+
+        [Test]
+        public async Task GetAllUserJoinedGymsFilteredAndPagedAsyncShouldWorkProperly()
+        {
+            var userId = "632fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymOneId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var gymTwoId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                Name = "Test",
+                IsDeleted = false
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymOneId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.Parse(gymTwoId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.UsersGyms.AddRangeAsync(new HashSet<UserGym>
+            {
+                new UserGym
+                {
+                    UserId = Guid.Parse(userId),
+                    GymId = Guid.Parse(gymOneId),
+                    IsDeleted = false
+                },
+                new UserGym
+                {
+                    UserId = Guid.Parse(userId),
+                    GymId = Guid.Parse(gymTwoId),
+                    IsDeleted = false
+                },
+                new UserGym
+                {
+                    IsDeleted = true
+                },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeletedReadonly<UserGym>())
+                .Returns(this.dbContext.UsersGyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            AllUserJoinedGymsQueryModel allUserJoinedGymsQueryModel = new AllUserJoinedGymsQueryModel
+            {
+                UserId = userId,
+                GymsPerPage = 2,
+                SearchTerm = null,
+                Sorting = GymsSorting.Newest,
+                CurrentPage = 1,
+                TotalGymsCount = 3
+            };
+
+            var result = await service.GetAllUserJoinedGymsFilteredAndPagedAsync(userId, allUserJoinedGymsQueryModel);
+
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.AllItemsAreInstancesOfType(result, typeof(DisplayGymViewModel));
         }
 
         [Test]

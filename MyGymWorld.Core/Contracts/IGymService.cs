@@ -7,7 +7,7 @@
 
     public interface IGymService
     {
-        Task CreateGymAsync(Guid managerId, CreateGymInputModel createGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
+        Task CreateGymAsync(string managerId, CreateGymInputModel createGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
 
         Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel);
 
@@ -19,11 +19,11 @@
 
         Task<EditGymInputModel> GetGymForEditByIdAsync(string gymId);
 
-		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(Guid managerId, bool isDeleted, int skip = 0, int? take = null);
+		Task<List<GymViewModel>> GetActiveOrDeletedForManagementAsync(string managerId, bool isDeleted, int skip = 0, int? take = null);
 
         Task<List<GymViewModel>> GetActiveOrDeletedForAdministrationAsync(bool isDeleted, int skip = 0, int? take = null);
 
-        Task<int> GetActiveOrDeletedGymsCountForManagementAsync(Guid managerId, bool isDeleted);
+        Task<int> GetActiveOrDeletedGymsCountForManagementAsync(string managerId, bool isDeleted);
 
         Task<int> GetActiveOrDeletedGymsCountForAdministrationAsync(bool isDeleted);
 
@@ -33,7 +33,7 @@
 
         Task<IEnumerable<DisplayGymViewModel>> GetTop10MostLikedActiveGymsAsync();
 
-        Task<IEnumerable<DisplayGymViewModel>> GetAllActiveFilteredAndPagedGymsAsync(AllGymsQueryModel queryModel);
+        Task<IEnumerable<DisplayGymViewModel>> GetAllActiveGymsFilteredAndPagedAsync(AllGymsQueryModel queryModel);
 
         Task<IEnumerable<DisplayGymViewModel>> GetAllUserJoinedGymsFilteredAndPagedAsync(string userId, AllUserJoinedGymsQueryModel queryModel);
 
