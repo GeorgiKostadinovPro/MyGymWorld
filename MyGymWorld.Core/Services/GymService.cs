@@ -102,10 +102,10 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel, GymLogoAndGalleryImagesInputModel gymLogoAndGalleryImagesInputModel)
+        public async Task EditGymAsync(string gymId, EditGymInputModel editGymInputModel)
         {
             Gym? gymToEdit = await this.repository.AllNotDeleted<Gym>()
-                .Where(g => g.ToString() == gymId)
+                .Where(g => g.Id.ToString() == gymId)
                 .Include(g => g.Address)
                 .ThenInclude(a => a.Town)
                 .FirstOrDefaultAsync();
@@ -132,15 +132,15 @@
 					gymToEdit.AddressId = createdAddress.Id;
 				}
 
-				if (gymLogoAndGalleryImagesInputModel.LogoResultParams != null)
+				if (editGymInputModel.LogoResultParams != null)
 				{
-					gymToEdit.LogoUri = gymLogoAndGalleryImagesInputModel.LogoResultParams!.SecureUri!.AbsoluteUri;
-					gymToEdit.LogoPublicId = gymLogoAndGalleryImagesInputModel.LogoResultParams.PublicId;
+					gymToEdit.LogoUri = editGymInputModel.LogoResultParams!.SecureUri!.AbsoluteUri;
+					gymToEdit.LogoPublicId = editGymInputModel.LogoResultParams.PublicId;
 				}
 
-				if (gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams.Count > 0)
+				if (editGymInputModel.GalleryImagesResultParams.Count > 0)
 				{
-					foreach (var galleryImageResultParams in gymLogoAndGalleryImagesInputModel.GalleryImagesResultParams)
+					foreach (var galleryImageResultParams in editGymInputModel.GalleryImagesResultParams)
 					{
 						string uri = galleryImageResultParams.SecureUri.AbsoluteUri;
 						string publicId = galleryImageResultParams.PublicId;
