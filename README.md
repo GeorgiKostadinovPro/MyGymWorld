@@ -330,7 +330,9 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 </ul>
 <p>The business layer of the application <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core">MyGymWorld.Core</a> is covered at 70%.</p>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/37e1891d-3c55-4b0a-8ec5-ee1058948b0e)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/3c48ce04-bac6-400f-9796-4aecc3fae673)
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e69b51f1-ecdd-489e-8eda-d380228bc8d0)
 
 <p>You can check all unit tests by going to <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core.Tests">MyGymWorld.Core.Tests</a>.</p>
 <p>Here is an example of test taken from <a href=https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/MyGymWorld.Core.Tests/MembershipServiceTests.cs">MembershipServiceTests</a> :</p>
