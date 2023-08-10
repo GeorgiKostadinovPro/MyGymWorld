@@ -1,6 +1,7 @@
 ﻿namespace MyGymWorld.Core.Tests
 {
     using AutoMapper;
+    using CloudinaryDotNet.Actions;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using MyGymWorld.Common;
@@ -17,6 +18,7 @@
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
 
     [TestFixture]
@@ -54,9 +56,10 @@
         }
 
         [Test]
-        public async Task CreateGymAsyncShouldWorkProperly()
+        public async Task CreateGymAsyncShouldWorkProperlyWhenAddressAlreadyExists()
         {
             var managerId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var address = "Mladost 4";
 
             this.mockRepository
                 .Setup(x => x.AddAsync(It.IsAny<Gym>()))
@@ -65,6 +68,382 @@
                     await this.dbContext.Gyms.AddAsync(gym);
                     await this.dbContext.SaveChangesAsync();
                 });
+
+            this.addressServiceMock
+                .Setup(x => x.GetAddressByNameAsync(address))
+                .ReturnsAsync(new Address
+                {
+                    Id = Guid.NewGuid(),
+                    Name = address
+                });
+
+            CreateGymInputModel createGymInputModel = new CreateGymInputModel
+            {
+                Name = "Test",
+                Email = "test@gmail.com",
+                PhoneNumber = "1234567890",
+                Description = "Something",
+                GymType = "PowerLifting",
+                Address = address,
+                LogoResultParams = new ImageUploadResult
+                {
+                    SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                    PublicId = "Test"
+                },
+                GalleryImagesResultParams = new HashSet<ImageUploadResult>
+                {
+                    new ImageUploadResult
+                    {
+                        SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                        PublicId = "Test"
+                    },
+                }
+            };
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.CreateGymAsync(managerId, createGymInputModel);
+
+            this.addressServiceMock.Verify(x => x.GetAddressByNameAsync(address), Times.Once);
+            this.mockRepository.Verify(x => x.AddAsync(It.IsAny<Gym>()), Times.Once);
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task CreateGymAsyncShouldWorkProperlyWhenAddressDoesNotExist()
+        {
+            var managerId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var address = "Mladost 4";
+
+            this.mockRepository
+                .Setup(x => x.AddAsync(It.IsAny<Gym>()))
+                .Callback(async (Gym gym) =>
+                {
+                    await this.dbContext.Gyms.AddAsync(gym);
+                    await this.dbContext.SaveChangesAsync();
+                });
+
+            this.addressServiceMock
+                .Setup(x => x.CreateAddressAsync(address, townId))
+                .ReturnsAsync(new Address
+                {
+                    Id = Guid.NewGuid(),
+                    Name = address
+                });
+
+            CreateGymInputModel createGymInputModel = new CreateGymInputModel
+            {
+                Name = "Test",
+                Email = "test@gmail.com",
+                PhoneNumber = "1234567890",
+                Description = "Something",
+                GymType = "PowerLifting",
+                Address = address,
+                TownId = townId,
+                LogoResultParams = new ImageUploadResult
+                {
+                    SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                    PublicId = "Test"
+                },
+                GalleryImagesResultParams = new HashSet<ImageUploadResult>
+                {
+                    new ImageUploadResult
+                    {
+                        SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                        PublicId = "Test"
+                    },
+                }
+            };
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.CreateGymAsync(managerId, createGymInputModel);
+
+            this.addressServiceMock.Verify(x => x.CreateAddressAsync(address, townId), Times.Once);
+            this.mockRepository.Verify(x => x.AddAsync(It.IsAny<Gym>()), Times.Once);
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task EditGymAsyncShouldWorkProperlyWhenAddressAlreadyExists()
+        {
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var address = "Mladost 4";
+
+            await this.dbContext.Towns.AddAsync(new Town
+            {
+                Id = Guid.Parse(townId),
+                Population = 10000,
+                ZipCode = "10001",
+                Name= "Test"
+            });
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                TownId = Guid.Parse(townId),
+                Name = "Test"
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeleted<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            this.addressServiceMock
+               .Setup(x => x.GetAddressByNameAsync(address))
+               .ReturnsAsync(new Address
+               {
+                   Id = Guid.NewGuid(),
+                   Name = address
+               });
+
+            EditGymInputModel createGymInputModel = new EditGymInputModel
+            {
+                Name = "Test",
+                Email = "test@gmail.com",
+                PhoneNumber = "1234567890",
+                Description = "Something",
+                GymType = "PowerLifting",
+                Address = address,
+                TownId = townId,
+                LogoResultParams = new ImageUploadResult
+                {
+                    SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                    PublicId = "Test"
+                },
+                GalleryImagesResultParams = new HashSet<ImageUploadResult>
+                {
+                    new ImageUploadResult
+                    {
+                        SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                        PublicId = "Test"
+                    },
+                }
+            };
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.EditGymAsync(gymId, createGymInputModel);
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+            this.addressServiceMock.Verify(x => x.GetAddressByNameAsync(address), Times.Once);
+        }
+
+        [Test]
+        public async Task EditGymAsyncShouldWorkProperlyWhenAddressDoesNotExists()
+        {
+            var gymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var address = "Mladost 4";
+
+            await this.dbContext.Towns.AddAsync(new Town
+            {
+                Id = Guid.Parse(townId),
+                Population = 10000,
+                ZipCode = "10001",
+                Name = "Test"
+            });
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                TownId = Guid.Parse(townId),
+                Name = "Test"
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(gymId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeleted<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            this.addressServiceMock
+               .Setup(x => x.CreateAddressAsync(address, townId))
+               .ReturnsAsync(new Address
+               {
+                   Id = Guid.NewGuid(),
+                   Name = address
+               });
+
+            EditGymInputModel createGymInputModel = new EditGymInputModel
+            {
+                Name = "Test",
+                Email = "test@gmail.com",
+                PhoneNumber = "1234567890",
+                Description = "Something",
+                GymType = "PowerLifting",
+                Address = address,
+                TownId = townId,
+                LogoResultParams = new ImageUploadResult
+                {
+                    SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                    PublicId = "Test"
+                },
+                GalleryImagesResultParams = new HashSet<ImageUploadResult>
+                {
+                    new ImageUploadResult
+                    {
+                        SecureUri = new Uri("https://res.cloudinary.com/de1i8aava/image/upload/v1691677046/MyGymWorld/assets/gyms-gallery-pictures/jwwsi2nvz8gn75xawk01.jpg"),
+                        PublicId = "Test"
+                    },
+                }
+            };
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.EditGymAsync(gymId, createGymInputModel);
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+            this.addressServiceMock.Verify(x => x.CreateAddressAsync(address, townId), Times.Once);
+        }
+
+        [Test]
+        [TestCase("")]
+        [TestCase(null)]
+        [TestCase("632fe39a-bc5b-4ea4-b0c5-68b2da06768e")]
+        public async Task EditGymAsyncShouldNotDoAnythingWhenIdIsInvalid(string gymId)
+        {
+            var validGymId = "732fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var addressId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+            var townId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Towns.AddAsync(new Town
+            {
+                Id = Guid.Parse(townId),
+                Population = 10000,
+                ZipCode = "10001",
+                Name = "Test"
+            });
+
+            await this.dbContext.Addresses.AddAsync(new Address
+            {
+                Id = Guid.Parse(addressId),
+                TownId = Guid.Parse(townId),
+                Name = "Test"
+            });
+
+            await this.dbContext.Gyms.AddRangeAsync(new HashSet<Gym>
+            {
+                new Gym
+                {
+                    Id = Guid.Parse(validGymId),
+                    AddressId = Guid.Parse(addressId),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = false
+                },
+                new Gym
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "test@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Name = "Gym Test",
+                    Description = "Gym Test",
+                    LogoUri = "test",
+                    LogoPublicId = "test",
+                    WebsiteUrl = "test",
+                    IsDeleted = true
+                }
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.mockRepository
+                .Setup(x => x.AllNotDeleted<Gym>())
+                .Returns(this.dbContext.Gyms
+                .Where(g => g.IsDeleted == false));
+
+            var service = new GymService(this.mapper, this.mockRepository.Object,
+               this.eventServiceMock.Object, this.articleServiceMock.Object, this.membershipServiceMock.Object,
+               this.likeServiceMock.Object, this.dislikeServiceMock.Object, this.commentServiceMock.Object,
+               this.addressServiceMock.Object);
+
+            await service.EditGymAsync(gymId, new EditGymInputModel());
+
+            this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Never);
         }
 
         [Test]

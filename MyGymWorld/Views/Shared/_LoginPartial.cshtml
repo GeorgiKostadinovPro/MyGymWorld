@@ -14,8 +14,8 @@
         if (User.IsInRole("Administrator"))
         {
             <li class="nav-item">
-                <a asp-area="Admin" asp-controller="Manager" asp-action="Requests" class="notification">
-                    <span>Requests</span>
+                <a asp-area="Admin" asp-controller="Manager" asp-action="Dashboard" class="notification">
+                    <span>Dashboard</span>
                     <span class="badge">@(await this.managerService.GetAllNotApprovedManagerRequestsCountAsync())</span>
                 </a>
             </li>

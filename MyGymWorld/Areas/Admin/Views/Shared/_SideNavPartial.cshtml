@@ -6,11 +6,17 @@
 
 @if (this.User.IsInRole(ApplicationRoleConstants.AdministratorRoleName))
 {
-    <h3 class="disabled">Admin</h3>
+    <h3 class="disabled" style="text-align: center;">Admin</h3>
     <hr />
-    <ul class="nav nav-pills flex-column" id="sideNav">
-        <li class="nav-item"><a asp-area="Admin" asp-controller="Role" asp-action="Active" class="nav-link">Roles</a></li>
-        <li class="nav-item"><a asp-area="Admin" asp-controller="User" asp-action="Active" class="nav-link">Users</a></li>
-        <li class="nav-item"><a asp-area="Admin" asp-controller="Gym" asp-action="Active"  class="nav-link">Gyms</a></li>
+    <ul class="nav nav-pills flex-column" id="sideNav" style="text-align: center;">
+        <li class="nav-item" style="margin-bottom: 5px;">
+            <a asp-area="Admin" asp-controller="Role" asp-action="Active" class="btn btn-primary" style="background-color: #204FCA">Roles</a>
+        </li>
+        <li class="nav-item" style="margin-bottom: 5px;">
+            <a asp-area="Admin" asp-controller="User" asp-action="Active" class="btn btn-primary" style="background-color: #204FCA">Users</a>
+        </li>
+        <li class="nav-item">
+            <a asp-area="Admin" asp-controller="Gym" asp-action="Active" class="btn btn-primary" style="background-color: #204FCA">Gyms</a>
+        </li>
     </ul>
 }
