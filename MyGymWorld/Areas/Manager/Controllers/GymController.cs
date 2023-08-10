@@ -64,14 +64,14 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, false);
+            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
 
             int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
             AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
             {
                 Gyms = await this.gymService
-                .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value, false, (page - 1) * GymsPerPage, GymsPerPage),
+                .GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), false, (page - 1) * GymsPerPage, GymsPerPage),
                 CurrentPage = page,
                 PagesCount = totalPages
             };
@@ -98,14 +98,14 @@
 				return this.RedirectToAction("Index", "Home");
 			}
 
-			int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, true);
+			int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), true);
 
 			int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
 
 			AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
 			{
 				Gyms = await this.gymService
-				.GetActiveOrDeletedForManagementAsync(user.ManagerId.Value, true, (page - 1) * GymsPerPage, GymsPerPage),
+				.GetActiveOrDeletedForManagementAsync(user.ManagerId.Value.ToString(), true, (page - 1) * GymsPerPage, GymsPerPage),
 				CurrentPage = page,
 				PagesCount = totalPages
 			};
@@ -131,7 +131,7 @@
 
             Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
 
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId!.Value, false);
+            int count = await this.gymService.GetActiveOrDeletedGymsCountForManagementAsync(user.ManagerId.Value.ToString(), false);
 
             if ((int)manager!.ManagerType == 0 && count > 0)
             {
@@ -271,7 +271,7 @@
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 
-                await this.gymService.CreateGymAsync(user.ManagerId!.Value, createGymInputModel, gymLogoAndGalleryImagesInputModel);
+                await this.gymService.CreateGymAsync(user.ManagerId!.Value.ToString(), createGymInputModel, gymLogoAndGalleryImagesInputModel);
 
                 this.TempData[SuccessMessage] = $"You successfully created a gym!";
 

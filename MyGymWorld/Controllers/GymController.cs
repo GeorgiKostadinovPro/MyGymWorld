@@ -35,7 +35,7 @@
                 AllGymsFilteredAndPagedViewModel allGymsFilteredAndPagedViewModel = new AllGymsFilteredAndPagedViewModel
                 {
                     TotalGymsCount = await this.gymService.GetActiveGymsCountAsync(),
-                    Gyms = await this.gymService.GetAllActiveFilteredAndPagedGymsAsync(queryModel)
+                    Gyms = await this.gymService.GetAllActiveGymsFilteredAndPagedAsync(queryModel)
                 };
 
                 queryModel.GymTypes = this.gymService.GetAllGymTypes();
@@ -55,68 +55,77 @@
         [HttpGet]
         public async Task<IActionResult> Details(string gymId)
         {
-            bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
-
-            if (!doesGymExist)
+            try
             {
-                this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
+                bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
 
-                return this.NotFound();
+                if (!doesGymExist)
+                {
+                    this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
+
+                    return this.NotFound();
+                }
+
+                GymDetailsViewModel gymDetailsViewModel = await this.gymService.GetGymDetailsByIdAsync(gymId);
+
+                return this.View(gymDetailsViewModel);
             }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-            GymDetailsViewModel gymDetailsViewModel = await this.gymService.GetGymDetailsByIdAsync(gymId);
-
-            return this.View(gymDetailsViewModel);
+                return this.RedirectToAction(nameof(All));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Join(string gymId)
         {
-			string userId = this.GetUserId();
-
-			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-			if (user.IsDeleted == true)
-			{
-				this.TempData[ErrorMessage] = "You were deleted by the Admin!";
-
-				return this.RedirectToAction("Index", "Home", new { area = "" });
-			}
-
-			bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
-
-            if (!doesGymExist)
-            {
-                this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
-
-                return this.NotFound();
-            }
-
-            Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
-
-            if (gym == null)
-            {
-                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
-
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
-            
-            if (manager != null)
-            {
-                bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
-
-                if (isUserManagerOfThisGym)
-                {
-                    this.TempData[ErrorMessage] = "You are the manager of this gym! You can NOT join it!";
-
-                    return this.RedirectToAction(nameof(Details), new { gymId = gymId });
-                }
-            }
-
             try
             {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user.IsDeleted == true)
+                {
+                    this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
+
+                if (!doesGymExist)
+                {
+                    this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
+
+                    return this.NotFound();
+                }
+
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+                if (manager != null)
+                {
+                    bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
+
+                    if (isUserManagerOfThisGym)
+                    {
+                        this.TempData[ErrorMessage] = "You are the manager of this gym! You can NOT join it!";
+
+                        return this.RedirectToAction(nameof(Details), new { gymId = gymId });
+                    }
+                }
+
                 await this.gymService.AddGymToUserAsync(gymId, user.Id.ToString());
 
                 await this.notificationService.CreateNotificationAsync(
@@ -145,51 +154,51 @@
         [HttpPost]
         public async Task<IActionResult> Leave(string gymId)
         {
-			string userId = this.GetUserId();
-
-			ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-			if (user.IsDeleted == true)
-			{
-				this.TempData[ErrorMessage] = "You were deleted by the Admin!";
-
-				return this.RedirectToAction("Index", "Home", new { area = "" });
-			}
-
-			bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
-
-            if (!doesGymExist)
-            {
-                this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
-
-                return this.NotFound();
-            }
-
-            Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
-
-            if (gym == null)
-            {
-                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
-
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
-
-            if (manager != null)
-            {
-                bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
-
-                if (isUserManagerOfThisGym)
-                {
-                    this.TempData[ErrorMessage] = "You are the manager of this gym! You can NOT join it!";
-
-                    return this.RedirectToAction(nameof(Details), new { gymId = gymId });
-                }
-            }
-
             try
             {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user.IsDeleted == true)
+                {
+                    this.TempData[ErrorMessage] = "You were deleted by the Admin!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                bool doesGymExist = await this.gymService.CheckIfGymExistsByIdAsync(gymId);
+
+                if (!doesGymExist)
+                {
+                    this.TempData[ErrorMessage] = "Such Gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "", statusCode = 404 });
+                }
+
+                Gym? gym = await this.gymService.GetGymByIdAsync(gymId);
+
+                if (gym == null)
+                {
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                Manager? manager = await this.managerService.GetManagerByUserIdAsync(this.GetUserId());
+
+                if (manager != null)
+                {
+                    bool isUserManagerOfThisGym = await this.gymService.CheckIfGymIsManagedByManagerAsync(gymId, manager.Id.ToString());
+
+                    if (isUserManagerOfThisGym)
+                    {
+                        this.TempData[ErrorMessage] = "You are the manager of this gym! You can NOT join it!";
+
+                        return this.RedirectToAction(nameof(Details), new { gymId = gymId });
+                    }
+                }
+
                 await this.gymService.RemoveGymFromUserAsync(gymId, user.Id.ToString());
 
                 await this.notificationService.CreateNotificationAsync(

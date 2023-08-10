@@ -110,6 +110,13 @@
                  .ForMember(d => d.MembershipsCount, opt => opt.MapFrom(src => src.Memberships.Count(c => c.IsDeleted == false)))
                  .ForMember(d => d.TotalDays, opt => opt.MapFrom(src => (int)(DateTime.UtcNow - src.CreatedOn).TotalDays));
 
+            this.CreateMap<Gym, EditGymInputModel>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.GymType, opt => opt.MapFrom(src => src.GymType.ToString()))
+                .ForMember(d => d.Address, opt => opt.MapFrom(src => src.Address.Name))
+                .ForMember(d => d.TownId, opt => opt.MapFrom(src => src.Address.Town.Id.ToString()))
+                .ForMember(d => d.CountryId, opt => opt.MapFrom(src => src.Address.Town.Country.Id.ToString()));
+
             // Comments
             this.CreateMap<Comment, CommentViewModel>()
                  .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
