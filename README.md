@@ -286,7 +286,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <strong>Seeded Data</strong>
 
 <details>
-   <summary>Users - all already authenticated (their email is confirmed)</summary>
+   <summary>Users - all already authenticated (their emails are confirmed)</summary>
    <ul>
      <li>Admin - with real gmail to test the authentication flow - forgot and reset password. (the password of the account is the password for the gmail)</li>
      <li>Manager</li>
@@ -328,7 +328,10 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <li><a href="https://www.nuget.org/packages/Moq">Moq</a></li>
   <li><a href="https://learn.microsoft.com/en-us/ef/core/providers/in-memory/?tabs=dotnet-core-cli">InMemory Database</a></li>
 </ul>
-<p>The business layer of the application <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core">MyGymWorld.Core</a> is covered at 65%.</p>
+<p>The business layer of the application <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core">MyGymWorld.Core</a> is covered at 70%.</p>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/37e1891d-3c55-4b0a-8ec5-ee1058948b0e)
+
 <p>You can check all unit tests by going to <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/tree/master/MyGymWorld.Core.Tests">MyGymWorld.Core.Tests</a>.</p>
 <p>Here is an example of test taken from <a href=https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/MyGymWorld.Core.Tests/MembershipServiceTests.cs">MembershipServiceTests</a> :</p>
 
