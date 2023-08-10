@@ -296,12 +296,33 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <h3>Home Page Top Part (Administrator)</h3>
 
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0abc8998-690e-499d-adb2-892289490b40)
 
+<h3>Notifications Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e3bf5187-341f-48e8-adac-3fdbf84dcbf5)
+
+<h3>User Profile Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d0166edf-62ee-45c2-910b-c05035b167be)
+
+<h3>User Profile With Profile Picture</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/eb6f86fb-7b06-471e-9406-37428523fe4d)
+
+<h3>Edit User Profile Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d052c063-14f0-4ea2-9e43-96c002bbd1c6)
 
 <h3>Become Manager Page</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e32b8945-f454-47d6-8d4e-4785dbbac406)
 
+<h3>Admin Dashboard</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d777b400-ba97-4aba-b93b-dc038599731c)
+
+<h3></h3>
 <hr />
 
 <!-- Seeding -->
