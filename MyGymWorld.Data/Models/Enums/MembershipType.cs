@@ -3,7 +3,9 @@
     public enum MembershipType
     {
         Week = 0,
-        Month = 1,
-        Year = 2
+        TowWeeks = 1,
+        Month = 2,
+        SixMonths = 3,
+        Year = 4
     }
 }

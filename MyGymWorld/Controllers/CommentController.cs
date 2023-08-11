@@ -9,7 +9,7 @@
 
     public class CommentController : BaseController
     {
-        private const int CommentsPerPage = 5;
+        private const int CommentsPerPage = 4;
 
         private readonly ICommentService commentService;
         private readonly IGymService gymService;
