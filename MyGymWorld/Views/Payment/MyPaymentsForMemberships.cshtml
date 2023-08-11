@@ -23,7 +23,8 @@
 						<th>Email</th>
 						<th>Purchased on</th>
 						<th>Valid to</th>
-						<th>Membership Type</th>
+						<th>Membership</th>
+						<th>Price</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -39,6 +40,7 @@
 							<td>@userMembership.PurchasedOn.ToString("d MMMM yyyy")</td>
 							<td>@userMembership.ValidTo.ToString("d MMMM yyyy")</td>
 							<td>@userMembership.MembershipType</td>
+							<td>@userMembership.Price</td>
 
 							@if (userMembership.PaymentStatus == true)
 							{

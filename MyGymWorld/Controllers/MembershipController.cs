@@ -70,62 +70,22 @@
 					}
 				}
 
-
 				await this.membershipService.BuyMembershipAsync(membershipId, userId);
 
 				this.TempData[SuccessMessage] = "You successfully bought a membership!";
 
 				await this.notificationService.CreateNotificationAsync(
 					$"You bought a membership for {gym.Name}",
-					$"/Membership/UserMemberships?userId={userId}",
+					$"/Payment/SuccessfulPayment?userId={userId}&membershipId=${membershipId}",
 					userId);
 
-				return this.RedirectToAction(nameof(UserMemberships), new { UserId = userId });
+				return this.RedirectToAction("SuccessfulPayment", "Payment", new { userId = userId, membershipId = membershipId });
 			}
 			catch (Exception)
 			{
 				this.TempData[ErrorMessage] = "Something went wrong!";
 
-				return this.RedirectToAction(nameof(Details), new { membershipId = membershipId });
-			}
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> MyPaymentsForMemberships(int page = 1)
-		{
-			try
-			{
-				string userId = this.GetUserId();
-
-				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-				if (user.IsDeleted == true)
-				{
-					this.TempData[ErrorMessage] = "You were deleted by the Admin!";
-
-					return this.RedirectToAction("Index", "Home", new { area = "" });
-				}
-
-				int count = await this.membershipService.GetAllActiveUserMembershipsCountByUserIdAsync(userId);
-
-				int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
-				totalPages = totalPages == 0 ? 1 : totalPages;
-
-				AllUserMembershipPaymentsViewModel allUserMembershipPaymentsViewModel = new AllUserMembershipPaymentsViewModel 
-				{ 
-					Memberships = await this.membershipService.GetActivePaymentsByUserIdAsync(userId),
-					CurrentPage = page,
-					PagesCount = totalPages,
-					UserId = userId
-				};
-
-				return this.View(allUserMembershipPaymentsViewModel);
-			}
-			catch (Exception)
-			{
-				this.TempData[ErrorMessage] = "Something went wrong!";
-
-				return this.RedirectToAction("Index", "Home", new { area = "" });
+				return this.View();
 			}
 		}
 

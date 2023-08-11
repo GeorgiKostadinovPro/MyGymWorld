@@ -1,10 +1,11 @@
 ﻿namespace MyGymWorld.Web.Controllers
 {
 	using Microsoft.AspNetCore.Mvc;
-	using MyGymWorld.Core.Contracts;
+    using MyGymWorld.Common;
+    using MyGymWorld.Core.Contracts;
 	using MyGymWorld.Data.Models;
-
-	using Stripe.Checkout;
+    using MyGymWorld.Web.ViewModels.Memberships;
+    using Stripe.Checkout;
 
     using static MyGymWorld.Common.NotificationMessagesConstants;
 
@@ -114,6 +115,87 @@
             }
             
             return this.StatusCode(500);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SuccessfulPayment(string userId, string membershipId)
+        {
+            try
+            {
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exist";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                UserMembership? userMembership = await this.membershipService.GetUserMembershipAsync(userId, membershipId);
+
+                if (userMembership == null)
+                {
+                    this.TempData[ErrorMessage] = "Such payment does NOT exist";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                PayedMembershipViewModel payedMembershipViewModel = new PayedMembershipViewModel
+                {
+                    Id = membershipId,
+                    UserEmail = user.Email,
+                    Price = userMembership.Membership.Price.ToString("C"),
+                    MembershipType = userMembership.Membership.MembershipType.ToString(),
+                    PurchasedOn = userMembership.CreatedOn
+                };
+
+                return this.View(payedMembershipViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyPaymentsForMemberships(int page = 1)
+        {
+            try
+            {
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user doesNOT exist";
+
+                    return this.RedirectToAction("Index", "Home", new { area = "" });
+                }
+
+                int count = await this.membershipService.GetAllActiveUserMembershipsCountByUserIdAsync(userId);
+
+                int totalPages = (int)Math.Ceiling((double)count / GlobalConstants.MembershipConstants.MembershipsPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllUserMembershipPaymentsViewModel allUserMembershipPaymentsViewModel = new AllUserMembershipPaymentsViewModel
+                {
+                    Memberships = await this.membershipService.GetActivePaymentsByUserIdAsync(userId),
+                    CurrentPage = page,
+                    PagesCount = totalPages,
+                    UserId = userId
+                };
+
+                return this.View(allUserMembershipPaymentsViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
         }
     }
 }

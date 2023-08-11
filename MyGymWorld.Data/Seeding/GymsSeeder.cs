@@ -185,13 +185,13 @@
 						new Membership
 						{
 							Price = 25.00M,
-							MembershipType = Models.Enums.MembershipType.Week,
+							MembershipType = Models.Enums.MembershipType.Weekly,
 							CreatedOn = DateTime.UtcNow
 						},
                         new Membership
                         {
                             Price = 50.00M,
-                            MembershipType = Models.Enums.MembershipType.Month,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
                             CreatedOn = DateTime.UtcNow
                         }
                     }
@@ -308,13 +308,13 @@
                         new Membership
                         {
                             Price = 30.00M,
-                            MembershipType = Models.Enums.MembershipType.Week,
+                            MembershipType = Models.Enums.MembershipType.Weekly,
                             CreatedOn = DateTime.UtcNow
                         },
                         new Membership
                         {
                             Price = 80.00M,
-                            MembershipType = Models.Enums.MembershipType.Month,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
                             CreatedOn = DateTime.UtcNow
                         }
                     }
@@ -481,13 +481,13 @@
                         new Membership
                         {
                             Price = 15.00M,
-                            MembershipType = Models.Enums.MembershipType.Week,
+                            MembershipType = Models.Enums.MembershipType.Weekly,
                             CreatedOn = DateTime.UtcNow
                         },
                         new Membership
                         {
                             Price = 100.00M,
-                            MembershipType = Models.Enums.MembershipType.Month,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
                             CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(30))
                         },
                         new Membership
