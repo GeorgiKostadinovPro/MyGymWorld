@@ -428,7 +428,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/020482a8-7c92-4401-bd8e-82c73156851f)
 
-<h3>My Payments Page</h3>
+<h3>Manage My Payments Page</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e3fc515e-8a05-4884-b52e-c35025bd2c43)
 
@@ -454,7 +454,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <h3>Edit Event Page (For Manager)</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2b6cfeeb-3a88-43ad-b3fc-2203036e388a)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/84efeed2-6cdd-4913-aa73-23f7bcd88086)
 
 <h3>Create Article Page (For Manager)</h3>
 
@@ -462,7 +462,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <h3>Edit Article Page (For Manager)</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2b6cfeeb-3a88-43ad-b3fc-2203036e388a)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6d5d1c31-98eb-4e58-96bc-a0b049d870bf)
 
 <h3>Create Membership Page (For Manager)</h3>
 
@@ -472,7 +472,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0037d973-a85a-4294-9ff9-22b6d5f3c58f)
 
-<h3>Gym Payments Page (For Manager)</h3>
+<h3>Manage Gym Payments Page (For Manager)</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0bd556bd-be65-4ef8-b4ca-03bfb9a9a444)
 
