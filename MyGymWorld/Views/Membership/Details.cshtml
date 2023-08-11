@@ -36,19 +36,28 @@
 		<img src="@Model.LogoUri" alt="img" style="width:100%">
 	}
 	
-		@if (Model.MembershipType == "Week")
+		@if (Model.MembershipType == "Weekly")
 		{
 			<h1 style="margin-top: 10px;">Weekly Membership</h1>
 		}
-		else if (Model.MembershipType == "Month")
+		else if (Model.MembershipType == "Monthly")
 		{
-		<h1 style="margin-top: 10px;">Monthly Membership</h1>
+			<h1 style="margin-top: 10px;">Monthly Membership</h1>
 		}
-		else
+		else if(Model.MembershipType == "Yearly")
 		{
-		<h1 style="margin-top: 10px;">Yearly Membership</h1>
+			<h1 style="margin-top: 10px;">Yearly Membership</h1>
+	    }
+	    else if (Model.MembershipType == "TwoWeeks")
+	    {
+			<h1 style="margin-top: 10px;">Two Weeks Membership</h1>
+
+	    }
+	    else
+	    {
+		    <h1 style="margin-top: 10px;">Six Months Membership</h1>
 		}
-	
+	    
 
 	@if (userMembership != null && userMembership.ValidTo > DateTime.UtcNow)
 	{
