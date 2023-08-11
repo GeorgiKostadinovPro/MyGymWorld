@@ -80,7 +80,7 @@
                 {
                     Id = Guid.Parse(membershipId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -129,7 +129,7 @@
                 {
                     Id = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -172,7 +172,7 @@
                 {
                     Id = Guid.Parse(membershipId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -213,7 +213,7 @@
                 {
                     Id = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -250,7 +250,7 @@
                     Id = Guid.Parse(membershipId),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -258,7 +258,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Month,
+                    MembershipType = MembershipType.Monthly,
                     IsDeleted = false
                 },
                 new Membership
@@ -318,7 +318,7 @@
                     Id = Guid.Parse(membershipId),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -326,7 +326,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Month,
+                    MembershipType = MembershipType.Monthly,
                     IsDeleted = false
                 },
                 new Membership
@@ -398,7 +398,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.Parse(gymId),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -468,7 +468,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.NewGuid(),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -547,7 +547,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(gymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -555,7 +555,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(gymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Month,
+                    MembershipType = MembershipType.Monthly,
                     IsDeleted = false
                 },
                 new Membership
@@ -617,7 +617,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(validGymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -625,7 +625,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(validGymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Month,
+                    MembershipType = MembershipType.Monthly,
                     IsDeleted = false
                 },
                 new Membership
@@ -678,7 +678,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.Parse(gymId),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -744,7 +744,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.NewGuid(),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -807,7 +807,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.NewGuid(),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -873,7 +873,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.NewGuid(),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -928,7 +928,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.Parse(gymId),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -985,7 +985,7 @@
                 Id = Guid.Parse(membershipId),
                 GymId = Guid.NewGuid(),
                 Price = 10m,
-                MembershipType = MembershipType.Week,
+                MembershipType = MembershipType.Weekly,
                 IsDeleted = false
             });
 
@@ -1041,7 +1041,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(gymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1049,7 +1049,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.Parse(gymId),
                      Price = 10m,
-                    MembershipType = MembershipType.Month,
+                    MembershipType = MembershipType.Monthly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1086,7 +1086,7 @@
                     Id = Guid.NewGuid(),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1219,7 +1219,7 @@
                     Id = Guid.Parse(membershipId),
                     GymId = Guid.Parse(gymId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1261,7 +1261,7 @@
                     Id = Guid.Parse(membershipId),
                     GymId = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1296,6 +1296,14 @@
         {
             var userId = "832fe39a-bc5b-4ea4-b0c5-68b2da06768e";
             var membershipId = "932fe39a-bc5b-4ea4-b0c5-68b2da06768e";
+
+            await this.dbContext.Memberships.AddAsync(new Membership
+            {
+                Id = Guid.Parse(membershipId),
+                Price = 10m,
+                MembershipType = MembershipType.Weekly,
+                IsDeleted = false
+            });
 
             await this.dbContext.UsersMemberships.AddRangeAsync(new HashSet<UserMembership>
             {
@@ -1387,7 +1395,7 @@
                 {
                     Id = Guid.Parse(membershipId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1429,7 +1437,7 @@
                 {
                     Id = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1469,7 +1477,7 @@
                 {
                     Id = Guid.Parse(membershipId),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1510,7 +1518,7 @@
                 {
                     Id = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1543,7 +1551,7 @@
                 {
                     Id = Guid.NewGuid(),
                     Price = 10m,
-                    MembershipType = MembershipType.Week,
+                    MembershipType = MembershipType.Weekly,
                     IsDeleted = false
                 },
                 new Membership
@@ -1580,7 +1588,7 @@
 
             var result = service.GetAllMembershipTypes();
 
-            Assert.That(result.Count(), Is.EqualTo(3));
+            Assert.That(result.Count(), Is.EqualTo(5));
         }
     }
 }

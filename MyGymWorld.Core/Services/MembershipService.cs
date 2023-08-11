@@ -337,7 +337,9 @@
         public async Task<UserMembership?> GetUserMembershipAsync(string userId, string membershipId)
         {
             return await this.repository.AllNotDeletedReadonly<UserMembership>()
-                .FirstOrDefaultAsync(um => um.UserId.ToString() == userId && um.MembershipId.ToString() == membershipId);
+                .Where(um => um.UserId.ToString() == userId && um.MembershipId.ToString() == membershipId)
+                .Include(um => um.Membership)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Membership?> GetMembershipByIdAsync(string membershipId)
