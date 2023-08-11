@@ -408,7 +408,7 @@
                             " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
                             "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                             "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                            CreatedOn = DateTime.UtcNow.AddMinutes(30),
+                            CreatedOn = DateTime.UtcNow
                         },
                         new Article
                         {
@@ -418,7 +418,7 @@
                             " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
                             "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                             "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                            CreatedOn = DateTime.UtcNow.AddDays(1)
+                            CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(30))
                         },
                         new Article
                         {
@@ -428,7 +428,7 @@
                             " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
                             "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                             "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                            CreatedOn = DateTime.UtcNow
+                            CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(50))
                         },
                         new Article
                         {
@@ -493,7 +493,7 @@
                         new Membership
                         {
                             Price = 50.00M,
-                            MembershipType = Models.Enums.MembershipType.TowWeeks,
+                            MembershipType = Models.Enums.MembershipType.TwoWeeks,
                             CreatedOn = DateTime.UtcNow
                         },
                         new Membership
