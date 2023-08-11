@@ -3,6 +3,7 @@
     public enum GymType
     {
         CrossFit = 0,
-        PowerLifting = 1
+        PowerLifting = 1,
+        Universal = 2
     }
 }

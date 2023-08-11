@@ -27,7 +27,6 @@
             Address address2 = await dbContext.Addresses.FirstAsync(a => a.Name == "bul. Bulgaria 1");
             Address address4 = await dbContext.Addresses.FirstAsync(a => a.Name == "Mladost 4");
 
-
             // The images are already pushed to Cloudinary the publicIds are exposed, but you cannot perform any actions without my OWN APIKey and APISecret
 
             IEnumerable<Gym> gyms = new HashSet<Gym>
@@ -322,12 +321,12 @@
                 },
                  new Gym
                 {
-                    Name = "Gorilla Gym",
+                    Name = "Tech Gym",
                     Email = managerUser.Email,
                     PhoneNumber = managerUser.PhoneNumber,
-                    Description = "The best gym for weightlifters!",
+                    Description = "The best gym for everyone!",
                     WebsiteUrl = "https://easybook.bg/fitnes-tsentar-gorilla-gym",
-                    GymType = Models.Enums.GymType.PowerLifting,
+                    GymType = Models.Enums.GymType.Universal,
                     LogoUri = "https://res.cloudinary.com/de1i8aava/image/upload/v1690992108/MyGymWorld/assets/gyms-logo-pictures/GorillaGym-gym-logo_xy721f.jpg",
                     LogoPublicId = "GorillaGym-gym-logo_xy721f",
                     ManagerId = managerUser.ManagerId.Value,
@@ -364,7 +363,7 @@
                     {
                         new Event
                         {
-                            Name = "Gorilla Gym Meeting",
+                            Name = "Tech Gym Meeting",
                             Description = "Meet with our trainers and managers.",
                             StartDate = DateTime.UtcNow,
                             EndDate = DateTime.UtcNow.AddDays(1),
@@ -373,19 +372,57 @@
                         },
                         new Event
                         {
-                            Name = "Gorilla Gym Training",
+                            Name = "Tech Gym Training",
                             Description = "Meet with our trainers and managers to train and gain experience.",
                             StartDate = DateTime.UtcNow.AddDays(2),
                             EndDate = DateTime.UtcNow.AddDays(10),
                             EventType = Models.Enums.EventType.Training,
                             CreatedOn = DateTime.UtcNow
-                        }
+                        },
+                        new Event
+                        {
+                            Name = "Business Meeting",
+                            Description = "A business meeting for taking actions about the new policy.",
+                            StartDate = DateTime.UtcNow.AddMinutes(1),
+                            EndDate = DateTime.UtcNow.AddMinutes(2),
+                            EventType = Models.Enums.EventType.Business,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Event
+                        {
+                            Name = "Tech Gym Charity",
+                            Description = "Please, lets help out all people that have struggles!",
+                            StartDate = DateTime.UtcNow.AddDays(3),
+                            EndDate = DateTime.UtcNow.AddDays(10),
+                            EventType = Models.Enums.EventType.Charity,
+                            CreatedOn = DateTime.UtcNow
+                        },
                     },
                     Articles = new HashSet<Article>
                     {
                         new Article
                         {
-                            Title = "Test Article Gorilla Gym",
+                            Title = "Test Article Tech Gym",
+                            Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
+                            " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
+                            "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
+                            "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                            CreatedOn = DateTime.UtcNow.AddMinutes(30),
+                        },
+                        new Article
+                        {
+                            Title = "Test Article 2 Tech Gym",
+                            Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
+                            " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
+                            "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
+                            "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                            CreatedOn = DateTime.UtcNow.AddDays(1)
+                        },
+                        new Article
+                        {
+                            Title = "Test Article 3 Tech Gym",
                             Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
                             "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
                             " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
@@ -395,14 +432,14 @@
                         },
                         new Article
                         {
-                            Title = "Test Article 2 Gorilla Gym",
+                            Title = "Test Article 4 Tech Gym",
                             Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
                             "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
                             " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
                             "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                             "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                             CreatedOn = DateTime.UtcNow
-                        }
+                        },
                     },
                     Comments = new HashSet<Comment>
                     {
@@ -415,6 +452,18 @@
                         new Comment
                         {
                             Content = "Totally recommend it!",
+                            UserId = admin.Id,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Comment
+                        {
+                            Content = "Top experience!",
+                            UserId = normalUser.Id,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Comment
+                        {
+                            Content = "The price is a little too high though...",
                             UserId = admin.Id,
                             CreatedOn = DateTime.UtcNow
                         }
@@ -433,14 +482,26 @@
                         {
                             Price = 15.00M,
                             MembershipType = Models.Enums.MembershipType.Week,
-                            CreatedOn = DateTime.UtcNow
+                            CreatedOn = DateTime.UtcNow.AddDays(1)
                         },
                         new Membership
                         {
                             Price = 100.00M,
                             MembershipType = Models.Enums.MembershipType.Month,
+                            CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(30))
+                        },
+                        new Membership
+                        {
+                            Price = 50.00M,
+                            MembershipType = Models.Enums.MembershipType.TowWeeks,
                             CreatedOn = DateTime.UtcNow
-                        }
+                        },
+                        new Membership
+                        {
+                            Price = 150.00M,
+                            MembershipType = Models.Enums.MembershipType.SixMonths,
+                            CreatedOn = DateTime.UtcNow
+                        },
                     }
                 }
             };
