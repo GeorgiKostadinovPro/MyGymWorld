@@ -2357,7 +2357,7 @@
 
             var result = service.GetAllGymTypes();
 
-            Assert.That(result.Count(), Is.EqualTo(2));
+            Assert.That(result.Count(), Is.EqualTo(3));
         }
     }
 }

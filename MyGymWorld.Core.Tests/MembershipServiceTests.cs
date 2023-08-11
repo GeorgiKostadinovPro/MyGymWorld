@@ -56,7 +56,7 @@
             {
                 GymId = Guid.NewGuid().ToString(),
                 Price = 10m,
-                MembershipType = "Week"
+                MembershipType = "Weekly"
             };
 
             var result = await service.CreateMembershipAsync(createMembershipInputModel);
@@ -104,7 +104,7 @@
                 Id = membershipId,
                 GymId = Guid.NewGuid().ToString(),
                 Price = 10m,
-                MembershipType = "Month"
+                MembershipType = "Monthly"
             };
 
             await service.EditMembershipAsync(membershipId, editMembershipInputModel);
@@ -114,7 +114,7 @@
 
             this.mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 
-            Assert.That(editedMembership.MembershipType.ToString(), Is.EqualTo("Month"));
+            Assert.That(editedMembership.MembershipType.ToString(), Is.EqualTo("Monthly"));
         }
 
         [Test]
