@@ -9,7 +9,7 @@
 
     public class NotificationController : BaseController
     {
-        private readonly int NotificationsPerPage = 5;
+        private readonly int NotificationsPerPage = 4;
 
         private readonly INotificationService notificationService;
         private readonly IUserService userService;
