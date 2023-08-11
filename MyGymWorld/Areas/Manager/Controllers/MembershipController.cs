@@ -159,15 +159,15 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateMembershipInputModel createMembershipInputModel)
         {
-            createMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(createMembershipInputModel);
-            }
-
             try
             {
+                createMembershipInputModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(createMembershipInputModel);
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);

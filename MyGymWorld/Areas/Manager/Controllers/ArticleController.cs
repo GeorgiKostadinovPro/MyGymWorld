@@ -98,15 +98,15 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateArticleInputModel createArticleInputModel)
         {
-            createArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(createArticleInputModel);
-            }
-
             try
             {
+                createArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(createArticleInputModel);
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -243,16 +243,16 @@
 		[HttpPost]
 		public async Task<IActionResult> Edit(string articleId, EditArticleInputModel editArticleInputModel)
 		{
-			editArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
-
-			if (!this.ModelState.IsValid)
-			{
-				return this.View(editArticleInputModel);
-			}
-
 			try
 			{
-				string userId = this.GetUserId();
+                editArticleInputModel.CategoriesListItems = await this.categoryService.GetAllAsSelectListItemsAsync();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(editArticleInputModel);
+                }
+
+                string userId = this.GetUserId();
 
 				ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
 

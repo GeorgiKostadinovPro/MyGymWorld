@@ -169,44 +169,53 @@
 		[HttpGet]
         public async Task<IActionResult> AllforGym([FromQuery] AllMembershipsForGymQueryModel queryModel)
         {
-            Gym? gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
+			try
+			{
+                Gym? gym = await this.gymService.GetGymByIdAsync(queryModel.GymId);
 
-            if (gym == null)
-            {
-                this.TempData[ErrorMessage] = "Such gym does NOT exists!";
-
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            string userId = this.GetUserId();
-
-            ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
-
-            if (user.ManagerId == null
-                || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(queryModel.GymId, user.ManagerId.ToString()!))))
-            {
-                bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
-
-                if (hasUserJoinedGym == false)
+                if (gym == null)
                 {
-                    this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+                    this.TempData[ErrorMessage] = "Such gym does NOT exists!";
 
-                    return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
+                    return this.RedirectToAction("Index", "Home");
                 }
+
+                string userId = this.GetUserId();
+
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user.ManagerId == null
+                    || (user.ManagerId != null && !(await this.gymService.CheckIfGymIsManagedByManagerAsync(queryModel.GymId, user.ManagerId.ToString()!))))
+                {
+                    bool hasUserJoinedGym = await this.gymService.CheckIfGymIsJoinedByUserAsync(queryModel.GymId, userId);
+
+                    if (hasUserJoinedGym == false)
+                    {
+                        this.TempData[ErrorMessage] = "You have to JOIN the gym to see events!";
+
+                        return this.RedirectToAction("Details", "Gym", new { gymId = queryModel.GymId });
+                    }
+                }
+
+                AllMembershipsForGymFilteredAndPagedViewModel allMembershipsForGymFilteredAndPagedViewModel = new AllMembershipsForGymFilteredAndPagedViewModel
+                {
+                    TotalMembershipsCount = await this.membershipService.GetAllActiveMembershipsCountByGymIdAsync(queryModel.GymId),
+                    Memberships = await this.membershipService.GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(queryModel)
+                };
+
+                queryModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
+                queryModel.TotalMembershipsCount = allMembershipsForGymFilteredAndPagedViewModel.TotalMembershipsCount;
+                queryModel.Memberships = allMembershipsForGymFilteredAndPagedViewModel.Memberships;
+
+                return this.View(queryModel);
             }
+			catch (Exception)
+			{
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-            AllMembershipsForGymFilteredAndPagedViewModel allMembershipsForGymFilteredAndPagedViewModel = new AllMembershipsForGymFilteredAndPagedViewModel
-            {
-                TotalMembershipsCount = await this.membershipService.GetAllActiveMembershipsCountByGymIdAsync(queryModel.GymId),
-                Memberships = await this.membershipService.GetAllActiveMembershipsFilteredAndPagedByGymIdAsync(queryModel)
-            };
-
-            queryModel.MembershipTypes = this.membershipService.GetAllMembershipTypes();
-            queryModel.TotalMembershipsCount = allMembershipsForGymFilteredAndPagedViewModel.TotalMembershipsCount;
-            queryModel.Memberships = allMembershipsForGymFilteredAndPagedViewModel.Memberships;
-
-            return this.View(queryModel);
-        }
+                return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+            }
+		}
 
         [HttpGet]
         public async Task<IActionResult> Details(string membershipId)

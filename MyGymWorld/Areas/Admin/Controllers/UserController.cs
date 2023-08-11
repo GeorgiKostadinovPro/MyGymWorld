@@ -26,38 +26,56 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(false);
-
-            int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllUsersViewModel allUsersViewModel = new AllUsersViewModel
+            try
             {
-                Users = await this.userService
-                .GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * UsersPerPage, UsersPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
+                int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(false);
 
-            return this.View(allUsersViewModel);
+                int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllUsersViewModel allUsersViewModel = new AllUsersViewModel
+                {
+                    Users = await this.userService
+                    .GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * UsersPerPage, UsersPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return this.View(allUsersViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(true);
-
-            int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllUsersViewModel allUsersViewModel = new AllUsersViewModel
+            try
             {
-                Users = await this.userService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * UsersPerPage, UsersPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
+                int usersCount = await this.userService.GetActiveOrDeletedUsersCountAsync(true);
 
-            return this.View(allUsersViewModel);
+                int totalPages = (int)Math.Ceiling((double)usersCount / UsersPerPage);
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllUsersViewModel allUsersViewModel = new AllUsersViewModel
+                {
+                    Users = await this.userService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * UsersPerPage, UsersPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return this.View(allUsersViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
+            }
         }
 
         [HttpPost]

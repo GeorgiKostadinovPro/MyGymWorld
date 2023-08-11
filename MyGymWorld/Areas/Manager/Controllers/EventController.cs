@@ -85,15 +85,15 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateEventInputModel createEventInputModel)
         {
-            createEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(createEventInputModel);
-            }
-
             try
             {
+                createEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(createEventInputModel);
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
@@ -233,15 +233,15 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string eventId, EditEventInputModel editEventInputModel)
         {
-            editEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(editEventInputModel);
-            }
-
             try
             {
+                editEventInputModel.EventTypes = this.eventService.GetAllEventTypes();
+
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(editEventInputModel);
+                }
+
                 string userId = this.GetUserId();
 
                 ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
