@@ -705,7 +705,7 @@ public async Task BuyMembershipAsyncShouldAddMembershipToUserWhenHeBuysItForTheF
 <!-- Usage -->
 ## :eyes: Usage
 
-Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources.
+This application can be used in various ways and most importantly it significantly helps fitness enthusiasts who wants an easier and faster way to find the best gym for them. 
 
 <hr />
 
