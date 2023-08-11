@@ -416,6 +416,10 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b09120ea-7846-4548-9feb-8dfc533e943d)
 
+<h3>Gym Membership Details After Successful Payment</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/cd57f332-6a78-4b40-8c61-cc296477ab50)
+
 <h3>Gym Membership Details Page (For Manager)</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d5a76e0b-faf3-497f-b34f-992ae8f4e8a9)
