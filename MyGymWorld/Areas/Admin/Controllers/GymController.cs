@@ -24,69 +24,87 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-            if (user == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such user does NOT exists!";
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
 
-                return this.RedirectToAction("Index", "Home");
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (!User.IsInRole("Administrator"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                int count = await this.gymService.GetActiveOrDeletedGymsCountForAdministrationAsync(false);
+
+                int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+
+                AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+                {
+                    Gyms = await this.gymService
+                    .GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * GymsPerPage, GymsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return this.View(allGymsForManagement);
             }
-
-            if (!User.IsInRole("Administrator"))
+            catch (Exception)
             {
-                this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
             }
-
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForAdministrationAsync(false);
-
-            int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
-
-            AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
-            {
-                Gyms = await this.gymService
-                .GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * GymsPerPage, GymsPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
-
-            return this.View(allGymsForManagement);
         }
 
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
-
-            if (user == null)
+            try
             {
-                this.TempData[ErrorMessage] = "Such user does NOT exists!";
+                ApplicationUser user = await this.userService.GetUserByIdAsync(this.GetUserId());
 
-                return this.RedirectToAction("Index", "Home");
+                if (user == null)
+                {
+                    this.TempData[ErrorMessage] = "Such user does NOT exists!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                if (!User.IsInRole("Administrator"))
+                {
+                    this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                int count = await this.gymService.GetActiveOrDeletedGymsCountForAdministrationAsync(true);
+
+                int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
+
+                AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
+                {
+                    Gyms = await this.gymService
+                    .GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * GymsPerPage, GymsPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return this.View(allGymsForManagement);
             }
-
-            if (!User.IsInRole("Administrator"))
+            catch (Exception)
             {
-                this.TempData[ErrorMessage] = "You do NOT have rights to open this page!";
+                this.TempData[ErrorMessage] = "Something went wrong!";
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
             }
-
-            int count = await this.gymService.GetActiveOrDeletedGymsCountForAdministrationAsync(true);
-
-            int totalPages = (int)Math.Ceiling((double)count / GymsPerPage);
-
-            AllGymsForManagementViewModel allGymsForManagement = new AllGymsForManagementViewModel
-            {
-                Gyms = await this.gymService
-                .GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * GymsPerPage, GymsPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
-
-            return this.View(allGymsForManagement);
         }
     }
 }

@@ -24,8 +24,6 @@
 
         public async Task<IActionResult> Create(string gymId)
         {
-           
-
             try
             {
                 if (!User.Identity!.IsAuthenticated)

@@ -24,38 +24,56 @@
         [HttpGet]
         public async Task<IActionResult> Active(int page = 1)
         {
-            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(false);
-
-            int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllRolesViewModel allRolesViewModel = new AllRolesViewModel
+            try
             {
-                Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * RolesPerPage, RolesPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
+                int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(false);
 
-            return View(allRolesViewModel);       
+                int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllRolesViewModel allRolesViewModel = new AllRolesViewModel
+                {
+                    Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(false, (page - 1) * RolesPerPage, RolesPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return View(allRolesViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Deleted(int page = 1)
         {
-            int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(true);
-
-            int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
-
-            totalPages = totalPages == 0 ? 1 : totalPages;
-
-            AllRolesViewModel allRolesViewModel = new AllRolesViewModel
+            try
             {
-                Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * RolesPerPage, RolesPerPage),
-                CurrentPage = page,
-                PagesCount = totalPages
-            };
+                int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(true);
 
-            return View(allRolesViewModel);
+                int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
+
+                totalPages = totalPages == 0 ? 1 : totalPages;
+
+                AllRolesViewModel allRolesViewModel = new AllRolesViewModel
+                {
+                    Roles = await this.roleService.GetActiveOrDeletedForAdministrationAsync(true, (page - 1) * RolesPerPage, RolesPerPage),
+                    CurrentPage = page,
+                    PagesCount = totalPages
+                };
+
+                return View(allRolesViewModel);
+            }
+            catch (Exception)
+            {
+                this.TempData[ErrorMessage] = "Something went wrong!";
+
+                return this.RedirectToAction("Dashboard", "Manager", new { area = "Admin" });
+            }
         }
 
         [HttpGet]
@@ -69,13 +87,13 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateRoleInputModel createRoleInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(createRoleInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(createRoleInputModel);
+                }
+
                 bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByNameAsync(createRoleInputModel.Name);
 
                 if (doesRoleExists)
@@ -91,6 +109,8 @@
                     $"You successfully created role: {createRoleInputModel.Name}",
                     "/Admin/Role/Active",
                     this.GetUserId());
+                
+                return this.RedirectToAction(nameof(Active));
             }
             catch (Exception ex)
             {
@@ -98,8 +118,6 @@
 
                 return this.View(createRoleInputModel);
             }
-
-            return this.RedirectToAction(nameof(Active));
         }
 
         [HttpGet]
@@ -129,13 +147,13 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditRoleInputModel editRoleInputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(editRoleInputModel);
-            }
-
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(editRoleInputModel);
+                }
+
                 bool doesRoleExists = await this.roleService.CheckIfRoleAlreadyExistsByIdAsync(editRoleInputModel.Id);
 
                 if (!doesRoleExists)
@@ -154,7 +172,7 @@
             }
             catch (Exception ex)
             {
-                this.TempData[ErrorMessage] = ex.Message;
+                this.TempData[ErrorMessage] = "Something went wrong!";
             }
             
             return this.RedirectToAction(nameof(Active));
@@ -179,7 +197,9 @@
                 await this.notificationService.CreateNotificationAsync(
                     $"You successfully deleted a role!",
                     "/Admin/Role/Deleted",
-                    this.GetUserId());
+                    this.GetUserId()); 
+                
+                return this.RedirectToAction(nameof(Deleted));
             }
             catch (Exception ex)
             {
@@ -187,8 +207,6 @@
 
                 return this.RedirectToAction(nameof(Active));
             }
-
-            return this.RedirectToAction(nameof(Deleted));
         }
     }
 }
