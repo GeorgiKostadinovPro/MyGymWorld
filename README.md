@@ -155,6 +155,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
   <summary>Authenticated User</summary>
   <ul>
     <li>Can reset his password.</li>
+    <li>Can see the Contact form and ask questions.</li>
     <li>Can view his profile.</li>
     <li>Can edit his profile.</li>
     <li>Can upload profile picture.</li>
@@ -279,6 +280,10 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/faa8d3d0-4c2a-4d01-93e0-6300ef2423ec)
 
+<h3>Contact Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/48069b70-fb82-42d8-9f4b-08292085f142)
+
 <h3>Home Page Top Part (Not Authenticated User)</h3>
 
 ![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/4c3a1b67-1074-4132-bfc8-f5d02efdc0d0)
@@ -289,41 +294,188 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <h3>Home Page Top Part (Authenticated User)</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/3d70c8db-cbd6-4d94-82f3-130bd0e4f3ac)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/ac22a23e-3bf8-44bf-9303-af9921096d7b)
 
 <h3>Home Page Top Part (Manager)</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2e5bfd80-0906-4479-a918-36bef5577c6b)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0392727b-bf51-4626-ad9e-9c3a52cd7b17)
 
 <h3>Home Page Top Part (Administrator)</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0abc8998-690e-499d-adb2-892289490b40)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/4b52ace3-0dbd-4636-9ed1-da0a6c051433)
 
 <h3>Notifications Page</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e3bf5187-341f-48e8-adac-3fdbf84dcbf5)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/fd97ea33-cd35-48f2-8c0c-2ca8b8a76678)
 
 <h3>User Profile Page</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d0166edf-62ee-45c2-910b-c05035b167be)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/07412b36-e3c5-47a3-b9a5-3a686d111d4b)
 
 <h3>User Profile With Profile Picture</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/eb6f86fb-7b06-471e-9406-37428523fe4d)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/61c1a221-c8fa-4c13-8933-8aa9fbf54b54)
 
 <h3>Edit User Profile Page</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d052c063-14f0-4ea2-9e43-96c002bbd1c6)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/071c9bd1-650d-4d4e-8026-8316618af086)
 
 <h3>Become Manager Page</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e32b8945-f454-47d6-8d4e-4785dbbac406)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/f41cedcf-441e-4d0a-bffd-ac1f27ab5a7f)
 
 <h3>Admin Dashboard</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d777b400-ba97-4aba-b93b-dc038599731c)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/320d3404-fb5a-4d6f-8b80-893288bdda26)
 
-<h3></h3>
+<h3>Manager Request Details Page (For Admin)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/1b426afc-6c81-4c6d-8c04-8785d7947c1b)
+
+<h3>Manager Roles Page (For Admin)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e66b8e05-b822-49d5-bc25-b7734e496e44)
+
+<h3>Manage Users Page (For Admin)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0aaa40a9-9ccf-41cf-b932-1034d939c14b)
+
+<h3>Manage Gyms Page (For Admin)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/231a9c71-3b5f-4ae7-a8d5-0556942cb1b2)
+
+<h3>All Gyms Filter Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/a3d9ca34-fe4e-487f-9cc6-fcf5e499099c)
+
+<h3>Gym Details Page (Not Joined)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6c473bdf-85bb-4d33-a97e-902712fb5b16)
+
+<h3>Gym Details Page (Joined)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6061effa-11f5-40a2-ae95-35a7e9637197)
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/f80a296c-bacc-4b6d-8312-0a3c9b815431)
+
+<h3>Gym Details Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/3f7d929b-0c2c-4d50-b126-7ca8806ea3b5)
+
+<h3>Comments Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/a62a026f-debf-4fd6-86a6-7305a8a799f5)
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b94d9ed8-fd76-416c-8d81-40bf7619e15a)
+
+<h3>User Joined Gyms Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/1d0871c5-902b-4c70-a6de-fd50e78b56e2)
+
+<h3>Gym Events Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b894c803-8f52-434b-aa2a-4cf9352940ed)
+
+<h3>Event Details Page (Not Participated)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/37984a80-5de0-4531-99da-b667e6a08f7a)
+
+<h3>Gym Event Details Page (Participated)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/78a1867a-a02c-42a7-b685-a1062ba2943b)
+
+<h3>Gym Event Details Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/88b7196c-0fe2-45d6-b27d-b18a61bb7b0e)
+
+<h3>User Joined Events Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d583c7a6-fd1d-4efa-baa2-f4d481643cba)
+
+<h3>Gym Articles Page (Not Subscribed)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/72579fe3-272d-404e-89b4-5f895117c14e)
+
+<h3>Gym Articles Page (Subscribed)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b99d0b1a-8e55-45cc-a1ef-d85e0940c15a)
+
+<h3>Gym Article Details Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/905ab67c-503d-460f-b416-e334c655bce8)
+
+<h3>Gym Articles Details Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e9380ffc-6e44-4df5-8e44-a79ab5a4e70d)
+
+<h3>Gym Memberships Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/685f5257-a52f-41db-bdf0-a73a53df0f79)
+
+<h3>Gym Memberships Details Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b09120ea-7846-4548-9feb-8dfc533e943d)
+
+<h3>Gym Membership Details Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/d5a76e0b-faf3-497f-b34f-992ae8f4e8a9)
+
+<h3>Buy Membership Checkout Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/6ed22bf1-f2de-4a05-908f-6ee7cfb38791)
+
+<h3>Successful Payment Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/020482a8-7c92-4401-bd8e-82c73156851f)
+
+<h3>My Payments Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/e3fc515e-8a05-4884-b52e-c35025bd2c43)
+
+<h3>My Memberships Page</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/a10f2c53-a5e1-4ed5-95e0-e9b4d52d30bf)
+
+<h3>Create Gym Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/5dc610a6-6a61-44df-8cd2-bf38b163a141)
+
+<h3>Edit Gym Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/94953896-ec3d-460a-b1db-908d620810cb)
+
+<h3>Manage Gyms Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/87b83fcd-eb88-4cfe-9c5f-320882a372d7)
+
+<h3>Create Event Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/8d0f3c61-7187-4b0a-affa-c45454e19bd2)
+
+<h3>Edit Event Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2b6cfeeb-3a88-43ad-b3fc-2203036e388a)
+
+<h3>Create Article Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/da78027c-f443-4d35-a89e-1af241473f2d)
+
+<h3>Edit Article Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/2b6cfeeb-3a88-43ad-b3fc-2203036e388a)
+
+<h3>Create Membership Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/394085d0-caea-49ea-a839-ecc857171c44)
+
+<h3>Edit Membership Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0037d973-a85a-4294-9ff9-22b6d5f3c58f)
+
+<h3>Gym Payments Page (For Manager)</h3>
+
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/0bd556bd-be65-4ef8-b4ca-03bfb9a9a444)
+
 <hr />
 
 <!-- Seeding -->
