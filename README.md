@@ -196,6 +196,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
     <li>Can see details about each membership.</li>
     <li>Can buy a membership.</li>
     <li>Can see all memberships he payed for. (Each has a unqiue QR Code)</li>
+    <li>Can see details for his payment.</li>
     <li>Can keep track of all his payments for gym memberships.</li>
     <li>Can become manager via request to Admin.</li>
     <li>If the user gets rejected by the admin he <strong>CANNOT</strong> apply again.</li>
