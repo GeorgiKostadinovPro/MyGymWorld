@@ -63,7 +63,7 @@
                                 <p style="color: #aaa;">
                                     @if(comment.ParentId != null)
                                     {
-                                        <a class="link-grey" onclick="showCommentForm('@(comment.Id)')">
+                                        <a class="link-grey">
                                            This is an answer.
                                         </a>
                                     }
@@ -74,6 +74,10 @@
                                             reply
                                              </span>Reply
                                         </a>
+
+                                        <a href="#!" class="link-grey" onclick="$('#showReplies').toggle()">
+                                             Replies <span>@Model.Comments.Count(c => c.ParentId == comment.Id)</span>
+                                        </a>
                                     }
                                 </p>
                                 <div class="d-flex flex-row">
@@ -83,9 +87,11 @@
                             </div>
                           </div>
                         </div>
-                            @{
-                                DisplayComments(comment.Id);
-                            }
+                            <div id="showReplies" style="display: none;">
+                                @{
+                                    DisplayComments(comment.Id);
+                                }
+                            </div>
                       </div>
                  </div>
                </div>
