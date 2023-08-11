@@ -353,7 +353,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 <details>
   <summary>Gym Entities</summary>
   <ul>
-     <li>Gyms</li>
+     <li>Gyms (Tech Gym is the most populated one)</li>
      <li>Gym Images (images may repeat themselves)</li>
      <li>Gym Events</li>
      <li>Gym Articles</li>
