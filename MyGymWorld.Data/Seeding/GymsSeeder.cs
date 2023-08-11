@@ -482,7 +482,7 @@
                         {
                             Price = 15.00M,
                             MembershipType = Models.Enums.MembershipType.Week,
-                            CreatedOn = DateTime.UtcNow.AddDays(1)
+                            CreatedOn = DateTime.UtcNow
                         },
                         new Membership
                         {
