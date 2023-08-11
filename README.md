@@ -739,6 +739,8 @@ This application can be used in various ways and most importantly it significant
 * [x] Create CRUD for Gym Memberships. (In Admin Area)
 * [x] Create Buy Memberships for Gym functionality.
 * [x] Create paging, filtering, sorting and searching functionality for Gym Memberships and Bought Memberships.
+* [x] Finish the Payment Flow.
+* [x] Cover the project business layer with Unit Tests.
 * [ ] Create Chat In Gym funationality. (In Admin Area)
 * [ ] Create Chat for Joined Gym Users functionality.
 
