@@ -16,23 +16,33 @@
 
 		private readonly IMembershipService membershipService;
 		private readonly IGymService gymService;
+        private readonly IUserService userService;
 
         public PaymentController (
 			IConfiguration _configuration, 
 			IMembershipService _membershipService,
-			IGymService _gymService)
+			IGymService _gymService,
+            IUserService _userService)
         {
             this.configuration = _configuration;
 
 			this.membershipService = _membershipService;
 			this.gymService = _gymService;
+            this.userService = _userService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCheckoutSession(string membershipId)
+        public async Task<IActionResult> CreateCheckoutSession(string userId, string membershipId)
         {
             try
             {
+                ApplicationUser user = await this.userService.GetUserByIdAsync(userId);
+
+                if (user == null)
+                {
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 401 });
+                }
+
                 string domain = this.configuration["ApplicationUrl"];
 
                 Membership? membership =
@@ -60,28 +70,29 @@
 
                     SessionCreateOptions sessionCreateOptions = new SessionCreateOptions
                     {
+                        CustomerEmail = user.Email,
                         PaymentMethodTypes = new List<string>
-                    {
-                        "card"
-                    },
-                        LineItems = new List<SessionLineItemOptions>
-                    {
-                        new SessionLineItemOptions
                         {
-                            PriceData = new SessionLineItemPriceDataOptions
+                            "card"
+                        },
+                        LineItems = new List<SessionLineItemOptions>
+                        {
+                            new SessionLineItemOptions
                             {
-                                UnitAmount = Convert.ToInt32(membership.Price) * 100,
-                                Currency = "usd",
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                PriceData = new SessionLineItemPriceDataOptions
                                 {
-                                    Name = membershipType,
-                                    Description = description,
-                                    Images = new List<string> { gym.LogoUri }
-                                }
-                            },
-                            Quantity = 1
-                        }
-                    },
+                                    UnitAmount = Convert.ToInt32(membership.Price) * 100,
+                                    Currency = "usd",
+                                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                                    {
+                                        Name = membershipType,
+                                        Description = description,
+                                        Images = new List<string> { gym.LogoUri }
+                                    }
+                                },
+                                Quantity = 1
+                            }
+                        },
                         Mode = "payment",
                         SuccessUrl = string.Concat(domain, $"/Membership/Buy?membershipId={membershipId}"),
                         CancelUrl = string.Concat(domain, $"/Membership/Details?membershipId={membershipId}")
@@ -89,6 +100,7 @@
 
                     SessionService service = new SessionService();
                     Session session = await service.CreateAsync(sessionCreateOptions);
+
                     this.SessionId = session.Id;
 
                     return this.Redirect(session.Url);

@@ -96,7 +96,8 @@
 				asp-area="" 
 				asp-controller="Payment"
 				asp-action="CreateCheckoutSession"
-				method="post">
+                  method="post">
+                <input type="hidden" name="userId" value="@userId">
                 <input type="hidden" name="membershipId" value="@Model.Id">
 				<button id="buy-button">Buy</button>
 			</form>
