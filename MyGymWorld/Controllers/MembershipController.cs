@@ -76,7 +76,7 @@
 
 				await this.notificationService.CreateNotificationAsync(
 					$"You bought a membership for {gym.Name}",
-					$"/Payment/SuccessfulPayment?userId={userId}&membershipId=${membershipId}",
+					$"/Payment/SuccessfulPayment?userId={userId}&membershipId={membershipId}",
 					userId);
 
 				return this.RedirectToAction("SuccessfulPayment", "Payment", new { userId = userId, membershipId = membershipId });
@@ -85,7 +85,7 @@
 			{
 				this.TempData[ErrorMessage] = "Something went wrong!";
 
-				return this.View();
+				return this.RedirectToAction("Index", "Home", new { area = "" });
 			}
 		}
 

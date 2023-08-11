@@ -170,7 +170,7 @@
 
                 if (user == null)
                 {
-                    this.TempData[ErrorMessage] = "Such user doesNOT exist";
+                    this.TempData[ErrorMessage] = "Such user does NOT exist";
 
                     return this.RedirectToAction("Index", "Home", new { area = "" });
                 }
