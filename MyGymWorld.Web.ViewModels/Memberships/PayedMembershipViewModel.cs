@@ -6,6 +6,8 @@
 	{
 		public string Id { get; set; } = null!;
 
+		public string MembershipId { get; set; } = null!;
+
 		public string UserEmail { get; set; } = null!;
 
 		public DateTime PurchasedOn { get; set; }

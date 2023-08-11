@@ -56,7 +56,15 @@
 							}
 
 							<td>
-								No Actions
+								<a asp-area=""
+							   asp-controller="Payment"
+							   asp-action="SuccessfulPayment"
+							   asp-route-userId="@Model.UserId"
+							   asp-route-membershipId="@userMembership.MembershipId">
+									<span class="material-symbols-outlined" data-toggle="tooltip" title="Details" style="color: #3F82C3;">
+										visibility
+									</span>
+								</a>
 							</td>
 						</tr>
 					}
