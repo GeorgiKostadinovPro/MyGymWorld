@@ -63,7 +63,7 @@
 
 			ApplicationUser user = new ApplicationUser
 			{
-				UserName = "NormalUser",
+				UserName = "Go4ko",
 				PasswordHash = "UserPass123.",
 				Email = "user@gmail.com",
 				EmailConfirmed = true,
