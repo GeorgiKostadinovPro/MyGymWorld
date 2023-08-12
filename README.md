@@ -282,7 +282,7 @@ There are two Areas in the project (Manager and Admin) and Common Layer for Auth
 
 <h3>Contact Page</h3>
 
-![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/48069b70-fb82-42d8-9f4b-08292085f142)
+![image](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/b30341d0-35cc-4518-ba53-637717180548)
 
 <h3>Home Page Top Part (Not Authenticated User)</h3>
 
