@@ -5,17 +5,16 @@
 }
 
 <!--Section: Contact v.2-->
-<section class="mb-4">
+<section class="mb-4" style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);">
 
-    <h2 class="h1-responsive font-weight-bold text-center my-4">Contact us</h2>
+    <h2 class="h1-responsive font-weight-bold text-center my-4" style="padding-top: 15px;">Contact us</h2>
     <p class="text-center w-responsive mx-auto mb-5">
         Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to you within
         a matter of hours to help you.
     </p>
 
     <div class="row">
-
-        <div class="col-md-9 mb-md-0 mb-5">
+        <div class="col-md-8 mb-md-0 mb-5" style="margin-left: 20px;">
             <form asp-area="" asp-controller="Home" asp-action="Contact" method="post">
                 <div class="row">
                     <div class="col-md-6">
@@ -51,13 +50,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center text-md-left" style="margin-top: 10px;">
-                    <button class="btn btn-primary">Send</button>
+                <div class="text-center text-md-left" style="margin-top: 10px; margin-bottom: 15px;">
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary">Send</button>
+                    </div>
                 </div>
             </form>
             <div class="status"></div>
         </div>
-        <div class="col-md-3 text-center">
+        <div class="col-md-3 text-center" style="margin-left: 20px;">
             <ul class="list-unstyled mb-0">
                 <li>
                     <i class="fas fa-map-marker-alt fa-2x"></i>

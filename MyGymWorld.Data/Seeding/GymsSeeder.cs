@@ -152,7 +152,22 @@
                             CreatedOn = DateTime.UtcNow
                         }
 					},
-					Comments = new HashSet<Comment>
+                    Memberships = new HashSet<Membership>
+                    {
+                        new Membership
+                        {
+                            Price = 25.00M,
+                            MembershipType = Models.Enums.MembershipType.Weekly,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Membership
+                        {
+                            Price = 50.00M,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                    Comments = new HashSet<Comment>
 					{
 						new Comment
 						{
@@ -179,22 +194,7 @@
 							UserId = admin.Id,
 							CreatedOn = DateTime.UtcNow
 						}
-					},
-					Memberships = new HashSet<Membership>
-					{
-						new Membership
-						{
-							Price = 25.00M,
-							MembershipType = Models.Enums.MembershipType.Weekly,
-							CreatedOn = DateTime.UtcNow
-						},
-                        new Membership
-                        {
-                            Price = 50.00M,
-                            MembershipType = Models.Enums.MembershipType.Monthly,
-                            CreatedOn = DateTime.UtcNow
-                        }
-                    }
+					}
 			    },
                 new Gym
                 {
@@ -280,6 +280,21 @@
                             CreatedOn = DateTime.UtcNow
                         }
                     },
+                    Memberships = new HashSet<Membership>
+                    {
+                        new Membership
+                        {
+                            Price = 30.00M,
+                            MembershipType = Models.Enums.MembershipType.Weekly,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Membership
+                        {
+                            Price = 80.00M,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
                     Comments = new HashSet<Comment>
                     {
                         new Comment
@@ -302,24 +317,174 @@
                             UserId = normalUser.Id,
                             CreatedOn = DateTime.UtcNow
                         }
+                    }
+                },
+                new Gym
+                {
+                    Name = "Titanium",
+                    Email = managerUser.Email,
+                    PhoneNumber = managerUser.PhoneNumber,
+                    Description = "The best gym in Sofia and around!",
+                    WebsiteUrl = "https://www.vibesfit.com/",
+                    GymType = Models.Enums.GymType.PowerLifting,
+                    LogoUri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691838312/MyGymWorld/assets/gyms-logo-pictures/Titanium-gym-logo_dkyefz.jpg",
+                    LogoPublicId = "Titanium-gym-logo_dkyefz",
+                    ManagerId = managerUser.ManagerId.Value,
+                    AddressId = address1.Id,
+                    CreatedOn = DateTime.UtcNow,
+                    GymImages = new HashSet<GymImage>
+                    {
+                        new GymImage
+                        {
+                            Uri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691838312/MyGymWorld/assets/gyms-logo-pictures/Titanium-gym-logo_dkyefz.jpg",
+                            PublicId = "Titanium-gym-logo_dkyefz",
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new GymImage
+                        {
+                            Uri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691838505/MyGymWorld/assets/gyms-gallery-pictures/gym-gallery-image-10_sii9yc.jpg",
+                            PublicId = "gym-gallery-image-10_sii9yc",
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new GymImage
+                        {
+                            Uri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691838505/MyGymWorld/assets/gyms-gallery-pictures/gym-gallery-image-11_trs39c.jpg",
+                            PublicId = "gym-gallery-image-11_trs39c",
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new GymImage
+                        {
+                            Uri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691838505/MyGymWorld/assets/gyms-gallery-pictures/gym-gallery-image-12_cm8b4x.jpg",
+                            PublicId = "gym-gallery-image-12_cm8b4x",
+                            CreatedOn = DateTime.UtcNow
+                        }
                     },
-                    Memberships = new HashSet<Membership>
+                    UsersGyms = new HashSet<UserGym>
+                    {
+                        new UserGym
+                        {
+                            UserId = normalUser.Id,
+                            IsSubscribedForArticles = true,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                    Events = new HashSet<Event>
+                    {
+                        new Event
+                        {
+                            Name = "Vshred Meeting",
+                            Description = "Meet with our trainers and managers.",
+                            StartDate = DateTime.UtcNow,
+                            EndDate = DateTime.UtcNow.AddDays(1),
+                            EventType = Models.Enums.EventType.Conference,
+                            CreatedOn = DateTime.UtcNow,
+                            UsersEvents = new HashSet<UserEvent>{
+                                new UserEvent
+                                {
+                                    UserId = normalUser.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                },
+                                new UserEvent
+                                {
+                                    UserId = admin.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                },
+                            }
+                        },
+                        new Event
+                        {
+                            Name = "Vshred Training",
+                            Description = "Meet with our trainers and managers to train and gain experience.",
+                            StartDate = DateTime.UtcNow.AddDays(4),
+                            EndDate = DateTime.UtcNow.AddDays(10),
+                            EventType = Models.Enums.EventType.Training,
+                            CreatedOn = DateTime.UtcNow,
+                            UsersEvents = new HashSet<UserEvent>{
+                                new UserEvent
+                                {
+                                    UserId = admin.Id,
+                                    CreatedOn = DateTime.UtcNow
+                                }
+                            }
+                        },
+                        new Event
+                        {
+                            Name = "Vshred Opening",
+                            Description = "Come and open the gym with us!",
+                            StartDate = DateTime.UtcNow,
+                            EndDate = DateTime.UtcNow.AddMinutes(1),
+                            EventType = Models.Enums.EventType.Training,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                    Articles = new HashSet<Article>
+                    {
+                        new Article
+                        {
+                            Title = "Test Article VShred",
+                            Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
+                            " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
+                            "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
+                            "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Article
+                        {
+                            Title = "Test Article 2 VShred",
+                            Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of" +
+                            " type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic " +
+                            "typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
+                            "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                     Memberships = new HashSet<Membership>
                     {
                         new Membership
                         {
-                            Price = 30.00M,
+                            Price = 25.00M,
                             MembershipType = Models.Enums.MembershipType.Weekly,
                             CreatedOn = DateTime.UtcNow
                         },
                         new Membership
                         {
-                            Price = 80.00M,
+                            Price = 50.00M,
                             MembershipType = Models.Enums.MembershipType.Monthly,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                    Comments = new HashSet<Comment>
+                    {
+                        new Comment
+                        {
+                            Content = "Very good gym!",
+                            UserId = normalUser.Id,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Comment
+                        {
+                            Content = "Excellent Gym!",
+                            UserId = admin.Id,
+                            CreatedOn = DateTime.UtcNow
+                        }
+                    },
+                    Likes = new HashSet<Like>
+                    {
+                        new Like
+                        {
+                            UserId = normalUser.Id,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Like
+                        {
+                            UserId = admin.Id,
                             CreatedOn = DateTime.UtcNow
                         }
                     }
                 },
-                 new Gym
+                new Gym
                 {
                     Name = "Tech Gym",
                     Email = managerUser.Email,
@@ -441,6 +606,44 @@
                             CreatedOn = DateTime.UtcNow
                         },
                     },
+                    Memberships = new HashSet<Membership>
+                    {
+                        new Membership
+                        {
+                            Price = 15.00M,
+                            MembershipType = Models.Enums.MembershipType.Weekly,
+                            CreatedOn = DateTime.UtcNow,
+                            UsersMemberships = new HashSet<UserMembership>
+                            {
+                                new UserMembership
+                                {
+                                    UserId = normalUser.Id,
+                                    QRCodeUri = "https://res.cloudinary.com/de1i8aava/image/upload/v1691790900/MyGymWorld/assets/user-barcode-pictures/gpvgzwck492aocfsywos.bmp",
+                                    PublicId = "gpvgzwck492aocfsywos",
+                                    ValidTo = DateTime.UtcNow.AddDays(7),
+                                    CreatedOn = DateTime.UtcNow,
+                                }
+                            }
+                        },
+                        new Membership
+                        {
+                            Price = 100.00M,
+                            MembershipType = Models.Enums.MembershipType.Monthly,
+                            CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(30))
+                        },
+                        new Membership
+                        {
+                            Price = 50.00M,
+                            MembershipType = Models.Enums.MembershipType.TwoWeeks,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                        new Membership
+                        {
+                            Price = 150.00M,
+                            MembershipType = Models.Enums.MembershipType.SixMonths,
+                            CreatedOn = DateTime.UtcNow
+                        },
+                    },
                     Comments = new HashSet<Comment>
                     {
                         new Comment
@@ -475,33 +678,6 @@
                             UserId = normalUser.Id,
                             CreatedOn = DateTime.UtcNow
                         }
-                    },
-                    Memberships = new HashSet<Membership>
-                    {
-                        new Membership
-                        {
-                            Price = 15.00M,
-                            MembershipType = Models.Enums.MembershipType.Weekly,
-                            CreatedOn = DateTime.UtcNow
-                        },
-                        new Membership
-                        {
-                            Price = 100.00M,
-                            MembershipType = Models.Enums.MembershipType.Monthly,
-                            CreatedOn = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(30))
-                        },
-                        new Membership
-                        {
-                            Price = 50.00M,
-                            MembershipType = Models.Enums.MembershipType.TwoWeeks,
-                            CreatedOn = DateTime.UtcNow
-                        },
-                        new Membership
-                        {
-                            Price = 150.00M,
-                            MembershipType = Models.Enums.MembershipType.SixMonths,
-                            CreatedOn = DateTime.UtcNow
-                        },
                     }
                 }
             };
