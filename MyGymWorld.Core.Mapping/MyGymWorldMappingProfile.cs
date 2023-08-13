@@ -66,7 +66,7 @@
                 .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.User.LastName))
                 .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
-                .ForMember(d => d.ManagerProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri))
+                .ForMember(d => d.ManagerProfilePictureUri, opt => opt.MapFrom(src => src.User.ProfilePictureUri != null ? src.User.ProfilePictureUri : "https://img.freepik.com/free-icon/user_318-159711.jpg?w=2000"))
                 .ForMember(d => d.ManagerType, opt => opt.MapFrom(src => src.ManagerType.ToString()));
 
             // Roles
