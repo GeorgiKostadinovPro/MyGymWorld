@@ -22,21 +22,6 @@
 
 			Address address = await dbContext.Addresses.FirstAsync(a => a.Name == "bul. Cherni vrah");
 
-			ICollection<Notification> notifications = new HashSet<Notification>
-			{
-				new Notification
-				{
-					Content = "This is a test notification!",
-					CreatedOn = DateTime.UtcNow
-				},
-				new Notification
-				{
-					Content = "This is a read notification!",
-					IsRead = true,
-					CreatedOn = DateTime.UtcNow
-				}
-			};
-
 			ApplicationUser admin = new ApplicationUser
 			{
 				UserName = "Admin",
@@ -44,8 +29,21 @@
 				Email = "mgmwrlddmnccnt@gmail.com",
 				EmailConfirmed = true,
 				CreatedOn = DateTime.UtcNow,
-				Notifications = notifications
-			};
+                Notifications = new HashSet<Notification>
+                {
+                    new Notification
+                    {
+                        Content = "This is a test notification!",
+                        CreatedOn = DateTime.UtcNow
+                    },
+                    new Notification
+                    {
+                        Content = "This is a read notification!",
+                        IsRead = true,
+                        CreatedOn = DateTime.UtcNow
+                    }
+                }
+            };
 
 			ApplicationUser manager = new ApplicationUser
 			{
@@ -58,7 +56,20 @@
 				Email = "manager@gmail.com",
 				EmailConfirmed = true,
 				CreatedOn = DateTime.UtcNow,
-                Notifications = notifications
+                Notifications = new HashSet<Notification>
+				{
+                    new Notification
+                    {
+						Content = "This is a test notification!",
+                        CreatedOn = DateTime.UtcNow
+                    },
+                    new Notification
+                    {
+				    	Content = "This is a read notification!",
+                        IsRead = true,
+                        CreatedOn = DateTime.UtcNow
+                    }
+                }
             };
 
 			ApplicationUser user = new ApplicationUser
@@ -68,7 +79,20 @@
 				Email = "user@gmail.com",
 				EmailConfirmed = true,
 				CreatedOn = DateTime.UtcNow,
-                Notifications = notifications
+                Notifications = new HashSet<Notification>
+                {
+                    new Notification
+                    {
+                        Content = "This is a test notification!",
+                        CreatedOn = DateTime.UtcNow
+                    },
+                    new Notification
+                    {
+                        Content = "This is a read notification!",
+                        IsRead = true,
+                        CreatedOn = DateTime.UtcNow
+                    }
+                }
             };
 
 			await userManager.CreateAsync(admin, admin.PasswordHash);
