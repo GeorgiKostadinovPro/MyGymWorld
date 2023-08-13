@@ -28,7 +28,7 @@
             {
                 int rolesCount = await this.roleService.GetActiveOrDeletedRolesCountAsync(false);
 
-                int totalPages = (int)Math.Ceiling((double)(rolesCount / RolesPerPage));
+                int totalPages = (int)Math.Ceiling((double)rolesCount / RolesPerPage);
                 totalPages = totalPages == 0 ? 1 : totalPages;
 
                 AllRolesViewModel allRolesViewModel = new AllRolesViewModel
