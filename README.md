@@ -72,6 +72,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 - [Usage](#eyes-usage)
 - [Roadmap](#compass-roadmap)
 - [License](#warning-license)
+- [Certificate](#certificate)
 - [Contact](#handshake-contact)
 - [Acknowledgements](#gem-acknowledgements)
 
@@ -755,6 +756,12 @@ This application can be used in various ways and most importantly it significant
 ## :warning: License
 
 Distributed under the MIT license. See LICENSE.txt for more information.
+
+<hr />
+
+## Certificate
+
+![ASP NET Advanced - June 2023 - Certificate](https://github.com/GeorgiKostadinovPro/MyGymWorld/assets/72508846/9c47892a-7c88-4bc9-b979-bdd429a3adfb)
 
 <hr />
 
