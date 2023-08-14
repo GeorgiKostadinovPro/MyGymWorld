@@ -87,6 +87,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <p>After paying for a card each user receives a QR Code card and now he can easily go in the gym and exercise.</p>
 <p>Users can see the memberships they payed for through "My Memberships" page.</p>
 <p>Users can easily keep track of their payments for memberships throught "My Payments" page.</p>
+<p>Can can also view details for there payment in format of receipt through "My Payments" as well.</p>
 <p>When a membership expires he can easily buy a new one.</p>
 <p>Gym managers can easily keep track of their gyms and payments throught their Manager Panel.</p>
 <p>For more information review the <strong>Features</strong> section below.</p>
