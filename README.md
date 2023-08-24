@@ -120,7 +120,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <details>
 <summary>Database</summary>
   <ul>
-    <li><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads">MSSQL Server</a></li>
+    <li><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads">Microsoft SQL Server</a></li>
     <li><a href="https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16">T-SQL (Transact-SQL)</a></li>
     <li><a href="https://sqldbm.com/Home/">SqlDBM (SQL Database Modeler)</a></li>
   </ul>
