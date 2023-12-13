@@ -106,6 +106,7 @@ Maybe you can mention me or this repo in the acknowledgements too
     <li><a href="https://jquery.com/">jQuery</a></li>
     <li><a href="https://nunit.org/">NUnit</a></li>
     <li><a href="https://www.nuget.org/packages/Moq">Moq</a></li>
+    <li><a href="https://www.docker.com/">Docker</a></li>
     <li><a href="https://sendgrid.com/">SendGrid</a></li>
     <li><a href="https://cloudinary.com/">Cloudinary</a></li>
     <li><a href="https://stripe.com/en-bg">Stripe (Payment Gateway)</a></li>
@@ -746,6 +747,7 @@ This application can be used in various ways and most importantly it significant
 * [x] Create Buy Memberships for Gym functionality.
 * [x] Create paging, filtering, sorting and searching functionality for Gym Memberships and Bought Memberships.
 * [x] Finish the Payment Flow.
+* [x] Dockerize the application. (Integrate Docker Containers and Images - Linux OS)
 * [x] Cover the project business layer with Unit Tests.
 * [ ] Create Chat In Gym functionality. (In Admin Area)
 * [ ] Create Chat for Joined Gym Users functionality.
