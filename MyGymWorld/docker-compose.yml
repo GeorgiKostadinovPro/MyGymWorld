@@ -1,0 +1,32 @@
+﻿version: '3.4'
+
+services:
+  mygymworld-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - sql-server
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mygymworld-network
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: MyGymWorld123. #No need for strong password sinceI blocked the SA Sql server account
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+    networks:
+      - mygymworld-network
+    volumes:
+      - sql-data:/var/opt/mssql
+
+networks:
+  mygymworld-network:
+
+volumes:
+  sql-data:
