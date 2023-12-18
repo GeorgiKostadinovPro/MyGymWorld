@@ -16,7 +16,7 @@ services:
   sql-server:
     image: mcr.microsoft.com/mssql/server
     environment:
-      SA_PASSWORD: MyGymWorld123. #No need for strong password sinceI blocked the SA Sql server account
+      SA_PASSWORD: MyGymWorld123. #No need for strong password since I blocked the SA Sql server account
       ACCEPT_EULA: Y
     ports:
       - "1433:1433"
