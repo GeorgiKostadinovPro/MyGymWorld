@@ -78,7 +78,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 <!-- About the Project -->
 ## :star2: About the Project
-<p>MyGymWorld is an easy to use platform where fitness enthusiasts can find the perfect gym for them.</p>
+<p>MyGymWorld is an easy-to-use platform where people can socialize and find the perfect gym for them (read articles, join events, buy memberships, write comments, give likes and much more).</p>
 <p>User can easily become manager after getting approval from the site admin. After that he can create a gym and keep track of all gyms he have created.</p>
 <p>Users can search, filter, sort gyms - like and dislike a gym, post comments, join gyms communities.</p>
 <p>Moreover, after joining a gym, users can review events for the gym, and decide to join or leave an event.</p>
