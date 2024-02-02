@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Article";
 }
 
-<script src="~/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/cxcysqt7k0e2fdxids5xs5p4hhk9o9ofc1gy0kd4o6vnm9qv/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 <div id="createArticle" style="padding: 20px; box-shadow: 0 0 10px #2C3142; display: flex; justify-content: center;">
     <form asp-area="Manager" asp-controller="Article" asp-action="Create" method="post">
@@ -42,20 +42,7 @@
             selector: '#editor',
             width: 540,
             height: 300,
-            resize: false,
-            plugins: [
-                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-                'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
-                'media', 'table', 'emoticons', 'template', 'help'
-            ],
-            toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
-                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-                'forecolor backcolor emoticons | help',
-            menu: {
-                favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
-            },
-            menubar: 'favs file edit view insert format tools table help',
-            content_css: 'css/content.css'
+            resize: false
         });
     </script>
 }
