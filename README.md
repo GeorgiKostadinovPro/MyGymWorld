@@ -40,9 +40,6 @@ Maybe you can mention me or this repo in the acknowledgements too
   <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/issues/">
     <img src="https://img.shields.io/github/issues/GeorgiKostadinovPro/MyGymWorld" alt="open issues" />
   </a>
-  <a href="https://github.com/GeorgiKostadinovPro/MyGymWorld/blob/master/LICENSE.txt">
-    <img src="https://badgen.net/badge/license/MIT/green" alt="license" />
-  </a>
 </p>
    
 <h4>
@@ -71,7 +68,6 @@ Maybe you can mention me or this repo in the acknowledgements too
   * [Run Locally](#running-run-locally)
 - [Usage](#eyes-usage)
 - [Roadmap](#compass-roadmap)
-- [License](#warning-license)
 - [Certificate](#certificate)
 - [Contact](#handshake-contact)
 - [Acknowledgements](#gem-acknowledgements)
@@ -751,13 +747,6 @@ This application can be used in various ways and most importantly it significant
 * [x] Cover the project business layer with Unit Tests.
 * [ ] Create Chat In Gym functionality. (In Admin Area)
 * [ ] Create Chat for Joined Gym Users functionality.
-
-<hr />
-
-<!-- License -->
-## :warning: License
-
-Distributed under the MIT license. See LICENSE.txt for more information.
 
 <hr />
 
